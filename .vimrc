@@ -3,10 +3,7 @@ filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
 call vundle#begin('~/.vimplugins')
-
 "Plugin Verwaltung
 "Plugin 'VundleVim/Vundle.vim'
 
@@ -40,28 +37,50 @@ Plugin 'airblade/vim-gitgutter'
 
 "schönere Statusleiste
 Plugin 'itchyny/lightline.vim'
+set laststatus=2
 
 "Colorscheme: Monokai Phoenix
 Plugin 'reewr/vim-monokai-phoenix'
 
-" All of your Plugins must be added before the following line
+"Operatoren hervorheben
+Plugin 'Valloric/vim-operator-highlight'
+
+"extended syntaxhighlighting for c/c++
+Plugin 'bfrg/vim-cpp-modern'
+
+"better indents for python
+Plugin 'vim-scripts/indentpython.vim'
+
+"python syntaxhighlighting
+"Plugin 'python-mode/python-mode'
+
+"python completion
+Bundle 'Valloric/YouCompleteMe'
+
+"python check syntax
+"Plugin 'vim-syntastic/syntastic'
+
+"python PEP8 checking
+"Plugin 'nvie/vim-flake8'
+
+"latex ide
+Bundle 'lervag/vimtex'
 call vundle#end()            " required
-"filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+
+let g:vimtex_view_method = 'zathura'
+let g:pymode_python = 'python3'
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 syntax on
-set number
 colorscheme monokai-phoenix
+
+set splitbelow
+
+set number
 set cursorline
 set ignorecase
 
@@ -70,7 +89,12 @@ set shiftwidth=4
 set softtabstop=4
 set autoindent
 set expandtab
+
 set clipboard=unnamedplus
+set nowrap
+set encoding=utf-8
+
+set backspace=indent,eol,start
 
 noremap gs :vsplit<LF>
 noremap gS :split<LF>
@@ -84,3 +108,14 @@ noremap <C-left> gT
 noremap <C-right> gt
 noremap <C-up> :bn<LF>
 noremap <C-down> :bN<LF>
+noremap <F3> :w<lf>
+noremap <F4> :w <bar> !gcc % && ./a.out<lf>
+noremap <F5> :w <bar> !python3 %<lf>
+noremap <F6> :w <bar> !bash %<lf>
+noremap ZW :w<lf>
+noremap zp :w <bar> :!python3 %<lf>
+
+autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
+autocmd FileType tex :set tabstop=2
+autocmd FileType tex :set shiftwidth=2
+autocmd FileType tex :set softtabstop=2
