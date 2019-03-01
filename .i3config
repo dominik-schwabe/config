@@ -10,6 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod1
+set $term xfce4-terminal
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -29,9 +30,6 @@ font pango:DejaVu Sans Mono 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
-
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -43,10 +41,10 @@ bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus bindsym $mod+j focus left
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+odiaeresis focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -55,10 +53,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+odiaeresis move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -67,7 +65,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+odiaeresis split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -121,7 +119,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+End exit
+bindsym $mod+Shift+Delete exit
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -131,10 +129,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym odiaeresis resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -157,17 +155,24 @@ bar {
         workspace_buttons yes
 }
 
-bindsym XF86AudioMute exec amixer set Master toggle
-bindsym XF86AudioRaiseVolume exec amixer set Master playback 4.0%+
-bindsym XF86AudioLowerVolume exec amixer set Master playback 4.0%-
-bindsym XF86MonBrightnessUp exec /home/dominik/bin/brightness +10
-bindsym XF86MonBrightnessDown exec /home/dominik/bin/brightness -10
-bindsym XF86ScreenSaver exec i3lock -c 000000
+bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master playback 4.0%+
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master playback 4.0%-
+bindsym XF86MonBrightnessUp exec --no-startup-id /home/dominik/bin/brightness +10
+bindsym XF86MonBrightnessDown exec --no-startup-id /home/dominik/bin/brightness -10
+bindsym XF86ScreenSaver exec --no-startup-id i3lock -c 000000
+bindsym XF86AudioNext exec --no-startup-id cmus-remote -n
+bindsym XF86AudioPrev exec --no-startup-id cmus-remote -r
+bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
+bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
+
 bindsym $mod+y exec google-chrome-stable
-bindsym $mod+x exec thunar
 bindsym $mod+u exec shutter -s
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec $term -e ranger
+bindsym $mod+m exec $term -e cmus
 
 hide_edge_borders both
 workspace_auto_back_and_forth yes
 
-exec pkill -u dominik redshift >/dev/null 2>&1; redshift >/dev/null 2>&1
+exec --no-startup-id pkill -u dominik redshift >/dev/null 2>&1; redshift >/dev/null 2>&1

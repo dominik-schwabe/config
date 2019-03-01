@@ -49,7 +49,7 @@ Plugin 'Valloric/vim-operator-highlight'
 Plugin 'bfrg/vim-cpp-modern'
 
 "better indents for python
-Plugin 'vim-scripts/indentpython.vim'
+"Plugin 'vim-scripts/indentpython.vim'
 
 "python syntaxhighlighting
 "Plugin 'python-mode/python-mode'
@@ -93,6 +93,7 @@ set expandtab
 set clipboard=unnamedplus
 set nowrap
 set encoding=utf-8
+"set scrolloff=8
 
 set backspace=indent,eol,start
 
