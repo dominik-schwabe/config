@@ -9,4 +9,5 @@ ln -s ~/config/.rc.conf ~/.config/ranger/rc.conf $@
 ln -s ~/config/.toprc ~/.toprc $@
 ln -s ~/config/.bashrc ~/.bashrc $@
 ln -s ~/config/.xsession ~/.xsession $@
+ln -s ~/config/.xinitrc ~/.xinitrc $@
 ln -s ~/config/.bg.jpg ~/.bg.jpg $@

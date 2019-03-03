@@ -64,11 +64,11 @@ Bundle 'Valloric/YouCompleteMe'
 "Plugin 'nvie/vim-flake8'
 
 "latex ide
-Bundle 'lervag/vimtex'
+"Bundle 'lervag/vimtex'
 call vundle#end()            " required
 
-let g:vimtex_view_method = 'zathura'
-let g:pymode_python = 'python3'
+"let g:vimtex_view_method = 'zathura'
+"let g:pymode_python = 'python3'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 filetype plugin on
@@ -93,7 +93,7 @@ set expandtab
 set clipboard=unnamedplus
 set nowrap
 set encoding=utf-8
-"set scrolloff=8
+set scrolloff=8
 
 set backspace=indent,eol,start
 
