@@ -155,6 +155,7 @@ bar {
         workspace_buttons yes
 }
 
+
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master playback 4.0%+
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master playback 4.0%-
@@ -167,13 +168,18 @@ bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
 bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
 bindsym $mod+y exec google-chrome-stable
-bindsym $mod+u exec shutter -s
+bindsym $mod+u exec scrot '%s.png' -e 'mv $f ~/Bilder'
+bindsym $mod+Shift+u exec scrot '%s.png' -u -e 'mv $f ~/Bilder'
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec $term -e ranger
 bindsym $mod+m exec $term -e cmus
 
-hide_edge_borders both
+default_border pixel 1
+hide_edge_borders vertical
+new_window 1pixel
 workspace_auto_back_and_forth yes
+
+client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
 exec --no-startup-id pkill -u dominik redshift >/dev/null 2>&1; redshift >/dev/null 2>&1
 exec --no-startup-id feh --bg-scale ~/.bg.jpg

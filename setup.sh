@@ -2,6 +2,8 @@
 
 ln -s ~/config/.vimrc ~/.vimrc $@
 ln -s ~/config/.vimrc ~/.nvimrc $@
+ln -s ~/config/.zshrc ~/.zshrc $@
+ln -s ~/config/.aliasrc ~/.aliasrc $@
 ln -s ~/config/.i3config ~/.config/i3/config $@
 ln -s ~/config/.i3pystatus.conf ~/.config/i3/i3pystatus.conf $@
 ln -s ~/config/.Xdefaults ~/.Xdefaults $@

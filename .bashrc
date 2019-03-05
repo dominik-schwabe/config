@@ -13,25 +13,15 @@ HISTFILESIZE=2000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # enable color support of ls and also add handy aliases
-alias ls='ls --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
-
-alias vim='/bin/nvim'
-alias oldvim='/bin/vim'
+if [[ -r ~/.aliasrc ]]; then
+    . ~/.aliasrc
+fi
 
 #if ! shopt -oq posix; then
 #  if [ -f /usr/share/bash-completion/bash_completion ]; then
