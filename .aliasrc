@@ -12,3 +12,4 @@ alias l='ls -CF'
 
 alias vim='/bin/nvim'
 alias oldvim='/bin/vim'
+alias ip='ip --color'
