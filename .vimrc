@@ -28,7 +28,6 @@ Plugin 'scrooloose/nerdtree'
 "HTML Tagclose
 "Plugin 'alvan/vim-closetag'
 "let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.php'
-
 "git Änderungsanzeige
 Plugin 'airblade/vim-gitgutter'
 
@@ -64,11 +63,11 @@ Bundle 'Valloric/YouCompleteMe'
 "Plugin 'nvie/vim-flake8'
 
 "latex ide
-"Bundle 'lervag/vimtex'
+Bundle 'lervag/vimtex'
 call vundle#end()            " required
 
-"let g:vimtex_view_method = 'zathura'
-"let g:pymode_python = 'python3'
+let g:vimtex_view_method = 'zathura'
+let g:pymode_python = 'python3'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 filetype plugin on
@@ -109,6 +108,10 @@ noremap <C-left> gT
 noremap <C-right> gt
 noremap <C-up> :bn<LF>
 noremap <C-down> :bN<LF>
+noremap <C-h> <C-W>h
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-l> <C-W>l
 noremap <F3> :w<lf>
 noremap <F4> :w <bar> !gcc % && ./a.out<lf>
 noremap <F5> :w <bar> !python3 %<lf>
@@ -120,3 +123,5 @@ autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
 autocmd FileType tex :set shiftwidth=2
 autocmd FileType tex :set softtabstop=2
+
+"setlocal spell spelllang=de_de

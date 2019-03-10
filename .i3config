@@ -168,17 +168,19 @@ bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
 bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
 bindsym $mod+y exec google-chrome-stable
+bindsym $mod+x exec thunar
 bindsym $mod+u exec scrot '%s.png' -e 'mv $f ~/Bilder'
 bindsym $mod+Shift+u exec scrot '%s.png' -u -e 'mv $f ~/Bilder'
 bindsym $mod+Return exec $term
-bindsym $mod+Shift+Return exec $term -e ranger
+bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
 
 default_border pixel 1
-hide_edge_borders vertical
+hide_edge_borders both
 new_window 1pixel
 workspace_auto_back_and_forth yes
 #focus_follows_mouse no
+for_window [class="Termite" window_role="ranger"] floating enable
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 

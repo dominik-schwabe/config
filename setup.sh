@@ -6,6 +6,7 @@ ln -s ~/config/.bashrc ~/.bashrc $@
 ln -s ~/config/.zshrc ~/.zshrc $@
 ln -s ~/config/.envrc ~/.envrc $@
 ln -s ~/config/.toprc ~/.toprc $@
+mkdir ~/.config/ranger -p
 ln -s ~/config/.rc.conf ~/.config/ranger/rc.conf $@
 ln -s ~/config/.termite.conf ~/.config/termite/config $@
 ln -s ~/config/.aliasrc ~/.aliasrc $@
