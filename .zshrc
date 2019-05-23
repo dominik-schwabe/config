@@ -33,4 +33,6 @@ fi
 . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 PS1='%B%F{green}%n@%m%f:%F{blue}%~%f$%b '
+#PS1='%B%F{yellow}%n@%m%f:%F{blue}%~%f$%b '
+#PS1='%B%F{red}%n@%m%f:%F{blue}%~%f$%b '
 RPS1='%B%(?..%F{red}%?%f)%  %F{yellow}${vcs_info_msg_0_}%f%b'
