@@ -1,20 +1,24 @@
 #!/bin/bash
 
-ln -s ~/config/.vimrc ~/.vimrc $@
-ln -s ~/config/.vimrc ~/.nvimrc $@
-ln -s ~/config/.bashrc ~/.bashrc $@
-ln -s ~/config/.zshrc ~/.zshrc $@
-ln -s ~/config/.envrc ~/.envrc $@
-ln -s ~/config/.toprc ~/.toprc $@
+CURRPATH=$(pwd)
+
+ln -s ${CURRPATH}/.vimrc ~/.vimrc $@
+ln -s ${CURRPATH}/.vimrc ~/.nvimrc $@
+ln -s ${CURRPATH}/.bashrc ~/.bashrc $@
+ln -s ${CURRPATH}/.zshrc ~/.zshrc $@
+ln -s ${CURRPATH}/.envrc ~/.envrc $@
+ln -s ${CURRPATH}/.toprc ~/.toprc $@
 mkdir ~/.config/ranger -p
-ln -s ~/config/.rc.conf ~/.config/ranger/rc.conf $@
+ln -s ${CURRPATH}/.rc.conf ~/.config/ranger/rc.conf $@
 mkdir ~/.config/termite -p
-ln -s ~/config/.termite.conf ~/.config/termite/config $@
-ln -s ~/config/.aliasrc ~/.aliasrc $@
+ln -s ${CURRPATH}/.termite.conf ~/.config/termite/config $@
+ln -s ${CURRPATH}/.aliasrc ~/.aliasrc $@
 mkdir ~/.config/i3 -p
-ln -s ~/config/.i3config ~/.config/i3/config $@
-ln -s ~/config/.i3pystatus.conf ~/.config/i3/i3pystatus.conf $@
-ln -s ~/config/.Xdefaults ~/.Xdefaults $@
-ln -s ~/config/.xsession ~/.xsession $@
-ln -s ~/config/.xinitrc ~/.xinitrc $@
-ln -s ~/config/.bg.jpg ~/.bg.jpg $@
+ln -s ${CURRPATH}/.i3config ~/.config/i3/config $@
+ln -s ${CURRPATH}/.i3pystatus.conf ~/.config/i3/i3pystatus.conf $@
+mkdir ~/.config/nvim -p
+ln -s ${CURRPATH}/.init.vim ~/.config/nvim/init.vim $@
+ln -s ${CURRPATH}/.Xdefaults ~/.Xdefaults $@
+ln -s ${CURRPATH}/.xsession ~/.xsession $@
+ln -s ${CURRPATH}/.xinitrc ~/.xinitrc $@
+ln -s ${CURRPATH}/.bg.jpg ~/.bg.jpg $@

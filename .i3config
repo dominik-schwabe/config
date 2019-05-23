@@ -155,7 +155,6 @@ bar {
         workspace_buttons yes
 }
 
-
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master playback 4.0%+
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master playback 4.0%-
@@ -174,6 +173,9 @@ bindsym $mod+Shift+u exec scrot '%s.png' -u -e 'mv $f ~/Bilder'
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
+bindsym $mod+n exec spotify
+bindsym $mod+Home exec brightness +1
+bindsym $mod+End exec brightness -1
 
 default_border pixel 1
 hide_edge_borders both

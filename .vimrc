@@ -123,5 +123,6 @@ autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
 autocmd FileType tex :set shiftwidth=2
 autocmd FileType tex :set softtabstop=2
+autocmd FileType tex :setlocal spell spelllang=de_de
 
-"setlocal spell spelllang=de_de
+autocmd FileType txt :setlocal spell spelllang=de_de
