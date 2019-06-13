@@ -168,8 +168,8 @@ bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
 bindsym $mod+y exec google-chrome-stable
 bindsym $mod+x exec thunar
-bindsym $mod+u exec scrot '%s.png' -e 'mv $f ~/Bilder'
-bindsym $mod+Shift+u exec scrot '%s.png' -u -e 'mv $f ~/Bilder'
+bindsym $mod+u exec scrot '%s.png' -e 'mv $f ~/Bilder' && notify-send -t 300 'screenshot has been taken'
+bindsym $mod+Shift+u exec scrot '%s.png' -u -e 'mv $f ~/Bilder' && notify-send -t 300 'screenshot has been taken'
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
