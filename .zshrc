@@ -32,6 +32,18 @@ fi
 
 . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# pip zsh completion start
+function _pip_completion {
+  local words cword
+  read -Ac words
+  read -cn cword
+  reply=( $( COMP_WORDS="$words[*]" \
+             COMP_CWORD=$(( cword-1 )) \
+             PIP_AUTO_COMPLETE=1 $words[1] ) )
+}
+compctl -K _pip_completion pip
+# pip zsh completion end
+
 PS1='%B%F{green}%n@%m%f:%F{blue}%~%f$%b '
 #PS1='%B%F{yellow}%n@%m%f:%F{blue}%~%f$%b '
 #PS1='%B%F{red}%n@%m%f:%F{blue}%~%f$%b '

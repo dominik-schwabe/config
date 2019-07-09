@@ -4,14 +4,17 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin('~/.vimplugins')
-"Plugin Verwaltung
-"Plugin 'VundleVim/Vundle.vim'
-
 "Codeschnipsel
 "Plugin 'msanders/snipmate.vim'
 
+"Automatisch Klammern schließen
+"Plugin 'Raimondi/delimitMate'
+
+"better indents for python
+"Plugin 'vim-scripts/indentpython.vim'
+
 "Zusammengehörende Klammern durch andere ersetzen (mit cs"')
-"Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 
 "Erweiterung des .-Befehls
 Plugin 'tpope/vim-repeat'
@@ -19,20 +22,8 @@ Plugin 'tpope/vim-repeat'
 "Verzeichnis durchsuchen
 Plugin 'scrooloose/nerdtree'
 
-"Automatisch Klammern schließen
-"Plugin 'Raimondi/delimitMate'
-
-"HTML Workflow
-"Plugin 'mattn/emmet-vim'        
-
-"HTML Tagclose
-"Plugin 'alvan/vim-closetag'
-"let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.php'
 "git Änderungsanzeige
 Plugin 'airblade/vim-gitgutter'
-
-"schnell Kommentare toggeln (mit gcc)
-"Plugin 'tomtom/tcomment_vim'
 
 "schönere Statusleiste
 Plugin 'itchyny/lightline.vim'
@@ -44,38 +35,53 @@ Plugin 'reewr/vim-monokai-phoenix'
 "Operatoren hervorheben
 Plugin 'Valloric/vim-operator-highlight'
 
-"extended syntaxhighlighting for c/c++
-Plugin 'bfrg/vim-cpp-modern'
+"python ide
+Plugin 'python-mode/python-mode'
 
-"better indents for python
-"Plugin 'vim-scripts/indentpython.vim'
+"completion
+Plugin 'Valloric/YouCompleteMe'
 
-"python syntaxhighlighting
-"Plugin 'python-mode/python-mode'
-
-"python completion
-Bundle 'Valloric/YouCompleteMe'
-
-"python check syntax
-"Plugin 'vim-syntastic/syntastic'
-
-"python PEP8 checking
-"Plugin 'nvie/vim-flake8'
+"super searching
+Plugin 'kien/ctrlp.vim'
 
 "latex ide
-Bundle 'lervag/vimtex'
+Plugin 'lervag/vimtex'
+
+"semantic highlighting
+Plugin 'numirias/semshi'
 call vundle#end()            " required
 
 let g:vimtex_view_method = 'zathura'
 let g:pymode_python = 'python3'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
+"semshi
+let g:semshi#mark_selected_nodes = 0
+let g:semshi#simplify_markup = v:false
+let g:semshi#error_sign = v:false
+
+"pymode
+let g:pymode_rope = 0
+let g:pymode_rope_completion = 0
+let g:pymode_lint = 0
+let g:pymode_syntax = 0
+
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
-syntax on
+" Virtualenv support
+py3 << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  exec(compile(open(activate_this, "rb").read(), activate_this, 'exec'), dict(__file__=activate_this))
+EOF
+
 colorscheme monokai-phoenix
+syntax on
 
 set splitbelow
 
@@ -100,29 +106,24 @@ noremap gs :vsplit<LF>
 noremap gS :split<LF>
 noremap <F2> :NERDTree<LF>
 noremap g+ :tabnew<LF>
-noremap <left> <C-W>h
-noremap <right> <C-W>l
-noremap <up> <C-W>k
-noremap <down> <C-W>j
-noremap <C-left> gT
-noremap <C-right> gt
-noremap <C-up> :bn<LF>
-noremap <C-down> :bN<LF>
+noremap <left> gT
+noremap <right> gt
+noremap <up> :bn<LF>
+noremap <down> :bN<LF>
+noremap <C-left> <C-W>H
+noremap <C-right> <C-W>L
+noremap <C-up> <C-W>K
+noremap <C-down> <C-W>J
 noremap <C-h> <C-W>h
 noremap <C-j> <C-W>j
 noremap <C-k> <C-W>k
 noremap <C-l> <C-W>l
-noremap <F3> :w<lf>
-noremap <F4> :w <bar> !gcc % && ./a.out<lf>
-noremap <F5> :w <bar> !python3 %<lf>
-noremap <F6> :w <bar> !bash %<lf>
-noremap ZW :w<lf>
-noremap zp :w <bar> :!python3 %<lf>
+noremap <F5> :setlocal spell! spelllang=en_us<CR>
+noremap <F6> :setlocal spell! spelllang=de_de<CR>
+noremap <F7> :noh<CR>
+noremap ZW :w<LF>
 
 autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
 autocmd FileType tex :set shiftwidth=2
 autocmd FileType tex :set softtabstop=2
-autocmd FileType tex :setlocal spell spelllang=de_de
-
-autocmd FileType txt :setlocal spell spelllang=de_de
