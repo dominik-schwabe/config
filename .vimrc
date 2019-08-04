@@ -49,10 +49,12 @@ Plugin 'lervag/vimtex'
 
 "semantic highlighting
 Plugin 'numirias/semshi'
+
+"view Konzept defitionen
+Plugin 'majutsushi/tagbar'
 call vundle#end()            " required
 
 let g:vimtex_view_method = 'zathura'
-let g:pymode_python = 'python3'
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "semshi
@@ -61,6 +63,7 @@ let g:semshi#simplify_markup = v:false
 let g:semshi#error_sign = v:false
 
 "pymode
+let g:pymode_python = 'python3'
 let g:pymode_rope = 0
 let g:pymode_rope_completion = 0
 let g:pymode_lint = 0
@@ -102,14 +105,15 @@ set scrolloff=8
 
 set backspace=indent,eol,start
 
-noremap gs :vsplit<LF>
-noremap gS :split<LF>
-noremap <F2> :NERDTree<LF>
-noremap g+ :tabnew<LF>
+noremap gs :vsplit<CR>
+noremap gS :split<CR>
+noremap <F2> :NERDTreeToggle<CR>
+noremap <F3> :TagbarToggle<CR>
+noremap g+ :tabnew<CR>
 noremap <left> gT
 noremap <right> gt
-noremap <up> :bn<LF>
-noremap <down> :bN<LF>
+noremap <up> :bn<CR>
+noremap <down> :bN<CR>
 noremap <C-left> <C-W>H
 noremap <C-right> <C-W>L
 noremap <C-up> <C-W>K
@@ -121,7 +125,7 @@ noremap <C-l> <C-W>l
 noremap <F5> :setlocal spell! spelllang=en_us<CR>
 noremap <F6> :setlocal spell! spelllang=de_de<CR>
 noremap <F7> :noh<CR>
-noremap ZW :w<LF>
+noremap ZW :w<CR>
 
 autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CURRPATH=$(pwd)
+CURRPATH="$(pwd)/$(dirname $0)"
 
 ln -s ${CURRPATH}/.vimrc ~/.vimrc $@
 ln -s ${CURRPATH}/.vimrc ~/.nvimrc $@
@@ -8,6 +8,7 @@ ln -s ${CURRPATH}/.bashrc ~/.bashrc $@
 ln -s ${CURRPATH}/.zshrc ~/.zshrc $@
 ln -s ${CURRPATH}/.envrc ~/.envrc $@
 ln -s ${CURRPATH}/.toprc ~/.toprc $@
+ln -s ${CURRPATH}/.inputrc ~/.inputrc $@
 mkdir ~/.config/ranger -p
 ln -s ${CURRPATH}/.rc.conf ~/.config/ranger/rc.conf $@
 mkdir ~/.config/termite -p
