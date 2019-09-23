@@ -30,7 +30,7 @@ if [[ -r ~/.envrc ]]; then
     . ~/.envrc
 fi
 
-. /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. ~/.zshplugins/zsh-syntax-highlighting.git/zsh-syntax-highlighting.zsh
 
 # pip zsh completion start
 function _pip_completion {
