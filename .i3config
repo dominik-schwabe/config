@@ -170,8 +170,8 @@ bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
 bindsym $mod+y exec google-chrome || chromium-browser || firefox
 bindsym $mod+x exec thunar || nautilus
-bindsym $mod+u exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Bilder' && notify-send -t 600 'screenshot has been taken'
-bindsym $mod+Shift+u exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Bilder' && notify-send -t 600 'screenshot has been taken'
+bindsym $mod+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
+bindsym $mod+Shift+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Return exec $term || termite || xfce4-terminal || gnome-terminal
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
@@ -185,8 +185,7 @@ hide_edge_borders both
 new_window 1pixel
 workspace_auto_back_and_forth yes
 #focus_follows_mouse no
-for_window [class="Termite" window_role="ranger"] floating enable
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
-exec --no-startup-id pkill -u $USER redshift >/dev/null 2>&1; redshift-gtk -t 6500:3500 >/dev/null 2>&1
+exec --no-startup-id pkill -u $USER redshift >/dev/null 2>&1; redshift-gtk -r -t 6500:3500 >/dev/null 2>&1
