@@ -24,5 +24,6 @@ mkdir ~/.config/nvim -p
 ln -s ${CURRPATH}/.init.vim ~/.config/nvim/init.vim $@
 ln -s ${CURRPATH}/.Xdefaults ~/.Xdefaults $@
 ln -s ${CURRPATH}/.xsession ~/.xsession $@
+ln -s ${CURRPATH}/.xsession ~/.xsessionrc $@
 ln -s ${CURRPATH}/.xinitrc ~/.xinitrc $@
 ln -s ${CURRPATH}/.bg.jpg ~/.bg.jpg $@
