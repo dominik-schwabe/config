@@ -2,6 +2,8 @@
 
 CURRPATH="$(pwd)/$(dirname $0)"
 
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
 ln -s ${CURRPATH}/.vimrc ~/.vimrc $@
 ln -s ${CURRPATH}/.vimrc ~/.nvimrc $@
 ln -s ${CURRPATH}/.bashrc ~/.bashrc $@
