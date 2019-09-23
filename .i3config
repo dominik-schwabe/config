@@ -187,4 +187,4 @@ for_window [class="Termite" window_role="ranger"] floating enable
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
-exec --no-startup-id pkill -u dominik redshift >/dev/null 2>&1; redshift >/dev/null 2>&1
+exec --no-startup-id pkill -u $USER redshift >/dev/null 2>&1; redshift-gtk >/dev/null 2>&1
