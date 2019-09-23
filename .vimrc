@@ -52,6 +52,9 @@ Plugin 'numirias/semshi'
 
 "view Konzept defitionen
 Plugin 'majutsushi/tagbar'
+
+"compile/run
+Plugin 'vim-scripts/SingleCompile'
 call vundle#end()            " required
 
 let g:vimtex_view_method = 'zathura'
@@ -68,6 +71,10 @@ let g:pymode_rope = 0
 let g:pymode_rope_completion = 0
 let g:pymode_lint = 0
 let g:pymode_syntax = 0
+
+"SingleCompile'
+let g:SingleCompile_usetee = 0
+let g:SingleCompile_usequickfix = 0
 
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
@@ -105,6 +112,8 @@ set scrolloff=8
 
 set backspace=indent,eol,start
 
+set relativenumber
+
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
 noremap <F2> :NERDTreeToggle<CR>
@@ -126,6 +135,8 @@ noremap <F5> :setlocal spell! spelllang=en_us<CR>
 noremap <F6> :setlocal spell! spelllang=de_de<CR>
 noremap <F7> :noh<CR>
 noremap ZW :w<CR>
+inoremap <F9> <Esc>:w<CR>:SCCompile<CR>
+nnoremap <F9> <Esc>:w<CR>:SCCompile<CR>
 
 autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
