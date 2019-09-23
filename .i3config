@@ -10,7 +10,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod1
-set $term termite
+set $term termite # xfce4-terminal gnome-terminal
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -167,10 +167,10 @@ bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
 bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
 bindsym $mod+y exec google-chrome || chromium-browser || firefox
-bindsym $mod+x exec thunar || xfce4-terminal || gnome-terminal
+bindsym $mod+x exec thunar || nautilus
 bindsym $mod+u exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Bilder' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Shift+u exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Bilder' && notify-send -t 600 'screenshot has been taken'
-bindsym $mod+Return exec $term
+bindsym $mod+Return exec $term || termite || xfce4-terminal || gnome-terminal
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
 bindsym $mod+n exec spotify
