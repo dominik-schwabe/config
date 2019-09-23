@@ -166,8 +166,8 @@ bindsym XF86AudioPrev exec --no-startup-id cmus-remote -r
 bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
 bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
-bindsym $mod+y exec google-chrome-stable
-bindsym $mod+x exec thunar
+bindsym $mod+y exec google-chrome || chromium-browser || firefox
+bindsym $mod+x exec thunar || xfce4-terminal || gnome-terminal
 bindsym $mod+u exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Bilder' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Shift+u exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Bilder' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Return exec $term
