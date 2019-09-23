@@ -119,7 +119,8 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+Delete exit
+bindsym $mod+Delete exit
+bindsym $mod+Shift+Delete exec --no-startup-id poweroff
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -161,6 +162,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master playback 4.0
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -time 0 +5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -time 0 -5
 bindsym XF86ScreenSaver exec --no-startup-id i3lock -c 000000
+bindsym $mod+Shift+p exec --no-startup-id i3lock -c 000000
 bindsym XF86AudioNext exec --no-startup-id cmus-remote -n
 bindsym XF86AudioPrev exec --no-startup-id cmus-remote -r
 bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
