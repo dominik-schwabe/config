@@ -55,6 +55,15 @@ Plugin 'majutsushi/tagbar'
 
 "compile/run
 Plugin 'vim-scripts/SingleCompile'
+
+"R studio
+Plugin 'jalvesaq/Nvim-R'
+
+"buffer explorer
+Plugin 'jlanzarotta/bufexplorer'
+
+"csv viewer
+Plugin 'chrisbra/csv.vim'
 call vundle#end()            " required
 
 let g:vimtex_view_method = 'zathura'
@@ -80,6 +89,23 @@ filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
+"Nvim-R
+let R_in_buffer = 1
+let R_buffer_opts = ''
+let R_setwidth = 50
+let R_term = 'xterm'
+let R_esc_term = 0
+let R_close_term = 1
+
+autocmd VimEnter * if exists(':RSend') | noremap s :call SendParagraphToR('silent', 'stay')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap S :call SendLineToR('stay')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
+
+
 " Virtualenv support
 py3 << EOF
 import os
@@ -94,6 +120,7 @@ colorscheme monokai-phoenix
 syntax on
 
 set splitbelow
+set splitright
 
 set number
 set cursorline
@@ -114,10 +141,13 @@ set backspace=indent,eol,start
 
 set relativenumber
 
+noremap Q :qa<CR>
+noremap <C-q> :bd<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
 noremap <F2> :NERDTreeToggle<CR>
 noremap <F3> :TagbarToggle<CR>
+noremap <F4> :ToggleBufExplorer<CR>
 noremap g+ :tabnew<CR>
 noremap <left> gT
 noremap <right> gt
@@ -135,8 +165,14 @@ noremap <F5> :setlocal spell! spelllang=en_us<CR>
 noremap <F6> :setlocal spell! spelllang=de_de<CR>
 noremap <F7> :noh<CR>
 noremap ZW :w<CR>
+
 inoremap <F9> <Esc>:w<CR>:SCCompile<CR>
 nnoremap <F9> <Esc>:w<CR>:SCCompile<CR>
+
+tnoremap <C-h> <C-\><C-n><C-W>h
+tnoremap <C-j> <C-\><C-n><C-W>j
+tnoremap <C-k> <C-\><C-n><C-W>k
+tnoremap <C-l> <C-\><C-n><C-W>l
 
 autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
