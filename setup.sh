@@ -2,7 +2,6 @@
 
 CURRPATH="$(pwd)/$(dirname $0)"
 
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zshplugins/zsh-syntax-highlighting.git
 
 ln -s ${CURRPATH}/.vimrc ~/.vimrc $@

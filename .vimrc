@@ -1,70 +1,78 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin('~/.vimplugins')
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
 "Codeschnipsel
-"Plugin 'msanders/snipmate.vim'
+"Plug 'msanders/snipmate.vim'
 
 "Automatisch Klammern schließen
-"Plugin 'Raimondi/delimitMate'
+"Plug 'Raimondi/delimitMate'
 
 "better indents for python
-"Plugin 'vim-scripts/indentpython.vim'
+"Plug 'vim-scripts/indentpython.vim'
 
 "Zusammengehörende Klammern durch andere ersetzen (mit cs"')
-Plugin 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 
 "Erweiterung des .-Befehls
-Plugin 'tpope/vim-repeat'
+Plug 'tpope/vim-repeat'
 
 "Verzeichnis durchsuchen
-Plugin 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 "git Änderungsanzeige
-Plugin 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 
 "schönere Statusleiste
-Plugin 'itchyny/lightline.vim'
+Plug 'itchyny/lightline.vim'
 set laststatus=2
 
 "Colorscheme: Monokai Phoenix
-Plugin 'reewr/vim-monokai-phoenix'
+Plug 'reewr/vim-monokai-phoenix'
 
 "Operatoren hervorheben
-Plugin 'Valloric/vim-operator-highlight'
+Plug 'Valloric/vim-operator-highlight'
 
 "python ide
-Plugin 'python-mode/python-mode'
+Plug 'python-mode/python-mode'
 
 "completion
-Plugin 'Valloric/YouCompleteMe'
-
-"super searching
-Plugin 'kien/ctrlp.vim'
-
-"latex ide
-Plugin 'lervag/vimtex'
-
-"semantic highlighting
-Plugin 'numirias/semshi'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 
 "view Konzept defitionen
-Plugin 'majutsushi/tagbar'
-
-"compile/run
-Plugin 'vim-scripts/SingleCompile'
-
-"R studio
-Plugin 'jalvesaq/Nvim-R'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 "buffer explorer
-Plugin 'jlanzarotta/bufexplorer'
+Plug 'jlanzarotta/bufexplorer', { 'on': 'ToggleBufExplorer' }
+
+"super searching
+Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
+noremap <C-p> :CtrlP<CR>
+
+"latex ide
+Plug 'lervag/vimtex'
+
+"semantic highlighting
+Plug 'numirias/semshi'
+
+"compile/run
+Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
+
+"R studio
+Plug 'jalvesaq/Nvim-R'
 
 "csv viewer
-Plugin 'chrisbra/csv.vim'
-call vundle#end()            " required
+Plug 'chrisbra/csv.vim'
+
+"multiple cursors
+Plug 'terryma/vim-multiple-cursors'
+call plug#end()
 
 let g:vimtex_view_method = 'zathura'
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -91,8 +99,6 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "Nvim-R
 let R_in_buffer = 1
-let R_buffer_opts = ''
-let R_setwidth = 50
 let R_term = 'xterm'
 let R_esc_term = 0
 let R_close_term = 1
