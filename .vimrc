@@ -8,74 +8,70 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
+"fast html
+"Plug 'rstacruz/sparkup'
 "Codeschnipsel
-"Plug 'msanders/snipmate.vim'
-
-"Automatisch Klammern schließen
-"Plug 'Raimondi/delimitMate'
-
-"better indents for python
-"Plug 'vim-scripts/indentpython.vim'
-
+"Plug 'honza/vim-snippets'
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
+"Plug 'garbas/vim-snipmate'
 "Zusammengehörende Klammern durch andere ersetzen (mit cs"')
 Plug 'tpope/vim-surround'
-
 "Erweiterung des .-Befehls
 Plug 'tpope/vim-repeat'
-
-"Verzeichnis durchsuchen
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-
 "git Änderungsanzeige
 Plug 'airblade/vim-gitgutter'
-
 "schönere Statusleiste
 Plug 'itchyny/lightline.vim'
 set laststatus=2
-
-"Colorscheme: Monokai Phoenix
-Plug 'reewr/vim-monokai-phoenix'
-
+"colorschemes
+Plug 'flazz/vim-colorschemes'
+Plug 'sheerun/vim-polyglot'
 "Operatoren hervorheben
 Plug 'Valloric/vim-operator-highlight'
-
 "python ide
 Plug 'python-mode/python-mode'
-
+"python interactive
+Plug 'jalvesaq/vimcmdline'
 "completion
 Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
-
+"Verzeichnis durchsuchen
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view Konzept defitionen
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-
 "buffer explorer
 Plug 'jlanzarotta/bufexplorer', { 'on': 'ToggleBufExplorer' }
-
 "super searching
 Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
-noremap <C-p> :CtrlP<CR>
-
 "latex ide
 Plug 'lervag/vimtex'
-
 "semantic highlighting
-Plug 'numirias/semshi'
-
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+"Plug 'jaxbot/semantic-highlight.vim'
 "compile/run
 Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
-
 "R studio
 Plug 'jalvesaq/Nvim-R'
-
 "csv viewer
 Plug 'chrisbra/csv.vim'
-
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 call plug#end()
 
+"solarized colorscheme
+let g:solarized_termcolors=256
+
+"CtrlP
+noremap <C-p> :CtrlP<CR>
+
+"vimtex
 let g:vimtex_view_method = 'zathura'
 let g:ycm_autoclose_preview_window_after_insertion = 1
+
+"vimcmdline
+let cmdline_vsplit = 1
+let cmdline_map_send = '<space>'
+let cmdline_map_send_paragraph = '<C-space>'
 
 "semshi
 let g:semshi#mark_selected_nodes = 0
@@ -93,6 +89,7 @@ let g:pymode_syntax = 0
 let g:SingleCompile_usetee = 0
 let g:SingleCompile_usequickfix = 0
 
+"YCM
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -102,15 +99,15 @@ let R_in_buffer = 1
 let R_term = 'xterm'
 let R_esc_term = 0
 let R_close_term = 1
+let R_min_editor_width = -80
 
-autocmd VimEnter * if exists(':RSend') | noremap s :call SendParagraphToR('silent', 'stay')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap S :call SendLineToR('stay')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
-
+autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'stay')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('stay')<CR>| endif
+"autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap \s :call StartR('R')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap \e :call RQuit('nosave')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap \h :call RAction('help')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap \v :call RAction('viewdf')<CR>| endif
 
 " Virtualenv support
 py3 << EOF
@@ -155,14 +152,10 @@ noremap <F2> :NERDTreeToggle<CR>
 noremap <F3> :TagbarToggle<CR>
 noremap <F4> :ToggleBufExplorer<CR>
 noremap g+ :tabnew<CR>
-noremap <left> gT
-noremap <right> gt
-noremap <up> :bn<CR>
-noremap <down> :bN<CR>
-noremap <C-left> <C-W>H
-noremap <C-right> <C-W>L
-noremap <C-up> <C-W>K
-noremap <C-down> <C-W>J
+noremap <left> <C-W>H
+noremap <right> <C-W>L
+noremap <up> <C-W>K
+noremap <down> <C-W>J
 noremap <C-h> <C-W>h
 noremap <C-j> <C-W>j
 noremap <C-k> <C-W>k
@@ -171,6 +164,8 @@ noremap <F5> :setlocal spell! spelllang=en_us<CR>
 noremap <F6> :setlocal spell! spelllang=de_de<CR>
 noremap <F7> :noh<CR>
 noremap ZW :w<CR>
+
+let python_highlight_all = 1
 
 inoremap <F9> <Esc>:w<CR>:SCCompile<CR>
 nnoremap <F9> <Esc>:w<CR>:SCCompile<CR>
