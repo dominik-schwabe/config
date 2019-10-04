@@ -21,6 +21,9 @@ sudo \
 git \
 gvim \
 neovim
+python-pynvim \
+python-language-server \
+python-jedi \
 vim-spell-de \
 vim-spell-en \
 zsh \
