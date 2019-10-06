@@ -27,3 +27,4 @@ then
 fi
 
 cloneupdate "zsh-users/zsh-syntax-highlighting.git" "${HOME}.zshplugins/zsh-syntax-highlighting.git/"
+cloneupdate "robbyrussell/oh-my-zsh.git" "${HOME}.zshplugins/oh-my-zsh/"

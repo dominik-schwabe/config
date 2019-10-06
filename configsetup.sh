@@ -21,7 +21,7 @@ function mkconfig {
     DESTPATH=${HOME}$2
     DESTDIR=$(dirname $DESTPATH)
     F=$3
-    mkdir -p $F $DESTDIR
+    mkdir -p $DESTDIR
     ln -s $F $SRCPATH $DESTPATH &> /dev/null
     if [ $? -eq 0 ]
     then
@@ -34,7 +34,7 @@ function mkconfig {
 set \
     .vimrc .vimrc \
     .bashrc .bashrc \
-    .zshrc .zshrc \
+    .oh-my-zshrc .zshrc \
     .envrc .envrc \
     .toprc .toprc \
     .inputrc .inputrc \
@@ -50,6 +50,7 @@ set \
     .xinitrc .xinitrc \
     .bg.jpg .bg.jpg \
     .bg.png .bg.png \
+#    .zshrc .zshrc \
 
 while :
 do
