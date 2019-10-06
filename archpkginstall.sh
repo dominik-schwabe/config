@@ -18,6 +18,7 @@ base-devel \
 bash-completion \
 cmake \
 cmus \
+curl \
 cronie \
 efibootmgr \
 git \
@@ -117,7 +118,7 @@ lightdm-mini-greeter \
 tor-browser \
 "
 
-function installyay {
+installyay() {
     YAYPATH=$(mktemp -d)
     git clone https://aur.archlinux.org/yay.git $YAYPATH
     cd $YAYPATH

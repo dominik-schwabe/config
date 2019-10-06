@@ -5,7 +5,7 @@ RED="\e[31m"
 BLUE="\e[34m"
 RESET="\e[0m"
 
-function cloneupdate {
+cloneupdate() {
     echo -e "${BLUE}clone ${RESET}$1 ${ORANGE}to${RESET} $2"
     GITNAME=$1
     GITPATH=https://github.com/$1

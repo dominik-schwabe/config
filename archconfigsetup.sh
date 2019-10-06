@@ -7,14 +7,14 @@
 #::1		localhost" > /etc/hosts
 #ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
-function main {
+main() {
     CURRPATH="$(pwd)/$(dirname $0)"
 
     GREEN="\e[32m"
     RED="\e[31m"
     RESET="\e[0m"
 
-    function cpconfig {
+    cpconfig() {
         DESTPATH=$1
         SRCPATH=${CURRPATH}/rootconf/$(basename $DESTPATH)
         DESTDIR=$(dirname $DESTPATH)

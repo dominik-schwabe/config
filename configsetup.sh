@@ -17,7 +17,7 @@ GREEN="\e[32m"
 RED="\e[31m"
 RESET="\e[0m"
 
-function mkconfig {
+mkconfig() {
     SRCPATH=${CURRPATH}/userconf/$1
     DESTPATH=${HOME}/$2
     DESTDIR=$(dirname $DESTPATH)
