@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 #echo "KEMAP=de" > /etc/vconsole.conf
 #echo "LANG=de_DE.UTF-8" > /etc/locale.conf

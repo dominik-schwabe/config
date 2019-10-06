@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 ORANGE="\e[33m"
 RED="\e[31m"
