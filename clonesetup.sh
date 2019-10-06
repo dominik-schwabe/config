@@ -17,7 +17,7 @@ function cloneupdate() {
         cd $2 &> /dev/null
         git pull &> /dev/null
     fi
-    echo 
+    echo
 }
 
 git &> /dev/null

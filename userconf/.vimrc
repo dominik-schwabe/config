@@ -7,6 +7,8 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"highlight trailing whitespace
+Plug 'bronson/vim-trailing-whitespace'
 "change root to git project
 Plug 'airblade/vim-rooter'
 "fast html writing

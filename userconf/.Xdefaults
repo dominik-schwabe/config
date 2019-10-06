@@ -19,5 +19,5 @@ URxvt.tabbed.tabbar-bg: 0
 URxvt.tabbed.tab-fg: 0
 URxvt.tabbed.tab-bg: 1
 URxvt.tabbed.secondaryScroll: true
-URxvt*inheritPixmap: true 
+URxvt*inheritPixmap: true
 URxvt*shading: 70

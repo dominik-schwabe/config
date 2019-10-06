@@ -4,8 +4,9 @@
 
 CURRPATH="$(pwd)/$(dirname $0)"
 
+FORCE=""
 while getopts "f" o
-do 
+do
     if [ $o == "f" ]
     then
         FORCE="-f"
@@ -17,7 +18,7 @@ RED="\e[31m"
 RESET="\e[0m"
 
 function mkconfig {
-    SRCPATH=${CURRPATH}/$1
+    SRCPATH=${CURRPATH}/userconf/$1
     DESTPATH=${HOME}/$2
     DESTDIR=$(dirname $DESTPATH)
     F=$3
