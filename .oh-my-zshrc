@@ -91,4 +91,5 @@ fi
 . ~/.zshplugins/zsh-syntax-highlighting.git/zsh-syntax-highlighting.zsh
 
 bindkey -v
+bindkey "^?" backward-delete-char
 autoload -U compinit && compinit

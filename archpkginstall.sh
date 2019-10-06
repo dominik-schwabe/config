@@ -56,29 +56,19 @@ cronie \
 "
 
 PYTHON="\
-python-cairocffi \
-python-dbus \
-python-flake8-debugger \
-python-flask \
-python-gensim \
-python-gobject \
-python-iwlib \
-python-markupsafe \
-python-matplotlib \
-python-nltk \
 python-numpy \
-python-opengl \
 python-pandas \
-python-pip \
-python-pipenv \
-python-pmw \
+python-nltk \
+python-matplotlib \
+python-scipy \
+python-dbus \
+python-flask \
+python-iwlib \
 python-pyalsa \
-python-pygame \
 python-pygments \
 python-pylint \
 python-pytz \
 python-rope \
-python-scipy \
 "
 
 GRAPHIC="\
