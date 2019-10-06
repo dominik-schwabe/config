@@ -18,7 +18,7 @@ RESET="\e[0m"
 
 function mkconfig {
     SRCPATH=${CURRPATH}/$1
-    DESTPATH=${HOME}$2
+    DESTPATH=${HOME}/$2
     DESTDIR=$(dirname $DESTPATH)
     F=$3
     mkdir -p $DESTDIR
