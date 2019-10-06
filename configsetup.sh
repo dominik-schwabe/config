@@ -49,6 +49,7 @@ set \
     .xsession .xsessionrc \
     .xinitrc .xinitrc \
     .bg.jpg .bg.jpg \
+    .bg.png .bg.png \
 
 while :
 do

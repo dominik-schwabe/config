@@ -67,10 +67,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+odiaeresis split h
+bindsym $mod+i split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+o split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -126,26 +126,26 @@ bindsym $mod+Shift+Delete exec --no-startup-id poweroff
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+    # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+    # same bindings, but for the arrow keys
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 
 bindsym $mod+r mode "resize"
@@ -153,10 +153,11 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        position bottom
-        status_command python3 ~/.config/i3/i3pystatus.conf
-        workspace_buttons yes
+    position bottom
+    status_command python3 ~/.config/i3/i3pystatus.conf
+    workspace_buttons yes
 }
+
 
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master playback 4.0%+
@@ -170,11 +171,14 @@ bindsym XF86AudioPrev exec --no-startup-id cmus-remote -r
 bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
 bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
-bindsym $mod+y exec google-chrome-stable || chromium-browser || firefox
-bindsym $mod+x exec thunar || nautilus
+bindsym $mod+y exec firefox
+#bindsym $mod+y exec chromium
+bindsym $mod+x exec thunar
 bindsym $mod+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Shift+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
-bindsym $mod+Return exec $term || termite || xfce4-terminal || gnome-terminal
+bindsym $mod+Return exec termite
+#bindsym $mod+Return exec xfce4-terminal
+#bindsym $mod+Return exec gnome-terminal
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
 bindsym $mod+n exec spotify
@@ -190,4 +194,5 @@ workspace_auto_back_and_forth yes
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
+exec --no-startup-id feh --bg-fill "$HOME/.bg.png"
 exec --no-startup-id pkill -u $USER redshift >/dev/null 2>&1; redshift-gtk -r -l "51.34:12.35" -t 6500:3500 >/dev/null 2>&1

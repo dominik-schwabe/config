@@ -7,6 +7,8 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"change root to git project
+Plug 'airblade/vim-rooter'
 "fast html writing
 Plug 'mattn/emmet-vim', { 'for': 'html' }
 "substitute brackets with others (cs"')
@@ -60,7 +62,6 @@ call plug#end()
 let g:solarized_termcolors = 256
 
 "lightline
-
 set laststatus=2
 
 "CtrlP
@@ -128,13 +129,13 @@ let R_esc_term = 0
 let R_close_term = 1
 let R_min_editor_width = -80
 
-autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'stay')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('stay')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
 "autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap \s :call StartR('R')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap \e :call RQuit('nosave')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap \h :call RAction('help')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap \v :call RAction('viewdf')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
 " Virtualenv support
 py3 << EOF
