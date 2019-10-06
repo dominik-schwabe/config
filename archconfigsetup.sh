@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 #echo "KEMAP=de" > /etc/vconsole.conf
 #echo "LANG=de_DE.UTF-8" > /etc/locale.conf
 #echo "dominiksArch" > /etc/hostname
