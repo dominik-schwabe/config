@@ -176,7 +176,7 @@ bindsym $mod+y exec firefox
 bindsym $mod+x exec thunar
 bindsym $mod+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Shift+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec $term
 #bindsym $mod+Return exec xfce4-terminal
 #bindsym $mod+Return exec gnome-terminal
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
