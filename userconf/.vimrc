@@ -59,6 +59,20 @@ Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
 Plug 'chrisbra/csv.vim'
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
+"wrap function arguments
+Plug 'foosoft/vim-argwrap'
+"exchange words
+Plug 'tommcdo/vim-exchange'
+"manipulate function arguments
+Plug 'inkarkat/argtextobj.vim'
+"swap objects like function arguments
+Plug 'AndrewRadev/sideways.vim'
+"textobj extension
+Plug 'wellle/targets.vim'
+"search for text in files
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
+"textobj for indents
+Plug 'michaeljsmith/vim-indent-object'
 call plug#end()
 
 "solarized colorscheme
@@ -131,6 +145,14 @@ let R_term = 'xterm'
 let R_esc_term = 0
 let R_close_term = 1
 let R_min_editor_width = -80
+
+"argwrap
+nnoremap Y :ArgWrap<CR>
+
+"sideways
+nnoremap R :SidewaysLeft<cr>
+nnoremap U :SidewaysRight<cr>
+
 
 autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
 autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif

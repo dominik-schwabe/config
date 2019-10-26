@@ -100,5 +100,6 @@ if [[ -r ~/.envrc ]]; then
     . ~/.envrc
 fi
 
-bindkey -v
 bindkey "^?" backward-delete-char
+# fix interaction of plugins: sudo vi-mode.zsh
+export KEYTIMEOUT=0
