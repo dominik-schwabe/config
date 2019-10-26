@@ -30,8 +30,6 @@ if [[ -r ~/.envrc ]]; then
     . ~/.envrc
 fi
 
-. ~/.zshplugins/zsh-syntax-highlighting.git/zsh-syntax-highlighting.zsh
-
 # pip zsh completion start
 function _pip_completion {
   local words cword

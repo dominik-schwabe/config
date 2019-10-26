@@ -35,7 +35,6 @@ mkconfig() {
 set \
     .vimrc .vimrc \
     .bashrc .bashrc \
-    .zshrc .zshrc \
     .envrc .envrc \
     .toprc .toprc \
     .inputrc .inputrc \
@@ -51,6 +50,7 @@ set \
     .xinitrc .xinitrc \
     .bg.jpg .bg.jpg \
     .bg.png .bg.png \
+    .zshrc .zshrc \
 #    .zshrc.min .zshrc \
 
 while :

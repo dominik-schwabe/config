@@ -52,7 +52,7 @@ COMPLETION_WAITING_DOTS="true"
 #HIST_STAMPS="mm/dd/yyyy"
 
 bgnotify_threshold=5
-plugins=(git pip colored-man-pages sudo history-substring-search bgnotify vi-mode z)
+plugins=(git pip colored-man-pages sudo history-substring-search bgnotify z)
 source $ZSH/oh-my-zsh.sh
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -63,16 +63,18 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 #export ARCHFLAGS="-arch x86_64"
 
-
+VI_MODE_CURSOR_INSERT='\e[2 q'
+VI_MODE_CURSOR_NORMAL='\e[6 q'
 ### Added by Zplugin's installer
 source "$HOME/.zplugin/bin/zplugin.zsh"
 #zplugin light "robbyrussell/oh-my-zsh"
 #zplugin light "zdharma/history-search-multi-word"
 #zplugin light "zsh-users/zsh-autosuggestions"
-zplugin light "b4b4r07/zsh-vimode-visual"
+zplugin light "zdharma/fast-syntax-highlighting"
 zplugin light "zsh-users/zsh-completions"
 zplugin light "MichaelAquilina/zsh-you-should-use"
-zplugin light "zdharma/fast-syntax-highlighting"
+zplugin light "kutsan/zsh-system-clipboard"
+zplugin light "madKuchenbaecker/vi-mode.zsh"
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 ### End of Zplugin installer's chunk
@@ -98,19 +100,5 @@ if [[ -r ~/.envrc ]]; then
     . ~/.envrc
 fi
 
-# cursor changes in vi normal and insert mode
-zle-keymap-select () {
-    if [ "$TERM" = "xterm-256color" ]; then
-        if [ $KEYMAP = vicmd ]; then
-            # the command mode for vi
-            echo -ne "\e[2 q"
-        else
-            # the insert mode for vi
-            echo -ne "\e[6 q"
-        fi
-    fi
-}
-_fix_cursor() {
-    echo -ne "\e[6 q"
-}
-precmd_functions+=(_fix_cursor)
+bindkey -v
+bindkey "^?" backward-delete-char
