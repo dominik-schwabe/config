@@ -26,5 +26,5 @@ then
     exit 1
 fi
 
-cloneupdate "zsh-users/zsh-syntax-highlighting.git" "${HOME}/.zshplugins/zsh-syntax-highlighting.git/"
-cloneupdate "robbyrussell/oh-my-zsh.git" "${HOME}/.zshplugins/oh-my-zsh/"
+cloneupdate "zdharma/zplugin" "${HOME}/.zplugin/bin"
+cloneupdate "robbyrussell/oh-my-zsh.git" "${HOME}/.zshplugins/oh-my-zsh"
