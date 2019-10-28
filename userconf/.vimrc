@@ -35,7 +35,7 @@ Plug 'Valloric/vim-operator-highlight'
 "interactive console (send lines of file)
 Plug 'jalvesaq/vimcmdline'
 "completion
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+"Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
@@ -73,6 +73,8 @@ Plug 'wellle/targets.vim'
 Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 "textobj for indents
 Plug 'michaeljsmith/vim-indent-object'
+" % match more
+Plug 'vim-scripts/matchit.zip'
 call plug#end()
 
 "solarized colorscheme
@@ -150,8 +152,11 @@ let R_min_editor_width = -80
 nnoremap Y :ArgWrap<CR>
 
 "sideways
-nnoremap R :SidewaysLeft<cr>
-nnoremap U :SidewaysRight<cr>
+nnoremap R :SidewaysLeft<CR>
+nnoremap U :SidewaysRight<CR>
+
+"grepper
+nnoremap <C-m> :Grepper<CR>
 
 
 autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
