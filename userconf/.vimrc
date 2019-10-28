@@ -35,7 +35,7 @@ Plug 'Valloric/vim-operator-highlight'
 "interactive console (send lines of file)
 Plug 'jalvesaq/vimcmdline'
 "completion
-"Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
@@ -93,10 +93,11 @@ function! Ulti_ExpandOrJump_and_getRes()
     return g:ulti_expand_res
 endfunction
 
-inoremap <CR> <C-R>=(Ulti_ExpandOrJump_and_getRes() > 0)?"":"\n"<CR>
-let g:UltiSnipsExpandSnippet = "<NUL>"
-let g:UltiSnipsJumpForwardTrigger = "<c-o>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-i>"
+"inoremap <CR> <C-R>=(Ulti_ExpandOrJump_and_getRes() > 0)?"":"\n"<CR>
+"let g:UltiSnipsExpandSnippet = '<NUL>'
+let g:UltiSnipsExpandTrigger = '<c-j>'
+let g:UltiSnipsJumpForwardTrigger = '<c-o>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-i>'
 
 "vimtex
 let g:tex_flavor = 'latex'
@@ -104,6 +105,11 @@ let g:vimtex_view_method = 'zathura'
 let g:vimtex_quickfix_mode = 0
 set conceallevel=1
 let g:tex_conceal = 'abdmg'
+
+if !exists('g:ycm_semantic_triggers')
+    let g:ycm_semantic_triggers = {}
+endif
+au VimEnter * let g:ycm_semantic_triggers.tex=g:vimtex#re#youcompleteme
 
 autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
