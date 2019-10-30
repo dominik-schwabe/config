@@ -26,7 +26,7 @@ grub \
 gvim \
 htop \
 ipython \
-linux
+linux \
 maven \
 neovim
 networkmanager \

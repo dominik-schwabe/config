@@ -50,6 +50,7 @@ set \
     .xinitrc .xinitrc \
     .bg.jpg .bg.jpg \
     .bg.png .bg.png \
+    .zathurarc .config/zathura/zathurarc \
     .zshrc .zshrc \
 #    .zshrc.min .zshrc \
 

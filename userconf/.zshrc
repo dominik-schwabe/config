@@ -103,3 +103,6 @@ fi
 bindkey "^?" backward-delete-char
 # fix interaction of plugins: sudo vi-mode.zsh
 export KEYTIMEOUT=0
+
+setopt noextendedhistory
+setopt nosharehistory
