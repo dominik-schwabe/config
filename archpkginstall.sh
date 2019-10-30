@@ -18,8 +18,8 @@ base-devel \
 bash-completion \
 cmake \
 cmus \
-curl \
 cronie \
+curl \
 efibootmgr \
 git \
 grub \
@@ -30,6 +30,8 @@ linux
 maven \
 neovim
 networkmanager \
+nodejs \
+npm \
 ntp \
 openjdk \
 pacman-contrib \
@@ -94,6 +96,7 @@ noto-fonts \
 pavucontrol \
 redshift \
 scrot \
+system-config-printer \
 termite \
 texlive-lang \
 texlive-most \

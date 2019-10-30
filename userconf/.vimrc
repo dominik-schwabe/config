@@ -35,7 +35,8 @@ Plug 'Valloric/vim-operator-highlight'
 "interactive console (send lines of file)
 Plug 'jalvesaq/vimcmdline'
 "completion
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
@@ -69,8 +70,6 @@ Plug 'inkarkat/argtextobj.vim'
 Plug 'AndrewRadev/sideways.vim'
 "textobj extension
 Plug 'wellle/targets.vim'
-"search for text in files
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 "textobj for indents
 Plug 'michaeljsmith/vim-indent-object'
 " % match more
@@ -87,22 +86,12 @@ set laststatus=2
 noremap <C-p> :CtrlP<CR>
 
 "ultisnips
-let g:ulti_expand_res = 0
-function! Ulti_ExpandOrJump_and_getRes()
-    call UltiSnips#ExpandSnippet()
-    return g:ulti_expand_res
-endfunction
-
-"inoremap <CR> <C-R>=(Ulti_ExpandOrJump_and_getRes() > 0)?"":"\n"<CR>
-"let g:UltiSnipsExpandSnippet = '<NUL>'
-let g:UltiSnipsExpandTrigger = '<c-j>'
-let g:UltiSnipsJumpForwardTrigger = '<c-o>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-i>'
+let g:UltiSnipsExpandTrigger = '<NUL>'
 
 "vimtex
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
-let g:vimtex_quickfix_mode = 0
+let g:vimtex_quickfix_mode = 1
 set conceallevel=1
 let g:tex_conceal = 'abdmg'
 
@@ -111,10 +100,10 @@ if !exists('g:ycm_semantic_triggers')
 endif
 au VimEnter * let g:ycm_semantic_triggers.tex=g:vimtex#re#youcompleteme
 
-autocmd FileType tex :set dictionary+=~/.vim/dictionary/texdict
 autocmd FileType tex :set tabstop=2
 autocmd FileType tex :set shiftwidth=2
 autocmd FileType tex :set softtabstop=2
+autocmd FileType tex :set indentexpr=""
 
 "polyglot
 let g:polyglot_disabled = ['latex']
@@ -131,9 +120,9 @@ let g:semshi#error_sign = v:false
 
 "pymode
 let g:pymode_python = 'python3'
-let g:pymode_rope = 0
-let g:pymode_rope_completion = 0
-let g:pymode_lint = 0
+let g:pymode_rope = 1
+let g:pymode_rope_completion = 1
+let g:pymode_lint = 1
 let g:pymode_syntax = 0
 
 "SingleCompile'
@@ -143,9 +132,45 @@ noremap <F9> <Esc>:w<CR>:SCCompile<CR>
 
 "YCM
 let g:ycm_autoclose_preview_window_after_insertion = 1
-filetype plugin on
+"filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+"coc.nvim
+inoremap <silent><expr> <c-space> coc#refresh()
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<c-n>" :
+    \ <sid>check_back_space() ? "\<tab>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+nmap <leader>rn <Plug>(coc-rename)
+let g:coc_snippet_next = '<C-o>'
+let g:coc_snippet_prev = '<C-i>'
+imap <C-j> <Plug>(coc-snippets-expand)
+let g:coc_global_extensions = ['coc-snippets', 'coc-python', 'coc-ultisnips', 'coc-css', 'coc-html', 'coc-json', 'coc-vimtex']
 
 "Nvim-R
 let R_in_buffer = 1
@@ -160,9 +185,6 @@ nnoremap Y :ArgWrap<CR>
 "sideways
 nnoremap R :SidewaysLeft<CR>
 nnoremap U :SidewaysRight<CR>
-
-"grepper
-nnoremap <C-m> :Grepper<CR>
 
 
 autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
@@ -197,9 +219,12 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set autoindent
+set smartindent
 set expandtab
 
-set clipboard=unnamedplus
+if has('unnamedplus')
+  set clipboard=unnamed,unnamedplus
+endif
 set nowrap
 set encoding=utf-8
 set scrolloff=8
@@ -207,6 +232,10 @@ set scrolloff=8
 set backspace=indent,eol,start
 
 set relativenumber
+
+set nobackup
+set nowritebackup
+set cmdheight=2
 
 noremap <C-o> :tabnext<CR>
 noremap <C-i> :tabprevious<CR>
@@ -230,6 +259,11 @@ noremap <F5> :setlocal spell! spelllang=en_us<CR>
 noremap <F6> :setlocal spell! spelllang=de_de<CR>
 nnoremap ö :noh<CR>
 noremap ZW :w<CR>
+noremap + :m+<CR>
+noremap - :m-2<CR>
+
+vmap < <gv
+vmap > >gv
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
