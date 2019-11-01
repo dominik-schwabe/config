@@ -34,6 +34,8 @@ mkconfig() {
 
 set \
     .vimrc .vimrc \
+    .coc-settings.json .vim/coc-settings.json \
+    .coc-settings.json .config/nvim/coc-settings.json \
     .bashrc .bashrc \
     .envrc .envrc \
     .toprc .toprc \

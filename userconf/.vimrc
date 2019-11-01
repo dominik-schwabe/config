@@ -8,12 +8,18 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"buffer explorer
+Plug 'fholgado/minibufexpl.vim'
+"async lint
+Plug 'w0rp/ale'
+"highlight colorcodes
+Plug 'ap/vim-css-color'
 "highlight trailing whitespace
 Plug 'bronson/vim-trailing-whitespace'
 "change root to git project
 Plug 'airblade/vim-rooter'
 "fast html writing
-Plug 'mattn/emmet-vim', { 'for': 'html' }
+Plug 'mattn/emmet-vim'
 "substitute brackets with others (cs"')
 Plug 'tpope/vim-surround'
 "extension of .-command
@@ -41,12 +47,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-"buffer explorer
-Plug 'jlanzarotta/bufexplorer', { 'on': 'ToggleBufExplorer' }
 "super searching
-Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
-"python ide
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'ctrlpvim/ctrlp.vim', { 'on': 'CtrlP' }
 "R ide
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "latex ide
@@ -76,6 +78,21 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
 
+"minibufexpl
+let g:miniBufExplVSplit = 20
+let g:miniBufExplBRSplit = 0
+let g:miniBufExplShowBufNumbers = 0
+let g:miniBufExplorerAutoStart = 0
+
+"ale
+let g:ale_python_auto_pipenv = 0
+let g:ale_linters = {'python': ['pylint', 'flake8', 'bandit']}
+
+"let g:ale_linters_ignore = {'python': ['mypy']}
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_python_pylint_options = "-d C0111,W0703,C0103"
+
 "solarized colorscheme
 let g:solarized_termcolors = 256
 
@@ -91,7 +108,17 @@ let g:UltiSnipsExpandTrigger = '<NUL>'
 "vimtex
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
-let g:vimtex_quickfix_mode = 1
+let g:vimtex_quickfix_mode = 2
+"let g:vimtex_quickfix_autoclose_after_keystrokes = 1
+"let g:vimtex_quickfix_ignore_all_warnings = 1
+"let g:vimtex_quickfix_open_on_warning = 0
+let g:vimtex_quickfix_latexlog = {
+      \ 'overfull' : 0,
+      \ 'underfull' : 0,
+      \ 'packages' : {
+      \   'default' : 0,
+      \ },
+      \}
 set conceallevel=1
 let g:tex_conceal = 'abdmg'
 
@@ -119,11 +146,13 @@ let g:semshi#simplify_markup = v:false
 let g:semshi#error_sign = v:false
 
 "pymode
-let g:pymode_python = 'python3'
-let g:pymode_rope = 1
-let g:pymode_rope_completion = 1
-let g:pymode_lint = 1
-let g:pymode_syntax = 0
+"let g:pymode_python = 'python3'
+"let g:pymode_rope = 1
+"let g:pymode_rope_completion = 1
+"let g:pymode_rope_lookup_project = 1
+"let g:pymode_lint = 1
+"let g:pymode_syntax = 0
+"let g:pymode_run_bind = '<NUL>'
 
 "SingleCompile'
 let g:SingleCompile_usetee = 0
@@ -131,10 +160,9 @@ let g:SingleCompile_usequickfix = 0
 noremap <F9> <Esc>:w<CR>:SCCompile<CR>
 
 "YCM
-let g:ycm_autoclose_preview_window_after_insertion = 1
-"filetype plugin on
-set omnifunc=syntaxcomplete#Complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+"let g:ycm_autoclose_preview_window_after_insertion = 1
+"set omnifunc=syntaxcomplete#Complete
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "coc.nvim
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -186,6 +214,9 @@ nnoremap Y :ArgWrap<CR>
 nnoremap R :SidewaysLeft<CR>
 nnoremap U :SidewaysRight<CR>
 
+"tagbar
+let g:tagbar_autofocus = 1
+
 
 autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
 autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
@@ -195,15 +226,6 @@ autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| e
 autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
 autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
-" Virtualenv support
-py3 << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  exec(compile(open(activate_this, "rb").read(), activate_this, 'exec'), dict(__file__=activate_this))
-EOF
 
 colorscheme monokai-phoenix
 syntax on
@@ -243,9 +265,9 @@ noremap Q :qa<CR>
 noremap <C-q> :bd<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
-noremap <F2> :NERDTreeToggle<CR>
+noremap <F1> :NERDTreeToggle<CR>
+noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR>
 noremap <F3> :TagbarToggle<CR>
-noremap <F4> :ToggleBufExplorer<CR>
 noremap gt :tabnew<CR>
 noremap <left> <C-W>H
 noremap <right> <C-W>L

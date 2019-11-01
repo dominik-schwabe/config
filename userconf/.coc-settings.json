@@ -1,0 +1,5 @@
+{
+    "coc.preferences.jumpCommand": "vsplit",
+    "python.linting.enabled": false,
+    "python.pythonPath": "python",
+}
