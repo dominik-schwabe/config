@@ -8,6 +8,10 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"autoclose brackets
+Plug 'raimondi/delimitmate'
+"toggle comment
+Plug 'scrooloose/nerdcommenter'
 "buffer explorer
 Plug 'fholgado/minibufexpl.vim'
 "async lint
@@ -78,6 +82,9 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
 
+"NERDCommenter
+let g:NERDDefaultAlign='start'
+
 "minibufexpl
 let g:miniBufExplVSplit = 20
 let g:miniBufExplBRSplit = 0
@@ -87,10 +94,9 @@ let g:miniBufExplorerAutoStart = 0
 "ale
 let g:ale_python_auto_pipenv = 0
 let g:ale_linters = {'python': ['pylint', 'flake8', 'bandit']}
-
 "let g:ale_linters_ignore = {'python': ['mypy']}
 let g:ale_lint_on_enter = 1
-let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_text_changed = 0
 let g:ale_python_pylint_options = "-d C0111,W0703,C0103"
 
 "solarized colorscheme
@@ -198,7 +204,7 @@ nmap <leader>rn <Plug>(coc-rename)
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
-let g:coc_global_extensions = ['coc-snippets', 'coc-python', 'coc-ultisnips', 'coc-css', 'coc-html', 'coc-json', 'coc-vimtex']
+let g:coc_global_extensions = ['coc-css', 'coc-emmet', 'coc-html', 'coc-json', 'coc-python', 'coc-snippets', 'coc-ultisnips', 'coc-vimtex', 'coc-yaml']
 
 "Nvim-R
 let R_in_buffer = 1
@@ -266,7 +272,7 @@ noremap <C-q> :bd<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
 noremap <F1> :NERDTreeToggle<CR>
-noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR>
+noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
 noremap <F3> :TagbarToggle<CR>
 noremap gt :tabnew<CR>
 noremap <left> <C-W>H
@@ -283,6 +289,8 @@ nnoremap ö :noh<CR>
 noremap ZW :w<CR>
 noremap + :m+<CR>
 noremap - :m-2<CR>
+nmap <CR> <Plug>NERDCommenterToggle
+vmap <CR> <Plug>NERDCommenterToggle gv
 
 vmap < <gv
 vmap > >gv
