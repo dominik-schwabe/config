@@ -48,7 +48,8 @@ Plug 'jalvesaq/vimcmdline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
@@ -265,16 +266,18 @@ set nobackup
 set nowritebackup
 set cmdheight=2
 
-noremap <C-o> :tabnext<CR>
-noremap <C-i> :tabprevious<CR>
+noremap <C-o> :tabnew<CR>
+noremap <C-q> :tabclose<CR>
+noremap <tab> :tabnext<CR>
+noremap <S-tab> :tabprevious<CR>
 noremap Q :qa<CR>
-noremap <C-q> :bd<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
-noremap <F1> :NERDTreeToggle<CR>
+noremap <F1> :NERDTreeTabsToggle<CR>
 noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
 noremap <F3> :TagbarToggle<CR>
 noremap gt :tabnew<CR>
+noremap gq :tabclose<CR>
 noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K
