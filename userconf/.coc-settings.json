@@ -1,5 +1,5 @@
 {
     "coc.preferences.jumpCommand": "vsplit",
     "python.linting.enabled": false,
-    "python.pythonPath": "python",
+    "python.pythonPath": "/usr/bin/python",
 }

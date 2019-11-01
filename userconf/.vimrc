@@ -89,7 +89,7 @@ let g:ale_python_auto_pipenv = 0
 let g:ale_linters = {'python': ['pylint', 'flake8', 'bandit']}
 
 "let g:ale_linters_ignore = {'python': ['mypy']}
-let g:ale_lint_on_enter = 0
+let g:ale_lint_on_enter = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_python_pylint_options = "-d C0111,W0703,C0103"
 
