@@ -6,8 +6,8 @@ export ZSH=$HOME/.zshplugins/oh-my-zsh
 #ZSH_THEME="essembeh"
 #ZSH_THEME="gentoo"
 #ZSH_THEME="jaischeema"
-ZSH_THEME="lukerandall"
 #ZSH_THEME="clean"
+ZSH_THEME="lukerandall"
 
 # Uncomment the following line to use case-sensitive completion.  CASE_SENSITIVE="true"
 
@@ -107,4 +107,4 @@ export KEYTIMEOUT=0
 
 setopt noextendedhistory
 setopt nosharehistory
-export RPROMPT='%B%(?..%F{#FF0000}%?%f)%  %F{#DEED12}%w%f %F{#00FF00}%T%f'
+export RPROMPT='%B%(?..%F{#FF0000}%?%f)%  %F{#ED9D12}❰%f %b%F{#DEED12}%w%f %F{#00FF00}%T%f%B%F{#ED9D12} ❱%f%b'
