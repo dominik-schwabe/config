@@ -53,6 +53,7 @@ set \
     .bg.jpg .bg.jpg \
     .bg.png .bg.png \
     .zathurarc .config/zathura/zathurarc \
+    .tmux.conf .tmux.conf \
     .zshrc .zshrc \
 #    .zshrc.min .zshrc \
 

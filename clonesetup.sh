@@ -28,3 +28,5 @@ fi
 
 cloneupdate "zdharma/zplugin" "${HOME}/.zplugin/bin"
 cloneupdate "robbyrussell/oh-my-zsh.git" "${HOME}/.zshplugins/oh-my-zsh"
+cloneupdate "tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm"
+

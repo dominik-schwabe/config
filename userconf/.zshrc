@@ -130,4 +130,4 @@ then
     ZSH_THEME_GIT_PROMPT_UNMERGED="?"
 fi
 
-RPS1='%(?..%B%F{#FF0000}%?%b ✗%f)%  %B%F{#DEED12}%w%f %F{#00FF00}%T%f%b'
+RPS1='%(?..%B%F{#FF0000}%?%b ✗ %f)% %w %B%F{yellow}%T%f%b'

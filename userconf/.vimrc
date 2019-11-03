@@ -8,6 +8,10 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"focus commands work in tmux
+Plug 'tmux-plugins/vim-tmux-focus-events'
+"execute command in tmux pane
+Plug 'benmills/vimux'
 "autoclose brackets
 Plug 'raimondi/delimitmate'
 "toggle comment
@@ -82,6 +86,9 @@ Plug 'michaeljsmith/vim-indent-object'
 " % match more
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
+
+"NERDTree
+let g:NERDTreeIgnore = ['__pycache__']
 
 "NERDCommenter
 let g:NERDDefaultAlign='start'
@@ -225,6 +232,32 @@ nnoremap U :SidewaysRight<CR>
 let g:tagbar_autofocus = 1
 
 
+"tmux
+if exists('$TMUX')
+    function! TmuxOrSplitSwitch(wincmd, tmuxdir)
+        let previous_winnr = winnr()
+        silent! execute "wincmd " . a:wincmd
+        if previous_winnr == winnr()
+            call system("tmux select-pane -" . a:tmuxdir)
+            redraw!
+        endif
+    endfunction
+
+    let previous_title = substitute(system("tmux display-message -p '#{pane_title}'"), '\n', '', '')
+    let &t_ti = "\<Esc>]2;vim\<Esc>\\" . &t_ti
+    let &t_te = "\<Esc>]2;". previous_title . "\<Esc>\\" . &t_te
+
+    nnoremap <silent> <C-h> :call TmuxOrSplitSwitch('h', 'L')<cr>
+    nnoremap <silent> <C-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
+    nnoremap <silent> <C-k> :call TmuxOrSplitSwitch('k', 'U')<cr>
+    nnoremap <silent> <C-l> :call TmuxOrSplitSwitch('l', 'R')<cr>
+else
+    map <C-h> <C-w>h
+    map <C-j> <C-w>j
+    map <C-k> <C-w>k
+    map <C-l> <C-w>l
+endif
+
 autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
 autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
 "autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
@@ -282,19 +315,24 @@ noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K
 noremap <down> <C-W>J
-noremap <C-h> <C-W>h
-noremap <C-j> <C-W>j
-noremap <C-k> <C-W>k
-noremap <C-l> <C-W>l
+"noremap <C-h> <C-W>h
+"noremap <C-j> <C-W>j
+"noremap <C-k> <C-W>k
+"noremap <C-l> <C-W>l
 noremap <F5> :setlocal spell! spelllang=en_us<CR>
 noremap <F6> :setlocal spell! spelllang=de_de<CR>
 nnoremap ö :noh<CR>
 noremap ZW :w<CR>
 noremap + :m+<CR>
 noremap - :m-2<CR>
-nmap <CR> <Plug>NERDCommenterToggle
-vmap <CR> <Plug>NERDCommenterToggle gv
+noremap <F12> :mksession<CR>:qa<CR>
+noremap <leader>vp :VimuxPromptCommand<CR>
+noremap <leader>vl :VimuxRunLastCommand<CR>
+noremap <leader>vi :VimuxInspectRunner<CR>
+noremap <leader>vz :VimuxZoomRunner<CR>
 
+nmap gc <Plug>NERDCommenterToggle
+vmap gc <Plug>NERDCommenterToggle gv
 vmap < <gv
 vmap > >gv
 
