@@ -94,6 +94,10 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 
 unset correctall
 
+exit_zsh() { exit }
+zle -N exit_zsh
+bindkey '^D' exit_zsh
+
 if [[ -r ~/.aliasrc ]]; then
     . ~/.aliasrc
 fi
