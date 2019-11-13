@@ -160,10 +160,15 @@ bar {
     #separator_symbol "▶  ◀"
     separator_symbol "❱  ❰"
     colors {
-        separator "#66D9EF"
-        background "#000000"
-        statusline "#F8F8F2"
-        focused_separator "#ED9D12"
+        focused_workspace   #000000 #ED9D12 #000000
+        active_workspace    #000000 #000000 #D8DEE8
+        inactive_workspace  #000000 #000000 #D8DEE8
+        urgent_workspace    #000000 #FF0000 #000000
+
+        separator #66D9EF
+        background #000000
+        statusline #F8F8F2
+        focused_separator #ED9D12
     }
 }
 
@@ -190,7 +195,6 @@ bindsym $mod+Return exec $term
 #bindsym $mod+Return exec gnome-terminal
 bindsym $mod+Shift+Return exec $term -r ranger -e ranger
 bindsym $mod+m exec $term -e cmus
-bindsym $mod+n exec spotify
 bindsym $mod+Home exec --no-startup-id xbacklight -time 0 +1
 bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+p move workspace to output right

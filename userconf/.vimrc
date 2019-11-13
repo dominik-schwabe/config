@@ -8,14 +8,20 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"session handling
+Plug 'tpope/vim-obsession'
+"greplike search
+Plug 'mileszs/ack.vim'
+"completion terms from other tmux pane
+Plug 'wellle/tmux-complete.vim'
+"textobj for python
+Plug 'jeetsukumaran/vim-pythonsense'
 "focus commands work in tmux
 Plug 'tmux-plugins/vim-tmux-focus-events'
 "execute command in tmux pane
 Plug 'benmills/vimux'
-"autoclose brackets
-Plug 'raimondi/delimitmate'
 "toggle comment
-Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
 "buffer explorer
 Plug 'fholgado/minibufexpl.vim'
 "async lint
@@ -23,11 +29,11 @@ Plug 'w0rp/ale'
 "highlight colorcodes
 Plug 'ap/vim-css-color'
 "highlight trailing whitespace
-Plug 'bronson/vim-trailing-whitespace'
+Plug 'ntpeters/vim-better-whitespace'
 "change root to git project
 Plug 'airblade/vim-rooter'
 "fast html writing
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': 'html' }
 "substitute brackets with others (cs"')
 Plug 'tpope/vim-surround'
 "extension of .-command
@@ -47,9 +53,9 @@ Plug 'sheerun/vim-polyglot'
 "highlight operators
 Plug 'Valloric/vim-operator-highlight'
 "interactive console (send lines of file)
-Plug 'jalvesaq/vimcmdline'
+"Plug 'jalvesaq/vimcmdline'
 "completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
 Plug 'scrooloose/nerdtree'
@@ -63,18 +69,18 @@ Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "latex ide
 Plug 'lervag/vimtex', { 'for': 'latex' }
 "semantic highlighting of python code
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
 "Plug 'jaxbot/semantic-highlight.vim'
 "compile/run
 Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
 "csv viewer
-Plug 'chrisbra/csv.vim'
+Plug 'chrisbra/csv.vim', { 'for': 'r'}
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 "wrap function arguments
 Plug 'foosoft/vim-argwrap'
 "exchange words
-Plug 'tommcdo/vim-exchange'
+"Plug 'tommcdo/vim-exchange'
 "manipulate function arguments
 Plug 'inkarkat/argtextobj.vim'
 "swap objects like function arguments
@@ -83,9 +89,14 @@ Plug 'AndrewRadev/sideways.vim'
 Plug 'wellle/targets.vim'
 "textobj for indents
 Plug 'michaeljsmith/vim-indent-object'
-" % match more
+"% match more
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
+
+"ack
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
+let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
 
 "NERDTree
 let g:NERDTreeIgnore = ['__pycache__']
@@ -95,15 +106,17 @@ let g:NERDDefaultAlign='start'
 
 "minibufexpl
 let g:miniBufExplVSplit = 20
-let g:miniBufExplBRSplit = 0
+let g:miniBufExplBRSplit = 1
 let g:miniBufExplShowBufNumbers = 0
 let g:miniBufExplorerAutoStart = 0
 
 "ale
+let g:ale_set_highlights = 0
 let g:ale_python_auto_pipenv = 0
 let g:ale_linters = {'python': ['pylint', 'flake8', 'bandit']}
 "let g:ale_linters_ignore = {'python': ['mypy']}
 let g:ale_lint_on_enter = 1
+let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 0
 let g:ale_python_pylint_options = "-d C0111,W0703,C0103"
 
@@ -123,6 +136,7 @@ let g:UltiSnipsExpandTrigger = '<NUL>'
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
 let g:vimtex_quickfix_mode = 2
+let g:vimtex_view_skim_reading_bar = 0
 "let g:vimtex_quickfix_autoclose_after_keystrokes = 1
 "let g:vimtex_quickfix_ignore_all_warnings = 1
 "let g:vimtex_quickfix_open_on_warning = 0
@@ -141,13 +155,15 @@ if !exists('g:ycm_semantic_triggers')
 endif
 au VimEnter * let g:ycm_semantic_triggers.tex=g:vimtex#re#youcompleteme
 
-autocmd FileType tex :set tabstop=2
-autocmd FileType tex :set shiftwidth=2
-autocmd FileType tex :set softtabstop=2
-autocmd FileType tex :set indentexpr=""
+autocmd FileType tex set tabstop=2
+autocmd FileType tex set shiftwidth=2
+autocmd FileType tex set softtabstop=2
+autocmd FileType tex set indentexpr=""
+autocmd FileType tex :NoMatchParen
 
 "polyglot
 let g:polyglot_disabled = ['latex']
+let g:python_highlight_space_errors = 0
 
 "vimcmdline
 let cmdline_vsplit = 1
@@ -158,6 +174,10 @@ let cmdline_map_send_paragraph = '<C-space>'
 let g:semshi#mark_selected_nodes = 0
 let g:semshi#simplify_markup = v:false
 let g:semshi#error_sign = v:false
+
+"better whitespace
+let g:current_line_whitespace_disabled_soft=1
+let g:better_whitespace_ctermcolor=52
 
 "pymode
 "let g:pymode_python = 'python3'
@@ -195,6 +215,7 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
     \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+nmap <silent> gD :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -209,6 +230,7 @@ function! s:show_documentation()
 endfunction
 
 nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>rf <Plug>(coc-refactor)
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
@@ -290,6 +312,7 @@ endif
 set nowrap
 set encoding=utf-8
 set scrolloff=8
+set hidden
 
 set backspace=indent,eol,start
 
@@ -298,8 +321,11 @@ set relativenumber
 set nobackup
 set nowritebackup
 set cmdheight=2
+set t_Co=256
 
-noremap <C-o> :tabnew<CR>
+let g:vimtex_matchparen_enabled = 0
+
+
 noremap <C-q> :tabclose<CR>
 noremap <tab> :tabnext<CR>
 noremap <S-tab> :tabprevious<CR>

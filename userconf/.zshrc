@@ -51,7 +51,7 @@ COMPLETION_WAITING_DOTS="true"
 #HIST_STAMPS="mm/dd/yyyy"
 
 bgnotify_threshold=5
-plugins=(git pip colored-man-pages sudo history-substring-search bgnotify z)
+plugins=(git pip colored-man-pages sudo history-substring-search bgnotify z systemd)
 source $ZSH/oh-my-zsh.sh
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -74,6 +74,7 @@ zplugin light "zsh-users/zsh-completions"
 zplugin light "MichaelAquilina/zsh-you-should-use"
 zplugin light "kutsan/zsh-system-clipboard"
 zplugin light "madKuchenbaecker/vi-mode.zsh"
+zplugin light "akarzim/zsh-docker-aliases"
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 ### End of Zplugin installer's chunk
