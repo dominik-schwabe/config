@@ -8,6 +8,16 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"json pretty print
+Plug 'tpope/vim-jdaddy'
+"markdown preview
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+"highlight operators
+Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
+"load hugefiles faster
+Plug 'mhinz/vim-hugefile'
+"align statements
+Plug 'junegunn/vim-easy-align'
 "session handling
 Plug 'tpope/vim-obsession'
 "greplike search
@@ -39,7 +49,7 @@ Plug 'tpope/vim-surround'
 "extension of .-command
 Plug 'tpope/vim-repeat'
 "git wrapper
-Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-fugitive'
 "git diff on left sidebar
 Plug 'airblade/vim-gitgutter'
 "beautiful statusbar
@@ -50,16 +60,13 @@ Plug 'honza/vim-snippets'
 "colorschemes
 Plug 'flazz/vim-colorschemes'
 Plug 'sheerun/vim-polyglot'
-"highlight operators
-Plug 'Valloric/vim-operator-highlight'
 "interactive console (send lines of file)
 "Plug 'jalvesaq/vimcmdline'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
-Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
@@ -70,21 +77,16 @@ Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 Plug 'lervag/vimtex', { 'for': 'latex' }
 "semantic highlighting of python code
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
-"Plug 'jaxbot/semantic-highlight.vim'
 "compile/run
 Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
 "csv viewer
-Plug 'chrisbra/csv.vim', { 'for': 'r'}
-"multiple cursors
-Plug 'terryma/vim-multiple-cursors'
+Plug 'chrisbra/csv.vim'
 "wrap function arguments
-Plug 'foosoft/vim-argwrap'
-"exchange words
-"Plug 'tommcdo/vim-exchange'
-"manipulate function arguments
-Plug 'inkarkat/argtextobj.vim'
+Plug 'foosoft/vim-argwrap', { 'on': 'ArgWrap' }
 "swap objects like function arguments
-Plug 'AndrewRadev/sideways.vim'
+Plug 'AndrewRadev/sideways.vim', { 'on': ['SidewaysLeft', 'SidewaysRight'] }
+"textobj function arguments
+Plug 'inkarkat/argtextobj.vim'
 "textobj extension
 Plug 'wellle/targets.vim'
 "textobj for indents
@@ -93,12 +95,20 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
 
+"easy align
+vmap <Enter> <Plug>(EasyAlign)
+
+"rainbow
+let g:rainbow_active = 1
+
 "ack
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
 
 "NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | q | endif
 let g:NERDTreeIgnore = ['__pycache__']
 
 "NERDCommenter
@@ -115,10 +125,10 @@ let g:ale_set_highlights = 0
 let g:ale_python_auto_pipenv = 0
 let g:ale_linters = {'python': ['pylint', 'flake8', 'bandit']}
 "let g:ale_linters_ignore = {'python': ['mypy']}
-let g:ale_lint_on_enter = 1
+let g:ale_lint_on_enter = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 0
-let g:ale_python_pylint_options = "-d C0111,W0703,C0103"
+let g:ale_python_pylint_options = "-d C0111,W0703,C0103,E0401,R0201,R0903"
 
 "solarized colorscheme
 let g:solarized_termcolors = 256
@@ -133,6 +143,7 @@ noremap <C-p> :CtrlP<CR>
 let g:UltiSnipsExpandTrigger = '<NUL>'
 
 "vimtex
+let g:vimtex_matchparen_enabled = 0
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
 let g:vimtex_quickfix_mode = 2
@@ -147,7 +158,6 @@ let g:vimtex_quickfix_latexlog = {
       \   'default' : 0,
       \ },
       \}
-set conceallevel=1
 let g:tex_conceal = 'abdmg'
 
 if !exists('g:ycm_semantic_triggers')
@@ -159,6 +169,7 @@ autocmd FileType tex set tabstop=2
 autocmd FileType tex set shiftwidth=2
 autocmd FileType tex set softtabstop=2
 autocmd FileType tex set indentexpr=""
+autocmd FileType tex set conceallevel=1
 autocmd FileType tex :NoMatchParen
 
 "polyglot
@@ -323,8 +334,6 @@ set nowritebackup
 set cmdheight=2
 set t_Co=256
 
-let g:vimtex_matchparen_enabled = 0
-
 
 noremap <C-q> :tabclose<CR>
 noremap <tab> :tabnext<CR>
@@ -332,7 +341,7 @@ noremap <S-tab> :tabprevious<CR>
 noremap Q :qa<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
-noremap <F1> :NERDTreeTabsToggle<CR>
+noremap <F1> :NERDTreeToggle<CR>
 noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
 noremap <F3> :TagbarToggle<CR>
 noremap gt :tabnew<CR>
@@ -345,8 +354,8 @@ noremap <down> <C-W>J
 "noremap <C-j> <C-W>j
 "noremap <C-k> <C-W>k
 "noremap <C-l> <C-W>l
-noremap <F5> :setlocal spell! spelllang=en_us<CR>
-noremap <F6> :setlocal spell! spelllang=de_de<CR>
+noremap <F6> :setlocal spell! spelllang=en_us<CR>
+noremap <F7> :setlocal spell! spelllang=de_de<CR>
 nnoremap ö :noh<CR>
 noremap ZW :w<CR>
 noremap + :m+<CR>

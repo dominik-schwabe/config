@@ -51,7 +51,7 @@ COMPLETION_WAITING_DOTS="true"
 #HIST_STAMPS="mm/dd/yyyy"
 
 bgnotify_threshold=5
-plugins=(git pip colored-man-pages sudo history-substring-search bgnotify z systemd)
+plugins=(git pip colored-man-pages sudo history-substring-search bgnotify z systemd tmuxinator)
 source $ZSH/oh-my-zsh.sh
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -70,7 +70,7 @@ source "$HOME/.zplugin/bin/zplugin.zsh"
 #zplugin light "zdharma/history-search-multi-word"
 #zplugin light "zsh-users/zsh-autosuggestions"
 zplugin light "zdharma/fast-syntax-highlighting"
-zplugin light "zsh-users/zsh-completions"
+#zplugin light "zsh-users/zsh-completions"
 zplugin light "MichaelAquilina/zsh-you-should-use"
 zplugin light "kutsan/zsh-system-clipboard"
 zplugin light "madKuchenbaecker/vi-mode.zsh"
@@ -80,6 +80,7 @@ autoload -Uz _zplugin
 ### End of Zplugin installer's chunk
 
 autoload -Uz compinit && compinit -i
+
 
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
