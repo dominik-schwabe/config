@@ -55,6 +55,7 @@ set \
     .zathurarc .config/zathura/zathurarc \
     .tmux.conf .tmux.conf \
     .zshrc .zshrc \
+    .config.rasi .config/rofi/config.rasi \
 #    .zshrc.min .zshrc \
 
 while :
