@@ -8,6 +8,16 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+pulsemixer \
+pamixer \
+openssh \
+pacman-contrib \
+ack \
+python-pylint \
+autopep8 \
+flake8 \
+arch-install-scripts \
+tmux \
 alsa \
 alsa-tools \
 alsa-utils \
@@ -19,6 +29,7 @@ bash-completion \
 cmake \
 cmus \
 cronie \
+wget \
 curl \
 efibootmgr \
 git \
@@ -27,28 +38,26 @@ gvim \
 htop \
 ipython \
 linux \
+nodejs \
+yarn \
 maven \
 neovim
+python-neovim \
+python2-neovim \
 networkmanager \
-nodejs \
-npm \
 ntp \
 openjdk \
 pacman-contrib \
 pulseaudio-alsa \
-pyenv \
 python \
 python-jedi \
-python-language-server \
 python-pip \
 python-pipenv \
-python-pynvim \
 python2 \
 python2-pip \
 r \
 ranger \
 rsync \
-screen \
 sudo \
 tmux \
 tor \
@@ -76,17 +85,17 @@ python-scipy \
 "
 
 GRAPHIC="\
+flameshot \
+arc-gtk-theme \
 accountsservice \
 android-file-transfer \
 arandr \
-arc-gtk-theme \
 bluez \
 bluez-utils \
 dunst \
 evince \
 firefox \
 gimp \
-gtk-redshift \
 i3 \
 libreoffice \
 lightdm \
@@ -95,23 +104,26 @@ nm-connection-editor \
 noto-fonts \
 pavucontrol \
 redshift \
+feh \
 scrot \
 system-config-printer \
 termite \
 texlive-lang \
 texlive-most \
 thunar \
-tor-browser \
+ttf-dejavu \
 ttf-arphic-ukai \
 ttf-arphic-uming \
 ttf-baekmuk \
 ttf-sazanami \
+rofi \
 vlc \
+xclip \
 xorg \
 xorg-apps \
 xorg-drivers \
 xorg-fonts \
-xorg-init \
+xorg-xinit \
 zathura \
 zathura-pdf-poppler \
 "

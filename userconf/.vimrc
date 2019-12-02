@@ -1,18 +1,19 @@
 "install vim-plug if not existing and install all plugins
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !(mkdir -p ~/.vim/autoload/ &&
-    \ wget -O ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim) ||
-    \ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  silent !(mkdir -p ~/.vim/autoload/ && wget -O ~/.vim/autoload/plug.vim 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+         \ || curl -fLo '~/.vim/autoload/plug.vim' --create-dirs 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"icon support
+Plug 'ryanoasis/vim-devicons'
 "json pretty print
 Plug 'tpope/vim-jdaddy'
 "markdown preview
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
-"highlight operators
+"rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "load hugefiles faster
 Plug 'mhinz/vim-hugefile'
@@ -100,6 +101,17 @@ vmap <Enter> <Plug>(EasyAlign)
 
 "rainbow
 let g:rainbow_active = 1
+let g:rainbow_conf = {
+\	'ctermfgs': ['cyan', 'red', 'green', 'yellow'],
+\	'operators': '_,\|+\|-\|*\|\/_',
+\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/{/ end=/}/ fold'],
+\	'separately': {
+\		'*': {},
+\		'css': 0,
+\       'latex': 0,
+\	}
+\}
+
 
 "ack
 cnoreabbrev Ack Ack!
@@ -123,8 +135,7 @@ let g:miniBufExplorerAutoStart = 0
 "ale
 let g:ale_set_highlights = 0
 let g:ale_python_auto_pipenv = 0
-let g:ale_linters = {'python': ['pylint', 'flake8', 'bandit']}
-"let g:ale_linters_ignore = {'python': ['mypy']}
+let g:ale_linters = {'python': ['pylint', 'flake8']}
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 0
