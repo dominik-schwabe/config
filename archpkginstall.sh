@@ -8,6 +8,7 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+python-rope \
 pulsemixer \
 pamixer \
 openssh \
@@ -70,18 +71,11 @@ zsh \
 
 PYTHON="\
 python-dbus \
-python-flask \
+python-pipenv \
 python-iwlib \
-python-matplotlib \
-python-nltk \
-python-numpy \
-python-pandas \
 python-pyalsa \
 python-pygments \
-python-pylint \
 python-pytz \
-python-rope \
-python-scipy \
 "
 
 GRAPHIC="\
