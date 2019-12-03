@@ -50,7 +50,7 @@ Plug 'tpope/vim-surround'
 "extension of .-command
 Plug 'tpope/vim-repeat'
 "git wrapper
-"Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 "git diff on left sidebar
 Plug 'airblade/vim-gitgutter'
 "beautiful statusbar
@@ -61,8 +61,6 @@ Plug 'honza/vim-snippets'
 "colorschemes
 Plug 'flazz/vim-colorschemes'
 Plug 'sheerun/vim-polyglot'
-"interactive console (send lines of file)
-"Plug 'jalvesaq/vimcmdline'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
@@ -107,6 +105,7 @@ let g:rainbow_conf = {
 \	'parentheses': ['start=/(/ end=/)/ fold', 'start=/{/ end=/}/ fold'],
 \	'separately': {
 \		'*': {},
+\       'html': 0,
 \		'css': 0,
 \       'latex': 0,
 \	}
