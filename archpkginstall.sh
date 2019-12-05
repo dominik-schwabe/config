@@ -79,6 +79,7 @@ python-pytz \
 "
 
 GRAPHIC="\
+xdotool \
 flameshot \
 arc-gtk-theme \
 accountsservice \

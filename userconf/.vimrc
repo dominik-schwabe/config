@@ -16,7 +16,7 @@ Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 "rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "load hugefiles faster
-Plug 'mhinz/vim-hugefile'
+"Plug 'mhinz/vim-hugefile'
 "align statements
 Plug 'junegunn/vim-easy-align'
 "session handling
@@ -78,8 +78,10 @@ Plug 'lervag/vimtex', { 'for': 'latex' }
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
 "compile/run
 Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
-"csv viewer
+"csv inspector/arranger
 Plug 'chrisbra/csv.vim'
+"csv query
+Plug 'mechatroner/rainbow_csv'
 "wrap function arguments
 Plug 'foosoft/vim-argwrap', { 'on': 'ArgWrap' }
 "swap objects like function arguments
@@ -93,6 +95,9 @@ Plug 'michaeljsmith/vim-indent-object'
 "% match more
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
+
+"pythonsense
+let g:is_pythonsense_suppress_motion_keymaps = 1
 
 "easy align
 vmap <Enter> <Plug>(EasyAlign)
@@ -153,6 +158,7 @@ noremap <C-p> :CtrlP<CR>
 let g:UltiSnipsExpandTrigger = '<NUL>'
 
 "vimtex
+let g:vimtex_compiler_progname = 'nvr'
 let g:vimtex_matchparen_enabled = 0
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
@@ -309,6 +315,9 @@ autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| e
 autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
 autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
+"python2
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python3'
 
 colorscheme monokai-phoenix
 syntax on
