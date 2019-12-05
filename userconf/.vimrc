@@ -255,7 +255,7 @@ nmap <leader>rf <Plug>(coc-refactor)
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
-let g:coc_global_extensions = ['coc-css', 'coc-emmet', 'coc-html', 'coc-json', 'coc-python', 'coc-snippets', 'coc-ultisnips', 'coc-vimtex', 'coc-yaml']
+let g:coc_global_extensions = ['coc-css', 'coc-html', 'coc-emmet', 'coc-tsserver', 'coc-json', 'coc-java', 'coc-python', 'coc-vimtex', 'coc-yaml', 'coc-ultisnips', 'coc-snippets']
 
 "Nvim-R
 let R_in_buffer = 1
