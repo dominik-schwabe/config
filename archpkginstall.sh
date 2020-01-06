@@ -8,6 +8,9 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+ctags \
+sshfs \
+dosfstools \
 python-rope \
 pulsemixer \
 pamixer \
@@ -105,7 +108,11 @@ system-config-printer \
 termite \
 texlive-lang \
 texlive-most \
+gvfs \
 thunar \
+thunar-volman \
+thunar-media-tags-plugin \
+thunar-archive-plugin \
 ttf-dejavu \
 ttf-arphic-ukai \
 ttf-arphic-uming \

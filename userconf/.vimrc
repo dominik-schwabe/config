@@ -11,8 +11,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'ryanoasis/vim-devicons'
 "json pretty print
 Plug 'tpope/vim-jdaddy'
-"markdown preview
-Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+"markdown preview ( requires: 'npm -g install instant-markdown-d \|\| pip install --user smdv' )
+Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "load hugefiles faster
@@ -37,8 +37,6 @@ Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
 Plug 'fholgado/minibufexpl.vim'
 "async lint
 Plug 'w0rp/ale'
-"highlight colorcodes
-Plug 'ap/vim-css-color'
 "highlight trailing whitespace
 Plug 'ntpeters/vim-better-whitespace'
 "change root to git project
@@ -72,6 +70,8 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'ctrlpvim/ctrlp.vim', { 'on': 'CtrlP' }
 "R ide
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
+"send commands to console
+Plug 'jalvesaq/vimcmdline'
 "latex ide
 Plug 'lervag/vimtex', { 'for': 'latex' }
 "semantic highlighting of python code
@@ -106,7 +106,6 @@ vmap <Enter> <Plug>(EasyAlign)
 let g:rainbow_active = 1
 let g:rainbow_conf = {
 \	'ctermfgs': ['cyan', 'red', 'green', 'yellow'],
-\	'operators': '_,\|+\|-\|*\|\/_',
 \	'parentheses': ['start=/(/ end=/)/ fold', 'start=/{/ end=/}/ fold'],
 \	'separately': {
 \		'*': {},
@@ -194,6 +193,7 @@ let g:python_highlight_space_errors = 0
 
 "vimcmdline
 let cmdline_vsplit = 1
+let cmdline_in_buffer = 0
 let cmdline_map_send = '<space>'
 let cmdline_map_send_paragraph = '<C-space>'
 
@@ -242,11 +242,15 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
     \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
 nmap <silent> gD :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -258,10 +262,11 @@ endfunction
 
 nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>rf <Plug>(coc-refactor)
+
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
-let g:coc_global_extensions = ['coc-css', 'coc-html', 'coc-emmet', 'coc-tsserver', 'coc-json', 'coc-java', 'coc-python', 'coc-vimtex', 'coc-yaml', 'coc-ultisnips', 'coc-snippets']
+let g:coc_global_extensions = ['coc-highlight', 'coc-css', 'coc-html', 'coc-emmet', 'coc-tsserver', 'coc-json', 'coc-java', 'coc-python', 'coc-vimtex', 'coc-yaml', 'coc-ultisnips', 'coc-snippets']
 
 "Nvim-R
 let R_in_buffer = 1
@@ -320,6 +325,7 @@ let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python3'
 
 colorscheme monokai-phoenix
+set termguicolors
 syntax on
 
 set splitbelow
@@ -344,15 +350,16 @@ set encoding=utf-8
 set scrolloff=8
 set hidden
 
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
 set backspace=indent,eol,start
-
 set relativenumber
-
 set nobackup
 set nowritebackup
 set cmdheight=2
 set t_Co=256
-
 
 noremap <C-q> :tabclose<CR>
 noremap <tab> :tabnext<CR>
