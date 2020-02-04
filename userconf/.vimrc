@@ -11,12 +11,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'ryanoasis/vim-devicons'
 "json pretty print
 Plug 'tpope/vim-jdaddy'
-"markdown preview ( requires: 'npm -g install instant-markdown-d \|\| pip install --user smdv' )
+"markdown preview ( requires: 'npm -g install instant-markdown-d || pip install --user smdv' )
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "load hugefiles faster
 "Plug 'mhinz/vim-hugefile'
+"highlight colorcodes
+Plug 'ap/vim-css-color'
 "align statements
 Plug 'junegunn/vim-easy-align'
 "session handling
@@ -266,7 +268,7 @@ nmap <leader>rf <Plug>(coc-refactor)
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
-let g:coc_global_extensions = ['coc-highlight', 'coc-css', 'coc-html', 'coc-emmet', 'coc-tsserver', 'coc-json', 'coc-java', 'coc-python', 'coc-vimtex', 'coc-yaml', 'coc-ultisnips', 'coc-snippets']
+let g:coc_global_extensions = ['coc-css', 'coc-html', 'coc-emmet', 'coc-tsserver', 'coc-json', 'coc-java', 'coc-python', 'coc-vimtex', 'coc-yaml', 'coc-ultisnips', 'coc-snippets', 'coc-docker']
 
 "Nvim-R
 let R_in_buffer = 1
@@ -367,7 +369,8 @@ noremap <S-tab> :tabprevious<CR>
 noremap Q :qa<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
-noremap <F1> :NERDTreeToggle<CR>
+nnoremap <F1> :NERDTreeToggle<CR>
+inoremap <F1> <ESC>:NERDTreeToggle<CR>
 noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
 noremap <F3> :TagbarToggle<CR>
 noremap gt :tabnew<CR>
@@ -396,6 +399,11 @@ nmap gc <Plug>NERDCommenterToggle
 vmap gc <Plug>NERDCommenterToggle gv
 vmap < <gv
 vmap > >gv
+
+autocmd FileType yaml       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType html       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType htmldjango set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
