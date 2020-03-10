@@ -73,7 +73,8 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
-Plug 'ctrlpvim/ctrlp.vim', { 'on': 'CtrlP' }
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 "R ide
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
@@ -165,8 +166,9 @@ let g:solarized_termcolors = 256
 "lightline
 set laststatus=2
 
-"CtrlP
-noremap <C-p> :CtrlP<CR>
+"fzf
+noremap <C-p> :FZF<CR>
+inoremap <C-p> <ESC>:FZF<CR>
 
 "ultisnips
 let g:UltiSnipsExpandTrigger = '<NUL>'

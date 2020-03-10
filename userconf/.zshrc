@@ -1,8 +1,11 @@
 if ! [ -d ~/.zinit/bin ]; then
     git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
 fi
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.zshplugins/oh-my-zsh
+if ! [ -d ~/.oh-my-zsh ]; then
+    git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+fi
+
+export ZSH=$HOME/.oh-my-zsh
 
 #ZSH_THEME="agnoster"
 #ZSH_THEME="alanpeabody"
@@ -12,14 +15,11 @@ export ZSH=$HOME/.zshplugins/oh-my-zsh
 #ZSH_THEME="clean"
 #ZSH_THEME="lukerandall"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
 DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
 bgnotify_threshold=5
-plugins=(git pip colored-man-pages sudo history-substring-search bgnotify z systemd tmuxinator)
+plugins=(git gitignore pip colored-man-pages sudo history-substring-search bgnotify tmuxinator)
 source $ZSH/oh-my-zsh.sh
 
 VI_MODE_CURSOR_INSERT='\e[2 q'
@@ -33,6 +33,7 @@ zinit light "MichaelAquilina/zsh-you-should-use"
 zinit light "kutsan/zsh-system-clipboard"
 zinit light "madKuchenbaecker/vi-mode.zsh"
 zinit light "akarzim/zsh-docker-aliases"
+zinit light "junegunn/fzf.git"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"
