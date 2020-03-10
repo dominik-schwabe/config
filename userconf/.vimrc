@@ -7,6 +7,10 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"debugger
+"Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python' }
+"xpath
+Plug 'actionshrimp/vim-xpath'
 "icon support
 Plug 'ryanoasis/vim-devicons'
 "json pretty print
@@ -59,11 +63,11 @@ Plug 'itchyny/lightline.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "colorschemes
-Plug 'flazz/vim-colorschemes'
+Plug 'reewr/vim-monokai-phoenix'
+" better language behavior
 Plug 'sheerun/vim-polyglot'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-"Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 "explore directory
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 "view concept definitions
@@ -82,8 +86,6 @@ Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
 Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
 "csv inspector/arranger
 Plug 'chrisbra/csv.vim'
-"csv query
-Plug 'mechatroner/rainbow_csv'
 "wrap function arguments
 Plug 'foosoft/vim-argwrap', { 'on': 'ArgWrap' }
 "swap objects like function arguments
@@ -97,6 +99,13 @@ Plug 'michaeljsmith/vim-indent-object'
 "% match more
 Plug 'vim-scripts/matchit.zip'
 call plug#end()
+
+" ----------------------------------
+" --- Begin Plugin Configuration ---
+" ----------------------------------
+
+"vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
 
 "pythonsense
 let g:is_pythonsense_suppress_motion_keymaps = 1
@@ -117,7 +126,6 @@ let g:rainbow_conf = {
 \	}
 \}
 
-
 "ack
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
@@ -127,15 +135,20 @@ let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | q | endif
 let g:NERDTreeIgnore = ['__pycache__']
+nnoremap <F1> :NERDTreeToggle<CR>
+inoremap <F1> <ESC>:NERDTreeToggle<CR>
 
 "NERDCommenter
 let g:NERDDefaultAlign='start'
+nmap gc <Plug>NERDCommenterToggle
+vmap gc <Plug>NERDCommenterToggle gv
 
 "minibufexpl
 let g:miniBufExplVSplit = 20
 let g:miniBufExplBRSplit = 1
 let g:miniBufExplShowBufNumbers = 0
 let g:miniBufExplorerAutoStart = 0
+noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
 
 "ale
 let g:ale_set_highlights = 0
@@ -208,24 +221,10 @@ let g:semshi#error_sign = v:false
 let g:current_line_whitespace_disabled_soft=1
 let g:better_whitespace_ctermcolor=52
 
-"pymode
-"let g:pymode_python = 'python3'
-"let g:pymode_rope = 1
-"let g:pymode_rope_completion = 1
-"let g:pymode_rope_lookup_project = 1
-"let g:pymode_lint = 1
-"let g:pymode_syntax = 0
-"let g:pymode_run_bind = '<NUL>'
-
 "SingleCompile'
 let g:SingleCompile_usetee = 0
 let g:SingleCompile_usequickfix = 0
 noremap <F9> <Esc>:w<CR>:SCCompile<CR>
-
-"YCM
-"let g:ycm_autoclose_preview_window_after_insertion = 1
-"set omnifunc=syntaxcomplete#Complete
-"autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "coc.nvim
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -268,14 +267,36 @@ nmap <leader>rf <Plug>(coc-refactor)
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
-let g:coc_global_extensions = ['coc-css', 'coc-html', 'coc-emmet', 'coc-tsserver', 'coc-json', 'coc-java', 'coc-python', 'coc-vimtex', 'coc-yaml', 'coc-ultisnips', 'coc-snippets', 'coc-docker']
+"install.packages("languageserver")
+let g:coc_global_extensions = [
+\    'coc-css',
+\    'coc-docker',
+\    'coc-emmet',
+\    'coc-html',
+\    'coc-java',
+\    'coc-json',
+\    'coc-python',
+\    'coc-r-lsp',
+\    'coc-snippets',
+\    'coc-tsserver',
+\    'coc-ultisnips',
+\    'coc-vimtex',
+\    'coc-yaml'
+\]
 
 "Nvim-R
 let R_in_buffer = 1
-let R_term = 'xterm'
+let R_notmuxconf = 1
 let R_esc_term = 0
 let R_close_term = 1
 let R_min_editor_width = -80
+autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
+"autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
 "argwrap
 nnoremap Y :ArgWrap<CR>
@@ -286,7 +307,7 @@ nnoremap U :SidewaysRight<CR>
 
 "tagbar
 let g:tagbar_autofocus = 1
-
+noremap <F3> :TagbarToggle<CR>
 
 "tmux
 if exists('$TMUX')
@@ -314,13 +335,31 @@ else
     map <C-l> <C-w>l
 endif
 
-autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
-"autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
+"vimux
+noremap <leader>vp :VimuxPromptCommand<CR>
+noremap <leader>vl :VimuxRunLastCommand<CR>
+noremap <leader>vi :VimuxInspectRunner<CR>
+noremap <leader>vz :VimuxZoomRunner<CR>
+
+" --------------------------------
+" --- End Plugin Configuration ---
+" --------------------------------
+
+"spellcheck
+let g:myLang = 0
+let g:myLangList = ['en_us', 'de_de']
+function! MySpellLang()
+  let g:myLang = (g:myLang + 1) % (len(g:myLangList) + 1)
+  :if g:myLang == 0
+    :set nospell
+    :echo "nospell"
+  :else
+    :silent set spell
+    :silent let &spelllang=g:myLangList[g:myLang-1]
+    :echo "language:" g:myLangList[g:myLang-1]
+  :endif
+endf
+map <F7> :call MySpellLang()<CR>
 
 "python2
 let g:python_host_prog = '/usr/bin/python2'
@@ -364,15 +403,10 @@ set cmdheight=2
 set t_Co=256
 
 noremap <C-q> :tabclose<CR>
-noremap <tab> :tabnext<CR>
 noremap <S-tab> :tabprevious<CR>
 noremap Q :qa<CR>
 noremap gs :vsplit<CR>
 noremap gS :split<CR>
-nnoremap <F1> :NERDTreeToggle<CR>
-inoremap <F1> <ESC>:NERDTreeToggle<CR>
-noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
-noremap <F3> :TagbarToggle<CR>
 noremap gt :tabnew<CR>
 noremap gq :tabclose<CR>
 noremap <left> <C-W>H
@@ -383,20 +417,8 @@ noremap <down> <C-W>J
 "noremap <C-j> <C-W>j
 "noremap <C-k> <C-W>k
 "noremap <C-l> <C-W>l
-noremap <F6> :setlocal spell! spelllang=en_us<CR>
-noremap <F7> :setlocal spell! spelllang=de_de<CR>
 nnoremap ö :noh<CR>
-noremap ZW :w<CR>
-noremap + :m+<CR>
-noremap - :m-2<CR>
-noremap <F12> :mksession<CR>:qa<CR>
-noremap <leader>vp :VimuxPromptCommand<CR>
-noremap <leader>vl :VimuxRunLastCommand<CR>
-noremap <leader>vi :VimuxInspectRunner<CR>
-noremap <leader>vz :VimuxZoomRunner<CR>
 
-nmap gc <Plug>NERDCommenterToggle
-vmap gc <Plug>NERDCommenterToggle gv
 vmap < <gv
 vmap > >gv
 

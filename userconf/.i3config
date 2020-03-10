@@ -120,7 +120,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Delete exit
-bindsym $mod+Shift+Delete exec --no-startup-id poweroff
+bindsym $mod+Shift+Delete exec --no-startup-id reboot
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -209,10 +209,14 @@ for_window [window_type="dialog"] floating_maximum_size 1000 x 600
 for_window [window_type="dialog"] move position center
 for_window [window_type="dialog"] move position center
 for_window [class="matplotlib"] floating enabled
+for_window [class="r_x11"] floating enabled
+for_window [class="R_x11"] floating enabled
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
 exec --no-startup-id feh --bg-fill "$HOME/.bg.png"
 exec --no-startup-id killall flameshot; flameshot
 exec --no-startup-id killall redshift; redshift-gtk -r -l "51.34:12.35" -t 6500:3500
+exec --no-startup-id telegram-desktop -startintray
+exec --no-startup-id picom -b
 
 exec --no-startup-id i3-msg 'workspace 2; exec termite; workspace 1; exec firefox'
