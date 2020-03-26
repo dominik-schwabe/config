@@ -265,6 +265,9 @@ endfunction
 
 nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>rf <Plug>(coc-refactor)
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>qf  <Plug>(coc-fix-current)
 
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'

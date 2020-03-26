@@ -5,6 +5,7 @@ alias vdir='vdir --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+alias fzf='fzf --color=16'
 
 alias ip='ip -color'
 
@@ -30,6 +31,8 @@ alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 
 alias R='R --no-save'
+alias dockerstart='sudo systemctl start docker.service'
+alias dockerstop='sudo systemctl stop docker.service'
 
 
 # vi: ft=sh
