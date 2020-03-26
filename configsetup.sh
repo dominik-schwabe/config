@@ -57,6 +57,8 @@ set \
     .zshrc .zshrc \
     .config.rasi .config/rofi/config.rasi \
     .picom.conf .config/picom.conf \
+    .gitconfig .gitconfig \
+    .Rprofile .Rprofile \
 #    .zshrc.min .zshrc \
 
 while :
