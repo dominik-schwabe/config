@@ -8,6 +8,15 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+awesome-terminal-fonts \
+acpid \
+docker-compose \
+docker \
+cups \
+gcc-fortran \
+ripgrep \
+fzf \
+tldr \
 ctags \
 sshfs \
 dosfstools \
@@ -39,13 +48,12 @@ efibootmgr \
 git \
 grub \
 gvim \
-htop \
 ipython \
 linux \
 nodejs \
-yarn \
-maven \
-neovim
+eslink \
+npm \
+neovim \
 python-neovim \
 python2-neovim \
 networkmanager \
@@ -82,15 +90,15 @@ python-pytz \
 "
 
 GRAPHIC="\
+powerline-fonts \
 xdotool \
 flameshot \
 arc-gtk-theme \
 accountsservice \
 android-file-transfer \
 arandr \
-bluez \
-bluez-utils \
 dunst \
+picom \
 evince \
 firefox \
 gimp \
@@ -102,6 +110,8 @@ nm-connection-editor \
 noto-fonts \
 pavucontrol \
 redshift \
+telegram-desktop \
+nomacs \
 feh \
 scrot \
 system-config-printer \
@@ -109,6 +119,9 @@ termite \
 texlive-lang \
 texlive-most \
 gvfs \
+gvfs-mtp \
+mtpfs \
+android-file-transfer \
 thunar \
 thunar-volman \
 thunar-media-tags-plugin \
@@ -119,7 +132,6 @@ ttf-arphic-uming \
 ttf-baekmuk \
 ttf-sazanami \
 rofi \
-vlc \
 xclip \
 xorg \
 xorg-apps \
@@ -131,8 +143,16 @@ zathura-pdf-poppler \
 "
 
 AURPKG="\
+jmtpfs \
+tmuxinator \
+i3pystatus-git \
+nerd-fonts-complete \
 lightdm-mini-greeter \
 tor-browser \
+nodejs-neovim \
+ruby-neovim \
+ttf-devicons \
+python-basiciw \
 "
 
 installyay() {
