@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-#echo "KEMAP=de" > /etc/vconsole.conf
-#echo "LANG=de_DE.UTF-8" > /etc/locale.conf
-#echo "dominiksArch" > /etc/hostname
-#echo "127.0.0.1	localhost
-#::1		localhost" > /etc/hosts
-#ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-
 main() {
     CURRPATH="$(pwd)/$(dirname $0)"
 

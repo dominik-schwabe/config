@@ -8,6 +8,7 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+guttenprint
 awesome-terminal-fonts \
 acpid \
 docker-compose \
@@ -51,14 +52,13 @@ gvim \
 ipython \
 linux \
 nodejs \
-eslink \
+eslint \
 npm \
 neovim \
 python-neovim \
-python2-neovim \
 networkmanager \
 ntp \
-openjdk \
+jre-openjdk \
 pacman-contrib \
 pulseaudio-alsa \
 python \
@@ -102,8 +102,8 @@ picom \
 evince \
 firefox \
 gimp \
-i3 \
-libreoffice \
+i3-wm \
+libreoffice-still \
 lightdm \
 lightdm-gtk-greeter \
 nm-connection-editor \
