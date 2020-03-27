@@ -50,7 +50,7 @@ git \
 grub \
 gvim \
 ipython \
-linux \
+linux-lts \
 nodejs \
 eslint \
 npm \
