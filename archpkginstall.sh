@@ -8,7 +8,7 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
-guttenprint
+gutenprint \
 awesome-terminal-fonts \
 acpid \
 docker-compose \
@@ -81,6 +81,8 @@ zsh \
 "
 
 PYTHON="\
+python-psutil \
+python-netifaces \
 python-dbus \
 python-pipenv \
 python-iwlib \
@@ -146,7 +148,6 @@ AURPKG="\
 jmtpfs \
 tmuxinator \
 i3pystatus-git \
-nerd-fonts-complete \
 lightdm-mini-greeter \
 tor-browser \
 nodejs-neovim \
@@ -220,14 +221,14 @@ if [ $INSTALLAUR -eq 1 ]
 then
     echo -e "install ${BLUE}aur${RESET}"
 fi
-echo
-echo $INSTALLSTRING
-echo
 
 if [ $PACMAN -eq 0 -a $INSTALLAUR -eq 0 ]
 then
     echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -p (${ORANGE}python-packages${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
 else
+    echo
+    echo $INSTALLSTRING
+    echo
     if [ $PACMAN -eq 1 ]
     then
         su -c "pacman -S $INSTALLSTRING"
