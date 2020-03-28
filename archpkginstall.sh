@@ -8,6 +8,7 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+dnsutils \
 gutenprint \
 awesome-terminal-fonts \
 acpid \
@@ -92,6 +93,7 @@ python-pytz \
 "
 
 GRAPHIC="\
+perl-file-mimeinfo \
 powerline-fonts \
 xdotool \
 flameshot \

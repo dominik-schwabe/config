@@ -59,7 +59,9 @@ set \
     .picom.conf .config/picom.conf \
     .gitconfig .gitconfig \
     .Rprofile .Rprofile \
-    .dunstrc .config/dunst/dunstrc
+    .dunstrc .config/dunst/dunstrc \
+    .gtkrc-3.0 .config/gtk-3.0/settings.ini \
+    .gtkrc-2.0 .gtkrc-2.0 \
 #    .zshrc.min .zshrc \
 
 while :
