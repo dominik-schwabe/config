@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 RED="\e[31m"
 GREEN="\e[32m"
@@ -8,6 +8,10 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
+bluez \
+bluez-utils \
+termdown \
+usbutils \
 dnsutils \
 gutenprint \
 awesome-terminal-fonts \
@@ -31,6 +35,7 @@ ack \
 python-pylint \
 autopep8 \
 flake8 \
+yapf \
 arch-install-scripts \
 tmux \
 alsa \
@@ -51,7 +56,7 @@ git \
 grub \
 gvim \
 ipython \
-linux-lts \
+linux \
 nodejs \
 eslint \
 npm \
@@ -93,6 +98,8 @@ python-pytz \
 "
 
 GRAPHIC="\
+xbindkeys \
+i3lock \
 perl-file-mimeinfo \
 powerline-fonts \
 xdotool \
@@ -147,6 +154,7 @@ zathura-pdf-poppler \
 "
 
 AURPKG="\
+neovim-remote \
 jmtpfs \
 tmuxinator \
 i3pystatus-git \

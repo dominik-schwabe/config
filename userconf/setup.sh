@@ -1,8 +1,7 @@
-#!/usr/bin/env bash
-
-./clonesetup.sh
+#!/usr/bin/bash
 
 CURRPATH="$(pwd)/$(dirname $0)"
+cd $CURRPATH
 
 FORCE=""
 while getopts "f" o
@@ -18,7 +17,7 @@ RED="\e[31m"
 RESET="\e[0m"
 
 mkconfig() {
-    SRCPATH=${CURRPATH}/userconf/$1
+    SRCPATH=${CURRPATH}/$1
     DESTPATH=${HOME}/$2
     DESTDIR=$(dirname $DESTPATH)
     F=$3

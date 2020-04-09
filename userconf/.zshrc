@@ -1,6 +1,8 @@
+# clone pluginmanager if not exist
 if ! [ -d ~/.zinit/bin ]; then
     git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
 fi
+# clone oh-my-zsh if not exist
 if ! [ -d ~/.oh-my-zsh ]; then
     git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
@@ -24,6 +26,12 @@ source $ZSH/oh-my-zsh.sh
 
 VI_MODE_CURSOR_INSERT='\e[2 q'
 VI_MODE_CURSOR_NORMAL='\e[6 q'
+
+
+function chpwd() {
+    emulate -L zsh
+    ls
+}
 
 
 # pluins

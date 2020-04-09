@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 ORANGE="\e[33m"
 RED="\e[31m"
@@ -17,7 +17,6 @@ cloneupdate() {
         cd $2 &> /dev/null
         git pull &> /dev/null
     fi
-    echo
 }
 
 git &> /dev/null

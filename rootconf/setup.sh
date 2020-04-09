@@ -9,7 +9,7 @@ main() {
 
     cpconfig() {
         DESTPATH=$1
-        SRCPATH=${CURRPATH}/rootconf/$(basename $DESTPATH)
+        SRCPATH=${CURRPATH}/$(basename $DESTPATH)
         DESTDIR=$(dirname $DESTPATH)
         F=$2
         mkdir -p $DESTDIR

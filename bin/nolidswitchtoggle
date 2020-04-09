@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if pgrep --exact -f "/bin/bash $HOME/bin/nolidswitch"; then
+    pkill --exact -f "/bin/bash $HOME/bin/nolidswitch"
+    notify-send -t 1000 -u low 'disable screen'
+else
+    ~/bin/nolidswitch &
+    notify-send -t 1000 -u critical 'keep screen active'
+fi

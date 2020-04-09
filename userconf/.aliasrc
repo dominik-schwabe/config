@@ -2,10 +2,11 @@ alias ls='ls --color=auto'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+alias grep='grep -i --color=auto'
+alias fgrep='fgrep -i --color=auto'
+alias egrep='egrep -i --color=auto'
 alias fzf='fzf --color=16'
+alias less='less -i'
 
 alias ip='ip -color'
 
@@ -14,10 +15,12 @@ alias la='ls -A'
 alias l='ls -CF'
 
 alias vim='/usr/bin/nvim'
+alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
 alias oldvim='/usr/bin/vim'
 
 alias python='python3'
 alias p='python'
+alias pt='ptpython'
 alias pip='pip3'
 
 alias services-enabled='systemctl --type service --state enabled list-unit-files'
@@ -33,6 +36,8 @@ alias tkss='tmux kill-session -t'
 alias R='R --no-save'
 alias dockerstart='sudo systemctl start docker.service'
 alias dockerstop='sudo systemctl stop docker.service'
+
+alias tt='termdown --no-figlet -s -a'
 
 
 # vi: ft=sh

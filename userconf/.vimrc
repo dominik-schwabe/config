@@ -7,12 +7,14 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"interact with quickfix
+Plug 'romainl/vim-qf'
+"improve search
+Plug 'haya14busa/vim-asterisk'
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python' }
 "xpath
 Plug 'actionshrimp/vim-xpath'
-"icon support
-Plug 'ryanoasis/vim-devicons'
 "json pretty print
 Plug 'tpope/vim-jdaddy'
 "markdown preview ( requires: 'npm -g install instant-markdown-d || pip install --user smdv' )
@@ -40,7 +42,7 @@ Plug 'benmills/vimux'
 "toggle comment
 Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
 "buffer explorer
-Plug 'fholgado/minibufexpl.vim'
+Plug 'madKuchenbaecker/minibufexpl.vim'
 "async lint
 Plug 'w0rp/ale'
 "highlight trailing whitespace
@@ -69,7 +71,9 @@ Plug 'sheerun/vim-polyglot'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "explore directory
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
+"git integration with nerdtree
+Plug 'Xuyuanp/nerdtree-git-plugin'
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
@@ -79,7 +83,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
 Plug 'jalvesaq/vimcmdline'
-"latex ide
+"latex ide ( requires: 'pip install neovim-remote' )
 Plug 'lervag/vimtex', { 'for': 'latex' }
 "semantic highlighting of python code
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
@@ -91,8 +95,6 @@ Plug 'chrisbra/csv.vim'
 Plug 'foosoft/vim-argwrap', { 'on': 'ArgWrap' }
 "swap objects like function arguments
 Plug 'AndrewRadev/sideways.vim', { 'on': ['SidewaysLeft', 'SidewaysRight'] }
-"textobj function arguments
-Plug 'inkarkat/argtextobj.vim'
 "textobj extension
 Plug 'wellle/targets.vim'
 "textobj for indents
@@ -104,6 +106,19 @@ call plug#end()
 " ----------------------------------
 " --- Begin Plugin Configuration ---
 " ----------------------------------
+
+"vim-asterisk
+map *   <Plug>(asterisk-*)
+map #   <Plug>(asterisk-#)
+map g*  <Plug>(asterisk-g*)
+map g#  <Plug>(asterisk-g#)
+map z*  <Plug>(asterisk-z*)
+map gz* <Plug>(asterisk-gz*)
+map z#  <Plug>(asterisk-z#)
+map gz# <Plug>(asterisk-gz#)
+
+"vim-qf
+map Ö <Plug>(qf_qf_toggle)
 
 "vimspector
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -133,11 +148,13 @@ nnoremap <Leader>a :Ack!<Space>
 let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
 
 "NERDTree
+let NERDTreeMinimalUI = 1
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | q | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | :wincmd h | endif
 let g:NERDTreeIgnore = ['__pycache__']
-nnoremap <F1> :NERDTreeToggle<CR>
-inoremap <F1> <ESC>:NERDTreeToggle<CR>
+nnoremap <silent> <F1> :NERDTreeToggle<CR>
+inoremap <silent> <F1> <ESC>:NERDTreeToggle<CR>
+nnoremap <silent> gt :NERDTreeFind<CR>
 
 "NERDCommenter
 let g:NERDDefaultAlign='start'
@@ -149,7 +166,8 @@ let g:miniBufExplVSplit = 20
 let g:miniBufExplBRSplit = 1
 let g:miniBufExplShowBufNumbers = 0
 let g:miniBufExplorerAutoStart = 0
-noremap <F2> :MBEToggleAll<CR> :MBEFocus<CR> <C-W>=
+nmap <silent> <F2> :MBEToggle<CR>:MBEFocus<CR><C-W>=
+imap <silent> <F2> <ESC>:MBEToggle<CR>:MBEFocus<CR><C-W>=
 
 "ale
 let g:ale_set_highlights = 0
@@ -159,6 +177,12 @@ let g:ale_lint_on_enter = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 0
 let g:ale_python_pylint_options = "-d C0111,W0703,C0103,E0401,R0201,R0903"
+let g:ale_fixers = {
+\  'javascript': ['prettier'],
+\  'python': ['black', 'isort']
+\}
+nnoremap <F5> :ALEFix<CR>
+inoremap <F5> <ESC>:ALEFix<CR>
 
 "solarized colorscheme
 let g:solarized_termcolors = 256
@@ -167,8 +191,8 @@ let g:solarized_termcolors = 256
 set laststatus=2
 
 "fzf
-noremap <C-p> :FZF<CR>
-inoremap <C-p> <ESC>:FZF<CR>
+noremap <silent> <C-p> :FZF<CR>
+inoremap <silent> <C-p> <ESC>:FZF<CR>
 
 "ultisnips
 let g:UltiSnipsExpandTrigger = '<NUL>'
@@ -180,9 +204,9 @@ let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
 let g:vimtex_quickfix_mode = 2
 let g:vimtex_view_skim_reading_bar = 0
-"let g:vimtex_quickfix_autoclose_after_keystrokes = 1
-"let g:vimtex_quickfix_ignore_all_warnings = 1
-"let g:vimtex_quickfix_open_on_warning = 0
+let g:vimtex_quickfix_autoclose_after_keystrokes = 1
+let g:vimtex_quickfix_ignore_all_warnings = 1
+let g:vimtex_quickfix_open_on_warning = 0
 let g:vimtex_quickfix_latexlog = {
       \ 'overfull' : 0,
       \ 'underfull' : 0,
@@ -213,6 +237,8 @@ let cmdline_vsplit = 1
 let cmdline_in_buffer = 0
 let cmdline_map_send = '<space>'
 let cmdline_map_send_paragraph = '<C-space>'
+nnoremap <F4> :lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
+inoremap <F4> <ESC>:lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 
 "semshi
 let g:semshi#mark_selected_nodes = 0
@@ -248,7 +274,7 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-nmap <silent> gD :call CocAction('jumpDefinition', 'vsplit')<CR>
+"nmap <silent> gD :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -307,12 +333,13 @@ autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>|
 nnoremap Y :ArgWrap<CR>
 
 "sideways
-nnoremap R :SidewaysLeft<CR>
-nnoremap U :SidewaysRight<CR>
+nnoremap <silent> R :SidewaysLeft<CR>
+nnoremap <silent> U :SidewaysRight<CR>
 
 "tagbar
 let g:tagbar_autofocus = 1
-noremap <F3> :TagbarToggle<CR>
+nnoremap <silent> <F3> :TagbarToggle<CR>
+inoremap <silent> <F3> <ESC>:TagbarToggle<CR>
 
 "tmux
 if exists('$TMUX')
@@ -366,7 +393,6 @@ function! MySpellLang()
 endf
 map <F7> :call MySpellLang()<CR>
 
-"python2
 let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python3'
 
@@ -406,14 +432,11 @@ set nobackup
 set nowritebackup
 set cmdheight=2
 set t_Co=256
+set ttyfast
 
-noremap <C-q> :tabclose<CR>
-noremap <S-tab> :tabprevious<CR>
 noremap Q :qa<CR>
-noremap gs :vsplit<CR>
-noremap gS :split<CR>
-noremap gt :tabnew<CR>
-noremap gq :tabclose<CR>
+noremap <silent> gs :vsplit<CR>
+noremap <silent> gS :split<CR>
 noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K
@@ -422,7 +445,7 @@ noremap <down> <C-W>J
 "noremap <C-j> <C-W>j
 "noremap <C-k> <C-W>k
 "noremap <C-l> <C-W>l
-nnoremap ö :noh<CR>
+nnoremap <silent> ö :noh<CR>
 
 vmap < <gv
 vmap > >gv
