@@ -61,6 +61,7 @@ set \
     .dunstrc .config/dunst/dunstrc \
     .gtkrc-3.0 .config/gtk-3.0/settings.ini \
     .gtkrc-2.0 .gtkrc-2.0 \
+    .ipython_config.py .ipython/profile_default/ipython_config.py
 #    .zshrc.min .zshrc \
 
 while :

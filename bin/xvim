@@ -1,13 +1,8 @@
-#!/bin/bash
-
-COMMAND="nvim -c 'call VimCmdLineStartApp()'"
+#!/usr/bin/bash
 
 if [ -z $@ ]; then
     echo "no file specified"
     exit 1
 fi
-if [ -z $TMUX ]; then
-    tmux new-session "$COMMAND $@"
-else
-    $COMMAND $@
-fi
+
+nvim --cmd "au VimEnter *.py :call VimCmdLineStartApp()" $1

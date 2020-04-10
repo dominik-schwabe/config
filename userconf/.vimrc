@@ -1,4 +1,3 @@
-"install vim-plug if not existing and install all plugins
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !(mkdir -p ~/.vim/autoload/ && wget -O ~/.vim/autoload/plug.vim 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
          \ || curl -fLo '~/.vim/autoload/plug.vim' --create-dirs 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
@@ -7,8 +6,11 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
-"interact with quickfix
-Plug 'romainl/vim-qf'
+Plug 'easymotion/vim-easymotion'
+"like tmux zoom
+Plug 'troydm/zoomwintab.vim'
+"toggle quickfix
+Plug 'Valloric/ListToggle'
 "improve search
 Plug 'haya14busa/vim-asterisk'
 "debugger
@@ -42,7 +44,7 @@ Plug 'benmills/vimux'
 "toggle comment
 Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
 "buffer explorer
-Plug 'madKuchenbaecker/minibufexpl.vim'
+Plug 'jlanzarotta/bufexplorer'
 "async lint
 Plug 'w0rp/ale'
 "highlight trailing whitespace
@@ -88,7 +90,7 @@ Plug 'lervag/vimtex', { 'for': 'latex' }
 "semantic highlighting of python code
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
 "compile/run
-Plug 'vim-scripts/SingleCompile', { 'on': 'SCCompile' }
+Plug 'skywind3000/asyncrun.vim'
 "csv inspector/arranger
 Plug 'chrisbra/csv.vim'
 "wrap function arguments
@@ -107,6 +109,18 @@ call plug#end()
 " --- Begin Plugin Configuration ---
 " ----------------------------------
 
+"easymotion
+"nmap Ö <Plug>(easymotion-overwin-f)
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+nmap m <Plug>(easymotion-overwin-f)
+nmap M <Plug>(easymotion-overwin-f2)
+
+"ayncrun
+let g:asyncrun_open = 10
+noremap ü :AsyncRun -program=make -raw=1 %<CR>
+noremap Ü :AsyncStop<CR>
+
 "vim-asterisk
 map *   <Plug>(asterisk-*)
 map #   <Plug>(asterisk-#)
@@ -117,8 +131,9 @@ map gz* <Plug>(asterisk-gz*)
 map z#  <Plug>(asterisk-z#)
 map gz# <Plug>(asterisk-gz#)
 
-"vim-qf
-map Ö <Plug>(qf_qf_toggle)
+"ListToggle
+let g:lt_quickfix_list_toggle_map = 'Ö'
+let g:lt_height = 10
 
 "vimspector
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -161,13 +176,21 @@ let g:NERDDefaultAlign='start'
 nmap gc <Plug>NERDCommenterToggle
 vmap gc <Plug>NERDCommenterToggle gv
 
-"minibufexpl
-let g:miniBufExplVSplit = 20
-let g:miniBufExplBRSplit = 1
-let g:miniBufExplShowBufNumbers = 0
-let g:miniBufExplorerAutoStart = 0
-nmap <silent> <F2> :MBEToggle<CR>:MBEFocus<CR><C-W>=
-imap <silent> <F2> <ESC>:MBEToggle<CR>:MBEFocus<CR><C-W>=
+"bufexplorer
+let g:bufExplorerDefaultHelp=0
+let g:bufExplorerDetailedHelp=0
+let g:bufExplorerFindActive=1
+let g:bufExplorerShowDirectories=0
+let g:bufExplorerShowNoName=0
+let g:bufExplorerShowRelativePath=1
+let g:bufExplorerShowTabBuffer=1
+let g:bufExplorerShowUnlisted=0
+let g:bufExplorerSortBy='mru'
+let g:bufExplorerSplitBelow=1
+let g:bufExplorerSplitRight=1
+let g:bufExplorerDisableDefaultKeyMapping=1
+nmap <silent> <F2> :ToggleBufExplorer<CR>
+imap <silent> <F2> <ESC>:ToggleBufExplorer<CR>
 
 "ale
 let g:ale_set_highlights = 0
@@ -181,8 +204,8 @@ let g:ale_fixers = {
 \  'javascript': ['prettier'],
 \  'python': ['black', 'isort']
 \}
-nnoremap <F5> :ALEFix<CR>
-inoremap <F5> <ESC>:ALEFix<CR>
+nnoremap <F9> :ALEFix<CR>
+inoremap <F9> <ESC>:ALEFix<CR>
 
 "solarized colorscheme
 let g:solarized_termcolors = 256
@@ -234,9 +257,14 @@ let g:python_highlight_space_errors = 0
 
 "vimcmdline
 let cmdline_vsplit = 1
-let cmdline_in_buffer = 0
+let cmdline_in_buffer = 1
+let cmdline_term_width = 67
 let cmdline_map_send = '<space>'
 let cmdline_map_send_paragraph = '<C-space>'
+let cmdline_map_source_fun = '<LocalLeader><space>'
+
+let cmdline_app = {}
+let cmdline_app['python'] = 'ipython'
 nnoremap <F4> :lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 inoremap <F4> <ESC>:lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 
@@ -248,11 +276,6 @@ let g:semshi#error_sign = v:false
 "better whitespace
 let g:current_line_whitespace_disabled_soft=1
 let g:better_whitespace_ctermcolor=52
-
-"SingleCompile'
-let g:SingleCompile_usetee = 0
-let g:SingleCompile_usequickfix = 0
-noremap <F9> <Esc>:w<CR>:SCCompile<CR>
 
 "coc.nvim
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -434,6 +457,8 @@ set cmdheight=2
 set t_Co=256
 set ttyfast
 
+noremap <F12> :ZoomWinTabToggle<CR>
+noremap <F8> :source $MYVIMRC<CR>
 noremap Q :qa<CR>
 noremap <silent> gs :vsplit<CR>
 noremap <silent> gS :split<CR>
@@ -450,6 +475,8 @@ nnoremap <silent> ö :noh<CR>
 vmap < <gv
 vmap > >gv
 
+let $PYTHONUNBUFFERED=1
+
 autocmd FileType yaml       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType html       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType htmldjango set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
@@ -459,3 +486,6 @@ tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
 tnoremap <C-k> <C-\><C-n><C-W>k
 tnoremap <C-l> <C-\><C-n><C-W>l
+tnoremap <F2> <C-\><C-n>:ToggleBufExplorer<CR>
+tnoremap <F12> <C-\><C-n> :ZoomWinTabToggle<CR>
+autocmd BufWinEnter,WinEnter term://* startinsert

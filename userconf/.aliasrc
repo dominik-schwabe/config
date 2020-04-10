@@ -19,8 +19,7 @@ alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
 alias oldvim='/usr/bin/vim'
 
 alias python='python3'
-alias p='python'
-alias pt='ptpython'
+alias p='ipython'
 alias pip='pip3'
 
 alias services-enabled='systemctl --type service --state enabled list-unit-files'
@@ -38,6 +37,7 @@ alias dockerstart='sudo systemctl start docker.service'
 alias dockerstop='sudo systemctl stop docker.service'
 
 alias tt='termdown --no-figlet -s -a'
+alias ssh='ssh -x -C'
 
 
 # vi: ft=sh
