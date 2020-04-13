@@ -6,41 +6,48 @@ endif
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
-Plug 'easymotion/vim-easymotion'
-"like tmux zoom
-Plug 'troydm/zoomwintab.vim'
-"toggle quickfix
-Plug 'Valloric/ListToggle'
-"improve search
-Plug 'haya14busa/vim-asterisk'
+"database completion (coc-dadbod)
+"Plug 'tpope/vim-dadbod'
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python' }
+"run test
+"Plug 'janko/vim-test'
+"session handling
+"Plug 'tpope/vim-obsession'
+"git diff on left sidebar
+"Plug 'airblade/vim-gitgutter'
+"toggle quickfix, loclist
+Plug 'Valloric/ListToggle', { 'on': ['LToggle', 'QToggle'] }
+"jump fast to location
+Plug 'easymotion/vim-easymotion', { 'on': ['<Plug>(easymotion-overwin-f)', '<Plug>(easymotion-overwin-f2)'] }
+"like tmux zoom
+Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
+"improve search
+Plug 'haya14busa/vim-asterisk'
 "xpath
-Plug 'actionshrimp/vim-xpath'
+Plug 'actionshrimp/vim-xpath', { 'for': ['html', 'xml'] }
 "json pretty print
 Plug 'tpope/vim-jdaddy'
 "markdown preview ( requires: 'npm -g install instant-markdown-d || pip install --user smdv' )
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
-"load hugefiles faster
-"Plug 'mhinz/vim-hugefile'
 "highlight colorcodes
-Plug 'ap/vim-css-color'
+Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini'] }
 "align statements
-Plug 'junegunn/vim-easy-align'
-"session handling
-Plug 'tpope/vim-obsession'
+Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 "greplike search
-Plug 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 "completion terms from other tmux pane
 Plug 'wellle/tmux-complete.vim'
+if $TMUX != ""
+    "focus commands work in tmux
+    Plug 'tmux-plugins/vim-tmux-focus-events'
+    "execute command in tmux pane
+    Plug 'benmills/vimux'
+endif
 "textobj for python
-Plug 'jeetsukumaran/vim-pythonsense'
-"focus commands work in tmux
-Plug 'tmux-plugins/vim-tmux-focus-events'
-"execute command in tmux pane
-Plug 'benmills/vimux'
+Plug 'jeetsukumaran/vim-pythonsense', { 'for': 'python' }
 "toggle comment
 Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
 "buffer explorer
@@ -52,15 +59,13 @@ Plug 'ntpeters/vim-better-whitespace'
 "change root to git project
 Plug 'airblade/vim-rooter'
 "fast html writing
-Plug 'mattn/emmet-vim', { 'for': 'html' }
+Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
 "substitute brackets with others (cs"')
 Plug 'tpope/vim-surround'
 "extension of .-command
 Plug 'tpope/vim-repeat'
 "git wrapper
 Plug 'tpope/vim-fugitive'
-"git diff on left sidebar
-Plug 'airblade/vim-gitgutter'
 "beautiful statusbar
 Plug 'itchyny/lightline.vim'
 "snippets
@@ -73,24 +78,26 @@ Plug 'sheerun/vim-polyglot'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "explore directory
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 "git integration with nerdtree
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
-Plug 'junegunn/fzf', { 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'on': 'FZF', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim', { 'on': 'FZF', 'do': './install --bin' }
 "R ide
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
 Plug 'jalvesaq/vimcmdline'
 "latex ide ( requires: 'pip install neovim-remote' )
 Plug 'lervag/vimtex', { 'for': 'latex' }
-"semantic highlighting of python code
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
+if has("nvim")
+    "semantic highlighting of python code
+    Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
+endif
 "compile/run
-Plug 'skywind3000/asyncrun.vim'
+Plug 'skywind3000/asyncrun.vim', { 'on': ['AsyncRun', 'AsyncStop'] }
 "csv inspector/arranger
 Plug 'chrisbra/csv.vim'
 "wrap function arguments
@@ -102,12 +109,25 @@ Plug 'wellle/targets.vim'
 "textobj for indents
 Plug 'michaeljsmith/vim-indent-object'
 "% match more
-Plug 'vim-scripts/matchit.zip'
+Plug 'andymass/vim-matchup', { 'for': ['html', 'xml'] }
 call plug#end()
 
 " ----------------------------------
 " --- Begin Plugin Configuration ---
 " ----------------------------------
+
+
+"vim-matchup
+let g:matchup_matchparen_enabled = 1
+
+"ListToggle
+let g:lt_height = 10
+nmap <silent> ä :LToggle<CR>
+nmap <silent> Ö :QToggle<CR>
+
+"test-vim
+let test#strategy = "asyncrun_background_term"
+let test#python#runner = 'pytest'
 
 "easymotion
 "nmap Ö <Plug>(easymotion-overwin-f)
@@ -115,11 +135,27 @@ let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 nmap m <Plug>(easymotion-overwin-f)
 nmap M <Plug>(easymotion-overwin-f2)
+vmap m <Plug>(easymotion-overwin-f)
+vmap M <Plug>(easymotion-overwin-f2)
 
 "ayncrun
+let g:asyncrun_save = 1
 let g:asyncrun_open = 10
-noremap ü :AsyncRun -program=make -raw=1 %<CR>
-noremap Ü :AsyncStop<CR>
+let g:asyncrun_trim = 1
+let g:asyncrun_exit = 'if g:asyncrun_status != "success" | call system("notify-send -t 1000 -u critical \"$VIM_FILENAME\" \"finished with error\"") | else | call system("notify-send -t 1000 -u normal \"$VIM_FILENAME\" \"finished normaly\"") | endif'
+function AsyncrunOutput(raw)
+    if g:asyncrun_status != "running"
+        if a:raw == 0
+            :AsyncRun -program=make -raw=0 %
+        elseif a:raw == 1
+            :AsyncRun -program=make -raw=1 %
+        endif
+    else
+        :AsyncStop
+    endif
+endfunction
+nmap Ü :call AsyncrunOutput(1)<CR>
+nmap ü :call AsyncrunOutput(0)<CR>
 
 "vim-asterisk
 map *   <Plug>(asterisk-*)
@@ -130,10 +166,6 @@ map z*  <Plug>(asterisk-z*)
 map gz* <Plug>(asterisk-gz*)
 map z#  <Plug>(asterisk-z#)
 map gz# <Plug>(asterisk-gz#)
-
-"ListToggle
-let g:lt_quickfix_list_toggle_map = 'Ö'
-let g:lt_height = 10
 
 "vimspector
 let g:vimspector_enable_mappings = 'HUMAN'
@@ -159,7 +191,13 @@ let g:rainbow_conf = {
 
 "ack
 cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
+function AckSearch()
+    let search = input("Search in files: ")
+    if search != ""
+        :Ack! search
+    endif
+endfunction
+nnoremap <Leader>a :call AckSearch()<CR>
 let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
 
 "NERDTree
@@ -193,13 +231,18 @@ nmap <silent> <F2> :ToggleBufExplorer<CR>
 imap <silent> <F2> <ESC>:ToggleBufExplorer<CR>
 
 "ale
+let g:ale_python_auto_pipenv = 1
 let g:ale_set_highlights = 0
-let g:ale_python_auto_pipenv = 0
-let g:ale_linters = {'python': ['pylint', 'flake8']}
+let g:ale_set_loclist = 1
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 0
-let g:ale_python_pylint_options = "-d C0111,W0703,C0103,E0401,R0201,R0903"
+let g:ale_set_quickfix = 0
+let g:ale_open_list = 0
+let g:ale_keep_list_window_open = 1
+let g:ale_linters = {
+\  'python': ['pylint', 'bandit']
+\}
 let g:ale_fixers = {
 \  'javascript': ['prettier'],
 \  'python': ['black', 'isort']
@@ -226,9 +269,8 @@ let g:vimtex_matchparen_enabled = 0
 let g:tex_flavor = 'latex'
 let g:vimtex_view_method = 'zathura'
 let g:vimtex_quickfix_mode = 2
-let g:vimtex_view_skim_reading_bar = 0
-let g:vimtex_quickfix_autoclose_after_keystrokes = 1
-let g:vimtex_quickfix_ignore_all_warnings = 1
+let g:vimtex_view_skim_reading_bar = 1
+let g:vimtex_quickfix_autoclose_after_keystrokes = 2
 let g:vimtex_quickfix_open_on_warning = 0
 let g:vimtex_quickfix_latexlog = {
       \ 'overfull' : 0,
@@ -256,15 +298,22 @@ let g:polyglot_disabled = ['latex']
 let g:python_highlight_space_errors = 0
 
 "vimcmdline
+let cmdline_esc_term = 0
 let cmdline_vsplit = 1
-let cmdline_in_buffer = 1
+if empty($TMUX)
+    let cmdline_in_buffer = 1
+else
+    let cmdline_in_buffer = 0
+endif
 let cmdline_term_width = 67
-let cmdline_map_send = '<space>'
-let cmdline_map_send_paragraph = '<C-space>'
+let cmdline_map_send = ''
+let cmdline_map_send_paragraph = ''
 let cmdline_map_source_fun = '<LocalLeader><space>'
 
 let cmdline_app = {}
 let cmdline_app['python'] = 'ipython'
+nnoremap <silent> <space> :call VimCmdLineSendCmd("\x03")<CR>:call VimCmdLineSendLine()<CR>
+nnoremap <silent> <C-space> :call VimCmdLineSendCmd("\x03")<CR>:call VimCmdLineSendParagraph()<CR>
 nnoremap <F4> :lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 inoremap <F4> <ESC>:lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 
@@ -323,19 +372,22 @@ let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
 "install.packages("languageserver")
 let g:coc_global_extensions = [
-\    'coc-css',
-\    'coc-docker',
-\    'coc-emmet',
-\    'coc-html',
-\    'coc-java',
-\    'coc-json',
-\    'coc-python',
-\    'coc-r-lsp',
-\    'coc-snippets',
-\    'coc-tsserver',
-\    'coc-ultisnips',
-\    'coc-vimtex',
-\    'coc-yaml'
+\  'coc-css',
+\  'coc-docker',
+\  'coc-emmet',
+\  'coc-github-users',
+\  'coc-html',
+\  'coc-java',
+\  'coc-json',
+\  'coc-python',
+\  'coc-r-lsp',
+\  'coc-sh',
+\  'coc-snippets',
+\  'coc-tsserver',
+\  'coc-ultisnips',
+\  'coc-vimlsp',
+\  'coc-vimtex',
+\  'coc-yaml',
 \]
 
 "Nvim-R
@@ -390,12 +442,6 @@ else
     map <C-l> <C-w>l
 endif
 
-"vimux
-noremap <leader>vp :VimuxPromptCommand<CR>
-noremap <leader>vl :VimuxRunLastCommand<CR>
-noremap <leader>vi :VimuxInspectRunner<CR>
-noremap <leader>vz :VimuxZoomRunner<CR>
-
 " --------------------------------
 " --- End Plugin Configuration ---
 " --------------------------------
@@ -416,11 +462,34 @@ function! MySpellLang()
 endf
 map <F7> :call MySpellLang()<CR>
 
+"toggle terminal
+let g:term_buf = 0
+let g:term_win = 0
+
+function! Term_toggle(height)
+    if win_gotoid(g:term_win)
+        hide
+    else
+        botright new
+        exec "resize " . a:height
+        try
+            exec "buffer " . g:term_buf
+        catch
+            call termopen($SHELL, {"detach": 0})
+            let g:term_buf = bufnr("")
+        endtry
+        startinsert!
+        let g:term_win = win_getid()
+    endif
+endfunction
+nnoremap <silent> <F10> :call Term_toggle(10)<cr>
+inoremap <silent> <F10> <ESC>:call Term_toggle(10)<cr>
+tnoremap <silent> <F10> <C-\><C-n>:call Term_toggle(10)<cr>
+
 let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python3'
 
 colorscheme monokai-phoenix
-set termguicolors
 syntax on
 
 set splitbelow
@@ -457,9 +526,10 @@ set cmdheight=2
 set t_Co=256
 set ttyfast
 
+let g:zoomwintab_hidetabbar = 0
 noremap <F12> :ZoomWinTabToggle<CR>
-noremap <F8> :source $MYVIMRC<CR>
 noremap Q :qa<CR>
+noremap <C-q> :qa!<CR>
 noremap <silent> gs :vsplit<CR>
 noremap <silent> gS :split<CR>
 noremap <left> <C-W>H
@@ -475,17 +545,26 @@ nnoremap <silent> ö :noh<CR>
 vmap < <gv
 vmap > >gv
 
+nnoremap + <C-w>+
+nnoremap - <C-w>-
+
 let $PYTHONUNBUFFERED=1
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 autocmd FileType yaml       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType html       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType htmldjango set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
+au TermOpen * set nonumber norelativenumber
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
 tnoremap <C-k> <C-\><C-n><C-W>k
 tnoremap <C-l> <C-\><C-n><C-W>l
-tnoremap <F2> <C-\><C-n>:ToggleBufExplorer<CR>
+tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
 tnoremap <F12> <C-\><C-n> :ZoomWinTabToggle<CR>
-autocmd BufWinEnter,WinEnter term://* startinsert
+if has("nvim")
+    set termguicolors
+    autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
+    autocmd TermClose term://* :bd!
+endif

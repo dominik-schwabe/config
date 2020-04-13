@@ -1,0 +1,48 @@
+font:
+  size: 9
+  normal:
+    family: Noto Sans Mono
+  bold:
+    family: Noto Sans Mono
+  italic:
+    family: Noto Sans Mono
+
+# shell:
+#     program: /usr/bin/tmux
+#     args:
+#      - -u # force UTF-8 in tmux
+
+windows:
+  decorations: none
+
+mouse:
+  hide_when_typing: true
+
+colors:
+  cursor:
+      text:   '#000000'
+      cursor: '#dddddd'
+
+  primary:
+    background: '#111111'
+    foreground: '#dddddd'
+
+  normal:
+    black:   '#888888'
+    red:     '#ff0000'
+    green:   '#3fff3f'
+    yellow:  '#deed12'
+    blue:    '#5f87af'
+    magenta: '#f92672'
+    cyan:    '#66d9ef'
+    white:   '#dddddd'
+
+  bright:
+    black:   '#1a1a1a'
+    red:     '#ff0000'
+    green:   '#3fff3f'
+    yellow:  '#deed12'
+    blue:    '#5f87af'
+    magenta: '#f92672'
+    cyan:    '#66d9ef'
+    white:   '#dddddd'

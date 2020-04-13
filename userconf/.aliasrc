@@ -7,6 +7,7 @@ alias fgrep='fgrep -i --color=auto'
 alias egrep='egrep -i --color=auto'
 alias fzf='fzf --color=16'
 alias less='less -i'
+alias tmux='tmux -u'
 
 alias ip='ip -color'
 

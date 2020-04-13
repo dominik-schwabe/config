@@ -24,6 +24,10 @@ bgnotify_threshold=5
 plugins=(git gitignore pip colored-man-pages sudo history-substring-search bgnotify tmuxinator)
 source $ZSH/oh-my-zsh.sh
 
+zstyle ':completion:*:default' list-colors \
+  "di=1;34" "ln=1;36" "so=1;32" "pi=33" "ex=1;32" "bd=34;46" "cd=1;33" \
+  "su=30;41" "sg=30;46" "tw=30;42" "ow=30;43"
+
 VI_MODE_CURSOR_INSERT='\e[2 q'
 VI_MODE_CURSOR_NORMAL='\e[6 q'
 

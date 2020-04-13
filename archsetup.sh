@@ -21,7 +21,7 @@ awesome-terminal-fonts \
 base \
 base-devel \
 bash-completion \
-black \
+python-black \
 bluez \
 bluez-utils \
 cmake \
