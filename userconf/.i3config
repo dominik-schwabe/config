@@ -11,9 +11,11 @@
 
 set $mod Mod4
 set $term termite
-#set $term termite
+#set $term alacritty
 #set $term xfce4-terminal
 #set $term gnome-terminal
+set $webbrowser firefox
+set $guifilebrowser thunar
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -186,16 +188,16 @@ bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
 bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 
 bindsym XF86Launch1 exec --no-startup-id ~/bin/nolidswitchtoggle
-bindsym $mod+y exec firefox
+bindsym $mod+y exec $webbrowser
 #bindsym $mod+y exec chromium
-bindsym $mod+x exec thunar
+bindsym $mod+x exec $guifilebrowser
 bindsym $mod+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Shift+u exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
-bindsym $mod+Return exec $term
+bindsym $mod+Return exec --no-startup-id $term
 #bindsym $mod+Return exec xfce4-terminal
 #bindsym $mod+Return exec gnome-terminal
-bindsym $mod+Shift+Return exec $term -r ranger -e ranger
-bindsym $mod+m exec $term -e cmus
+bindsym $mod+Shift+Return exec --no-startup-id $term -e ranger
+bindsym $mod+m exec --no-startup-id $term -e cmus
 bindsym $mod+Home exec --no-startup-id xbacklight -time 0 +1
 bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+p move workspace to output right
@@ -217,6 +219,10 @@ for_window [instance="matplotlib"] floating enabled
 for_window [instance="matplotlib"] resize set height 600 px
 for_window [instance="matplotlib"] resize set width 800 px
 for_window [instance="matplotlib"] move position center
+for_window [title="Figure *" class=" "] floating enabled
+for_window [title="Figure *" class=" "] resize set height 600 px
+for_window [title="Figure *" class=" "] resize set width 800 px
+for_window [title="Figure *" class=" "] move position center
 for_window [instance="r_x11"] floating enabled
 for_window [instance="r_x11"] resize set height 600 px
 for_window [instance="r_x11"] resize set width 800 px
@@ -230,4 +236,7 @@ exec --no-startup-id killall redshift; redshift-gtk -r -l "51.34:12.35" -t 6500:
 exec --no-startup-id telegram-desktop -startintray
 exec --no-startup-id picom -b
 
-exec --no-startup-id i3-msg 'workspace 2; exec termite; workspace 1; exec firefox'
+
+assign [title="terminal_startup"] 2
+exec --no-startup-id exec $webbrowser
+exec --no-startup-id $term --title "terminal_startup"

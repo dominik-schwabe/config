@@ -67,6 +67,7 @@ disable=
         broad-except,
         no-else-return,
         import-error,
+        bad-continuation
 #        print-statement,
 #        parameter-unpacking,
 #        unpacking-in-except,
@@ -586,3 +587,6 @@ preferred-modules=
 # "BaseException, Exception".
 overgeneral-exceptions=BaseException,
                        Exception
+
+
+# vi: ft=dosini

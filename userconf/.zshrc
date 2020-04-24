@@ -7,15 +7,23 @@ if ! [ -d ~/.oh-my-zsh ]; then
     git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
 
+if [[ -r ~/.envrc ]]; then
+    . ~/.envrc
+fi
+
+if [[ -r ~/.aliasrc ]]; then
+    . ~/.aliasrc
+fi
+
 export ZSH=$HOME/.oh-my-zsh
 
 #ZSH_THEME="agnoster"
 #ZSH_THEME="alanpeabody"
 #ZSH_THEME="essembeh"
-#ZSH_THEME="gentoo"
-#ZSH_THEME="jaischeema"
 #ZSH_THEME="clean"
 #ZSH_THEME="lukerandall"
+#ZSH_THEME="gentoo"             # root
+#ZSH_THEME="jaischeema"         # server
 
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
@@ -46,6 +54,7 @@ zinit light "kutsan/zsh-system-clipboard"
 zinit light "madKuchenbaecker/vi-mode.zsh"
 zinit light "akarzim/zsh-docker-aliases"
 zinit light "junegunn/fzf.git"
+#zinit light "lukechilds/zsh-nvm"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"
@@ -69,14 +78,6 @@ unset correctall
 exit_zsh() { exit }
 zle -N exit_zsh
 bindkey '^D' exit_zsh
-
-if [[ -r ~/.aliasrc ]]; then
-    . ~/.aliasrc
-fi
-
-if [[ -r ~/.envrc ]]; then
-    . ~/.envrc
-fi
 
 bindkey "^?" backward-delete-char
 
@@ -112,4 +113,4 @@ then
     ZSH_THEME_GIT_PROMPT_UNMERGED="?"
 fi
 
-RPS1='%(?..%F{#FF0000}%B%?%b%f )% %w %B%F{yellow}%T%f%b'
+RPS1='%(?..%F{#FF0000}%B%?%b%f )% %w %B%F{#DEED12}%T%f%b'

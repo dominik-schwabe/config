@@ -3,7 +3,7 @@ set selection-clipboard clipboard
 set default-bg "#111111"
 set default-fg "#dcdccc"
 set recolor-lightcolor "#111111"
-set recolor-darkcolor "#eeeeee"
+set recolor-darkcolor "#ffffff"
 set highlight-color "#00FF00"
 set highlight-active-color "#00FF00"
 set highlight-transparency 0.2

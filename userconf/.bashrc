@@ -1,6 +1,5 @@
 shopt -s histappend
 shopt -s checkwinsize
-
 set -o vi
 
 if [[ -r ~/.aliasrc ]]; then

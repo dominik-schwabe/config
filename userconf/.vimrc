@@ -15,7 +15,7 @@ call plug#begin('~/.vim/plugged')
 "session handling
 "Plug 'tpope/vim-obsession'
 "git diff on left sidebar
-"Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 "toggle quickfix, loclist
 Plug 'Valloric/ListToggle', { 'on': ['LToggle', 'QToggle'] }
 "jump fast to location
@@ -33,7 +33,7 @@ Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "highlight colorcodes
-Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini'] }
+Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini', 'conf', 'cfg', 'vim'] }
 "align statements
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 "greplike search
@@ -112,10 +112,17 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'andymass/vim-matchup', { 'for': ['html', 'xml'] }
 call plug#end()
 
+
+
+
 " ----------------------------------
 " --- Begin Plugin Configuration ---
 " ----------------------------------
 
+"vim-rooter
+"let g:rooter_use_lcd = 1
+let g:rooter_manual_only = 1
+autocmd VimEnter * :Rooter
 
 "vim-matchup
 let g:matchup_matchparen_enabled = 1
@@ -143,12 +150,14 @@ let g:asyncrun_save = 1
 let g:asyncrun_open = 10
 let g:asyncrun_trim = 1
 let g:asyncrun_exit = 'if g:asyncrun_status != "success" | call system("notify-send -t 1000 -u critical \"$VIM_FILENAME\" \"finished with error\"") | else | call system("notify-send -t 1000 -u normal \"$VIM_FILENAME\" \"finished normaly\"") | endif'
+
+let g:asyncrun_status = "success"
 function AsyncrunOutput(raw)
     if g:asyncrun_status != "running"
         if a:raw == 0
-            :AsyncRun -program=make -raw=0 %
+            :AsyncRun -program=make -strip=1 -raw=0 %
         elseif a:raw == 1
-            :AsyncRun -program=make -raw=1 %
+            :AsyncRun -program=make -strip=1 -raw=1 %
         endif
     else
         :AsyncStop
@@ -194,13 +203,15 @@ cnoreabbrev Ack Ack!
 function AckSearch()
     let search = input("Search in files: ")
     if search != ""
-        :Ack! search
+        execute 'Ack!' search
     endif
 endfunction
-nnoremap <Leader>a :call AckSearch()<CR>
+nnoremap <Leader>a :Ack! 
+nnoremap _ :call AckSearch()<CR>
 let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
 
 "NERDTree
+let NERDTreeQuitOnOpen=1
 let NERDTreeMinimalUI = 1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | :wincmd h | endif
@@ -239,9 +250,9 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 0
 let g:ale_set_quickfix = 0
 let g:ale_open_list = 0
-let g:ale_keep_list_window_open = 1
+let g:ale_keep_list_window_open = 0
 let g:ale_linters = {
-\  'python': ['pylint', 'bandit']
+\  'python': ['pylint']
 \}
 let g:ale_fixers = {
 \  'javascript': ['prettier'],
@@ -249,6 +260,7 @@ let g:ale_fixers = {
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
+autocmd BufWinEnter experiments.py :ALEDisable
 
 "solarized colorscheme
 let g:solarized_termcolors = 256
@@ -300,20 +312,14 @@ let g:python_highlight_space_errors = 0
 "vimcmdline
 let cmdline_esc_term = 0
 let cmdline_vsplit = 1
-if empty($TMUX)
-    let cmdline_in_buffer = 1
-else
-    let cmdline_in_buffer = 0
-endif
+let cmdline_in_buffer = 1
 let cmdline_term_width = 67
-let cmdline_map_send = ''
-let cmdline_map_send_paragraph = ''
+let cmdline_map_send = '<space>'
+let cmdline_map_send_paragraph = '<C-space>'
 let cmdline_map_source_fun = '<LocalLeader><space>'
 
 let cmdline_app = {}
 let cmdline_app['python'] = 'ipython'
-nnoremap <silent> <space> :call VimCmdLineSendCmd("\x03")<CR>:call VimCmdLineSendLine()<CR>
-nnoremap <silent> <C-space> :call VimCmdLineSendCmd("\x03")<CR>:call VimCmdLineSendParagraph()<CR>
 nnoremap <F4> :lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 inoremap <F4> <ESC>:lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
 
@@ -365,6 +371,7 @@ nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>rf <Plug>(coc-refactor)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 let g:coc_snippet_next = '<C-o>'
@@ -379,6 +386,7 @@ let g:coc_global_extensions = [
 \  'coc-html',
 \  'coc-java',
 \  'coc-json',
+\  'coc-prettier',
 \  'coc-python',
 \  'coc-r-lsp',
 \  'coc-sh',
@@ -446,6 +454,9 @@ endif
 " --- End Plugin Configuration ---
 " --------------------------------
 
+
+
+
 "spellcheck
 let g:myLang = 0
 let g:myLangList = ['en_us', 'de_de']
@@ -460,7 +471,8 @@ function! MySpellLang()
     :echo "language:" g:myLangList[g:myLang-1]
   :endif
 endf
-map <F7> :call MySpellLang()<CR>
+nnoremap <F7> :call MySpellLang()<CR>
+inoremap <F7> <ESC>:call MySpellLang()<CR>
 
 "toggle terminal
 let g:term_buf = 0
@@ -485,6 +497,31 @@ endfunction
 nnoremap <silent> <F10> :call Term_toggle(10)<cr>
 inoremap <silent> <F10> <ESC>:call Term_toggle(10)<cr>
 tnoremap <silent> <F10> <C-\><C-n>:call Term_toggle(10)<cr>
+
+"smart resize
+function MyResize(dir)
+    let hwin = winnr("h")
+    let kwin = winnr("k")
+    let lwin = winnr("l")
+    let jwin = winnr("j")
+
+    if hwin != lwin
+        if a:dir == 0
+            vertical resize +5
+        else
+            vertical resize -5
+        endif
+    elseif kwin != jwin
+        if a:dir == 0
+            resize +1
+        else
+            resize -1
+        endif
+    endif
+endfunction
+nnoremap <silent> + :call MyResize(0)<CR>
+nnoremap <silent> - :call MyResize(1)<CR>
+
 
 let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python3'
@@ -526,7 +563,6 @@ set cmdheight=2
 set t_Co=256
 set ttyfast
 
-let g:zoomwintab_hidetabbar = 0
 noremap <F12> :ZoomWinTabToggle<CR>
 noremap Q :qa<CR>
 noremap <C-q> :qa!<CR>
@@ -536,17 +572,10 @@ noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K
 noremap <down> <C-W>J
-"noremap <C-h> <C-W>h
-"noremap <C-j> <C-W>j
-"noremap <C-k> <C-W>k
-"noremap <C-l> <C-W>l
 nnoremap <silent> ö :noh<CR>
 
 vmap < <gv
 vmap > >gv
-
-nnoremap + <C-w>+
-nnoremap - <C-w>-
 
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -556,15 +585,33 @@ autocmd FileType html       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=
 autocmd FileType htmldjango set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
-au TermOpen * set nonumber norelativenumber
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
 tnoremap <C-k> <C-\><C-n><C-W>k
 tnoremap <C-l> <C-\><C-n><C-W>l
 tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
-tnoremap <F12> <C-\><C-n> :ZoomWinTabToggle<CR>
+tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 if has("nvim")
     set termguicolors
+    au TermOpen * set nonumber norelativenumber signcolumn=no
     autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
     autocmd TermClose term://* :bd!
 endif
+
+"terminal colors
+let g:terminal_color_0  = '#000000'
+let g:terminal_color_1  = '#ff0000'
+let g:terminal_color_2  = '#3fff3f'
+let g:terminal_color_3  = '#ed9d12'
+let g:terminal_color_4  = '#5f87af'
+let g:terminal_color_5  = '#f92782'
+let g:terminal_color_6  = '#66d9ef'
+let g:terminal_color_7  = '#f8f8f2'
+let g:terminal_color_8  = '#ff0000'
+let g:terminal_color_9  = '#ff3f3f'
+let g:terminal_color_10 = '#3fff3f'
+let g:terminal_color_11 = '#deed12'
+let g:terminal_color_12 = '#5f87af'
+let g:terminal_color_13 = '#f92672'
+let g:terminal_color_14 = '#66d9ef'
+let g:terminal_color_15 = '#f8f8f2'
