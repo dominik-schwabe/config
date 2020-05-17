@@ -8,13 +8,17 @@ endif
 call plug#begin('~/.vim/plugged')
 "database completion (coc-dadbod)
 "Plug 'tpope/vim-dadbod'
-"debugger
-"Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python' }
 "run test
 "Plug 'janko/vim-test'
 "session handling
 "Plug 'tpope/vim-obsession'
-"git diff on left sidebar
+"debugger
+"Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
+"create own textobj
+Plug 'kana/vim-textobj-user'
+"use b for all brackets
+Plug 'rhysd/vim-textobj-anyblock'
+"git status bar
 Plug 'airblade/vim-gitgutter'
 "toggle quickfix, loclist
 Plug 'Valloric/ListToggle', { 'on': ['LToggle', 'QToggle'] }
@@ -73,7 +77,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "colorschemes
 Plug 'reewr/vim-monokai-phoenix'
-" better language behavior
+"better language behavior
 Plug 'sheerun/vim-polyglot'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -154,17 +158,21 @@ let g:asyncrun_exit = 'if g:asyncrun_status != "success" | call system("notify-s
 let g:asyncrun_status = "success"
 function AsyncrunOutput(raw)
     if g:asyncrun_status != "running"
-        if a:raw == 0
-            :AsyncRun -program=make -strip=1 -raw=0 %
-        elseif a:raw == 1
-            :AsyncRun -program=make -strip=1 -raw=1 %
+        let asynccommand = ":AsyncRun -program=make -strip=1 "
+        call system("notify-send -t 1000 -u normal \"$VIM_FILENAME\" \"start\"")
+        if &filetype == "c" || &filetype == "cpp"
+            let asynccommand .= " %< && ./%<"
+        else
+            let asynccommand .= "-raw=" . a:raw . " %"
         endif
+        echom l:asynccommand
+        execute asynccommand
     else
         :AsyncStop
     endif
 endfunction
-nmap Ü :call AsyncrunOutput(1)<CR>
-nmap ü :call AsyncrunOutput(0)<CR>
+nmap <silent> Ü :call AsyncrunOutput(0)<CR>
+nmap <silent> ü :call AsyncrunOutput(1)<CR>
 
 "vim-asterisk
 map *   <Plug>(asterisk-*)
@@ -177,7 +185,19 @@ map z#  <Plug>(asterisk-z#)
 map gz# <Plug>(asterisk-gz#)
 
 "vimspector
-let g:vimspector_enable_mappings = 'HUMAN'
+"nmap <leader>ds <Plug>VimspectorStop
+"nmap <leader>dr <Plug>VimspectorRestart
+"nmap <leader>dp <Plug>VimspectorPause
+"nmap <F5> <Plug>VimspectorContinue
+"imap <F5> <ESC><Plug>VimspectorContinue
+"nmap <F6> <Plug>VimspectorToggleBreakpoint
+"imap <F6> <ESC><Plug>VimspectorToggleBreakpoint
+"nmap <S-F6> <Plug>VimspectorAddFunctionBreakpoint
+"imap <S-F6> <ESC><Plug>VimspectorAddFunctionBreakpoint
+"nmap <F8> <Plug>VimspectorStepOver
+"imap <F8> <ESC><Plug>VimspectorStepOver
+"<Plug>VimspectorStepInto
+"<Plug>VimspectorStepOut
 
 "pythonsense
 let g:is_pythonsense_suppress_motion_keymaps = 1
@@ -218,6 +238,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 let g:NERDTreeIgnore = ['__pycache__']
 nnoremap <silent> <F1> :NERDTreeToggle<CR>
 inoremap <silent> <F1> <ESC>:NERDTreeToggle<CR>
+tnoremap <silent> <F1> <C-\><C-n>:NERDTreeToggle<CR>
 nnoremap <silent> gt :NERDTreeFind<CR>
 
 "NERDCommenter
@@ -255,8 +276,9 @@ let g:ale_linters = {
 \  'python': ['pylint']
 \}
 let g:ale_fixers = {
+\  'python': ['black', 'isort'],
 \  'javascript': ['prettier'],
-\  'python': ['black', 'isort']
+\  'json': ['prettier']
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
@@ -296,7 +318,6 @@ let g:tex_conceal = 'abdmg'
 if !exists('g:ycm_semantic_triggers')
     let g:ycm_semantic_triggers = {}
 endif
-au VimEnter * let g:ycm_semantic_triggers.tex=g:vimtex#re#youcompleteme
 
 autocmd FileType tex set tabstop=2
 autocmd FileType tex set shiftwidth=2
@@ -396,6 +417,7 @@ let g:coc_global_extensions = [
 \  'coc-vimlsp',
 \  'coc-vimtex',
 \  'coc-yaml',
+\  'coc-clangd',
 \]
 
 "Nvim-R
@@ -449,6 +471,9 @@ else
     map <C-k> <C-w>k
     map <C-l> <C-w>l
 endif
+
+"zoomwintab
+let g:zoomwintab_remap = 0
 
 " --------------------------------
 " --- End Plugin Configuration ---
@@ -549,6 +574,7 @@ endif
 set nowrap
 set encoding=utf-8
 set scrolloff=8
+set sidescrolloff=15
 set hidden
 
 set updatetime=300
@@ -564,6 +590,7 @@ set t_Co=256
 set ttyfast
 
 noremap <F12> :ZoomWinTabToggle<CR>
+inoremap <F12> <ESC>:ZoomWinTabToggle<CR>
 noremap Q :qa<CR>
 noremap <C-q> :qa!<CR>
 noremap <silent> gs :vsplit<CR>
@@ -577,6 +604,7 @@ nnoremap <silent> ö :noh<CR>
 vmap < <gv
 vmap > >gv
 
+let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
@@ -595,7 +623,7 @@ if has("nvim")
     set termguicolors
     au TermOpen * set nonumber norelativenumber signcolumn=no
     autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
-    autocmd TermClose term://* :bd!
+    autocmd TermClose term://* :execute "bdelete! " . expand("<abuf>")
 endif
 
 "terminal colors

@@ -68,10 +68,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+i split h
+bindsym $mod+i split h; exec notify-send -t 600 "horizontal"
 
 # split in vertical orientation
-bindsym $mod+o split v
+bindsym $mod+o split v; exec notify-send -t 600 "vertical"
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle

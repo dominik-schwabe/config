@@ -17,6 +17,8 @@ alias l='ls -CF'
 
 alias vim='/usr/bin/nvim'
 alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
+alias xvim='nvim -c ":ALEDisable | :call VimCmdLineStartApp()"'
+alias pxvim='pipenv run nvim -c ":ALEDisable | :call VimCmdLineStartApp()"'
 alias oldvim='/usr/bin/vim'
 
 alias python='python3'

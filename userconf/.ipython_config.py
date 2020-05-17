@@ -112,7 +112,7 @@ c.InteractiveShell.autoindent = True
 #  less than 3, it is reset to 0 and a warning is issued).  This limit is defined
 #  because otherwise you'll spend more time re-flushing a too small cache than
 #  working
-#c.InteractiveShell.cache_size = 1000
+c.InteractiveShell.cache_size = 0
 
 ## Use colors for displaying information about objects. Because this information
 #  is passed through a pager (like 'less'), and some pagers get confused with
