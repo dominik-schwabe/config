@@ -18,12 +18,12 @@ fi
 export ZSH=$HOME/.oh-my-zsh
 
 #ZSH_THEME="agnoster"
-#ZSH_THEME="alanpeabody"
 #ZSH_THEME="essembeh"
-#ZSH_THEME="clean"
 #ZSH_THEME="lukerandall"
-#ZSH_THEME="gentoo"             # root
-#ZSH_THEME="jaischeema"         # server
+#ZSH_THEME="clean"
+#ZSH_THEME="gentoo"
+#ZSH_THEME="jaischeema"      # root
+#ZSH_THEME="alanpeabody"     # server
 
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"

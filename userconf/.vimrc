@@ -14,10 +14,6 @@ call plug#begin('~/.vim/plugged')
 "Plug 'tpope/vim-obsession'
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
-"create own textobj
-Plug 'kana/vim-textobj-user'
-"use b for all brackets
-Plug 'rhysd/vim-textobj-anyblock'
 "git status bar
 Plug 'airblade/vim-gitgutter'
 "toggle quickfix, loclist
