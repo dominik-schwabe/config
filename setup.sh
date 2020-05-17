@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 CURRPATH="$(pwd)/$(dirname $0)"
 cd $CURRPATH
@@ -13,10 +13,10 @@ do
 done
 
 echo "clonesetup"
-clone/setup.sh $FORCE
+bash clone/setup.sh $FORCE
 echo
 echo "binsetup"
-bin/setup.sh $FORCE
+bash bin/setup.sh $FORCE
 echo
 echo "configsetup"
-userconf/setup.sh $FORCE
+bash userconf/setup.sh $FORCE

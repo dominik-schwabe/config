@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 main() {
     CURRPATH="$(pwd)/$(dirname $0)"

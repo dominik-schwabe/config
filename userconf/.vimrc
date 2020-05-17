@@ -88,8 +88,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERD
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
-Plug 'junegunn/fzf', { 'on': 'FZF', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim', { 'on': 'FZF', 'do': './install --bin' }
+Plug 'junegunn/fzf', { 'on': 'FZF', 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim', { 'on': 'FZF' }
 "R ide
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console

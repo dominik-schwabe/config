@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 CURRPATH="$(pwd)/$(dirname $0)"
 cd $CURRPATH
