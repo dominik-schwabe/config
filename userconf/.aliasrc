@@ -36,8 +36,8 @@ alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 
 alias R='R --no-save'
-alias dockerstart='sudo systemctl start docker.service'
-alias dockerstop='sudo systemctl stop docker.service'
+alias dst='sudo systemctl start docker.service'
+alias dsp='sudo systemctl stop docker.service'
 
 alias tt='termdown --no-figlet -s -a'
 alias ssh='ssh -x -C'

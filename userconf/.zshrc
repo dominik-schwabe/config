@@ -48,13 +48,14 @@ function chpwd() {
 
 # pluins
 source "$HOME/.zinit/bin/zinit.zsh"
+#zinit light "mattberther/zsh-pyenv"
+#zinit light "lukechilds/zsh-nvm"
 zinit light "zdharma/fast-syntax-highlighting"
 zinit light "MichaelAquilina/zsh-you-should-use"
 zinit light "kutsan/zsh-system-clipboard"
 zinit light "madKuchenbaecker/vi-mode.zsh"
 zinit light "akarzim/zsh-docker-aliases"
 zinit light "junegunn/fzf.git"
-#zinit light "lukechilds/zsh-nvm"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"

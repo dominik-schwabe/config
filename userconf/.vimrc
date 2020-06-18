@@ -1,7 +1,12 @@
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !(mkdir -p ~/.vim/autoload/ && wget -O ~/.vim/autoload/plug.vim 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-         \ || curl -fLo '~/.vim/autoload/plug.vim' --create-dirs 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+         \ || curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+if empty(glob('~/bin/ack'))
+  silent !(mkdir -p ~/bin && wget -O ~/bin/ack.vim 'https://beyondgrep.com/ack-v3.3.1')
+         \ || (curl -fLo "$HOME/bin/ack" --create-dirs 'https://beyondgrep.com/ack-v3.3.1' && chmod 0755 $HOME/bin/ack)
 endif
 
 "define plugins using vim-plug
@@ -14,6 +19,8 @@ call plug#begin('~/.vim/plugged')
 "Plug 'tpope/vim-obsession'
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
+"perl/ruby like regex
+Plug 'othree/eregex.vim'
 "git status bar
 Plug 'airblade/vim-gitgutter'
 "toggle quickfix, loclist
@@ -55,7 +62,7 @@ Plug 'jlanzarotta/bufexplorer'
 "async lint
 Plug 'w0rp/ale'
 "highlight trailing whitespace
-Plug 'ntpeters/vim-better-whitespace'
+Plug 'bronson/vim-trailing-whitespace'
 "change root to git project
 Plug 'airblade/vim-rooter'
 "fast html writing
@@ -274,7 +281,8 @@ let g:ale_linters = {
 let g:ale_fixers = {
 \  'python': ['black', 'isort'],
 \  'javascript': ['prettier'],
-\  'json': ['prettier']
+\  'json': ['prettier'],
+\  'tex': ['latexindent']
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
@@ -471,6 +479,9 @@ endif
 "zoomwintab
 let g:zoomwintab_remap = 0
 
+"eregex.vim
+let g:eregex_default_enable = 0
+
 " --------------------------------
 " --- End Plugin Configuration ---
 " --------------------------------
@@ -577,6 +588,7 @@ set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
+set background=dark
 set backspace=indent,eol,start
 set relativenumber
 set nobackup
