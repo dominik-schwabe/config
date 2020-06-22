@@ -4,9 +4,20 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if empty(glob('~/bin/ack'))
-  silent !(mkdir -p ~/bin && wget -O ~/bin/ack.vim 'https://beyondgrep.com/ack-v3.3.1')
-         \ || (curl -fLo "$HOME/bin/ack" --create-dirs 'https://beyondgrep.com/ack-v3.3.1' && chmod 0755 $HOME/bin/ack)
+if empty(glob('~/bin/rg'))
+  let g:rg_version = '12.1.1'
+  let g:rg_folder_name = 'ripgrep-' . g:rg_version . '-x86_64-unknown-linux-musl'
+  let g:rg_archive_name = g:rg_folder_name . '.tar.gz'
+  let g:rg_archive_link = 'https://github.com/BurntSushi/ripgrep/releases/download/' . g:rg_version . '/' . g:rg_archive_name
+  let g:rg_archive_path = "$HOME/bin/" . g:rg_archive_name
+  let g:rg_extract_path = "$HOME/bin/" . g:rg_folder_name
+  let mycommand = 'mkdir -p $HOME/bin && (wget -O ' . g:rg_archive_path . ' ' . g:rg_archive_link
+  let mycommand .= ' || curl -fLo  --create-dirs ' . g:rg_archive_link .')'
+  let mycommand .= ' && tar -xzf ' . g:rg_archive_path
+  let mycommand .= ' && mv ' . g:rg_extract_path . "/rg $HOME/bin/rg"
+  let mycommand .= ' && rm -r ' . g:rg_archive_path . ' ' . g:rg_extract_path
+  echom 'installing ripgrep'
+  silent call system(mycommand)
 endif
 
 "define plugins using vim-plug
@@ -19,6 +30,8 @@ call plug#begin('~/.vim/plugged')
 "Plug 'tpope/vim-obsession'
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
+"multiple cursors
+Plug 'terryma/vim-multiple-cursors'
 "perl/ruby like regex
 Plug 'othree/eregex.vim'
 "git status bar
@@ -44,7 +57,7 @@ Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'd
 "align statements
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 "greplike search
-Plug 'mileszs/ack.vim', { 'on': 'Ack' }
+Plug 'jremmen/vim-ripgrep', { 'on': 'Rg' }
 "completion terms from other tmux pane
 Plug 'wellle/tmux-complete.vim'
 if $TMUX != ""
@@ -221,17 +234,17 @@ let g:rainbow_conf = {
 \	}
 \}
 
-"ack
-cnoreabbrev Ack Ack!
-function AckSearch()
+
+"ripgrep
+function RgSearch()
     let search = input("Search in files: ")
     if search != ""
-        execute 'Ack!' search
+        execute 'Rg' search
     endif
 endfunction
-nnoremap <Leader>a :Ack! 
-nnoremap _ :call AckSearch()<CR>
-let g:ack_default_options = " -S -s -H --nocolor --nogroup --column"
+nnoremap _ :call RgSearch()<CR>
+let g:rg_derive_root = 'true'
+let g:rg_highlight = 'true'
 
 "NERDTree
 let NERDTreeQuitOnOpen=1
@@ -521,6 +534,7 @@ function! Term_toggle(height)
         catch
             call termopen($SHELL, {"detach": 0})
             let g:term_buf = bufnr("")
+            set nobuflisted
         endtry
         startinsert!
         let g:term_win = win_getid()
@@ -581,7 +595,7 @@ endif
 set nowrap
 set encoding=utf-8
 set scrolloff=8
-set sidescrolloff=15
+"set sidescrolloff=15
 set hidden
 
 set updatetime=300
@@ -620,6 +634,7 @@ autocmd FileType yaml       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=
 autocmd FileType html       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType htmldjango set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType vim        set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
@@ -628,10 +643,10 @@ tnoremap <C-l> <C-\><C-n><C-W>l
 tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
 tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 if has("nvim")
-    set termguicolors
-    au TermOpen * set nonumber norelativenumber signcolumn=no
-    autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
-    autocmd TermClose term://* :execute "bdelete! " . expand("<abuf>")
+  set termguicolors
+  au TermOpen * set nonumber norelativenumber signcolumn=no
+  autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
+  autocmd TermClose term://* :execute "bdelete! " . expand("<abuf>")
 endif
 
 "terminal colors

@@ -6,11 +6,11 @@ c = get_config()
 ## List of files to run at IPython startup.
 #c.InteractiveShellApp.exec_files = []
 
-## lines of code to run at IPython startup.
-#c.InteractiveShellApp.exec_lines = [""]
-
 ## A list of dotted module names of IPython extensions to load.
-#c.InteractiveShellApp.extensions = []
+c.InteractiveShellApp.extensions = ["autoreload", "ipython_autoimport"]
+
+## lines of code to run at IPython startup.
+c.InteractiveShellApp.exec_lines = ["autoreload 2"]
 
 ## dotted module name of an IPython extension to load.
 #c.InteractiveShellApp.extra_extension = ''
@@ -438,7 +438,7 @@ c.Completer.jedi_compute_type_timeout = 400
 
 ## Experimental: Use Jedi to generate autocompletions. Default to True if jedi is
 #  installed.
-#c.Completer.use_jedi = True
+c.Completer.use_jedi = False
 
 #------------------------------------------------------------------------------
 # IPCompleter(Completer) configuration
