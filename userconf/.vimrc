@@ -1,24 +1,92 @@
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !(mkdir -p ~/.vim/autoload/ && wget -O ~/.vim/autoload/plug.vim 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-         \ || curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+set cmdheight=2
 
-if empty(glob('~/bin/rg'))
-  let g:rg_version = '12.1.1'
-  let g:rg_folder_name = 'ripgrep-' . g:rg_version . '-x86_64-unknown-linux-musl'
-  let g:rg_archive_name = g:rg_folder_name . '.tar.gz'
-  let g:rg_archive_link = 'https://github.com/BurntSushi/ripgrep/releases/download/' . g:rg_version . '/' . g:rg_archive_name
-  let g:rg_archive_path = "$HOME/bin/" . g:rg_archive_name
-  let g:rg_extract_path = "$HOME/bin/" . g:rg_folder_name
-  let mycommand = 'mkdir -p $HOME/bin && (wget -O ' . g:rg_archive_path . ' ' . g:rg_archive_link
-  let mycommand .= ' || curl -fLo  --create-dirs ' . g:rg_archive_link .')'
-  let mycommand .= ' && tar -xzf ' . g:rg_archive_path
-  let mycommand .= ' && mv ' . g:rg_extract_path . "/rg $HOME/bin/rg"
-  let mycommand .= ' && rm -r ' . g:rg_archive_path . ' ' . g:rg_extract_path
+function MakeDir(path)
+  silent call system('mkdir -p ' . a:path)
+  return v:shell_error
+endfunction
+
+function DownloadWithWget(url, savepath)
+  echom 'wget: downloading ' . a:url . ' to ' . a:savepath
+  silent call system('wget -O ' . a:savepath . ' ' . a:url)
+  return v:shell_error
+endfunction
+
+function DownloadWithCurl(url, savepath)
+  echom 'curl: downloading ' . a:url . ' to ' . a:savepath
+  silent call system('wget -O ' . a:savepath . ' ' . a:url)
+  silent call system('curl --create-dirs -fLo ' . a:savepath . ' ' . a:url)
+  return v:shell_error
+endfunction
+
+function InstallVimPlug()
+  let l:dirname = '$HOME/.vim/autoload/'
+  let l:path = l:dirname . 'plug.vim'
+  if !empty(glob(l:path))
+    return
+  endif
+  let l:url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  echom 'installing plug.vim'
+  if MakeDir(l:dirname) != 0
+    echom 'failure creating directory ' . l:dirname
+    return
+  endif
+  echom
+  if DownloadWithWget(l:url, l:path) == 0 || DownloadWithCurl(l:url, l:path) == 0
+    echom 'success downloading plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  else
+    echom 'failure downloading plug.vim'
+  endif
+endfunction
+
+function ExecuteCommand(command, message)
+  echom a:message
+  silent call system(a:command)
+  if v:shell_error != 0
+    echom 'failure '. a:message
+  endif
+  return v:shell_error
+endfunction
+
+function InstallRipgrep(version)
+  let l:bin_path = '$HOME/bin/'
+  let l:executable = 'rg'
+  let l:exec_path = l:bin_path . l:executable
+  if !empty(glob(l:exec_path))
+    return
+  endif
+  let l:rg_folder_name = 'ripgrep-' . a:version . '-x86_64-unknown-linux-musl'
+  let l:rg_archive_name = l:rg_folder_name . '.tar.gz'
+  let l:rg_archive_url = 'https://github.com/BurntSushi/ripgrep/releases/download/' . a:version . '/' . l:rg_archive_name
+  let l:rg_archive_path = l:bin_path . l:rg_archive_name
+  let l:rg_extract_path = l:bin_path . l:rg_folder_name
+  let l:rg_extract_path_exec = l:rg_extract_path . '/' . l:executable
+
   echom 'installing ripgrep'
-  silent call system(mycommand)
-endif
+  if MakeDir(l:bin_path) != 0
+    return
+  endif
+  echom "downloading archive"
+  if DownloadWithWget(l:rg_archive_url, l:rg_archive_path) != 0 && DownloadWithCurl(l:rg_archive_url, l:rg_archive_path) != 0
+    echom 'failure downloading ripgrep'
+    return
+  endif
+  let command = 'tar -C ' . l:bin_path . ' -xzf ' . l:rg_archive_path
+  if ExecuteCommand(command, "extracting archive") != 0
+    return
+  endif
+  let command = 'mv ' . l:rg_extract_path_exec . ' ' . l:exec_path
+  if ExecuteCommand(command, "copying ripgrep to bin") != 0
+    return
+  endif
+  let command = 'rm -r ' . l:rg_archive_path . ' ' . l:rg_extract_path
+  if ExecuteCommand(command, "cleaning installation") != 0
+    return
+  endif
+endfunction
+
+call InstallVimPlug()
+call InstallRipgrep('12.1.1')
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
@@ -595,7 +663,6 @@ endif
 set nowrap
 set encoding=utf-8
 set scrolloff=8
-"set sidescrolloff=15
 set hidden
 
 set updatetime=300
@@ -607,7 +674,6 @@ set backspace=indent,eol,start
 set relativenumber
 set nobackup
 set nowritebackup
-set cmdheight=2
 set t_Co=256
 set ttyfast
 
