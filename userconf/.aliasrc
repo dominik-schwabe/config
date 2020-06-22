@@ -21,9 +21,7 @@ alias xvim='nvim -c ":ALEDisable | :call VimCmdLineStartApp()"'
 alias pxvim='pipenv run nvim -c ":ALEDisable | :call VimCmdLineStartApp()"'
 alias oldvim='/usr/bin/vim'
 
-alias python='python3'
 alias p='ipython'
-alias pip='pip3'
 
 alias services-enabled='systemctl --type service --state enabled list-unit-files'
 alias services-disabled='systemctl --type service --state disabled list-unit-files'
