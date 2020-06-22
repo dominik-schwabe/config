@@ -57,7 +57,7 @@ c.InteractiveShellApp.matplotlib = None
 #------------------------------------------------------------------------------
 
 ## Whether to display a banner upon starting IPython.
-c.TerminalIPythonApp.display_banner = False
+c.TerminalIPythonApp.display_banner = True
 
 ## If a command or file is given via the command-line, e.g. 'ipython foo.py', start an interactive shell after executing the file or command.
 #c.TerminalIPythonApp.force_interact = False
