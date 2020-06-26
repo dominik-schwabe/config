@@ -63,7 +63,8 @@ set \
     .gtkrc-2.0 .gtkrc-2.0 \
     .ipython_config.py .ipython/profile_default/ipython_config.py \
     .alacritty.yml .alacritty.yml \
-    .pylintrc .pylintrc
+    .pylintrc .pylintrc \
+    .cmus .config/cmus/rc
 #    .zshrc.min .zshrc \
 
 while :

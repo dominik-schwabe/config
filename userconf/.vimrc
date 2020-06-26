@@ -305,10 +305,10 @@ let g:rainbow_conf = {
 
 "ripgrep
 function RgSearch()
-    let search = input("Search in files: ")
-    if search != ""
-        execute 'Rg' search
-    endif
+  let l:search = input("Search in files: ")
+  if l:search != ""
+    execute 'Rg ' . '"' . escape(search, '"') . '"'
+  endif
 endfunction
 nnoremap _ :call RgSearch()<CR>
 let g:rg_derive_root = 'true'

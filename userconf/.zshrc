@@ -7,14 +7,6 @@ if ! [ -d ~/.oh-my-zsh ]; then
     git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
 
-if [[ -r ~/.envrc ]]; then
-    . ~/.envrc
-fi
-
-if [[ -r ~/.aliasrc ]]; then
-    . ~/.aliasrc
-fi
-
 export ZSH=$HOME/.oh-my-zsh
 
 #ZSH_THEME="agnoster"
@@ -45,6 +37,13 @@ function chpwd() {
     ls
 }
 
+if [[ -r ~/.envrc ]]; then
+    . ~/.envrc
+fi
+
+if [[ -r ~/.aliasrc ]]; then
+    . ~/.aliasrc
+fi
 
 # pluins
 source "$HOME/.zinit/bin/zinit.zsh"
@@ -55,7 +54,6 @@ zinit light "MichaelAquilina/zsh-you-should-use"
 zinit light "kutsan/zsh-system-clipboard"
 zinit light "madKuchenbaecker/vi-mode.zsh"
 zinit light "akarzim/zsh-docker-aliases"
-zinit light "junegunn/fzf.git"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"

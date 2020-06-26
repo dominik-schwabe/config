@@ -8,7 +8,6 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="\
-ack \
 acpid \
 alsa \
 alsa-tools \
