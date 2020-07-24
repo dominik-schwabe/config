@@ -363,6 +363,7 @@ let g:ale_fixers = {
 \  'python': ['black', 'isort'],
 \  'javascript': ['prettier'],
 \  'json': ['prettier'],
+\  'yaml': ['prettier'],
 \  'tex': ['latexindent']
 \}
 nnoremap <F9> :ALEFix<CR>
@@ -636,9 +637,10 @@ endfunction
 nnoremap <silent> + :call MyResize(0)<CR>
 nnoremap <silent> - :call MyResize(1)<CR>
 
+vnoremap p "_dP
 
-let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/bin/python3'
+"let g:python_host_prog = '/usr/bin/python2'
+"let g:python3_host_prog = '/usr/bin/python3'
 
 colorscheme monokai-phoenix
 syntax on
@@ -680,7 +682,6 @@ set ttyfast
 noremap <F12> :ZoomWinTabToggle<CR>
 inoremap <F12> <ESC>:ZoomWinTabToggle<CR>
 noremap Q :qa<CR>
-noremap <C-q> :qa!<CR>
 noremap <silent> gs :vsplit<CR>
 noremap <silent> gS :split<CR>
 noremap <left> <C-W>H

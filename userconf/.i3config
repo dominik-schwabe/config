@@ -232,10 +232,11 @@ for_window [instance="r_x11"] move position center
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
-exec --no-startup-id feh --bg-fill "$HOME/.bg.png"
+exec --no-startup-id feh --bg-fill "$HOME/.bg2.jpg"
 exec --no-startup-id killall flameshot; flameshot
 exec --no-startup-id killall redshift; redshift-gtk -r -l "51.34:12.35" -t 6500:3500
 exec --no-startup-id telegram-desktop -startintray
+exec --no-startup-id discord --start-minimized
 
 
 assign [class="firefox"] 1

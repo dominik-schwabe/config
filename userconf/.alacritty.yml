@@ -39,10 +39,13 @@ colors:
 
   bright:
     black:   '#1a1a1a'
-    red:     '#ff1111'
+    red:     '#ff3f3f'
     green:   '#3fff3f'
-    yellow:  '#ed9d12'
+    yellow:  '#deed12'
     blue:    '#5f87af'
     magenta: '#f92672'
     cyan:    '#66d9ef'
     white:   '#dddddd'
+
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }

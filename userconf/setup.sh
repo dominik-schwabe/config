@@ -50,6 +50,7 @@ set \
     .xsession .xsessionrc \
     .xinitrc .xinitrc \
     .bg.jpg .bg.jpg \
+    .bg2.jpg .bg2.jpg \
     .bg.png .bg.png \
     .zathurarc .config/zathura/zathurarc \
     .tmux.conf .tmux.conf \

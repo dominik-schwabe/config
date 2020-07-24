@@ -14,14 +14,20 @@ export ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME="lukerandall"
 #ZSH_THEME="clean"
 #ZSH_THEME="gentoo"
-#ZSH_THEME="jaischeema"      # root
-#ZSH_THEME="alanpeabody"     # server
+
+if [[ $SSH_TTY ]]
+then
+    ZSH_THEME="alanpeabody"
+elif [[ $UID == 0 ]]
+then
+    ZSH_THEME="jaischeema"
+fi
 
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
 
 bgnotify_threshold=5
-plugins=(git gitignore pip colored-man-pages sudo history-substring-search bgnotify tmuxinator)
+plugins=(git gitignore pip colored-man-pages sudo history-substring-search bgnotify tmuxinator kubectl)
 source $ZSH/oh-my-zsh.sh
 
 zstyle ':completion:*:default' list-colors \
@@ -53,7 +59,6 @@ zinit light "zdharma/fast-syntax-highlighting"
 zinit light "MichaelAquilina/zsh-you-should-use"
 zinit light "kutsan/zsh-system-clipboard"
 zinit light "madKuchenbaecker/vi-mode.zsh"
-zinit light "akarzim/zsh-docker-aliases"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"
@@ -86,7 +91,7 @@ export KEYTIMEOUT=0
 setopt noextendedhistory
 setopt nosharehistory
 
-if [ -z $ZSH_THEME ]
+if [[ -z $ZSH_THEME ]]
 then
     function my_git_prompt_info() {
         ref=$(git symbolic-ref HEAD 2> /dev/null) || return
@@ -100,10 +105,10 @@ then
         echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$GIT_STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
     }
 
-    PROMPT='%{$fg_bold[green]%}%n%F{#cccc00}@%f%{$fg_bold[green]%}%m%{$reset_color%} %{$fg_bold[blue]%}%2~%{$reset_color%} $(my_git_prompt_info)%{$reset_color%}%B»%b '
+    PROMPT='%{$fg_bold[green]%}%n%F{178}@%f%{$fg_bold[green]%}%m%{$reset_color%} %{$fg_bold[blue]%}%2~%{$reset_color%} $(my_git_prompt_info)%{$reset_color%}%B»%b '
 
-    ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%} "
-    ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
+    ZSH_THEME_GIT_PROMPT_PREFIX="%F{3} "
+    ZSH_THEME_GIT_PROMPT_SUFFIX="%f "
     ZSH_THEME_GIT_PROMPT_UNTRACKED="%%"
     ZSH_THEME_GIT_PROMPT_ADDED="+"
     ZSH_THEME_GIT_PROMPT_MODIFIED="*"
@@ -112,4 +117,4 @@ then
     ZSH_THEME_GIT_PROMPT_UNMERGED="?"
 fi
 
-RPS1='%(?..%F{#FF0000}%B%?%b%f )% %w %B%F{#DEED12}%T%f%b'
+RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b'

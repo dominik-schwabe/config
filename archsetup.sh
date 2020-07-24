@@ -13,7 +13,6 @@ alsa \
 alsa-tools \
 alsa-utils \
 arch-install-scripts \
-arch-install-scripts \
 autopep8 \
 avahi \
 awesome-terminal-fonts \
@@ -52,7 +51,6 @@ npm \
 ntp \
 openssh \
 pacman-contrib \
-pacman-contrib \
 pamixer \
 pulseaudio-alsa \
 pulsemixer \
@@ -65,15 +63,12 @@ python-pylint \
 python-rope \
 python2 \
 python2-pip \
-r \
 ranger \
-ripgrep \
 rsync \
 sshfs \
 sudo \
 termdown \
 tldr \
-tmux \
 tmux \
 tor \
 unzip \
