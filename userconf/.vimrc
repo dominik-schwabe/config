@@ -121,7 +121,8 @@ Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "highlight colorcodes
-Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini', 'conf', 'cfg', 'vim'] }
+Plug 'norcalli/nvim-colorizer.lua'
+"Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini', 'conf', 'cfg', 'vim'] }
 "align statements
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 "greplike search
@@ -697,11 +698,7 @@ let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-autocmd FileType yaml       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
-autocmd FileType html       set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
-autocmd FileType htmldjango set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
-autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
-autocmd FileType vim        set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType yaml,html,htmldjango,javascript,vim set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
@@ -713,7 +710,7 @@ if has("nvim")
   set termguicolors
   au TermOpen * set nonumber norelativenumber signcolumn=no
   autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
-  autocmd TermClose term://* :execute "bdelete! " . expand("<abuf>")
+  autocmd TermClose term://* exec "bwipeout! " . expand("<abuf>")
 endif
 
 "terminal colors
@@ -733,3 +730,8 @@ let g:terminal_color_12 = '#5f87af'
 let g:terminal_color_13 = '#f92672'
 let g:terminal_color_14 = '#66d9ef'
 let g:terminal_color_15 = '#f8f8f2'
+
+"nvim-colorizer
+if has("nvim")
+  lua require'colorizer'.setup()
+endif

@@ -68,7 +68,6 @@ rsync \
 sshfs \
 sudo \
 termdown \
-tldr \
 tmux \
 tor \
 unzip \
@@ -148,6 +147,7 @@ zathura-pdf-poppler \
 "
 
 AURPKG="\
+cht.sh \
 i3pystatus-git \
 jmtpfs \
 lightdm-mini-greeter \
