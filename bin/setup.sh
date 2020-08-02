@@ -34,6 +34,7 @@ set \
     nolidswitch nolidswitch \
     nolidswitchtoggle nolidswitchtoggle \
     xvim xvim \
+    tmux-mem tmux-mem \
 
 while :
 do

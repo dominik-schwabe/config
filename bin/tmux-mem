@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+awkcommand='
+$1=="MemTotal:" {mem_total = $2*1024}
+$1=="MemAvailable:" {mem_avail = $2*1024}
+END {
+    mem_free = mem_total - mem_avail
+    mem_percent = mem_free*100/mem_total
+    mem_total /= 1000000000
+    mem_free /= 1000000000
+    if (mem_percent < 0.5)
+        fg="#00FFFF"
+    else if (mem_percent < 0.8)
+        fg="#DEED12"
+    else
+        fg="#FF0000"
+    printf("#[fg=%s]%.1f/%.1fG %5.1f%%", fg, mem_free, mem_total, mem_percent)
+}
+'
+if [[ -r /proc/meminfo ]]
+then
+    head -3 /proc/meminfo | awk "$awkcommand"
+else
+    echo "mem unknown"
+fi
