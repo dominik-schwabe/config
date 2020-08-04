@@ -8,13 +8,13 @@ END {
     mem_percent = mem_free*100/mem_total
     mem_total /= 1000000000
     mem_free /= 1000000000
-    if (mem_percent < 0.5)
-        fg="#00FFFF"
-    else if (mem_percent < 0.8)
-        fg="#DEED12"
+    if (mem_percent < 50.0)
+        fg="##00FFFF"
+    else if (mem_percent < 80.0)
+        fg="##DEED12"
     else
-        fg="#FF0000"
-    printf("#[fg=%s]%.1f/%.1fG %5.1f%%", fg, mem_free, mem_total, mem_percent)
+        fg="##FF0000"
+    printf("#[fg=%s] %.1f/%.1fG %5.1f%%", fg, mem_free, mem_total, mem_percent)
 }
 '
 if [[ -r /proc/meminfo ]]

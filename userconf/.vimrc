@@ -698,7 +698,7 @@ let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-autocmd FileType yaml,html,htmldjango,javascript,vim set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType json,yaml,html,htmldjango,javascript,vim set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
