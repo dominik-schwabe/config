@@ -60,10 +60,10 @@ zinit light "MichaelAquilina/zsh-you-should-use"
 zinit light "kutsan/zsh-system-clipboard"
 zinit light "dominik-schwabe/vi-mode.zsh"
 zinit light "akarzim/zsh-docker-aliases"
+#zinit light "zsh-users/zsh-completions"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"
-#zinit light "zsh-users/zsh-completions"
 
 
 

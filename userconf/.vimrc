@@ -129,12 +129,10 @@ Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'jremmen/vim-ripgrep', { 'on': 'Rg' }
 "completion terms from other tmux pane
 Plug 'wellle/tmux-complete.vim'
-if $TMUX != ""
-    "focus commands work in tmux
-    Plug 'tmux-plugins/vim-tmux-focus-events'
-    "execute command in tmux pane
-    Plug 'benmills/vimux'
-endif
+"focus commands work in tmux
+Plug 'tmux-plugins/vim-tmux-focus-events'
+"execute command in tmux pane
+Plug 'benmills/vimux'
 "textobj for python
 Plug 'jeetsukumaran/vim-pythonsense', { 'for': 'python' }
 "toggle comment
@@ -369,7 +367,6 @@ let g:ale_fixers = {
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
-autocmd BufWinEnter experiments.py :ALEDisable
 
 "solarized colorscheme
 let g:solarized_termcolors = 256
@@ -640,8 +637,16 @@ nnoremap <silent> - :call MyResize(1)<CR>
 
 vnoremap p "_dP
 
-"let g:python_host_prog = '/usr/bin/python2'
-"let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python3'
+if $PYENV_HOME != "" && $PYENV_VERSION != ""
+  let python_path = $PYENV_HOME . '/versions/' . $PYENV_VERSION . '/bin/python'
+  if $PYENV_VERSION =~ "^3.*$"
+    let g:python3_host_prog = python_path
+  elseif $PYENV_VERSION =~ "^2.*$"
+    let g:python_host_prog = python_path
+  endif
+endif
 
 colorscheme monokai-phoenix
 syntax on
@@ -708,7 +713,7 @@ tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
 tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 if has("nvim")
   set termguicolors
-  au TermOpen * set nonumber norelativenumber signcolumn=no
+  au TermOpen * setlocal nonumber norelativenumber signcolumn=no
   autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
   autocmd TermClose term://* exec "bwipeout! " . expand("<abuf>")
 endif
