@@ -88,6 +88,8 @@ endfunction
 call InstallVimPlug()
 call InstallRipgrep('12.1.1')
 
+let g:polyglot_disabled = ['latex']
+
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
 "database completion (coc-dadbod)
@@ -98,6 +100,10 @@ call plug#begin('~/.vim/plugged')
 "Plug 'tpope/vim-obsession'
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
+"rst
+Plug 'Rykka/riv.vim'
+"rst preview
+Plug 'Rykka/InstantRst' "pip install https://github.com/Rykka/instant-rst.py/archive/master.zip
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 "perl/ruby like regex
@@ -178,7 +184,7 @@ Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
 Plug 'jalvesaq/vimcmdline'
 "latex ide ( requires: 'pip install neovim-remote' )
-Plug 'lervag/vimtex', { 'for': 'latex' }
+Plug 'lervag/vimtex', { 'for': 'tex' }
 if has("nvim")
     "semantic highlighting of python code
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
@@ -282,6 +288,10 @@ map gz# <Plug>(asterisk-gz#)
 "<Plug>VimspectorStepInto
 "<Plug>VimspectorStepOut
 
+" riv
+let g:riv_disable_folding = 1
+let g:riv_disable_indent = 1
+
 "pythonsense
 let g:is_pythonsense_suppress_motion_keymaps = 1
 
@@ -355,12 +365,16 @@ let g:ale_lint_on_text_changed = 0
 let g:ale_set_quickfix = 0
 let g:ale_open_list = 0
 let g:ale_keep_list_window_open = 0
+let g:ale_languagetool_options = "-l de -d COMMA_PARENTHESIS_WHITESPACE,TYPOGRAFISCHE_ANFUEHRUNGSZEICHEN,DE_CASE"
+let b:ale_linter_aliases = {'tex': ['tex', 'text']}
 let g:ale_linters = {
-\  'python': ['pylint']
+\  'python': ['pylint'],
+\  'tex': ['chktex']
 \}
 let g:ale_fixers = {
 \  'python': ['black', 'isort'],
 \  'javascript': ['prettier'],
+\  'html': ['prettier'],
 \  'json': ['prettier'],
 \  'yaml': ['prettier'],
 \  'tex': ['latexindent']
@@ -411,7 +425,6 @@ autocmd FileType tex set conceallevel=1
 autocmd FileType tex :NoMatchParen
 
 "polyglot
-let g:polyglot_disabled = ['latex']
 let g:python_highlight_space_errors = 0
 
 "vimcmdline
@@ -688,8 +701,8 @@ set ttyfast
 noremap <F12> :ZoomWinTabToggle<CR>
 inoremap <F12> <ESC>:ZoomWinTabToggle<CR>
 noremap Q :qa<CR>
-noremap <silent> gs :vsplit<CR>
-noremap <silent> gS :split<CR>
+noremap <silent> gs :vnew<CR>
+noremap <silent> gS :new<CR>
 noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K

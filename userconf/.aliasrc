@@ -38,7 +38,8 @@ alias dst='sudo systemctl start docker.service'
 alias dsp='sudo systemctl stop docker.service'
 
 alias tt='termdown --no-figlet -s -a'
-alias ssh='ssh -x -C'
+alias ssh='ssh -xC'
+alias xssh='ssh -YC'
 
 alias pyinstall='pyenv install $PYENV_VERSION'
 

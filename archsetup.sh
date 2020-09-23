@@ -122,7 +122,7 @@ rofi \
 scrot \
 system-config-printer \
 telegram-desktop \
-termite \
+alacritty \
 texlive-lang \
 texlive-most \
 thunar \

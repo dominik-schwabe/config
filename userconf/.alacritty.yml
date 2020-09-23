@@ -1,5 +1,8 @@
 font:
   size: 9
+  offset:
+    x: 0
+    y: 1
   normal:
     family: Noto Sans Mono
   bold:
@@ -46,6 +49,3 @@ colors:
     magenta: '#f92672'
     cyan:    '#66d9ef'
     white:   '#dddddd'
-
-mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
