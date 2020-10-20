@@ -9,12 +9,6 @@ fi
 
 export ZSH=$HOME/.oh-my-zsh
 
-#ZSH_THEME="agnoster"
-#ZSH_THEME="essembeh"
-#ZSH_THEME="lukerandall"
-#ZSH_THEME="clean"
-#ZSH_THEME="gentoo"
-
 if [[ $SSH_TTY ]]
 then
     ZSH_THEME="alanpeabody"
@@ -30,13 +24,10 @@ bgnotify_threshold=5
 plugins=(git gitignore pip colored-man-pages sudo history-substring-search bgnotify tmuxinator kubectl)
 source $ZSH/oh-my-zsh.sh
 
-zstyle ':completion:*:default' list-colors \
-  "di=1;34" "ln=1;36" "so=1;32" "pi=33" "ex=1;32" "bd=34;46" "cd=1;33" \
-  "su=30;41" "sg=30;46" "tw=30;42" "ow=30;43"
+zstyle ':completion:*:default' list-colors "di=1;34" "ln=1;36" "so=1;32" "pi=33" "ex=1;32" "bd=34;46" "cd=1;33" "su=30;41" "sg=30;46" "tw=30;42" "ow=30;43"
 
 VI_MODE_CURSOR_INSERT='\e[2 q'
 VI_MODE_CURSOR_NORMAL='\e[6 q'
-
 
 function chpwd() {
     emulate -L zsh
@@ -54,18 +45,16 @@ fi
 # pluins
 source "$HOME/.zinit/bin/zinit.zsh"
 #zinit light "mattberther/zsh-pyenv"
-#zinit light "lukechilds/zsh-nvm"
+zinit light "dominik-schwabe/zsh-fnm"
 zinit light "zdharma/fast-syntax-highlighting"
 zinit light "MichaelAquilina/zsh-you-should-use"
 zinit light "kutsan/zsh-system-clipboard"
 zinit light "dominik-schwabe/vi-mode.zsh"
 zinit light "akarzim/zsh-docker-aliases"
-#zinit light "zsh-users/zsh-completions"
+zinit light "zsh-users/zsh-completions"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"
-
-
 
 autoload -Uz compinit && compinit -i
 

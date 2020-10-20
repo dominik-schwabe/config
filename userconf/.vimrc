@@ -88,7 +88,7 @@ endfunction
 call InstallVimPlug()
 call InstallRipgrep('12.1.1')
 
-let g:polyglot_disabled = ['latex']
+let g:polyglot_disabled = ['latex', 'tex']
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
@@ -101,9 +101,9 @@ call plug#begin('~/.vim/plugged')
 "debugger
 "Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
 "rst
-Plug 'Rykka/riv.vim'
+Plug 'gu-fan/riv.vim'
 "rst preview
-Plug 'Rykka/InstantRst' "pip install https://github.com/Rykka/instant-rst.py/archive/master.zip
+Plug 'gu-fan/InstantRst' "pip install https://github.com/Rykka/instant-rst.py/archive/master.zip
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 "perl/ruby like regex
@@ -184,7 +184,7 @@ Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
 Plug 'jalvesaq/vimcmdline'
 "latex ide ( requires: 'pip install neovim-remote' )
-Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'lervag/vimtex'
 if has("nvim")
     "semantic highlighting of python code
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
@@ -365,7 +365,7 @@ let g:ale_lint_on_text_changed = 0
 let g:ale_set_quickfix = 0
 let g:ale_open_list = 0
 let g:ale_keep_list_window_open = 0
-let g:ale_languagetool_options = "-l de -d COMMA_PARENTHESIS_WHITESPACE,TYPOGRAFISCHE_ANFUEHRUNGSZEICHEN,DE_CASE"
+let g:ale_languagetool_options = "-l de -d COMMA_PARENTHESIS_WHITESPACE,TYPOGRAFISCHE_ANFUEHRUNGSZEICHEN,DE_CASE,ZB_ABK,F_ANSTATT_PH,LEERZEICHEN_HINTER_DOPPELPUNKT,TEST_F_ANSTATT_PH,EINHEIT_LEERZEICHEN"
 let b:ale_linter_aliases = {'tex': ['tex', 'text']}
 let g:ale_linters = {
 \  'python': ['pylint'],
@@ -404,13 +404,7 @@ let g:vimtex_quickfix_mode = 2
 let g:vimtex_view_skim_reading_bar = 1
 let g:vimtex_quickfix_autoclose_after_keystrokes = 2
 let g:vimtex_quickfix_open_on_warning = 0
-let g:vimtex_quickfix_latexlog = {
-      \ 'overfull' : 0,
-      \ 'underfull' : 0,
-      \ 'packages' : {
-      \   'default' : 0,
-      \ },
-      \}
+"let g:vimtex_quickfix_ignore_filters = ['overfull', 'underfull']
 let g:tex_conceal = 'abdmg'
 
 if !exists('g:ycm_semantic_triggers')

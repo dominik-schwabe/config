@@ -35,6 +35,7 @@ set \
     nolidswitchtoggle nolidswitchtoggle \
     xvim xvim \
     tmux-mem tmux-mem \
+    termcolors.zsh termcolors.zsh \
 
 while :
 do

@@ -1,0 +1,16 @@
+ipython
+ipdb
+black
+jedi
+neovim
+pipenv
+pylint
+rope
+dbus
+iwlib
+netifaces
+pipenv
+psutil
+pyalsa
+pygments
+pytz

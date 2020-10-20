@@ -43,5 +43,6 @@ alias xssh='ssh -YC'
 
 alias pyinstall='pyenv install $PYENV_VERSION'
 
+#command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
 # vi: ft=sh

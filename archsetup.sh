@@ -19,7 +19,6 @@ awesome-terminal-fonts \
 base \
 base-devel \
 bash-completion \
-python-black \
 bluez \
 bluez-utils \
 cmake \
@@ -41,7 +40,6 @@ git \
 grub \
 gutenprint \
 gvim \
-ipython \
 jre-openjdk \
 linux \
 neovim \
@@ -53,14 +51,10 @@ openssh \
 pacman-contrib \
 pamixer \
 pulseaudio-alsa \
+pulseaudio-bluetooth \
 pulsemixer \
 python \
-python-jedi \
-python-neovim \
 python-pip \
-python-pipenv \
-python-pylint \
-python-rope \
 python2 \
 python2-pip \
 ranger \
@@ -77,17 +71,6 @@ vim-spell-en \
 wget \
 zip \
 zsh \
-"
-
-PYTHON="\
-python-dbus \
-python-iwlib \
-python-netifaces \
-python-pipenv \
-python-psutil \
-python-pyalsa \
-python-pygments \
-python-pytz \
 "
 
 GRAPHIC="\
@@ -169,7 +152,6 @@ installyay() {
 
 INSTALLBASE=0
 INSTALLGRAPHICAL=0
-INSTALLPYTHONPKG=0
 INSTALLAUR=0
 
 while getopts "abgpu" o &> /dev/null
@@ -178,7 +160,6 @@ do
         "a")
             INSTALLBASE=1
             INSTALLGRAPHICAL=1
-            INSTALLPYTHONPKG=1
             INSTALLAUR=1
             ;;
         "b")
@@ -186,9 +167,6 @@ do
             ;;
         "g")
             INSTALLGRAPHICAL=1
-            ;;
-        "p")
-            INSTALLPYTHONPKG=1
             ;;
         "u")
             INSTALLAUR=1
@@ -211,13 +189,6 @@ if [ $INSTALLGRAPHICAL -eq 1 ]
 then
     echo -e "install ${GREEN}graphical${RESET}"
     INSTALLSTRING=${INSTALLSTRING}${GRAPHIC}
-    PACMAN=1
-fi
-
-if [ $INSTALLPYTHONPKG -eq 1 ]
-then
-    echo -e "install ${ORANGE}python-packages${RESET}"
-    INSTALLSTRING=${INSTALLSTRING}${PYTHON}
     PACMAN=1
 fi
 
