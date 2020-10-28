@@ -6,5 +6,6 @@
     "python.jediEnabled": true,
     "python.pythonPath": "/usr/bin/python3",
     "python.autoComplete.addBrackets": true,
-    "signature.target": "float"
+    "signature.target": "float",
+    "clangd.semanticHighlighting": true
 }

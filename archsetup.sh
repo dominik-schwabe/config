@@ -127,6 +127,7 @@ xorg-fonts \
 xorg-xinit \
 zathura \
 zathura-pdf-poppler \
+playerctl \
 "
 
 AURPKG="\

@@ -249,10 +249,11 @@ function AsyncrunOutput(raw)
     if g:asyncrun_status != "running"
         let asynccommand = ":AsyncRun -program=make -strip=1 "
         call system("notify-send -t 1000 -u normal \"$VIM_FILENAME\" \"start\"")
+        let asynccommand .= "-raw=" . a:raw . " "
         if &filetype == "c" || &filetype == "cpp"
-            let asynccommand .= " %< && ./%<"
+            let asynccommand .= "%< && ./%<"
         else
-            let asynccommand .= "-raw=" . a:raw . " %"
+            let asynccommand .= "%"
         endif
         echom l:asynccommand
         execute asynccommand
@@ -260,8 +261,8 @@ function AsyncrunOutput(raw)
         :AsyncStop
     endif
 endfunction
-nmap <silent> Ü :call AsyncrunOutput(0)<CR>
-nmap <silent> ü :call AsyncrunOutput(1)<CR>
+nmap <silent> Ü :call AsyncrunOutput(1)<CR>
+nmap <silent> ü :call AsyncrunOutput(0)<CR>
 
 "vim-asterisk
 map *   <Plug>(asterisk-*)
@@ -377,7 +378,8 @@ let g:ale_fixers = {
 \  'html': ['prettier'],
 \  'json': ['prettier'],
 \  'yaml': ['prettier'],
-\  'tex': ['latexindent']
+\  'tex': ['latexindent'],
+\  'cpp': ['clang-format']
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
@@ -411,10 +413,6 @@ if !exists('g:ycm_semantic_triggers')
     let g:ycm_semantic_triggers = {}
 endif
 
-autocmd FileType tex set tabstop=2
-autocmd FileType tex set shiftwidth=2
-autocmd FileType tex set softtabstop=2
-autocmd FileType tex set indentexpr=""
 autocmd FileType tex set conceallevel=1
 autocmd FileType tex :NoMatchParen
 
@@ -710,7 +708,7 @@ let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-autocmd FileType json,yaml,html,htmldjango,javascript,vim set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
