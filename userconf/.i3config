@@ -191,6 +191,9 @@ bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioStop exec --no-startup-id playerctl pause
 
+bindsym $mod+Shift+less exec --no-startup-id playerctl next
+bindsym $mod+less exec --no-startup-id playerctl previous
+
 bindsym XF86Launch1 exec --no-startup-id ~/bin/nolidswitchtoggle
 bindsym $mod+y exec $webbrowser
 #bindsym $mod+y exec chromium

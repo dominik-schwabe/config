@@ -1,11 +1,8 @@
 {
     "diagnostic.enable": false,
-    "diagnostic.displayByAle": false,
-    "python.linting.enabled": false,
-    "python.linting.pylintEnabled": true,
-    "python.jediEnabled": true,
-    "python.pythonPath": "/usr/bin/python3",
-    "python.autoComplete.addBrackets": true,
-    "signature.target": "float",
-    "clangd.semanticHighlighting": true
+    "diagnostic.messageTarget": "echo",
+    "diagnostic.infoSign": "--",
+    "diagnostic.hintSign": "--",
+    "diagnostic.errorSign": ">>",
+    "diagnostic.warningSign": ">>"
 }

@@ -177,10 +177,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERD
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
-Plug 'junegunn/fzf', { 'on': 'FZF', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim', { 'on': 'FZF' }
-"R ide
-Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
 Plug 'jalvesaq/vimcmdline'
 "latex ide ( requires: 'pip install neovim-remote' )
@@ -273,21 +270,6 @@ map z*  <Plug>(asterisk-z*)
 map gz* <Plug>(asterisk-gz*)
 map z#  <Plug>(asterisk-z#)
 map gz# <Plug>(asterisk-gz#)
-
-"vimspector
-"nmap <leader>ds <Plug>VimspectorStop
-"nmap <leader>dr <Plug>VimspectorRestart
-"nmap <leader>dp <Plug>VimspectorPause
-"nmap <F5> <Plug>VimspectorContinue
-"imap <F5> <ESC><Plug>VimspectorContinue
-"nmap <F6> <Plug>VimspectorToggleBreakpoint
-"imap <F6> <ESC><Plug>VimspectorToggleBreakpoint
-"nmap <S-F6> <Plug>VimspectorAddFunctionBreakpoint
-"imap <S-F6> <ESC><Plug>VimspectorAddFunctionBreakpoint
-"nmap <F8> <Plug>VimspectorStepOver
-"imap <F8> <ESC><Plug>VimspectorStepOver
-"<Plug>VimspectorStepInto
-"<Plug>VimspectorStepOut
 
 " riv
 let g:riv_disable_folding = 1
@@ -443,11 +425,9 @@ let g:current_line_whitespace_disabled_soft=1
 let g:better_whitespace_ctermcolor=52
 
 "coc.nvim
-inoremap <silent><expr> <c-space> coc#refresh()
-
 function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 inoremap <silent><expr> <TAB>
@@ -462,7 +442,6 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-"nmap <silent> gD :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -472,8 +451,10 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 
@@ -484,9 +465,13 @@ nmap <leader>f  <Plug>(coc-format-selected)
 vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
+command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
 let g:coc_snippet_next = '<C-o>'
 let g:coc_snippet_prev = '<C-i>'
 imap <C-j> <Plug>(coc-snippets-expand)
+
 "install.packages("languageserver")
 let g:coc_global_extensions = [
 \  'coc-css',
@@ -497,7 +482,7 @@ let g:coc_global_extensions = [
 \  'coc-java',
 \  'coc-json',
 \  'coc-prettier',
-\  'coc-python',
+\  'coc-pyright',
 \  'coc-r-lsp',
 \  'coc-sh',
 \  'coc-snippets',
@@ -508,20 +493,6 @@ let g:coc_global_extensions = [
 \  'coc-yaml',
 \  'coc-clangd',
 \]
-
-"Nvim-R
-let R_in_buffer = 1
-let R_notmuxconf = 1
-let R_esc_term = 0
-let R_close_term = 1
-let R_min_editor_width = -80
-autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
-"autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
 "argwrap
 nnoremap Y :ArgWrap<CR>

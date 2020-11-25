@@ -20,19 +20,12 @@ fi
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
 
+export KEYTIMEOUT=1
 bgnotify_threshold=5
-plugins=(git gitignore pip colored-man-pages sudo history-substring-search bgnotify tmuxinator kubectl)
+plugins=(git gitignore pip sudo colored-man-pages history-substring-search bgnotify tmuxinator kubectl)
 source $ZSH/oh-my-zsh.sh
 
 zstyle ':completion:*:default' list-colors "di=1;34" "ln=1;36" "so=1;32" "pi=33" "ex=1;32" "bd=34;46" "cd=1;33" "su=30;41" "sg=30;46" "tw=30;42" "ow=30;43"
-
-VI_MODE_CURSOR_INSERT='\e[2 q'
-VI_MODE_CURSOR_NORMAL='\e[6 q'
-
-function chpwd() {
-    emulate -L zsh
-    ls
-}
 
 if [[ -r ~/.envrc ]]; then
     . ~/.envrc
@@ -42,16 +35,31 @@ if [[ -r ~/.aliasrc ]]; then
     . ~/.aliasrc
 fi
 
-# pluins
+function chpwd() {
+    emulate -L zsh
+    ls
+}
+
+# plugins
 source "$HOME/.zinit/bin/zinit.zsh"
-#zinit light "mattberther/zsh-pyenv"
-zinit light "dominik-schwabe/zsh-fnm"
-zinit light "zdharma/fast-syntax-highlighting"
-zinit light "MichaelAquilina/zsh-you-should-use"
-zinit light "kutsan/zsh-system-clipboard"
 zinit light "dominik-schwabe/vi-mode.zsh"
+zinit ice wait'0' lucid
+zinit light "mattberther/zsh-pyenv"
+zinit ice wait'0' lucid
+zinit light "zsh-vi-more/vi-increment"
+zinit ice wait'0' lucid
+zinit light "dominik-schwabe/zsh-fnm"
+zinit ice wait'0' lucid
+zinit light "zdharma/fast-syntax-highlighting"
+zinit ice wait'0' lucid
+zinit light "MichaelAquilina/zsh-you-should-use"
+zinit ice wait'0' lucid
+zinit light "kutsan/zsh-system-clipboard"
+zinit ice wait'0' lucid
 zinit light "akarzim/zsh-docker-aliases"
+zinit ice wait'0' lucid
 zinit light "zsh-users/zsh-completions"
+#zinit light "lukechilds/zsh-better-npm-completion"
 #zinit light "robbyrussell/oh-my-zsh"
 #zinit light "zdharma/history-search-multi-word"
 #zinit plugin light "zsh-users/zsh-autosuggestions"
@@ -61,23 +69,23 @@ autoload -Uz compinit && compinit -i
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
-# use the vi navigation keys in menu completion
+## use the vi navigation keys in menu completion
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-unset correctall
-
 exit_zsh() { exit }
 zle -N exit_zsh
-bindkey '^D' exit_zsh
+bindkey -M viins '^D' exit_zsh
+bindkey -M vicmd '^D' exit_zsh
+bindkey -M vicmd 'K' sudo-command-line
+bindkey -M vicmd '^K' sudo-command-line
+bindkey -M viins '^K' sudo-command-line
 
-bindkey "^?" backward-delete-char
+unset correctall
 
 # fix interaction of plugins: sudo vi-mode.zsh
-export KEYTIMEOUT=0
-
 setopt noextendedhistory
 setopt nosharehistory
 
