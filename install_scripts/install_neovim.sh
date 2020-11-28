@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 CLONE_FOLDER=/tmp/neovim_git_clone
 THIS_PATH=$(pwd)

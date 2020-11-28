@@ -33,6 +33,11 @@ alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 
+alias txs='tmuxinator start'
+alias txo='tmuxinator open'
+alias txn='tmuxinator new'
+alias txl='tmuxinator list'
+
 alias R='R --no-save'
 alias dst='sudo systemctl start docker.service'
 alias dsp='sudo systemctl stop docker.service'
@@ -42,7 +47,16 @@ alias ssh='ssh -xC'
 alias xssh='ssh -YC'
 
 alias pyinstall='pyenv install $PYENV_VERSION'
+alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
+
+alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
+alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
+
+alias pyl="export PYENV_VERSION=$PYENV_VERSION"
+alias pys="export PYENV_VERSION=system"
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
+
+source ~/.kubectl.alias
 
 # vi: ft=sh

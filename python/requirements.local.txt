@@ -1,0 +1,8 @@
+black
+ipdb
+ipython
+jedi
+neovim
+neovim-remote
+pipenv
+pylint

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 trap 'kill -TERM $PID' TERM INT
 systemd-inhibit --what=handle-lid-switch:sleep:idle sleep infinity &

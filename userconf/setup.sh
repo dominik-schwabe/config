@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 CURRPATH="$(pwd)/$(dirname $0)"
 cd $CURRPATH
@@ -20,9 +20,8 @@ mkconfig() {
     SRCPATH=${CURRPATH}/$1
     DESTPATH=${HOME}/$2
     DESTDIR=$(dirname $DESTPATH)
-    F=$3
     mkdir -p $DESTDIR
-    ln -s $F $SRCPATH $DESTPATH &> /dev/null
+    ln -s $FORCE $SRCPATH $DESTPATH &> /dev/null
     if [ $? -eq 0 ]
     then
         echo -e "${GREEN}success${RESET} creating symlink $DESTPATH"
@@ -65,7 +64,8 @@ set \
     .ipython_config.py .ipython/profile_default/ipython_config.py \
     .alacritty.yml .alacritty.yml \
     .pylintrc .pylintrc \
-    .cmus .config/cmus/rc
+    .cmus .config/cmus/rc \
+    .kubectl.alias .kubectl.alias \
 #    .zshrc.min .zshrc \
 
 while :
@@ -82,5 +82,5 @@ do
     then
         break
     fi
-    mkconfig $SRCDIR $DESTDIR $FORCE
+    mkconfig $SRCDIR $DESTDIR
 done

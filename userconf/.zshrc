@@ -17,38 +17,41 @@ ZSH_COMPLETIONS_DIR=~/.zsh-completions
 fpath+="$ZSH_COMPLETIONS_DIR"
 
 download_completion() {
-    COMPLETION_NAME=$(basename $1)
+    COMPLETION_NAME=${2-$(basename $1)}
     COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/$COMPLETION_NAME
-    if [[ ! -r $COMPLETION_PATH ]]; then
+    if [[ ! -r $COMPLETION_PATH ]] && command -v curl 2>&1 >/dev/null; then
         echo "downloading $COMPLETION_NAME"
-        command -v curl 2>&1 >/dev/null && curl --create-dirs -sfLo $COMPLETION_PATH $1
+        curl --create-dirs -sfLo $COMPLETION_PATH $1
+    fi
+}
+
+command_completion() {
+    if [[ ! -r $ZSH_COMPLETIONS_DIR/_$1 ]] && command -v $0 2>&1 >/dev/null; then
+        echo "generating completion '$@'"
+        $@ > $ZSH_COMPLETIONS_DIR/_$1
     fi
 }
 
 download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
+download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
+download_completion https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh _tmuxinator
+command_completion kubectl completion zsh
 
 COMPLETION_WAITING_DOTS="true"
 bgnotify_threshold=5
+export KEYTIMEOUT=20
 
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit light "dominik-schwabe/vi-mode.zsh"
+#zinit light "softmoth/zsh-vim-mode"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
-zinit ice wait'0' lucid
-zinit snippet OMZL::directories.zsh
-zinit ice wait'0' lucid
 zinit snippet OMZL::git.zsh
-zinit ice wait'0' lucid
-zinit snippet OMZL::functions.zsh
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
 zinit ice wait'0' lucid
 zinit snippet OMZP::bgnotify
-zinit ice wait'0' lucid
-zinit snippet OMZP::tmuxinator
-zinit ice wait'0' lucid
-zinit snippet OMZP::kubectl
 zinit ice wait'0' lucid
 zinit snippet OMZP::pip
 zinit ice wait'0' lucid
@@ -99,8 +102,8 @@ unset correctall
 
 # theme
 DEFAULT_COLOR="2"
-ROOT_COLOR="214"
-SSH_COLOR="161"
+ROOT_COLOR="161"
+SSH_COLOR="214"
 
 DEFAULT_COLOR=${DEFAULT_COLOR:-green}
 SSH_COLOR=${SSH_COLOR:-blue}
@@ -121,7 +124,7 @@ function my_git_prompt_info() {
     echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$GIT_STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
-PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{178}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f$(my_git_prompt_info)%b >>> '
+PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f$(my_git_prompt_info)%b >>> '
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %B%F{3}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%f%b"
@@ -131,12 +134,10 @@ ZSH_THEME_GIT_PROMPT_MODIFIED="*"
 ZSH_THEME_GIT_PROMPT_RENAMED="~"
 ZSH_THEME_GIT_PROMPT_DELETED="!"
 ZSH_THEME_GIT_PROMPT_UNMERGED="?"
-RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b'
+RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B${PYENV_VERSION+ $PYENV_VERSION}%b%f%F{34}%B${ZSH_FNM_NODE_VERSION+ $ZSH_FNM_NODE_VERSION}%b%f'
 # theme end
 
-setopt interactivecomments
-setopt noextendedhistory
-setopt nosharehistory
+setopt hist_ignore_dups hist_ignore_space interactivecomments noextendedhistory nosharehistory
 
 exit_zsh() { exit }
 zle -N exit_zsh
@@ -147,3 +148,15 @@ autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
+
+expand-alias() {
+	zle _expand_alias
+}
+zle -N expand-alias
+bindkey -M viins '^[OS' expand-alias
+bindkey -M vicmd '^[OS' expand-alias
+
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'

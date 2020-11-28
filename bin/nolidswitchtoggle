@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if pgrep --exact -f "/bin/bash $HOME/bin/nolidswitch"; then
     pkill --exact -f "/bin/bash $HOME/bin/nolidswitch"

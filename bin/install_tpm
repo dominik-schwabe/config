@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ORANGE="\e[33m"
 RED="\e[31m"
@@ -19,10 +19,6 @@ cloneupdate() {
     fi
 }
 
-git &> /dev/null
-if [ $? != 1 ]
-then
-    exit 1
-fi
+command -v git 2>&1 >/dev/null || exit 1
 
 cloneupdate "tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm"

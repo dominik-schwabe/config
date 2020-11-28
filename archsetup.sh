@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bin bash
 
 RED="\e[31m"
 GREEN="\e[32m"
@@ -13,9 +13,7 @@ alsa \
 alsa-tools \
 alsa-utils \
 arch-install-scripts \
-autopep8 \
 avahi \
-awesome-terminal-fonts \
 base \
 base-devel \
 bash-completion \
@@ -32,9 +30,6 @@ docker \
 docker-compose \
 dosfstools \
 efibootmgr \
-eslint \
-flake8 \
-fzf \
 gcc-fortran \
 git \
 grub \
@@ -44,8 +39,6 @@ jre-openjdk \
 linux \
 neovim \
 networkmanager \
-nodejs \
-npm \
 ntp \
 openssh \
 pacman-contrib \
@@ -57,13 +50,11 @@ python \
 python-pip \
 python2 \
 python2-pip \
-ranger \
 rsync \
 sshfs \
 sudo \
 termdown \
 tmux \
-tor \
 unzip \
 usbutils \
 vim-spell-de \
@@ -74,8 +65,8 @@ zsh \
 "
 
 GRAPHIC="\
+wireless_tools \
 accountsservice \
-android-file-transfer \
 android-file-transfer \
 arandr \
 arc-gtk-theme \
@@ -84,7 +75,6 @@ evince \
 feh \
 firefox \
 flameshot \
-gimp \
 gvfs \
 gvfs-mtp \
 i3-wm \
@@ -132,16 +122,9 @@ playerctl \
 
 AURPKG="\
 cht.sh \
-i3pystatus-git \
 jmtpfs \
 lightdm-mini-greeter \
-neovim-remote \
-nodejs-neovim \
-python-basiciw \
-ruby-neovim \
 tmuxinator \
-tor-browser \
-ttf-devicons \
 "
 
 installyay() {
@@ -200,7 +183,7 @@ fi
 
 if [ $PACMAN -eq 0 -a $INSTALLAUR -eq 0 ]
 then
-    echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -p (${ORANGE}python-packages${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
+    echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
 else
     echo
     echo $INSTALLSTRING

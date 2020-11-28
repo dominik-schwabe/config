@@ -92,18 +92,6 @@ let g:polyglot_disabled = ['latex', 'tex']
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
-"database completion (coc-dadbod)
-"Plug 'tpope/vim-dadbod'
-"run test
-"Plug 'janko/vim-test'
-"session handling
-"Plug 'tpope/vim-obsession'
-"debugger
-"Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-python', 'on': '<Plug>VimspectorContinue' } git diff on left sidebar
-"rst
-Plug 'gu-fan/riv.vim'
-"rst preview
-Plug 'gu-fan/InstantRst' "pip install https://github.com/Rykka/instant-rst.py/archive/master.zip
 "multiple cursors
 Plug 'terryma/vim-multiple-cursors'
 "perl/ruby like regex
@@ -118,31 +106,23 @@ Plug 'easymotion/vim-easymotion', { 'on': ['<Plug>(easymotion-overwin-f)', '<Plu
 Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
 "improve search
 Plug 'haya14busa/vim-asterisk'
-"xpath
-Plug 'actionshrimp/vim-xpath', { 'for': ['html', 'xml'] }
-"json pretty print
-Plug 'tpope/vim-jdaddy'
 "markdown preview ( requires: 'npm -g install instant-markdown-d || pip install --user smdv' )
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
-Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
+Plug 'luochen1990/rainbow',       { 'for': ['python',          'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "highlight colorcodes
 Plug 'norcalli/nvim-colorizer.lua'
 "Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini', 'conf', 'cfg', 'vim'] }
-"align statements
-Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 "greplike search
 Plug 'jremmen/vim-ripgrep', { 'on': 'Rg' }
 "completion terms from other tmux pane
 Plug 'wellle/tmux-complete.vim'
 "focus commands work in tmux
-Plug 'tmux-plugins/vim-tmux-focus-events'
-"execute command in tmux pane
-Plug 'benmills/vimux'
+Plug 'christoomey/vim-tmux-navigator'
 "textobj for python
 Plug 'jeetsukumaran/vim-pythonsense', { 'for': 'python' }
 "toggle comment
-Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
+Plug 'preservim/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
 "buffer explorer
 Plug 'jlanzarotta/bufexplorer'
 "async lint
@@ -151,8 +131,6 @@ Plug 'w0rp/ale'
 Plug 'bronson/vim-trailing-whitespace'
 "change root to git project
 Plug 'airblade/vim-rooter'
-"fast html writing
-Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
 "substitute brackets with others (cs"')
 Plug 'tpope/vim-surround'
 "extension of .-command
@@ -171,7 +149,7 @@ Plug 'sheerun/vim-polyglot'
 "completion
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "explore directory
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
+Plug 'preservim/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 "git integration with nerdtree
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
 "view concept definitions
@@ -474,10 +452,9 @@ imap <C-j> <Plug>(coc-snippets-expand)
 
 "install.packages("languageserver")
 let g:coc_global_extensions = [
+\  'coc-clangd',
 \  'coc-css',
 \  'coc-docker',
-\  'coc-emmet',
-\  'coc-github-users',
 \  'coc-html',
 \  'coc-java',
 \  'coc-json',
@@ -491,7 +468,6 @@ let g:coc_global_extensions = [
 \  'coc-vimlsp',
 \  'coc-vimtex',
 \  'coc-yaml',
-\  'coc-clangd',
 \]
 
 "argwrap
