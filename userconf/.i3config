@@ -126,10 +126,15 @@ mode "resize" {
     # Pressing right will grow the window’s width.
     # Pressing up will shrink the window’s height.
     # Pressing down will grow the window’s height.
-    bindsym h resize shrink width 10 px or 10 ppt
-    bindsym j resize grow height 10 px or 10 ppt
-    bindsym k resize shrink height 10 px or 10 ppt
-    bindsym l resize grow width 10 px or 10 ppt
+    bindsym h resize grow left 10 px or 10 ppt
+    bindsym j resize grow down 10 px or 10 ppt
+    bindsym k resize grow up 10 px or 10 ppt
+    bindsym l resize grow right 10 px or 10 ppt
+
+    bindsym Shift+h resize shrink right 10 px or 10 ppt
+    bindsym Shift+j resize shrink up 10 px or 10 ppt
+    bindsym Shift+k resize shrink down 10 px or 10 ppt
+    bindsym Shift+l resize shrink left 10 px or 10 ppt
 
     # same bindings, but for the arrow keys
     bindsym Left resize shrink width 10 px or 10 ppt
@@ -148,6 +153,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     tray_padding 0
+    font pango:DejaVu Sans Mono 9
     position bottom
     status_command python3 ~/.config/i3/i3pystatus.conf
     workspace_buttons yes
@@ -184,7 +190,8 @@ bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioStop exec --no-startup-id playerctl pause
 
 bindsym $mod+less exec --no-startup-id playerctl previous
-bindsym $mod+y exec --no-startup-id playerctl next
+bindsym $mod+y exec --no-startup-id playerctl play-pause
+bindsym $mod+x exec --no-startup-id playerctl next
 
 bindsym XF86Launch1 exec --no-startup-id ~/bin/nolidswitchtoggle
 bindsym $mod+odiaeresis exec --no-startup-id pgrep $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace 1"
@@ -195,11 +202,12 @@ bindsym Shift+Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-
 bindsym $mod+Return exec --no-startup-id $term
 #bindsym $mod+Return exec xfce4-terminal
 #bindsym $mod+Return exec gnome-terminal
-bindsym $mod+m exec --no-startup-id $term -e cmus
+#bindsym $mod+m exec --no-startup-id $term -e cmus
+bindsym $mod+m exec --no-startup-id pgrep "cmus" || $term --class cmus -e cmus; exec --no-startup-id i3-msg "workspace 7"
 bindsym $mod+Home exec --no-startup-id xbacklight -time 0 +1
 bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+udiaeresis move workspace to output right
-bindsym $mod+Tab exec --no-startup-id rofi -show window
+bindsym $mod+Tab workspace 1
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+F1 exec --no-startup-id exec bash -c "pkill picom || picom -b"
 bindsym --release $mod+underscore exec --no-startup-id xkill
@@ -239,6 +247,8 @@ exec --no-startup-id discord --start-minimized
 
 
 assign [class="firefox"] 1
+assign [class="discord"] 7
+assign [instance="cmus"] 7
 assign [title="terminal_startup"] 2
 exec --no-startup-id exec $webbrowser
 exec --no-startup-id $term --title "terminal_startup"

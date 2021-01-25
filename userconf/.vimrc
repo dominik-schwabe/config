@@ -85,8 +85,17 @@ function InstallRipgrep(version)
   endif
 endfunction
 
+
+function InstallFZF()
+  if empty(glob('$HOME/bin/fzf'))
+    let command = 'cd ~; curl -L https://raw.githubusercontent.com/junegunn/fzf/master/install | bash -s -- --bin'
+    call ExecuteCommand(command, "installing fzf")
+  endif
+endfunction
+
 call InstallVimPlug()
 call InstallRipgrep('12.1.1')
+call InstallFZF()
 
 let g:polyglot_disabled = ['latex', 'tex']
 
@@ -109,7 +118,7 @@ Plug 'haya14busa/vim-asterisk'
 "markdown preview ( requires: 'npm -g install instant-markdown-d || pip install --user smdv' )
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 "rainbow parenthese
-Plug 'luochen1990/rainbow',       { 'for': ['python',          'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
+Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "highlight colorcodes
 Plug 'norcalli/nvim-colorizer.lua'
 "Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini', 'conf', 'cfg', 'vim'] }
@@ -155,7 +164,10 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERD
 "view concept definitions
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 "super searching
+Plug 'junegunn/fzf', { 'on': 'FZF' }
 Plug 'junegunn/fzf.vim', { 'on': 'FZF' }
+"R ide
+Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
 Plug 'jalvesaq/vimcmdline'
 "latex ide ( requires: 'pip install neovim-remote' )
@@ -334,6 +346,7 @@ let g:ale_linters = {
 \}
 let g:ale_fixers = {
 \  'python': ['black', 'isort'],
+\  'r': ['styler'],
 \  'javascript': ['prettier'],
 \  'html': ['prettier'],
 \  'json': ['prettier'],
@@ -469,6 +482,20 @@ let g:coc_global_extensions = [
 \  'coc-vimtex',
 \  'coc-yaml',
 \]
+
+"Nvim-R
+let R_in_buffer = 1
+let R_notmuxconf = 1
+let R_esc_term = 0
+let R_close_term = 1
+let R_min_editor_width = -80
+autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
+"autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
+autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
 "argwrap
 nnoremap Y :ArgWrap<CR>

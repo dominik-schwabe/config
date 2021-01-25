@@ -12,13 +12,14 @@ if [[ -r ~/.aliasrc ]]; then
 fi
 
 [ -d $NODE_PATH ] || mkdir -p $NODE_PATH
+
 ZSH_COMPLETIONS_DIR=~/.zsh-completions
 [ -d $ZSH_COMPLETIONS_DIR ] || mkdir $ZSH_COMPLETIONS_DIR
 fpath+="$ZSH_COMPLETIONS_DIR"
 
 download_completion() {
-    COMPLETION_NAME=${2-$(basename $1)}
-    COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/$COMPLETION_NAME
+    local COMPLETION_NAME=${2-$(basename $1)}
+    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/$COMPLETION_NAME
     if [[ ! -r $COMPLETION_PATH ]] && command -v curl 2>&1 >/dev/null; then
         echo "downloading $COMPLETION_NAME"
         curl --create-dirs -sfLo $COMPLETION_PATH $1
@@ -35,31 +36,31 @@ command_completion() {
 download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
 download_completion https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh _tmuxinator
+download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z _7z
 command_completion kubectl completion zsh
 
 COMPLETION_WAITING_DOTS="true"
 bgnotify_threshold=5
-export KEYTIMEOUT=20
+export KEYTIMEOUT=15
 
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit light "dominik-schwabe/vi-mode.zsh"
-#zinit light "softmoth/zsh-vim-mode"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::git.zsh
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
 zinit ice wait'0' lucid
-zinit snippet OMZP::bgnotify
-zinit ice wait'0' lucid
 zinit snippet OMZP::pip
+zinit ice wait'0' lucid
+zinit snippet OMZP::gitignore
+zinit ice wait'0' lucid
+zinit light "t413/zsh-background-notify"
 zinit ice wait'0' lucid
 zinit light "zsh-users/zsh-history-substring-search"
 zinit ice wait'0' lucid
 zinit light "ael-code/zsh-colored-man-pages"
-zinit ice wait'0' lucid
-zinit light "voronkovich/gitignore.plugin.zsh"
 zinit ice wait'0' lucid
 zinit light "mattberther/zsh-pyenv"
 zinit ice wait'0' lucid
@@ -80,7 +81,7 @@ zinit light "zsh-users/zsh-completions"
 #zinit light "zdharma/history-search-multi-word"
 #zinit light "zsh-users/zsh-autosuggestions"
 
-zstyle ':completion:*:default' list-colors "di=1;34" "ln=1;36" "so=1;32" "pi=33" "ex=1;32" "bd=34;46" "cd=1;33" "su=30;41" "sg=30;46" "tw=30;42" "ow=30;43"
+zstyle ':completion:*:default' list-colors $LS_COLORS
 
 autoload -Uz compinit && compinit -i
 
@@ -93,7 +94,7 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-function chpwd() {
+chpwd() {
     emulate -L zsh
     ls
 }
@@ -117,7 +118,7 @@ else
     PROMPT_COLOR=$DEFAULT_COLOR
 fi
 
-function my_git_prompt_info() {
+my_git_prompt_info() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || return
     GIT_STATUS=$(git_prompt_status)
     [[ $GIT_STATUS ]] && GIT_STATUS=" $GIT_STATUS"
@@ -160,3 +161,15 @@ alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
+
+_pacman_update() {
+    LBUFFER="sudo pacman -Syu"
+    RBUFFER=""
+    zle accept-line
+}
+
+zle -N _pacman_update
+bindkey -M vicmd '^[[15~' _pacman_update
+bindkey -M viins '^[[15~' _pacman_update
+bindkey -M vicmd '^[[[E' _pacman_update
+bindkey -M viins '^[[[E' _pacman_update
