@@ -8,11 +8,11 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="
-acpid
 alsa
 alsa-tools
 alsa-utils
 arch-install-scripts
+arp-scan
 avahi
 base
 base-devel
@@ -21,8 +21,6 @@ bluez
 bluez-utils
 cmake
 cmus
-cronie
-ctags
 cups
 curl
 dnsutils
@@ -34,12 +32,15 @@ gcc-fortran
 git
 grub
 gutenprint
+gvfs
+gvfs-mtp
 gvim
-jre-openjdk
-linux
+linux-zen
+mtpfs
 neovim
+net-tools
 networkmanager
-ntp
+openresolv
 openssh
 pacman-contrib
 pamixer
@@ -48,58 +49,47 @@ pulseaudio-bluetooth
 pulsemixer
 python
 python-pip
-python2
-python2-pip
 rsync
 sshfs
 sudo
-termdown
 tmux
 unzip
 usbutils
-vim-spell-de
-vim-spell-en
 wget
 zip
 zsh
 "
 
 GRAPHIC="
-sxiv
-tumbler
-wireless_tools
 accountsservice
+alacritty
 android-file-transfer
 arandr
 arc-gtk-theme
+discord
 dunst
 evince
 feh
 firefox
 flameshot
-gvfs
-gvfs-mtp
 i3-wm
 i3lock
 libreoffice-still
 lightdm
 lightdm-gtk-greeter
-mtpfs
 nm-connection-editor
 nomacs
 noto-fonts
 pavucontrol
 perl-file-mimeinfo
 picom
-powerline-fonts
+playerctl
 redshift
 rofi
 scrot
+sxiv
 system-config-printer
 telegram-desktop
-alacritty
-texlive-lang
-texlive-most
 thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
@@ -109,6 +99,8 @@ ttf-arphic-uming
 ttf-baekmuk
 ttf-dejavu
 ttf-sazanami
+tumbler
+wireless_tools
 xbindkeys
 xclip
 xdotool
@@ -119,14 +111,16 @@ xorg-fonts
 xorg-xinit
 zathura
 zathura-pdf-poppler
-playerctl
+"
+
+LATEX="
+texlive-lang
+texlive-most
 "
 
 AURPKG="
 cht.sh
 jmtpfs
-lightdm-mini-greeter
-tmuxinator
 "
 
 installyay() {
@@ -138,14 +132,16 @@ installyay() {
 
 INSTALLBASE=0
 INSTALLGRAPHICAL=0
+INSTALLLATEX=0
 INSTALLAUR=0
 
-while getopts "abgpu" o &> /dev/null
+while getopts "abglu" o &> /dev/null
 do
     case $o in
         "a")
             INSTALLBASE=1
             INSTALLGRAPHICAL=1
+            INSTALLLATEX=1
             INSTALLAUR=1
             ;;
         "b")
@@ -153,6 +149,9 @@ do
             ;;
         "g")
             INSTALLGRAPHICAL=1
+            ;;
+        "l")
+            INSTALLLATEX=1
             ;;
         "u")
             INSTALLAUR=1
@@ -178,6 +177,13 @@ then
     PACMAN=1
 fi
 
+if [ $INSTALLLATEX -eq 1 ]
+then
+    echo -e "install ${ORANGE}latex${RESET}"
+    INSTALLSTRING="${INSTALLSTRING} ${LATEX}"
+    PACMAN=1
+fi
+
 if [ $INSTALLAUR -eq 1 ]
 then
     echo -e "install ${BLUE}aur${RESET}"
@@ -187,14 +193,14 @@ INSTALLSTRING=$((tr "\n" " " | sed -e "s/\s\+/ /g" -e "s/^\s\+|\s\+$//g") <<< $I
 
 if [ $PACMAN -eq 0 -a $INSTALLAUR -eq 0 ]
 then
-    echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
+    echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -l (${ORANGE}latex${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
 else
     if [ $PACMAN -eq 1 ]
     then
         echo
         echo $INSTALLSTRING
         echo
-        su -c "echo 'pacman -S $INSTALLSTRING'" || exit 1
+        su -c "pacman -S $INSTALLSTRING" || exit 1
     fi
 
     if [ $INSTALLBASE -eq 1 ]

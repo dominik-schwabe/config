@@ -25,7 +25,6 @@ main() {
     set \
         /etc/lightdm/lightdm.conf \
         /etc/lightdm/lightdm-gtk-greeter.conf \
-        /etc/lightdm/lightdm-mini-greeter.conf \
         /usr/share/backgrounds/stars.png
 
 

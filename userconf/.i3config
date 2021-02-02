@@ -173,8 +173,8 @@ bar {
 }
 
 
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute 1 toggle
+bindsym XF86AudioMute exec --no-startup-id pamixer --toggle-mute
+bindsym XF86AudioMicMute exec --no-startup-id pamixer --source 1 --toggle-mute
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -time 0 +5

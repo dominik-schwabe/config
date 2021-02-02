@@ -37,6 +37,7 @@ download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plu
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
 download_completion https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh _tmuxinator
 download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z _7z
+download_completion https://gist.githubusercontent.com/ssh0/436e906765dfe8d1b3d6/raw/f4a75bc5ed90d1c8217baa5c6cef7543a3c6d04c/youtube-dl_completion.zsh _youtube_dl
 command_completion kubectl completion zsh
 
 COMPLETION_WAITING_DOTS="true"

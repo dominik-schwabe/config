@@ -347,6 +347,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
 \  'python': ['black', 'isort'],
 \  'r': ['styler'],
+\  'sh': ['shfmt'],
 \  'javascript': ['prettier'],
 \  'html': ['prettier'],
 \  'json': ['prettier'],
