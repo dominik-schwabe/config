@@ -8,6 +8,8 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="
+clang
+inetutils
 alsa
 alsa-tools
 alsa-utils
@@ -35,6 +37,7 @@ gutenprint
 gvfs
 gvfs-mtp
 gvim
+linux-firmware
 linux-zen
 mtpfs
 neovim
@@ -58,9 +61,12 @@ usbutils
 wget
 zip
 zsh
+tcl
+tk
 "
 
 GRAPHIC="
+thunderbird
 accountsservice
 alacritty
 android-file-transfer
@@ -121,6 +127,7 @@ texlive-most
 AURPKG="
 cht.sh
 jmtpfs
+birdtray
 "
 
 installyay() {

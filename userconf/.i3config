@@ -93,22 +93,30 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+
 # switch to workspace
-bindsym $mod+o workspace 2
-bindsym $mod+i workspace 3
-bindsym $mod+u workspace 4
-bindsym $mod+8 workspace 5
-bindsym $mod+9 workspace 6
-bindsym $mod+p workspace 7
+bindsym $mod+o workspace $ws2
+bindsym $mod+i workspace $ws3
+bindsym $mod+u workspace $ws4
+bindsym $mod+8 workspace $ws5
+bindsym $mod+9 workspace $ws6
+bindsym $mod+p workspace $ws7
 
 # move focused container to workspace
-bindsym $mod+Shift+odiaeresis move container to workspace 1; workspace 1
-bindsym $mod+Shift+o move container to workspace 2; workspace 2
-bindsym $mod+Shift+i move container to workspace 3; workspace 3
-bindsym $mod+Shift+u move container to workspace 4; workspace 4
-bindsym $mod+Shift+8 move container to workspace 5; workspace 5
-bindsym $mod+Shift+9 move container to workspace 6; workspace 6
-bindsym $mod+Shift+p move container to workspace 7; workspace 7
+bindsym $mod+Shift+odiaeresis move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+o move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+i move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+u move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+8 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+9 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+p move container to workspace $ws7; workspace $ws7
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -149,15 +157,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 bar {
     tray_padding 0
     font pango:DejaVu Sans Mono 9
     position bottom
     status_command python3 ~/.config/i3/i3pystatus.conf
     workspace_buttons yes
-    #separator_symbol "▶  ◀"
     separator_symbol "❱  ❰"
     colors {
         focused_workspace   #000000 #ED9D12 #000000
@@ -180,10 +185,6 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -time 0 +5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -time 0 -5
 bindsym XF86ScreenSaver exec --no-startup-id i3lock -c 000000
-#bindsym XF86AudioNext exec --no-startup-id cmus-remote -n
-#bindsym XF86AudioPrev exec --no-startup-id cmus-remote -r
-#bindsym XF86AudioPlay exec --no-startup-id cmus-remote -u
-#bindsym XF86AudioStop exec --no-startup-id cmus-remote -p
 bindsym XF86AudioNext exec --no-startup-id playerctl next
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
@@ -194,20 +195,18 @@ bindsym $mod+y exec --no-startup-id playerctl play-pause
 bindsym $mod+x exec --no-startup-id playerctl next
 
 bindsym XF86Launch1 exec --no-startup-id ~/bin/nolidswitchtoggle
-bindsym $mod+odiaeresis exec --no-startup-id pgrep $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace 1"
+bindsym $mod+odiaeresis exec --no-startup-id pgrep $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
+bindsym $mod+period exec --no-startup-id "i3-msg '[floating] resize set width 38 ppt height 40 ppt; move position 62 ppt 0'"
+bindsym $mod+Shift+period exec --no-startup-id "i3-msg '[floating] resize set width 38 ppt height 40 ppt; move position 0 0'"
 bindsym $mod+Shift+Return exec $guifilebrowser
-#bindsym $mod+y exec chromium
 bindsym Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym Shift+Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym $mod+Return exec --no-startup-id $term
-#bindsym $mod+Return exec xfce4-terminal
-#bindsym $mod+Return exec gnome-terminal
-#bindsym $mod+m exec --no-startup-id $term -e cmus
-bindsym $mod+m exec --no-startup-id pgrep "cmus" || $term --class cmus -e cmus; exec --no-startup-id i3-msg "workspace 7"
+bindsym $mod+m exec --no-startup-id pgrep "cmus" || $term --class cmus -e cmus; exec --no-startup-id i3-msg "[instance=cmus] focus"
 bindsym $mod+Home exec --no-startup-id xbacklight -time 0 +1
 bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+udiaeresis move workspace to output right
-bindsym $mod+Tab workspace 1
+bindsym $mod+Tab workspace $ws1
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+F1 exec --no-startup-id exec bash -c "pkill picom || picom -b"
 bindsym --release $mod+underscore exec --no-startup-id xkill
@@ -220,22 +219,42 @@ new_window 1pixel
 workspace_auto_back_and_forth yes
 #focus_follows_mouse no
 
+for_window [workspace=$ws7] layout tabbed
+
+for_window [instance="cmus"] focus
+for_window [class="discord"] focus
+for_window [class="Spotify"] focus
+
 for_window [window_type="dialog"] floating enabled
-for_window [window_type="dialog"] resize set height 600 px
-for_window [window_type="dialog"] resize set width 800 px
+for_window [window_type="dialog"] resize set width 800 px height 600 px
 for_window [window_type="dialog"] move position center
+for_window [class="Pavucontrol"] floating enabled
+for_window [class="Pavucontrol"] resize set width 800 px height 600 px
+for_window [class="Pavucontrol"] move position center
+for_window [class="Blueman-manager"] floating enabled
+for_window [class="Blueman-manager"] resize set width 800 px height 600 px
+for_window [class="Blueman-manager"] move position center
 for_window [instance="matplotlib"] floating enabled
-for_window [instance="matplotlib"] resize set height 600 px
-for_window [instance="matplotlib"] resize set width 800 px
+for_window [instance="matplotlib"] resize set width 800 px height 600 px
 for_window [instance="matplotlib"] move position center
 for_window [title="Figure *" class=" "] floating enabled
-for_window [title="Figure *" class=" "] resize set height 600 px
-for_window [title="Figure *" class=" "] resize set width 800 px
+for_window [title="Figure *" class=" "] resize set width 800 px height 600 px
 for_window [title="Figure *" class=" "] move position center
 for_window [instance="r_x11"] floating enabled
-for_window [instance="r_x11"] resize set height 600 px
-for_window [instance="r_x11"] resize set width 800 px
+for_window [instance="r_x11"] resize set width 800 px height 600 px
 for_window [instance="r_x11"] move position center
+for_window [class="Arandr"] floating enabled
+for_window [class="Arandr"] resize set width 800 px height 600 px
+for_window [class="Arandr"] move position center
+
+for_window [class="TelegramDesktop"] floating enabled
+for_window [class="TelegramDesktop"] resize set width 50 ppt height 97 ppt
+for_window [class="TelegramDesktop"] move position 50 ppt 0
+for_window [class="Thunderbird"] floating enabled
+for_window [class="Thunderbird"] resize set width 50 ppt height 97 ppt
+for_window [class="Thunderbird"] move position 50 ppt 0
+
+for_window [class="firefox" window_type="Picture-in-Picture" floating] move position 0 0
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
 
@@ -244,11 +263,16 @@ exec --no-startup-id killall flameshot; flameshot
 exec --no-startup-id killall redshift; redshift-gtk -r -l "51.34:12.35" -t 6500:3500
 exec --no-startup-id telegram-desktop -startintray
 exec --no-startup-id discord --start-minimized
+exec --no-startup-id birdtray
+#exec --no-startup-id ~/bin/drink_linux
 
 
 assign [class="firefox"] 1
+assign [title="terminal_startup"] 2
+assign [class="Steam"] 3
 assign [class="discord"] 7
 assign [instance="cmus"] 7
-assign [title="terminal_startup"] 2
+for_window [class="Spotify" workspace="(?!^$ws7)"] move container to workspace $ws7
+
 exec --no-startup-id exec $webbrowser
 exec --no-startup-id $term --title "terminal_startup"

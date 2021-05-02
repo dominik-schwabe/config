@@ -1,8 +1,4 @@
 {
-    "diagnostic.enable": false,
-    "diagnostic.messageTarget": "echo",
-    "diagnostic.infoSign": "--",
-    "diagnostic.hintSign": "--",
-    "diagnostic.errorSign": ">>",
-    "diagnostic.warningSign": ">>"
+    "clangd.semanticHighlighting": true,
+    "diagnostic.displayByAle": true,
 }

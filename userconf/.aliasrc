@@ -39,8 +39,8 @@ alias txn='tmuxinator new'
 alias txl='tmuxinator list'
 
 alias R='R --no-save'
-alias dst='sudo systemctl start docker.service'
-alias dsp='sudo systemctl stop docker.service'
+alias dst='sudo systemctl start docker.socket'
+alias dsp='sudo systemctl stop docker.socket'
 
 alias ssh='ssh -xC'
 alias xssh='ssh -YC'

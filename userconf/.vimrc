@@ -55,7 +55,12 @@ function InstallRipgrep(version)
   if !empty(glob(l:exec_path))
     return
   endif
-  let l:rg_folder_name = 'ripgrep-' . a:version . '-x86_64-unknown-linux-musl'
+  if substitute(system('uname -m'), '\n', '', '') == 'x86_64'
+    let l:rg_suffix = '-x86_64-unknown-linux-musl'
+  else
+    let l:rg_suffix = '-arm-unknown-linux-gnueabihf'
+  endif
+  let l:rg_folder_name = 'ripgrep-' . a:version . l:rg_suffix
   let l:rg_archive_name = l:rg_folder_name . '.tar.gz'
   let l:rg_archive_url = 'https://github.com/BurntSushi/ripgrep/releases/download/' . a:version . '/' . l:rg_archive_name
   let l:rg_archive_path = l:bin_path . l:rg_archive_name
@@ -101,8 +106,10 @@ let g:polyglot_disabled = ['latex', 'tex']
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"html expansion
+Plug 'mattn/emmet-vim'
 "multiple cursors
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 "perl/ruby like regex
 Plug 'othree/eregex.vim'
 "git status bar
@@ -173,9 +180,11 @@ Plug 'jalvesaq/vimcmdline'
 "latex ide ( requires: 'pip install neovim-remote' )
 Plug 'lervag/vimtex'
 if has("nvim")
-    "semantic highlighting of python code
+    "semantic highlighting for python
     Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins', 'for': 'python' }
 endif
+"semantic highlighting for c/c++
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 "compile/run
 Plug 'skywind3000/asyncrun.vim', { 'on': ['AsyncRun', 'AsyncStop'] }
 "csv inspector/arranger
@@ -329,6 +338,7 @@ nmap <silent> <F2> :ToggleBufExplorer<CR>
 imap <silent> <F2> <ESC>:ToggleBufExplorer<CR>
 
 "ale
+let g:ale_disable_lsp = 1
 let g:ale_python_auto_pipenv = 1
 let g:ale_set_highlights = 0
 let g:ale_set_loclist = 1
@@ -348,12 +358,15 @@ let g:ale_fixers = {
 \  'python': ['black', 'isort'],
 \  'r': ['styler'],
 \  'sh': ['shfmt'],
+\  'markdown': ['prettier'],
 \  'javascript': ['prettier'],
 \  'html': ['prettier'],
+\  'css': ['prettier'],
 \  'json': ['prettier'],
 \  'yaml': ['prettier'],
 \  'tex': ['latexindent'],
-\  'cpp': ['clang-format']
+\  'cpp': ['clang-format'],
+\  'c': ['clang-format']
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
@@ -468,6 +481,7 @@ imap <C-j> <Plug>(coc-snippets-expand)
 let g:coc_global_extensions = [
 \  'coc-clangd',
 \  'coc-css',
+\  'coc-emmet',
 \  'coc-docker',
 \  'coc-html',
 \  'coc-java',
@@ -683,7 +697,7 @@ let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-autocmd FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp,css set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j

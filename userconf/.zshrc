@@ -27,7 +27,7 @@ download_completion() {
 }
 
 command_completion() {
-    if [[ ! -r $ZSH_COMPLETIONS_DIR/_$1 ]] && command -v $0 2>&1 >/dev/null; then
+    if [[ ! -r $ZSH_COMPLETIONS_DIR/_$1 ]] && command -v $1 2>&1 >/dev/null; then
         echo "generating completion '$@'"
         $@ > $ZSH_COMPLETIONS_DIR/_$1
     fi
@@ -66,7 +66,7 @@ zinit ice wait'0' lucid
 zinit light "mattberther/zsh-pyenv"
 zinit ice wait'0' lucid
 zinit light "zsh-vi-more/vi-increment"
-zinit ice wait'0' lucid
+zinit ice wait'!0' lucid
 zinit light "dominik-schwabe/zsh-fnm"
 zinit ice wait'0' lucid
 zinit light "zdharma/fast-syntax-highlighting"
