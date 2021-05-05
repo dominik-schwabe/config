@@ -25,9 +25,7 @@ download_completion() {
     if [[ ! -r $COMPLETION_PATH ]] && command -v curl 2>&1 >/dev/null; then
         echo "downloading $COMPLETION_NAME"
         curl --create-dirs -sfLo $COMPLETION_PATH $1
-        echo ${COMPLETION_NAME}
         local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${COMPLETION_NAME}/{p;q}")
-        echo $NAME_IN_COMPDEF
         if [ -z "$NAME_IN_COMPDEF" ]; then
             sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
             sed -i "1 i\\#compdef ${COMPLETION_NAME}" $COMPLETION_PATH
