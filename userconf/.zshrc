@@ -18,11 +18,20 @@ ZSH_COMPLETIONS_DIR=~/.zsh-completions
 fpath+="$ZSH_COMPLETIONS_DIR"
 
 download_completion() {
-    local COMPLETION_NAME=${2-$(basename $1)}
-    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/$COMPLETION_NAME
+    local COMPLETION_NAME=$(basename $1)
+    COMPLETION_NAME=${COMPLETION_NAME:1}
+    COMPLETION_NAME=${2-$COMPLETION_NAME}
+    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$COMPLETION_NAME
     if [[ ! -r $COMPLETION_PATH ]] && command -v curl 2>&1 >/dev/null; then
         echo "downloading $COMPLETION_NAME"
         curl --create-dirs -sfLo $COMPLETION_PATH $1
+        echo ${COMPLETION_NAME}
+        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${COMPLETION_NAME}/{p;q}")
+        echo $NAME_IN_COMPDEF
+        if [ -z "$NAME_IN_COMPDEF" ]; then
+            sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
+            sed -i "1 i\\#compdef ${COMPLETION_NAME}" $COMPLETION_PATH
+        fi
     fi
 }
 
@@ -35,9 +44,9 @@ command_completion() {
 
 download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
-download_completion https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh _tmuxinator
-download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z _7z
-download_completion https://gist.githubusercontent.com/ssh0/436e906765dfe8d1b3d6/raw/f4a75bc5ed90d1c8217baa5c6cef7543a3c6d04c/youtube-dl_completion.zsh _youtube_dl
+download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z 7z
+download_completion https://gist.githubusercontent.com/ssh0/436e906765dfe8d1b3d6/raw/f4a75bc5ed90d1c8217baa5c6cef7543a3c6d04c/youtube-dl_completion.zsh youtube-dl
+download_completion https://raw.githubusercontent.com/pwmt/zathura/develop/data/zsh-completion.in vpdf
 command_completion kubectl completion zsh
 
 COMPLETION_WAITING_DOTS="true"

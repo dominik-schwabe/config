@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 if ! xprop -name "___dropdownterminal___"; then
-    alacritty -t "___dropdownterminal___"
+    alacritty -t "___dropdownterminal___" &!
 else
-    i3-msg '[title="___dropdownterminal___"] scratchpad show; [title="___dropdownterminal___"] move position center'
+    i3-msg '[title="___dropdownterminal___"] scratchpad show; [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt; [title="___dropdownterminal___"] move position center'
 fi
-
