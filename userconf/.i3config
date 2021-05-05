@@ -56,10 +56,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+bindsym $mod+Shift+h move left 10 ppt
+bindsym $mod+Shift+j move down 10 ppt
+bindsym $mod+Shift+k move up 10 ppt
+bindsym $mod+Shift+l move right 10 ppt
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -196,8 +196,12 @@ bindsym $mod+x exec --no-startup-id playerctl next
 
 bindsym XF86Launch1 exec --no-startup-id ~/bin/nolidswitchtoggle
 bindsym $mod+odiaeresis exec --no-startup-id pgrep $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
-bindsym $mod+period exec --no-startup-id "i3-msg '[floating] resize set width 38 ppt height 40 ppt; move position 62 ppt 0'"
-bindsym $mod+Shift+period exec --no-startup-id "i3-msg '[floating] resize set width 38 ppt height 40 ppt; move position 0 0'"
+bindsym $mod+period resize set width 360 px height 240 px; move container position 1006 px 0
+bindsym $mod+Shift+period resize set width 360 px height 240 px; move container position 0 0
+bindsym $mod+plus resize grow right 40 px; resize grow down 20 px
+bindsym $mod+underscore resize shrink right 40 px; resize shrink down 20 px
+bindsym $mod+comma resize set width 800 px height 600 px; move container position center;
+bindsym $mod+Shift comma sticky toggle
 bindsym $mod+Shift+Return exec $guifilebrowser
 bindsym Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
 bindsym Shift+Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot '%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot has been taken'
@@ -209,13 +213,14 @@ bindsym $mod+udiaeresis move workspace to output right
 bindsym $mod+Tab workspace $ws1
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+F1 exec --no-startup-id exec bash -c "pkill picom || picom -b"
-bindsym --release $mod+underscore exec --no-startup-id xkill
+bindsym --release $mod+numbersign exec --no-startup-id xkill
 
 
 default_border pixel 1
 hide_edge_borders both
 focus_wrapping no
 new_window 1pixel
+new_float 1pixel
 workspace_auto_back_and_forth yes
 #focus_follows_mouse no
 
@@ -246,6 +251,9 @@ for_window [instance="r_x11"] move position center
 for_window [class="Arandr"] floating enabled
 for_window [class="Arandr"] resize set width 800 px height 600 px
 for_window [class="Arandr"] move position center
+for_window [instance="system-config-printer"] floating enabled
+for_window [instance="system-config-printer"] resize set width 800 px height 600 px
+for_window [instance="system-config-printer"] move position center
 
 for_window [class="TelegramDesktop"] floating enabled
 for_window [class="TelegramDesktop"] resize set width 50 ppt height 97 ppt
@@ -254,9 +262,19 @@ for_window [class="Thunderbird"] floating enabled
 for_window [class="Thunderbird"] resize set width 50 ppt height 97 ppt
 for_window [class="Thunderbird"] move position 50 ppt 0
 
-for_window [class="firefox" window_type="Picture-in-Picture" floating] move position 0 0
+for_window [class="Steam" title=".*Steam Guard.*"] floating enabled
+for_window [class="Steam" title=".*Steam - News.*"] floating enabled
+for_window [class="Steam" title=".*Steam - News.*"] resize set width 800 px height 600 px
+for_window [class="Steam" title=".*Steam - News.*"] move position center
 
-client.focused #3333cc #003300 #ffffff #3333cc #3333cc
+for_window [title="___dropdownterminal___"] floating enabled
+for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
+for_window [title="___dropdownterminal___"] move scratchpad
+for_window [title="___dropdownterminal___"] scratchpad show
+for_window [title="___dropdownterminal___"] move position center;
+for_window [title="___dropdownterminal___"] border pixel 5
+for_window [title="___dropdownterminal___"] sticky enable
+bindsym $mod+asciicircum exec --no-startup-id ~/bin/dropdownterminal
 
 exec --no-startup-id feh --bg-fill "$HOME/.bg2.jpg"
 exec --no-startup-id killall flameshot; flameshot
@@ -276,3 +294,5 @@ for_window [class="Spotify" workspace="(?!^$ws7)"] move container to workspace $
 
 exec --no-startup-id exec $webbrowser
 exec --no-startup-id $term --title "terminal_startup"
+
+client.focused #3333cc #003300 #ffffff #3333cc #3333cc

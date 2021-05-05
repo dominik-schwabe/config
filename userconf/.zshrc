@@ -174,3 +174,7 @@ bindkey -M vicmd '^[[15~' _pacman_update
 bindkey -M viins '^[[15~' _pacman_update
 bindkey -M vicmd '^[[[E' _pacman_update
 bindkey -M viins '^[[[E' _pacman_update
+
+docker-tags() {
+    curl --silent --get "https://registry.hub.docker.com/v1/repositories/$1/tags" | jq -r '.[].name'
+}

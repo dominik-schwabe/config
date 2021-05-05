@@ -80,8 +80,7 @@ function InstallRipgrep(version)
   if ExecuteCommand(command, "extracting archive") != 0
     return
   endif
-  let command = 'mv ' . l:rg_extract_path_exec . ' ' . l:exec_path
-  if ExecuteCommand(command, "copying ripgrep to bin") != 0
+  let command = 'mv ' . l:rg_extract_path_exec . ' ' . l:exec_path if ExecuteCommand(command, "copying ripgrep to bin") != 0
     return
   endif
   let command = 'rm -r ' . l:rg_archive_path . ' ' . l:rg_extract_path
@@ -106,6 +105,8 @@ let g:polyglot_disabled = ['latex', 'tex']
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"greplike search
+Plug 'wincent/ferret'
 "html expansion
 Plug 'mattn/emmet-vim'
 "multiple cursors
@@ -128,9 +129,6 @@ Plug 'suan/vim-instant-markdown', { 'for': 'markdown'}
 Plug 'luochen1990/rainbow', { 'for': ['python', 'c', 'cpp', 'lisp', 'html', 'vim', 'java'] }
 "highlight colorcodes
 Plug 'norcalli/nvim-colorizer.lua'
-"Plug 'ap/vim-css-color', { 'for': ['html', 'css', 'javascript', 'sh', 'yaml', 'dosini', 'conf', 'cfg', 'vim'] }
-"greplike search
-Plug 'jremmen/vim-ripgrep', { 'on': 'Rg' }
 "completion terms from other tmux pane
 Plug 'wellle/tmux-complete.vim'
 "focus commands work in tmux
@@ -185,8 +183,6 @@ if has("nvim")
 endif
 "semantic highlighting for c/c++
 Plug 'jackguo380/vim-lsp-cxx-highlight'
-"compile/run
-Plug 'skywind3000/asyncrun.vim', { 'on': ['AsyncRun', 'AsyncStop'] }
 "csv inspector/arranger
 Plug 'chrisbra/csv.vim'
 "wrap function arguments
@@ -234,32 +230,6 @@ nmap M <Plug>(easymotion-overwin-f2)
 vmap m <Plug>(easymotion-overwin-f)
 vmap M <Plug>(easymotion-overwin-f2)
 
-"ayncrun
-let g:asyncrun_save = 1
-let g:asyncrun_open = 10
-let g:asyncrun_trim = 1
-let g:asyncrun_exit = 'if g:asyncrun_status != "success" | call system("notify-send -t 1000 -u critical \"$VIM_FILENAME\" \"finished with error\"") | else | call system("notify-send -t 1000 -u normal \"$VIM_FILENAME\" \"finished normaly\"") | endif'
-
-let g:asyncrun_status = "success"
-function AsyncrunOutput(raw)
-    if g:asyncrun_status != "running"
-        let asynccommand = ":AsyncRun -program=make -strip=1 "
-        call system("notify-send -t 1000 -u normal \"$VIM_FILENAME\" \"start\"")
-        let asynccommand .= "-raw=" . a:raw . " "
-        if &filetype == "c" || &filetype == "cpp"
-            let asynccommand .= "%< && ./%<"
-        else
-            let asynccommand .= "%"
-        endif
-        echom l:asynccommand
-        execute asynccommand
-    else
-        :AsyncStop
-    endif
-endfunction
-nmap <silent> Ü :call AsyncrunOutput(1)<CR>
-nmap <silent> ü :call AsyncrunOutput(0)<CR>
-
 "vim-asterisk
 map *   <Plug>(asterisk-*)
 map #   <Plug>(asterisk-#)
@@ -294,16 +264,19 @@ let g:rainbow_conf = {
 \}
 
 
-"ripgrep
-function RgSearch()
+"ferret
+function SearchFilesRegex()
+  call inputsave()
   let l:search = input("Search in files: ")
-  if l:search != ""
-    execute 'Rg ' . '"' . escape(search, '"') . '"'
+  call inputrestore()
+  if !empty(l:search)
+    exec 'Ack ' . substitute(escape(search, ' '), '^-', '\[-\]', '')
   endif
 endfunction
-nnoremap _ :call RgSearch()<CR>
-let g:rg_derive_root = 'true'
-let g:rg_highlight = 'true'
+nnoremap _ :call SearchFilesRegex()<CR>
+nmap <leader>a <Plug>(FerretAckWord)
+let g:FerretMap = 0
+let g:FerretMaxResults=1000
 
 "NERDTree
 let NERDTreeQuitOnOpen=1
@@ -400,7 +373,7 @@ if !exists('g:ycm_semantic_triggers')
     let g:ycm_semantic_triggers = {}
 endif
 
-autocmd FileType tex set conceallevel=1
+autocmd FileType tex setlocal conceallevel=1
 autocmd FileType tex :NoMatchParen
 
 "polyglot
@@ -697,7 +670,7 @@ let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-autocmd FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp,css set tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+autocmd FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
@@ -707,7 +680,7 @@ tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
 tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 if has("nvim")
   set termguicolors
-  au TermOpen * setlocal nonumber norelativenumber signcolumn=no
+  au TermOpen * setlocal nonumber norelativenumber signcolumn=no scrolloff=0
   autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
   autocmd TermClose term://* exec "bwipeout! " . expand("<abuf>")
 endif
