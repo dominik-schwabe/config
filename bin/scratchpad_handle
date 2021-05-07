@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+WINDOWNAME=$1
+shift
+SIZE=$1
+shift
+COMMAND_EXTRAS=$@
+if ! xprop -name "$WINDOWNAME"; then
+    alacritty -t "$WINDOWNAME" $COMMAND_EXTRAS &!
+else
+    i3-msg "[title=\"$WINDOWNAME\"] scratchpad show; [title=\"$WINDOWNAME\"] resize set width $SIZE ppt height $SIZE ppt; [title=\"$WINDOWNAME\"] move position center"
+fi

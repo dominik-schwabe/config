@@ -66,6 +66,7 @@ set \
     .pylintrc .pylintrc \
     .cmus .config/cmus/rc \
     .kubectl.alias .kubectl.alias \
+    .mimeapps.list .config/mimeapps.list \
 #    .zshrc.min .zshrc \
 
 while :

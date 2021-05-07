@@ -44,7 +44,6 @@ download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plu
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
 download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z 7z
 download_completion https://gist.githubusercontent.com/ssh0/436e906765dfe8d1b3d6/raw/f4a75bc5ed90d1c8217baa5c6cef7543a3c6d04c/youtube-dl_completion.zsh youtube-dl
-download_completion https://raw.githubusercontent.com/pwmt/zathura/develop/data/zsh-completion.in vpdf
 command_completion kubectl completion zsh
 
 COMPLETION_WAITING_DOTS="true"
@@ -63,6 +62,8 @@ zinit ice wait'0' lucid
 zinit snippet OMZP::pip
 zinit ice wait'0' lucid
 zinit snippet OMZP::gitignore
+zinit ice wait'0' lucid
+zinit light "agkozak/zsh-z"
 zinit ice wait'0' lucid
 zinit light "t413/zsh-background-notify"
 zinit ice wait'0' lucid
