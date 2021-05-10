@@ -17,4 +17,3 @@ Control-l: clear-screen
 Control-a: beginning-of-line
 
 $endif
-

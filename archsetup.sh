@@ -9,6 +9,8 @@ RESET="\e[0m"
 
 BASE="
 clang
+jq
+gnome-keyring
 inetutils
 alsa
 alsa-tools

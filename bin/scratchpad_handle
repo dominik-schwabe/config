@@ -4,8 +4,13 @@ shift
 SIZE=$1
 shift
 COMMAND_EXTRAS=$@
-if ! xprop -name "$WINDOWNAME"; then
+if ! xprop -name "$WINDOWNAME" 2>&1 >/dev/null; then
     alacritty -t "$WINDOWNAME" $COMMAND_EXTRAS &!
 else
-    i3-msg "[title=\"$WINDOWNAME\"] scratchpad show; [title=\"$WINDOWNAME\"] resize set width $SIZE ppt height $SIZE ppt; [title=\"$WINDOWNAME\"] move position center"
+    if [[ $(i3-msg -t get_tree | jq ".. | select(.name? == \"__i3_scratch\") | .. | select(.name? == \"$WINDOWNAME\")") ]]
+    then
+        i3-msg "[title=\"$WINDOWNAME\"] scratchpad show; [title=\"$WINDOWNAME\"] resize set width $SIZE ppt height $SIZE ppt; [title=\"$WINDOWNAME\"] move position center"
+    else
+        i3-msg "[title=\"$WINDOWNAME\"] move scratchpad"
+    fi
 fi

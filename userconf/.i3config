@@ -252,12 +252,17 @@ for_window [class="Arandr"] move position center
 for_window [instance="system-config-printer"] floating enabled
 for_window [instance="system-config-printer"] resize set width 800 px height 600 px
 for_window [instance="system-config-printer"] move position center
+for_window [instance="nm-connection-editor" class="Nm-connection-editor"] floating enabled
+for_window [instance="nm-connection-editor" class="Nm-connection-editor"] resize set width 800 px height 600 px
+for_window [instance="nm-connection-editor" class="Nm-connection-editor"] move position center
 for_window [instance="Msgcompose" class="Thunderbird"] floating enabled
 for_window [instance="Msgcompose" class="Thunderbird"] resize set width 800 px height 600 px
 for_window [instance="Msgcompose" class="Thunderbird"] move position center
 for_window [instance="Places" class="firefox"] floating enabled
 for_window [instance="Places" class="firefox"] resize set width 800 px height 600 px
 for_window [instance="Places" class="firefox"] move position center
+for_window [instance="Toolkit" class="firefox"] resize set width 360 px height 240 px
+for_window [instance="Toolkit" class="firefox"] move container position 0 0
 
 
 for_window [class="TelegramDesktop"] floating enabled
@@ -270,20 +275,16 @@ for_window [class="Steam" title=".*Steam - News.*"] resize set width 800 px heig
 for_window [class="Steam" title=".*Steam - News.*"] move position center
 
 for_window [title="___dropdownterminal___"] floating enabled
-for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
-for_window [title="___dropdownterminal___"] move scratchpad
-for_window [title="___dropdownterminal___"] scratchpad show
-for_window [title="___dropdownterminal___"] move position center;
 for_window [title="___dropdownterminal___"] border pixel 5
+for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
+for_window [title="___dropdownterminal___"] move position center;
 for_window [title="___dropdownterminal___"] sticky enable
 bindsym $mod+asciicircum exec --no-startup-id ~/bin/scratchpad_handle ___dropdownterminal___ 80 -o font.size=10
 
 for_window [title="___musicplayer___"] floating enabled
-for_window [title="___musicplayer___"] resize set width 90 ppt height 90 ppt
-for_window [title="___musicplayer___"] move scratchpad
-for_window [title="___musicplayer___"] scratchpad show
-for_window [title="___musicplayer___"] move position center;
 for_window [title="___musicplayer___"] border pixel 5
+for_window [title="___musicplayer___"] resize set width 90 ppt height 90 ppt
+for_window [title="___musicplayer___"] move position center;
 for_window [title="___musicplayer___"] sticky enable
 bindsym $mod+m exec --no-startup-id ~/bin/scratchpad_handle ___musicplayer___ 90 -e cmus
 
@@ -293,7 +294,7 @@ for_window [instance="Mail" class="Thunderbird"] border pixel 5
 for_window [instance="Mail" class="Thunderbird"] sticky enable
 bindsym $mod+adiaeresis [instance="Mail" class="Thunderbird"] scratchpad show; [instance="Mail" class="Thunderbird"] resize set width 90 ppt height 90 ppt; [instance="Mail" class="Thunderbird"] move position center;
 
-exec --no-startup-id feh --bg-fill "$HOME/.bg2.jpg"
+exec --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id killall flameshot; flameshot
 exec --no-startup-id killall redshift; redshift-gtk -r -l "51.34:12.35" -t 6500:3500
 exec --no-startup-id telegram-desktop -startintray
@@ -302,10 +303,10 @@ exec --no-startup-id birdtray
 #exec --no-startup-id ~/bin/drink_linux
 
 
-assign [class="firefox"] 1
-assign [title="terminal_startup"] 2
-assign [class="Steam"] 3
-assign [class="discord"] 7
+assign [class="firefox"] $ws1
+assign [title="terminal_startup"] $ws2
+assign [class="Steam"] $ws3
+assign [class="discord"] $ws7
 for_window [class="Spotify" workspace="(?!^$ws7)"] move container to workspace $ws7
 
 exec --no-startup-id exec $webbrowser
