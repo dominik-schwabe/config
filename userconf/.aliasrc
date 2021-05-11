@@ -53,6 +53,7 @@ alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9
 
 alias pyl="export PYENV_VERSION=$PYENV_VERSION"
 alias pys="export PYENV_VERSION=system"
+alias pythonserver='python -m SimpleHTTPServer 8000'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

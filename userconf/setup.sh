@@ -50,6 +50,7 @@ set \
     .xinitrc .xinitrc \
     .bg.jpg .bg.jpg \
     .bg2.jpg .bg2.jpg \
+    .bg3.jpg .bg3.jpg \
     .bg.png .bg.png \
     .zathurarc .config/zathura/zathurarc \
     .tmux.conf .tmux.conf \
@@ -60,13 +61,13 @@ set \
     .Rprofile .Rprofile \
     .dunstrc .config/dunst/dunstrc \
     .gtkrc-3.0 .config/gtk-3.0/settings.ini \
-    .gtkrc-2.0 .gtkrc-2.0 \
     .ipython_config.py .ipython/profile_default/ipython_config.py \
     .alacritty.yml .alacritty.yml \
     .pylintrc .pylintrc \
     .cmus .config/cmus/rc \
     .kubectl.alias .kubectl.alias \
     .mimeapps.list .config/mimeapps.list \
+#    .gtkrc-2.0 .gtkrc-2.0 \
 #    .zshrc.min .zshrc \
 
 while :
