@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+[ -z "$1" ] && {
+    echo "no tag given"
+    exit 0
+}
+curl --silent --get "https://registry.hub.docker.com/v1/repositories/$1/tags" | jq -r '.[].name' 2>/dev/null
+[ $? ] && {
+    echo "no repositorie found"
+    exit 1
+}

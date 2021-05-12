@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+if [[ $(i3-msg -t get_tree | jq ".. | select(.name? == \"__i3_scratch\") | .. | select(.class? == \"Thunderbird\" and .instance? == \"Mail\")") ]]
+then
+    i3-msg "[instance=\"Mail\" class=\"Thunderbird\"] scratchpad show; [instance=\"Mail\" class=\"Thunderbird\"] resize set width 90 ppt height 90 ppt; [instance=\"Mail\" class=\"Thunderbird\"] move position center;"
+else
+    i3-msg "[instance=\"Mail\" class=\"Thunderbird\"] move scratchpad"
+fi
