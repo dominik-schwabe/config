@@ -1,2 +1,3 @@
 bind -f common y player-prev
 bind -f common z win-add-p
+colorscheme night

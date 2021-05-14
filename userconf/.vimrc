@@ -48,58 +48,7 @@ function ExecuteCommand(command, message)
   return v:shell_error
 endfunction
 
-function InstallRipgrep(version)
-  let l:bin_path = '$HOME/bin/'
-  let l:executable = 'rg'
-  let l:exec_path = l:bin_path . l:executable
-  if !empty(glob(l:exec_path))
-    return
-  endif
-  if substitute(system('uname -m'), '\n', '', '') == 'x86_64'
-    let l:rg_suffix = '-x86_64-unknown-linux-musl'
-  else
-    let l:rg_suffix = '-arm-unknown-linux-gnueabihf'
-  endif
-  let l:rg_folder_name = 'ripgrep-' . a:version . l:rg_suffix
-  let l:rg_archive_name = l:rg_folder_name . '.tar.gz'
-  let l:rg_archive_url = 'https://github.com/BurntSushi/ripgrep/releases/download/' . a:version . '/' . l:rg_archive_name
-  let l:rg_archive_path = l:bin_path . l:rg_archive_name
-  let l:rg_extract_path = l:bin_path . l:rg_folder_name
-  let l:rg_extract_path_exec = l:rg_extract_path . '/' . l:executable
-
-  echom 'installing ripgrep'
-  if MakeDir(l:bin_path) != 0
-    return
-  endif
-  echom "downloading archive"
-  if DownloadWithWget(l:rg_archive_url, l:rg_archive_path) != 0 && DownloadWithCurl(l:rg_archive_url, l:rg_archive_path) != 0
-    echom 'failure downloading ripgrep'
-    return
-  endif
-  let command = 'tar -C ' . l:bin_path . ' -xzf ' . l:rg_archive_path
-  if ExecuteCommand(command, "extracting archive") != 0
-    return
-  endif
-  let command = 'mv ' . l:rg_extract_path_exec . ' ' . l:exec_path if ExecuteCommand(command, "copying ripgrep to bin") != 0
-    return
-  endif
-  let command = 'rm -r ' . l:rg_archive_path . ' ' . l:rg_extract_path
-  if ExecuteCommand(command, "cleaning installation") != 0
-    return
-  endif
-endfunction
-
-
-function InstallFZF()
-  if empty(glob('$HOME/bin/fzf'))
-    let command = 'cd ~; curl -L https://raw.githubusercontent.com/junegunn/fzf/master/install | bash -s -- --bin'
-    call ExecuteCommand(command, "installing fzf")
-  endif
-endfunction
-
 call InstallVimPlug()
-call InstallRipgrep('12.1.1')
-call InstallFZF()
 
 let g:polyglot_disabled = ['latex', 'tex']
 

@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-pyenv install --skip-existing $PYENV_VERSION

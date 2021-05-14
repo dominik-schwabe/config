@@ -11,8 +11,9 @@ alias tmux='tmux -u'
 
 alias ip='ip -color'
 
-alias ll='ls -l'
 alias la='ls -A'
+alias ll='ls -l'
+alias lr="find -type f -exec basename {} \;"
 alias l='ls -CF'
 
 alias vim='nvim'
@@ -45,9 +46,6 @@ alias dsp='sudo systemctl stop docker.socket'
 alias ssh='ssh -xC'
 alias xssh='ssh -YC'
 
-alias pyinstall='pyenv install $PYENV_VERSION'
-alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
-
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 
@@ -55,8 +53,13 @@ alias pyl="export PYENV_VERSION=$PYENV_VERSION"
 alias pys="export PYENV_VERSION=system"
 alias pythonserver='python -m SimpleHTTPServer 8000'
 
+alias install_python='pyenv install --skip-existing $PYENV_VERSION'
+alias install_node='fnm use $FNM_VERSION --install-if-missing'
+alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
+
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
 source ~/.kubectl.alias
+source ~/.docker.alias
 
 # vi: ft=sh

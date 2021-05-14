@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+[ -e $HOME/bin/rg ] && exit 2
+
+case $(uname -m) in
+    *x86_64*) SUFFIX='x86_64-unknown-linux-musl' ;;
+    *arm*)    SUFFIX='arm-unknown-linux-gnueabihf' ;;
+    *)        exit 1 ;;
+esac
+
+if ! command -v curl &>/dev/null; then
+    echo "curl required" >/dev/stderr;
+    exit 1
+fi
+
+VERSION=$(curl -fsSL "https://api.github.com/repos/BurntSushi/ripgrep/releases" | jq -r '.[0].tag_name')
+[ -z "$VERSION" ] && exit 1
+
+FOLDER_NAME="ripgrep-$VERSION-$SUFFIX"
+ARCHIVE_NAME="$FOLDER_NAME.tar.gz"
+ARCHIVE_URL="https://github.com/BurntSushi/ripgrep/releases/download/$VERSION/$ARCHIVE_NAME"
+
+TEMP_FOLDER=$(mktemp -d)
+ARCHIVE_PATH=$TEMP_FOLDER/$ARCHIVE_NAME
+curl -fsSL $ARCHIVE_URL -o $ARCHIVE_PATH || exit 1
+
+tar -C $TEMP_FOLDER -xzf $ARCHIVE_PATH $FOLDER_NAME/rg
+mv $TEMP_FOLDER/$FOLDER_NAME/rg $HOME/bin/rg
+rm -r $TEMP_FOLDER

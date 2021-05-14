@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+[ -e $HOME/bin/fzf ] && exit 2
+cd ~; curl -fsSL "https://raw.githubusercontent.com/junegunn/fzf/master/install" | bash -s -- --bin &>/dev/null

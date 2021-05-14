@@ -4,17 +4,12 @@ shopt -s cmdhist
 shopt -u autocd
 set -o vi
 
-if [[ -r ~/.aliasrc ]]; then
-    . ~/.aliasrc
-fi
+[ -r ~/.aliasrc ] && . ~/.aliasrc
+[ -r ~/.envrc ] && . ~/.envrc
+[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
-if [[ -r ~/.envrc ]]; then
-    . ~/.envrc
-fi
-
-if [[ -r /usr/share/bash-completion/bash_completion ]]; then
-    . /usr/share/bash-completion/bash_completion
-fi
+. "$HOME/.shell_plugins/pyenv/plugin.sh"
+. "$HOME/.shell_plugins/fnm/plugin.sh"
 
 RESET="\[\017\]"
 RED="\[\033[31;1m\]"
@@ -24,16 +19,10 @@ BLUE="\[\033[34;1m\]"
 WHITE="\[\033[00m\]"
 BOLDWHITE="\[\033[37;1m\]"
 
-if [[ $SSH_TTY ]]; then
-    PROMPT_COLOR=$YELLOW
-elif [[ $UID == 0 ]]; then
-    PROMPT_COLOR=$RED
-else
-    PROMPT_COLOR=$GREEN
-fi
+PROMPT_COLOR=$GREEN
+[ "$UID" == "0" ] && PROMPT_COLOR=$RED
+[ "$SSH_TTY" ] && PROMPT_COLOR=$YELLOW
 
-function prompt_retrun_value() {
-    RET=$?; [ "$RET" != 0 ] && echo "$RET "
-}
+prompt_retrun_value() { RET=$?; [ "$RET" != "0" ] && echo "$RET "; }
 
 export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${RED}\$(prompt_retrun_value)${WHITE}>>> ${RESET}"

@@ -3,8 +3,9 @@ ipdb
 ipython
 ipython_autoimport
 jedi
-neovim
 neovim-remote
 pipenv
 pylint
+pynvim
+setuptools
 wheel
