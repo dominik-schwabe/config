@@ -240,6 +240,7 @@ nnoremap <silent> gt :NERDTreeFind<CR>
 
 "NERDCommenter
 let g:NERDDefaultAlign='start'
+let g:NERDSpaceDelims = 1
 nmap gc <Plug>NERDCommenterToggle
 vmap gc <Plug>NERDCommenterToggle gv
 
@@ -281,7 +282,7 @@ let g:ale_fixers = {
 \  'r': ['styler'],
 \  'sh': ['shfmt'],
 \  'markdown': ['prettier'],
-\  'javascript': ['prettier'],
+\  'javascript': ['prettier', 'eslint'],
 \  'html': ['prettier'],
 \  'css': ['prettier'],
 \  'json': ['prettier'],
