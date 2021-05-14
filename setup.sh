@@ -34,4 +34,4 @@ for file in $CURRPATH/tools/*; do
 done
 echo
 echo "folder links"
-./create_symlink.sh $FORCE $HOME/.shell_plugins $CURRPATH/shell_plugins
+./create_symlink.sh $CURRPATH/shell_plugins $FORCE $HOME/.shell_plugins
