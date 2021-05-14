@@ -3,7 +3,7 @@ if [ "$ENABLE_FNM" = "true" ]; then
         local FNM_INSTALL_URL="https://fnm.vercel.app/install"
         FNM_INSTALL_SCRIPT=$(curl -fsSL $FNM_INSTALL_URL 2>/dev/null) \
         || FNM_INSTALL_SCRIPT=$(wget -qO- $FNM_INSTALL_URL 2>/dev/null) \
-        || {echo "curl or wget required to install fnm"; return 1}
+        || { echo "curl or wget required to install fnm"; return 1; }
         bash -s -- --skip-shell <<< $FNM_INSTALL_SCRIPT || return 1
         unset FNM_INSTALL_SCRIPT
         return 0
