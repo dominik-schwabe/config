@@ -159,3 +159,6 @@ alias dkcu='docker-compose up'
 alias dkcU='docker-compose up -d'
 alias dkcv='docker-compose version'
 alias dkcx='docker-compose stop'
+
+
+# vi: ft=sh

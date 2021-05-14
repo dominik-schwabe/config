@@ -334,3 +334,6 @@ exec --no-startup-id exec $webbrowser
 exec --no-startup-id $term -t "___startup_terminal___"
 
 client.focused #3333cc #003300 #ffffff #3333cc #3333cc
+
+
+# vi: ft=i3config
