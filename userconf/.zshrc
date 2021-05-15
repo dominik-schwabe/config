@@ -116,18 +116,18 @@ PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f$(my_g
 
 get_python_version() {
     if [ "$ENABLE_PYENV" = "true" ] ; then
-        pyenv version-name 2>/dev/null
+        COMMAND=$(pyenv version-name 2>/dev/null)
         RET=$?
-        [ $RET = "0" ] && return 0
+        [ $RET = "0" ] && { echo "$COMMAND"; return 0; }
         [ $RET = "127" ] && {echo "$PYENV_VERSION"; return 0;}
     fi
     echo "system"
 }
 get_node_version() {
     if [ "$ENABLE_FNM" = "true" ] ; then
-        fnm current 2>/dev/null
+        COMMAND=$(fnm current 2>/dev/null)
         RET=$?
-        [ $RET = "0" ] && return 0
+        [ $RET = "0" ] && { echo "$COMMAND"; return 0; }
         [ $RET = "127" ] && {echo "$FNM_VERSION"; return 0;}
     fi
     echo "system"
