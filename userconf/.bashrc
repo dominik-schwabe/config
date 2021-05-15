@@ -4,8 +4,9 @@ shopt -s cmdhist
 shopt -u autocd
 set -o vi
 
-[ -r ~/.aliasrc ] && . ~/.aliasrc
 [ -r ~/.envrc ] && . ~/.envrc
+[ -r ~/.aliasrc ] && . ~/.aliasrc
+[ -r ~/.customrc ] && . ~/.customrc
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
 . "$HOME/.shell_plugins/pyenv/plugin.sh"

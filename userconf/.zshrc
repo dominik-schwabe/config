@@ -2,6 +2,7 @@
 [ ! -d ~/.zinit/bin ] && git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
 
 [ -r ~/.envrc ] && . ~/.envrc
+[ -r ~/.customrc ] && . ~/.customrc
 [ -r ~/.aliasrc ] && . ~/.aliasrc
 
 ZSH_COMPLETIONS_DIR=$HOME/.zsh-completions
