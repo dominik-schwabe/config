@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+[ -e $HOME/bin/nvim ] && exit 2
+
+if ! command -v curl &>/dev/null; then
+    echo "curl required" >/dev/stderr;
+    exit 1
+fi
+
+command -v python &>/dev/null && COMMAND="python -c 'import sys, json; print(next(filter(lambda x: x[\"name\"] == \"nvim.appimage\", next(filter(lambda x: not x[\"prerelease\"], json.load(sys.stdin)))[\"assets\"]))[\"browser_download_url\"])'"
+command -v jq &>/dev/null && COMMAND="jq -r '[.[] | select(.prerelease? == false)][0] | .assets | .. | select(.name? == \"nvim.appimage\") | .browser_download_url'"
+if    [ -z "$COMMAND" ]; then
+    echo "python or jq required"
+    exit 1
+fi
+
+SOURCEURL=$(curl -fsSL "https://api.github.com/repos/neovim/neovim/releases" | eval "$COMMAND")
+curl -fsSL $SOURCEURL -o $HOME/bin/nvim || exit 1
+chmod 755 $HOME/bin/nvim
