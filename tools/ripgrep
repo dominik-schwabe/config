@@ -13,7 +13,14 @@ if ! command -v curl &>/dev/null; then
     exit 1
 fi
 
-VERSION=$(curl -fsSL "https://api.github.com/repos/BurntSushi/ripgrep/releases" | jq -r '.[0].tag_name')
+command -v python &>/dev/null && COMMAND="python -c 'import sys, json; print(json.load(sys.stdin)[0][\"tag_name\"])'"
+command -v jq &>/dev/null && COMMAND="jq -r '.[0].tag_name'"
+if    [ -z "$COMMAND" ]; then
+    echo "python or jq required"
+    exit 1
+fi
+
+VERSION=$(curl -fsSL "https://api.github.com/repos/BurntSushi/ripgrep/releases" | eval "$COMMAND")
 [ -z "$VERSION" ] && exit 1
 
 FOLDER_NAME="ripgrep-$VERSION-$SUFFIX"
