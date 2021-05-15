@@ -5,7 +5,7 @@
 case $(uname -m) in
     *x86_64*) SUFFIX='x86_64-unknown-linux-musl' ;;
     *arm*)    SUFFIX='arm-unknown-linux-gnueabihf' ;;
-    *)        exit 1 ;;
+    *)        exit 3 ;;
 esac
 
 if ! command -v curl &>/dev/null; then

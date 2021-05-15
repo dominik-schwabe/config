@@ -2,6 +2,7 @@
 
 GREEN="\e[32m"
 BLUE="\e[34m"
+MAGENTA="\e[35m"
 RED="\e[31m"
 RESET="\e[0m"
 
@@ -28,6 +29,7 @@ for file in $CURRPATH/tools/*; do
     echo -n "$(basename $file)"
     $file
     RET=$?
+    [ "$RET" = 3 ] && echo -e " ${MAGENTA}not supported${RESET}"
     [ "$RET" = 2 ] && echo -e " ${BLUE}exists${RESET}"
     [ "$RET" = 1 ] && echo -e " ${RED}failure${RESET}"
     [ "$RET" = 0 ] && echo -e " ${GREEN}success${RESET}"

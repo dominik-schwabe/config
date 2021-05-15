@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+[ "$(uname -m)" != "x86_64" ] && exit 3
 [ -e $HOME/bin/nvim ] && exit 2
 
 if ! command -v curl &>/dev/null; then
