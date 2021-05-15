@@ -13,11 +13,10 @@ while getopts "f" o; do
     [ $o == "f" ] && FORCE="-f"
 done
 
-echo "bin setup"
 [ -e $HOME/bin ] || mkdir $HOME/bin
-for file in $CURRPATH/bin/*; do
-    ./create_symlink.sh $FORCE $file $HOME/bin/$(basename $file)
-done
+
+echo "bin setup"
+./create_symlink.sh $FORCE $CURRPATH/bin $HOME/.bin
 echo
 echo "config setup"
 for file in $(find userconf -not -type d -printf '%P '); do

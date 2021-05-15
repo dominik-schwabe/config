@@ -8,4 +8,5 @@ pipenv
 pylint
 pynvim
 setuptools
+telegram-send
 wheel

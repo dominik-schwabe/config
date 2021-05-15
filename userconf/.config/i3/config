@@ -210,7 +210,7 @@ bindsym $mod+less exec --no-startup-id playerctl previous
 bindsym $mod+y exec --no-startup-id playerctl play-pause
 bindsym $mod+x exec --no-startup-id playerctl next
 
-bindsym XF86Launch1 exec --no-startup-id ~/bin/nolidswitchtoggle
+bindsym XF86Launch1 exec --no-startup-id ~/.bin/nolidswitchtoggle
 bindsym $mod+odiaeresis exec --no-startup-id pgrep $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
 bindsym $mod+period resize set width 360 px height 240 px; move container position 1006 px 0
 bindsym $mod+Shift+period resize set width 360 px height 240 px; move container position 0 0
@@ -295,27 +295,27 @@ for_window [title="___dropdownterminal___"] border pixel 5
 for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
 for_window [title="___dropdownterminal___"] move position center;
 for_window [title="___dropdownterminal___"] sticky enable
-bindsym $mod+asciicircum exec --no-startup-id "~/bin/scratchpad_handle ___dropdownterminal___ 80 $term -t ___dropdownterminal___ -o font.size=10"
+bindsym $mod+asciicircum exec --no-startup-id "~/.bin/scratchpad_handle ___dropdownterminal___ 80 $term -t ___dropdownterminal___ -o font.size=10"
 
 for_window [title="___musicplayer___"] floating enabled
 for_window [title="___musicplayer___"] border pixel 5
 for_window [title="___musicplayer___"] resize set width 90 ppt height 90 ppt
 for_window [title="___musicplayer___"] move position center;
 for_window [title="___musicplayer___"] sticky enable
-bindsym $mod+m exec --no-startup-id "~/bin/scratchpad_handle ___musicplayer___ 90 $term -t ___musicplayer___ -e cmus"
+bindsym $mod+m exec --no-startup-id "~/.bin/scratchpad_handle ___musicplayer___ 90 $term -t ___musicplayer___ -e cmus"
 
 for_window [title="___todo___"] floating enabled
 for_window [title="___todo___"] border pixel 5
 for_window [title="___todo___"] resize set width 80 ppt height 80 ppt
 for_window [title="___todo___"] move position center;
 for_window [title="___todo___"] sticky enable
-bindsym $mod+Shift+underscore exec --no-startup-id "~/bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"noremap Q :qa<CR>\\"'"
+bindsym $mod+Shift+underscore exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"noremap Q :qa<CR>\\"'"
 
 for_window [instance="Mail" class="Thunderbird"] floating enabled
 for_window [instance="Mail" class="Thunderbird"] move scratchpad
 for_window [instance="Mail" class="Thunderbird"] border pixel 5
 for_window [instance="Mail" class="Thunderbird"] sticky enable
-bindsym $mod+adiaeresis exec --no-startup-id "~/bin/scratchpad_thunderbird"
+bindsym $mod+adiaeresis exec --no-startup-id "~/.bin/scratchpad_thunderbird"
 
 exec --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id killall flameshot; flameshot
