@@ -70,8 +70,8 @@ zinit ice wait'0' lucid
 zinit light "kutsan/zsh-system-clipboard"
 zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/pyenv"
-zinit ice wait'!0' lucid atload"command_completion fnm completions"
-zinit load "$HOME/.shell_plugins/fnm"
+zinit ice wait'!0' lucid
+zinit light "$HOME/.shell_plugins/n"
 zinit ice wait'0' lucid atload'zicompinit'
 zinit light "zsh-users/zsh-completions"
 #zinit light "lukechilds/zsh-better-npm-completion"
@@ -118,19 +118,18 @@ get_python_version() {
     if [ "$ENABLE_PYENV" = "true" ] ; then
         COMMAND=$(pyenv version-name 2>/dev/null)
         RET=$?
-        [ $RET = "0" ] && { echo "$COMMAND"; return 0; }
-        [ $RET = "127" ] && {echo "$PYENV_VERSION"; return 0;}
+        [ $RET = "0" ] && { echo "$COMMAND"; return; }
+        [ $RET = "127" ] && {echo "$PYENV_VERSION"; return;}
     fi
-    echo "system"
+    if command -v python &>/dev/null; then
+        echo "system"
+    else
+        echo "none"
+    fi
 }
+
 get_node_version() {
-    if [ "$ENABLE_FNM" = "true" ] ; then
-        COMMAND=$(fnm current 2>/dev/null)
-        RET=$?
-        [ $RET = "0" ] && { echo "$COMMAND"; return 0; }
-        [ $RET = "127" ] && {echo "$FNM_VERSION"; return 0;}
-    fi
-    echo "system"
+    node --version 2>/dev/null || echo "none"
 }
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %B%F{3}"

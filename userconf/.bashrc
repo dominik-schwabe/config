@@ -10,7 +10,7 @@ set -o vi
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
 . "$HOME/.shell_plugins/pyenv/plugin.sh"
-. "$HOME/.shell_plugins/fnm/plugin.sh"
+. "$HOME/.shell_plugins/n/plugin.sh"
 
 RESET="\[\017\]"
 RED="\[\033[31;1m\]"
