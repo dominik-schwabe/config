@@ -7,7 +7,7 @@ if ! command -v curl &>/dev/null; then
     exit 1
 fi
 
-command -v python &>/dev/null && COMMAND="python -c 'import sys, json; print(next(filter(lambda x: x[\"name\"] == \"nvim.appimage\", next(filter(lambda x: not x[\"prerelease\"], json.load(sys.stdin)))[\"assets\"]))[\"browser_download_url\"])'"
+command -v python &>/dev/null && COMMAND="python -c 'import sys, json; print(next(iter(filter(lambda x: x[\"name\"] == \"nvim.appimage\", next(iter(filter(lambda x: not x[\"prerelease\"], json.load(sys.stdin))))[\"assets\"])))[\"browser_download_url\"])'"
 command -v jq &>/dev/null && COMMAND="jq -r '[.[] | select(.prerelease? == false)][0] | .assets | .. | select(.name? == \"nvim.appimage\") | .browser_download_url'"
 if    [ -z "$COMMAND" ]; then
     echo "python or jq required"
