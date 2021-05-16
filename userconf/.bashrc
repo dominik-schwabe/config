@@ -9,8 +9,10 @@ set -o vi
 [ -r ~/.customrc ] && . ~/.customrc
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
+
 . "$HOME/.shell_plugins/pyenv/plugin.sh"
 . "$HOME/.shell_plugins/n/plugin.sh"
+[ -r "$PYENV_ROOT/completions/pyenv.bash" ] && source "$PYENV_ROOT/completions/pyenv.bash"
 
 RESET="\[\017\]"
 RED="\[\033[31;1m\]"

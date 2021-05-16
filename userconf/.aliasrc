@@ -47,6 +47,7 @@ alias dsp='sudo systemctl stop docker.socket'
 
 alias ssh='ssh -xC'
 alias xssh='ssh -YC'
+alias lssh='ssh -L 3000:localhost:3000 -L 5000:localhost:5000'
 
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'

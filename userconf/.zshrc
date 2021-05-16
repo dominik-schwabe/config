@@ -68,7 +68,7 @@ zinit ice wait'0' lucid
 zinit light "MichaelAquilina/zsh-you-should-use"
 zinit ice wait'0' lucid
 zinit light "kutsan/zsh-system-clipboard"
-zinit ice wait'!0' lucid
+zinit ice wait'!0' lucid atload'[ -r "$PYENV_ROOT/completions/pyenv.zsh" ] && source "$PYENV_ROOT/completions/pyenv.zsh"'
 zinit light "$HOME/.shell_plugins/pyenv"
 zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/n"

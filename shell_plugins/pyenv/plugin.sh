@@ -12,9 +12,5 @@ if [ "$ENABLE_PYENV" = "true" ]; then
         unset PYENV_INSTALL_URL
         unset PYENV_INSTALL_SCRIPT
     }
-    command -v pyenv &>/dev/null && {
-        eval "$(pyenv init --path)"
-        eval "$(pyenv init - --no-rehash)"
-        eval "$(pyenv virtualenv-init -)"
-    }
+    command -v pyenv &>/dev/null && export PATH="$PYENV_ROOT/shims:$PATH"
 fi
