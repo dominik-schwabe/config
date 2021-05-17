@@ -48,8 +48,8 @@ zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::git.zsh
-zinit light "$HOME/.shell_plugins/pyenv"
-zinit light "$HOME/.shell_plugins/n"
+zinit ice wait'0' lucid
+zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
 zinit ice wait'0' lucid
@@ -115,21 +115,19 @@ my_git_prompt_info() {
 PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f$(my_git_prompt_info)%b >>> '
 
 get_python_version() {
-    if [ "$ENABLE_PYENV" = "true" ] ; then
-        COMMAND=$(pyenv version-name 2>/dev/null)
-        RET=$?
-        [ $RET = "0" ] && { echo "$COMMAND"; return; }
-        [ $RET = "127" ] && {echo "$PYENV_VERSION"; return;}
-    fi
-    if command -v python &>/dev/null; then
-        echo "system"
+    if [ "$ASDF_ENABLED" = "true" -a -n "$ASDF_PYTHON_VERSION" -a -e "$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION" ]; then
+        echo $ASDF_PYTHON_VERSION
     else
-        echo "none"
+        echo "system"
     fi
 }
 
 get_node_version() {
-    node --version 2>/dev/null || echo "none"
+    if [ "$ASDF_ENABLED" = "true" -a -n "$ASDF_NODEJS_VERSION" -a -e "$HOME/.asdf/installs/nodejs/$ASDF_NODEJS_VERSION" ]; then
+        echo $ASDF_NODEJS_VERSION
+    else
+        echo "system"
+    fi
 }
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %B%F{3}"

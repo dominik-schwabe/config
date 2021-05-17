@@ -9,10 +9,7 @@ set -o vi
 [ -r ~/.customrc ] && . ~/.customrc
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
-
-. "$HOME/.shell_plugins/pyenv/plugin.sh"
-. "$HOME/.shell_plugins/n/plugin.sh"
-[ -r "$PYENV_ROOT/completions/pyenv.bash" ] && source "$PYENV_ROOT/completions/pyenv.bash"
+. "$HOME/.shell_plugins/asdf/plugin.sh"
 
 RESET="\[\017\]"
 RED="\[\033[31;1m\]"
@@ -26,6 +23,4 @@ PROMPT_COLOR=$GREEN
 [ "$UID" == "0" ] && PROMPT_COLOR=$RED
 [ "$SSH_TTY" ] && PROMPT_COLOR=$YELLOW
 
-prompt_retrun_value() { RET=$?; [ "$RET" != "0" ] && echo "$RET "; }
-
-export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${RED}\$(prompt_retrun_value)${WHITE}>>> ${RESET}"
+export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${RED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>> ${RESET}"
