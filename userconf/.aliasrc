@@ -52,13 +52,14 @@ alias lssh='ssh -L 3000:localhost:3000 -L 5000:localhost:5000'
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 
-alias pyl='[ -n "$_ASDF_PYTHON_VERSION" -a "$ASDF_PYTHON_VERSION" = "system" ] && { export ASDF_PYTHON_VERSION=$_ASDF_PYTHON_VERSION; }'
-alias pys='[ -n "$ASDF_PYTHON_VERSION" -a "$ASDF_PYTHON_VERSION" != "system" ] && { export _ASDF_PYTHON_VERSION=$ASDF_PYTHON_VERSION; ASDF_PYTHON_VERSION=system; }'
+alias pyl='[ "$ASDF_PYTHON_VERSION" = "system" ] && if [ -z "$_ASDF_PYTHON_VERSION" ]; then unset ASDF_PYTHON_VERSION; else export ASDF_PYTHON_VERSION=$_ASDF_PYTHON_VERSION; unset _ASDF_PYTHON_VERSION; fi'
+alias pys='[ "$ASDF_PYTHON_VERSION" != "system" ] && { _ASDF_PYTHON_VERSION=$ASDF_PYTHON_VERSION; export ASDF_PYTHON_VERSION=system; }'
 alias pythonserver='python -m SimpleHTTPServer 8000'
-alias pip='post_pip_asdf() { pip ${@}; for i in ${@}; do [ "$i" = "install" ] && local IS_PIP_INSTALL=true; done; [ -n "$IS_PIP_INSTALL" -a "$ASDF_ENABLED" = "true" -a -n "$ASDF_PYTHON_VERSION" -a -e "$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION" ] && { echo "reshimming ..."; asdf reshim; } }; post_pip_asdf'
+alias pip='post_pip_asdf() { pip ${@}; for i in ${@}; do [ "$i" = "install" ] && local IS_PIP_INSTALL=true; done; [ -n "$IS_PIP_INSTALL" -a "$ASDF_ENABLED" = "true" ] && { echo "reshimming ..."; asdf reshim; } }; post_pip_asdf'
 
 alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
 alias rs="asdf reshim"
+alias e="extract"
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

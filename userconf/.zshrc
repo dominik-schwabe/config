@@ -52,7 +52,7 @@ zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::git.zsh
-zinit ice wait'!0' lucid
+# zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
@@ -114,20 +114,27 @@ my_git_prompt_info() {
 
 PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f$(my_git_prompt_info)%b >>> '
 
-get_python_version() {
-    if [ "$ASDF_ENABLED" = "true" -a -n "$ASDF_PYTHON_VERSION" -a -e "$HOME/.asdf/installs/python/$ASDF_PYTHON_VERSION" ]; then
-        echo $ASDF_PYTHON_VERSION
-    else
-        echo "system"
+_get_asdf_versions_prompt() {
+    VARIABLE_NAME="ASDF_$(tr '[a-z]' '[A-Z]' <<< $1)_VERSION"
+    if DEFINED_NAME=$(export -p "$VARIABLE_NAME") 2>/dev/null && [[ "$DEFINED_NAME" = 'export'* ]]; then
+        eval "local VERSIONS=\$$VARIABLE_NAME"
+        [ -n "$VERSIONS" ] && {
+            echo "$VERSIONS"
+            return 0
+        }
     fi
+    [ -r $HOME/.tool-versions ] || return 1
+    VERSIONS=$(sed -n -e "/^$1\s/{s/^$1\s//p;q}" < $HOME/.tool-versions)
+    [ -z "$VERSIONS" ] && return 1
+    echo $VERSIONS
+}
+
+get_python_version() {
+    _get_asdf_versions_prompt python || echo system
 }
 
 get_node_version() {
-    if [ "$ASDF_ENABLED" = "true" -a -n "$ASDF_NODEJS_VERSION" -a -e "$HOME/.asdf/installs/nodejs/$ASDF_NODEJS_VERSION" ]; then
-        echo $ASDF_NODEJS_VERSION
-    else
-        echo "system"
-    fi
+    _get_asdf_versions_prompt nodejs || echo system
 }
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %B%F{3}"
