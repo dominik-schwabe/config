@@ -25,14 +25,11 @@ if [ "$ASDF_ENABLED" = "true" ]; then
         asdf global $1 $(echo $VERSIONS)
     }
 
-    if [ -e $HOME/.asdf ] || git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf; then
-        . $HOME/.asdf/asdf.sh
+    export ASDF_DIR="$HOME/.asdf"
+    if [ -e $ASDF_DIR ] || git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR; then
+        PATH="$ASDF_DIR/bin:$PATH"
         for L in $ASDF_ENABLED_PLUGINS; do
             __setup_asdf $L
-            VERSIONS=($(echo $(_get_adsf_versions $L)))
-            for VERSION in $VERSIONS; do
-                PATH="$ASDF_DIR/installs/$L/$VERSION/bin:$PATH"
-            done
         done
         if [ "$ASDF_SPEED" = "true" ]; then
             for L in $ASDF_ENABLED_PLUGINS; do
@@ -41,6 +38,8 @@ if [ "$ASDF_ENABLED" = "true" ]; then
                     PATH="$ASDF_DIR/installs/$L/$VERSION/bin:$PATH"
                 done
             done
+        else
+            PATH="$ASDF_DIR/shims:$PATH"
         fi
     fi
 fi
