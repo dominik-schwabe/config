@@ -15,8 +15,9 @@ download_completion() {
     local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$COMPLETION_NAME
     if [ ! -r $COMPLETION_PATH ] && command -v curl 2>&1 >/dev/null; then
         echo "downloading $COMPLETION_NAME"
-        curl --create-dirs -sfLo $COMPLETION_PATH $1
+        curl --create-dirs -sfLo $COMPLETION_PATH $1 || return 1
         local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${COMPLETION_NAME}/{p;q}")
+        _INSTALLED_NEW_COMPLETION=true
         if [ -z "$NAME_IN_COMPDEF" ]; then
             sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
             sed -i "1 i\\#compdef ${COMPLETION_NAME}" $COMPLETION_PATH
@@ -27,11 +28,13 @@ download_completion() {
 command_completion() {
     [ ! -r $ZSH_COMPLETIONS_DIR/_$1 ] && command -v $1 2>&1 >/dev/null && {
         echo "generating completion '$@'"
-        $@ > $ZSH_COMPLETIONS_DIR/_$1
+        $@ > $ZSH_COMPLETIONS_DIR/_$1 || return 1
+        _INSTALLED_NEW_COMPLETION=true
     }
 }
 
 download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
+download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip post_pip_asdf
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
 download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
 download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl
@@ -43,7 +46,8 @@ KEYTIMEOUT=15
 
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
-zinit fpath -f $ZSH_COMPLETIONS_DIR
+[ "$_INSTALLED_NEW_COMPLETION" = "true" ] && zinit creinstall $ZSH_COMPLETIONS_DIR
+# zinit fpath -f $ZSH_COMPLETIONS_DIR
 zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
@@ -52,10 +56,6 @@ zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
-zinit ice wait'0' lucid
-zinit snippet OMZP::pip
-zinit ice wait'0' lucid
-zinit snippet OMZP::gitignore
 zinit ice wait'0' lucid
 zinit light "agkozak/zsh-z"
 zinit ice wait'0' lucid
