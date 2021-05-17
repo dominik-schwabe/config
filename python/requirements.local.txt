@@ -1,3 +1,5 @@
+setuptools
+wheel
 black
 ipdb
 ipython
@@ -7,6 +9,4 @@ neovim-remote
 pipenv
 pylint
 pynvim
-setuptools
 telegram-send
-wheel

@@ -48,7 +48,7 @@ zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::git.zsh
-zinit ice wait'0' lucid
+zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git

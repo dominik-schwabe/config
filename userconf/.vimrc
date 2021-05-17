@@ -538,13 +538,13 @@ nnoremap <silent> - :call MyResize(1)<CR>
 vnoremap p "_dP
 
 let g:python_host_prog = '/usr/bin/python2'
-if $PYENV_ROOT != "" && !empty(glob($PYENV_ROOT . '/shims/python2'))
-  let g:python_host_prog = $PYENV_ROOT . '/shims/python2'
+if $ASDF_DIR != "" && !empty(glob($ASDF_DIR . '/shims/python2'))
+  let g:python_host_prog = $ASDF_DIR . '/shims/python2'
 endif
 
 let g:python3_host_prog = '/usr/bin/python3'
-if $PYENV_ROOT != "" && !empty(glob($PYENV_ROOT . '/shims/python3'))
-  let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
+if $ASDF_DIR != "" && !empty(glob($ASDF_DIR . '/shims/python3'))
+  let g:python3_host_prog = $ASDF_DIR . '/shims/python3'
 endif
 
 

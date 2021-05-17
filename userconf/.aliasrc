@@ -52,13 +52,12 @@ alias lssh='ssh -L 3000:localhost:3000 -L 5000:localhost:5000'
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 
-alias pyl="export PYENV_VERSION=$PYENV_VERSION"
-alias pys="export PYENV_VERSION=system"
+alias pyl='[ -n "$_ASDF_PYTHON_VERSION" -a "$ASDF_PYTHON_VERSION" = "system" ] && { export ASDF_PYTHON_VERSION=$_ASDF_PYTHON_VERSION; }'
+alias pys='[ -n "$ASDF_PYTHON_VERSION" -a "$ASDF_PYTHON_VERSION" != "system" ] && { export _ASDF_PYTHON_VERSION=$ASDF_PYTHON_VERSION; ASDF_PYTHON_VERSION=system; }'
 alias pythonserver='python -m SimpleHTTPServer 8000'
 
-alias install_python='pyenv install --skip-existing $PYENV_VERSION'
-alias install_node='fnm use $FNM_VERSION --install-if-missing'
 alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
+alias rs="asdf reshim"
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

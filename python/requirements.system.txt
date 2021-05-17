@@ -1,12 +1,11 @@
+setuptools
+wheel
 basiciw
 colour
 dbus-python
 git+https://github.com/enkore/i3pystatus.git
 iwlib
 netifaces
-netifaces
-psutil
 psutil
 pynvim
 pytz
-wheel
