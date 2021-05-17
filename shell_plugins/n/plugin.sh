@@ -1,4 +1,6 @@
 if [ "$ENABLE_N" = "true" ]; then
+    export N_PREFIX="$HOME/.n"
+    export PATH="$N_PREFIX/bin:$PATH"
     _install_n() {
         if ! npm install -g n 2>/dev/null; then
             if command -v curl &>/dev/null; then

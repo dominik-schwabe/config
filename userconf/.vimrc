@@ -143,7 +143,9 @@ Plug 'wellle/targets.vim'
 "textobj for indents
 Plug 'michaeljsmith/vim-indent-object'
 "% match more
-Plug 'andymass/vim-matchup', { 'for': ['html', 'xml'] }
+Plug 'andymass/vim-matchup'
+"faster merge line
+Plug 'AndrewRadev/splitjoin.vim'
 call plug#end()
 
 
@@ -153,10 +155,6 @@ call plug#end()
 " --- Begin Plugin Configuration ---
 " ----------------------------------
 
-"vim-rooter
-"let g:rooter_use_lcd = 1
-let g:rooter_manual_only = 1
-autocmd VimEnter * :Rooter
 
 "vim-matchup
 let g:matchup_matchparen_enabled = 1
@@ -166,12 +164,7 @@ let g:lt_height = 10
 nmap <silent> ä :LToggle<CR>
 nmap <silent> Ö :QToggle<CR>
 
-"test-vim
-let test#strategy = "asyncrun_background_term"
-let test#python#runner = 'pytest'
-
 "easymotion
-"nmap Ö <Plug>(easymotion-overwin-f)
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 nmap m <Plug>(easymotion-overwin-f)
@@ -189,15 +182,8 @@ map gz* <Plug>(asterisk-gz*)
 map z#  <Plug>(asterisk-z#)
 map gz# <Plug>(asterisk-gz#)
 
-" riv
-let g:riv_disable_folding = 1
-let g:riv_disable_indent = 1
-
 "pythonsense
 let g:is_pythonsense_suppress_motion_keymaps = 1
-
-"easy align
-vmap <Enter> <Plug>(EasyAlign)
 
 "rainbow
 let g:rainbow_active = 1
@@ -293,9 +279,6 @@ let g:ale_fixers = {
 \}
 nnoremap <F9> :ALEFix<CR>
 inoremap <F9> <ESC>:ALEFix<CR>
-
-"solarized colorscheme
-let g:solarized_termcolors = 256
 
 "lightline
 set laststatus=2
@@ -555,15 +538,15 @@ nnoremap <silent> - :call MyResize(1)<CR>
 vnoremap p "_dP
 
 let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/bin/python3'
-if $PYENV_HOME != "" && $PYENV_VERSION != ""
-  let python_path = $PYENV_HOME . '/versions/' . $PYENV_VERSION . '/bin/python'
-  if $PYENV_VERSION =~ "^3.*$"
-    let g:python3_host_prog = python_path
-  elseif $PYENV_VERSION =~ "^2.*$"
-    let g:python_host_prog = python_path
-  endif
+if $PYENV_ROOT != "" && !empty(glob($PYENV_ROOT . '/shims/python2'))
+  let g:python_host_prog = $PYENV_ROOT . '/shims/python2'
 endif
+
+let g:python3_host_prog = '/usr/bin/python3'
+if $PYENV_ROOT != "" && !empty(glob($PYENV_ROOT . '/shims/python3'))
+  let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
+endif
+
 
 colorscheme monokai-phoenix
 syntax on

@@ -42,13 +42,11 @@ CUSTOM_PATH="$HOME/.customrc"
 if [ -e "$CUSTOM_PATH" ]; then
     if ! [ -d "$CUSTOM_PATH" ]; then
         echo -e "${BLUE}exists${RESET}"
-    elif [ -n "$FORCE" ]; then
-        rm -rf $CUSTOM_PATH
     else
         echo -e "${RED}failure${RESET}"
     fi
 fi
 if ! [ -e "$CUSTOM_PATH" ]; then
-    touch "$CUSTOM_PATH"
+    cp ./customrc "$CUSTOM_PATH"
     echo -e "${GREEN}success${RESET}"
 fi

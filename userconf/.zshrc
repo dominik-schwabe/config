@@ -48,6 +48,8 @@ zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::git.zsh
+zinit light "$HOME/.shell_plugins/pyenv"
+zinit light "$HOME/.shell_plugins/n"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
 zinit ice wait'0' lucid
@@ -68,15 +70,13 @@ zinit ice wait'0' lucid
 zinit light "MichaelAquilina/zsh-you-should-use"
 zinit ice wait'0' lucid
 zinit light "kutsan/zsh-system-clipboard"
-zinit ice wait'!0' lucid atload'[ -r "$PYENV_ROOT/completions/pyenv.zsh" ] && source "$PYENV_ROOT/completions/pyenv.zsh"'
-zinit light "$HOME/.shell_plugins/pyenv"
-zinit ice wait'!0' lucid
-zinit light "$HOME/.shell_plugins/n"
 zinit ice wait'0' lucid atload'zicompinit'
 zinit light "zsh-users/zsh-completions"
 #zinit light "lukechilds/zsh-better-npm-completion"
 #zinit light "zdharma/history-search-multi-word"
 #zinit light "zsh-users/zsh-autosuggestions"
+
+[ -r "$PYENV_ROOT/completions/pyenv.zsh" ] && source "$PYENV_ROOT/completions/pyenv.zsh"
 
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
