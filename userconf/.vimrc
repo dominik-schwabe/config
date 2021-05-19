@@ -426,10 +426,16 @@ function SendParagraph()
     endif
 endfunction
 
+function SendSelection()
+  let lines = join(getline("'<", "'>"), "\r\n") . "\r\n"
+  echom lines
+  call ripple#command("", "", lines)
+endfunction
+
 function StartRepl()
   nmap <space> <Plug>(ripple_send_line)j
-  vmap <space> <Plug>(ripple_send_selection)
-  nmap <C-space> :call SendParagraph()<cr>
+  vmap <space> :<c-u>call SendSelection()<cr>
+  nmap <C-space> :<c-u>call SendParagraph()<cr>
   xmap <localleader><space> <Plug>(ripple_send_buffer)
   call ripple#open_repl(1)
 endfunction
