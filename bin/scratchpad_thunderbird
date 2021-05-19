@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
-if [[ $(i3-msg -t get_tree | jq ".. | select(.name? == \"__i3_scratch\") | .. | select(.class? == \"Thunderbird\" and .instance? == \"Mail\")") ]]
+TITLE=".*Mozilla Thunderbird"
+INSTANCE="Mail"
+CLASS="Thunderbird"
+SELECTOR="[instance=\"$INSTANCE\" class=\"$CLASS\" title=\"$TITLE\"]"
+if [[ $(i3-msg -t get_tree | jq ".. | select(.name? == \"__i3_scratch\") | .. | select(.class? == \"Thunderbird\" and .instance? == \"Mail\" )") ]]
 then
-    i3-msg "[instance=\"Mail\" class=\"Thunderbird\"] scratchpad show; [instance=\"Mail\" class=\"Thunderbird\"] resize set width 90 ppt height 90 ppt; [instance=\"Mail\" class=\"Thunderbird\"] move position center;"
+    i3-msg "$SELECTOR scratchpad show; $SELECTOR resize set width 90 ppt height 90 ppt; $SELECTOR move position center;"
 else
-    i3-msg "[instance=\"Mail\" class=\"Thunderbird\"] move scratchpad"
+    i3-msg "$SELECTOR move scratchpad"
 fi

@@ -1,56 +1,23 @@
 set cmdheight=2
-
-function MakeDir(path)
-  silent call system('mkdir -p ' . a:path)
-  return v:shell_error
-endfunction
-
-function DownloadWithWget(url, savepath)
-  echom 'wget: downloading ' . a:url . ' to ' . a:savepath
-  silent call system('wget -O ' . a:savepath . ' ' . a:url)
-  return v:shell_error
-endfunction
-
-function DownloadWithCurl(url, savepath)
-  echom 'curl: downloading ' . a:url . ' to ' . a:savepath
-  silent call system('wget -O ' . a:savepath . ' ' . a:url)
-  silent call system('curl --create-dirs -fLo ' . a:savepath . ' ' . a:url)
-  return v:shell_error
-endfunction
-
-function InstallVimPlug()
-  let l:dirname = '$HOME/.vim/autoload/'
-  let l:path = l:dirname . 'plug.vim'
-  if !empty(glob(l:path))
-    return
-  endif
-  let l:url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  echom 'installing plug.vim'
-  if MakeDir(l:dirname) != 0
-    echom 'failure creating directory ' . l:dirname
-    return
-  endif
-  echom
-  if DownloadWithWget(l:url, l:path) == 0 || DownloadWithCurl(l:url, l:path) == 0
-    echom 'success downloading plug.vim'
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  else
-    echom 'failure downloading plug.vim'
-  endif
-endfunction
-
-function ExecuteCommand(command, message)
-  echom a:message
-  silent call system(a:command)
-  if v:shell_error != 0
-    echom 'failure '. a:message
-  endif
-  return v:shell_error
-endfunction
-
-call InstallVimPlug()
-
 let g:polyglot_disabled = ['latex', 'tex']
+
+
+function InstallPluginManager()
+  let l:directory = '$HOME/.vim/autoload/'
+  let l:path = l:directory . 'plug.vim'
+  if !empty(glob(l:path)) | return | endif
+  let l:url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  echom 'installing plugin manager'
+  silent call system('mkdir -p ' . l:directory)
+  if v:shell_error | echom 'failure creating directory for plugin manager'  | return | endif
+  silent call system('curl --create-dirs -fLo ' . l:path . ' ' . l:url)
+  if v:shell_error | silent call system('wget -O ' . l:path . ' ' . l:url) | endif
+  if v:shell_error | echom 'failure installing plugin manager' | return | endif
+  echom 'success installing plugin manager'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endfunction
+
+call InstallPluginManager()
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
@@ -121,9 +88,8 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'junegunn/fzf', { 'on': 'FZF' }
 Plug 'junegunn/fzf.vim', { 'on': 'FZF' }
 "R ide
-Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 "send commands to console
-Plug 'jalvesaq/vimcmdline'
+Plug 'urbainvaes/vim-ripple'
 "latex ide ( requires: 'pip install neovim-remote' )
 Plug 'lervag/vimtex'
 if has("nvim")
@@ -312,20 +278,6 @@ autocmd FileType tex :NoMatchParen
 "polyglot
 let g:python_highlight_space_errors = 0
 
-"vimcmdline
-let cmdline_esc_term = 0
-let cmdline_vsplit = 1
-let cmdline_in_buffer = 1
-let cmdline_term_width = 67
-let cmdline_map_send = '<space>'
-let cmdline_map_send_paragraph = '<C-space>'
-let cmdline_map_source_fun = '<LocalLeader><space>'
-
-let cmdline_app = {}
-let cmdline_app['python'] = 'ipython'
-nnoremap <F4> :lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
-inoremap <F4> <ESC>:lcd %:p:h<CR>:call VimCmdLineStartApp()<CR>
-
 "semshi
 let g:semshi#mark_selected_nodes = 0
 let g:semshi#simplify_markup = v:false
@@ -404,19 +356,6 @@ let g:coc_global_extensions = [
 \  'coc-yaml',
 \]
 
-"Nvim-R
-let R_in_buffer = 1
-let R_notmuxconf = 1
-let R_esc_term = 0
-let R_close_term = 1
-let R_min_editor_width = -80
-autocmd VimEnter * if exists(':RSend') | noremap <space> :call SendParagraphToR('silent', 'down')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap <C-space> :call SendLineToR('down')<CR>| endif
-"autocmd VimEnter * if exists(':RSend') | noremap <C-s> :call SendFileToR('silent')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZR :call StartR('R')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZE :call RQuit('nosave')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZH :call RAction('help')<CR>| endif
-autocmd VimEnter * if exists(':RSend') | noremap ZV :call RAction('viewdf')<CR>| endif
 
 "argwrap
 nnoremap Y :ArgWrap<CR>
@@ -461,6 +400,41 @@ let g:zoomwintab_remap = 0
 
 "eregex.vim
 let g:eregex_default_enable = 0
+
+"vim-ripple
+let g:ripple_enable_mappings = 0
+
+function SendParagraph()
+    let i = line(".")
+    let c = col(".")
+    let max = line("$")
+    let j = i
+    let gotempty = 0
+    while j < max
+        let j += 1
+        let line = getline(j)
+        if line =~ '^\s*$'
+            break
+        endif
+    endwhile
+    let lines = join(getline(i, j), "\r\n")
+    call ripple#command("", "", lines)
+    if j < max
+        call cursor(j, 1)
+    else
+        call cursor(max, 1)
+    endif
+endfunction
+
+function StartRepl()
+  nmap <space> <Plug>(ripple_send_line)j
+  vmap <space> <Plug>(ripple_send_selection)
+  nmap <C-space> :call SendParagraph()<cr>
+  xmap <localleader><space> <Plug>(ripple_send_buffer)
+  call ripple#open_repl(1)
+endfunction
+
+nmap <F4> :call StartRepl()<cr>
 
 " --------------------------------
 " --- End Plugin Configuration ---
@@ -510,6 +484,7 @@ endfunction
 nnoremap <silent> <F10> :call Term_toggle(10)<cr>
 inoremap <silent> <F10> <ESC>:call Term_toggle(10)<cr>
 tnoremap <silent> <F10> <C-\><C-n>:call Term_toggle(10)<cr>
+
 
 "smart resize
 function MyResize(dir)
@@ -612,9 +587,9 @@ tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
 tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 if has("nvim")
   set termguicolors
-  au TermOpen * setlocal nonumber norelativenumber signcolumn=no scrolloff=0
-  autocmd TermOpen,BufWinEnter,WinEnter term://* startinsert
-  autocmd TermClose term://* exec "bwipeout! " . expand("<abuf>")
+  au TermOpen * setlocal nonumber norelativenumber signcolumn=no
+  autocmd TermOpen,BufWinEnter,WinEnter term:* startinsert
+  autocmd TermClose term:* exec "bwipeout! " . expand("<abuf>")
 endif
 
 "terminal colors
@@ -634,6 +609,7 @@ let g:terminal_color_12 = '#5f87af'
 let g:terminal_color_13 = '#f92672'
 let g:terminal_color_14 = '#66d9ef'
 let g:terminal_color_15 = '#f8f8f2'
+let g:neoterm_direct_open_repl=1
 
 "nvim-colorizer
 if has("nvim")

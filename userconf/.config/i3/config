@@ -311,10 +311,10 @@ for_window [title="___todo___"] move position center;
 for_window [title="___todo___"] sticky enable
 bindsym $mod+Shift+underscore exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"noremap Q :qa<CR>\\"'"
 
-for_window [instance="Mail" class="Thunderbird"] floating enabled
-for_window [instance="Mail" class="Thunderbird"] move scratchpad
-for_window [instance="Mail" class="Thunderbird"] border pixel 5
-for_window [instance="Mail" class="Thunderbird"] sticky enable
+for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
+for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
+for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] border pixel 5
+for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] sticky enable
 bindsym $mod+adiaeresis exec --no-startup-id "~/.bin/scratchpad_thunderbird"
 
 exec --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
