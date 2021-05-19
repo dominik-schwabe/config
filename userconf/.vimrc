@@ -409,18 +409,32 @@ function SendParagraph()
     let c = col(".")
     let max = line("$")
     let j = i
+    let res = i
     let gotempty = 0
+    let last_was_empty = 0
     while j < max
         let j += 1
         let line = getline(j)
         if line =~ '^\s*$'
+          if last_was_empty == 0
+            let res = j
+            let last_number_of_space = strlen(substitute(lastline, "^\\( \\+\\).*$", "\\1", "g"))
+            if last_number_of_space == 0 | break | endif
+          endif
+          let last_was_empty = 1
+        else
+          if last_was_empty == 1 && !(strlen(substitute(line, "^\\( \\+\\).*$", "\\1", "g")) == last_number_of_space)
             break
+          endif
+          let res = j
+          let last_was_empty = 0
         endif
+        let lastline = line
     endwhile
-    let lines = join(getline(i, j), "\r\n")
+    let lines = join(getline(i, res), "\r\n")
     call ripple#command("", "", lines)
-    if j < max
-        call cursor(j, 1)
+    if res < max
+        call cursor(res, 1)
     else
         call cursor(max, 1)
     endif
@@ -428,7 +442,6 @@ endfunction
 
 function SendSelection()
   let lines = join(getline("'<", "'>"), "\r\n") . "\r\n"
-  echom lines
   call ripple#command("", "", lines)
 endfunction
 
