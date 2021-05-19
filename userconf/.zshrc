@@ -1,26 +1,23 @@
 # clone pluginmanager if not exist
-[ ! -d ~/.zinit/bin ] && git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+[ -d ~/.zinit/bin ] || git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
 
 [ -r ~/.envrc ] && . ~/.envrc
 [ -r ~/.customrc ] && . ~/.customrc
 [ -r ~/.aliasrc ] && . ~/.aliasrc
 
 ZSH_COMPLETIONS_DIR=$HOME/.zsh-completions
-[ ! -d $ZSH_COMPLETIONS_DIR ] && mkdir $ZSH_COMPLETIONS_DIR
+[ -d $ZSH_COMPLETIONS_DIR ] || mkdir $ZSH_COMPLETIONS_DIR
 
 download_completion() {
-    local COMPLETION_NAME=$(basename $1)
-    local COMPLETION_NAME=${COMPLETION_NAME:1}
-    local COMPLETION_NAME=${2-$COMPLETION_NAME}
-    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$COMPLETION_NAME
+    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$2
     if [ ! -r $COMPLETION_PATH ] && command -v curl 2>&1 >/dev/null; then
-        echo "downloading $COMPLETION_NAME"
+        echo "downloading $2"
         curl --create-dirs -sfLo $COMPLETION_PATH $1 || return 1
-        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${COMPLETION_NAME}/{p;q}")
+        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${2}/{p;q}")
         _INSTALLED_NEW_COMPLETION=true
         if [ -z "$NAME_IN_COMPDEF" ]; then
             sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
-            sed -i "1 i\\#compdef ${COMPLETION_NAME}" $COMPLETION_PATH
+            sed -i "1 i\\#compdef ${2}" $COMPLETION_PATH
         fi
     fi
 }
@@ -33,11 +30,11 @@ command_completion() {
     }
 }
 
-download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
-download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip post_pip_asdf
-download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv
-download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
-download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl
+download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            pip
+download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            post_pip_asdf
+download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv               pipenv
+download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z           7z
+download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl youtube-dl
 command_completion kubectl completion zsh
 
 COMPLETION_WAITING_DOTS="true"
@@ -47,12 +44,11 @@ KEYTIMEOUT=15
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
 [ "$_INSTALLED_NEW_COMPLETION" = "true" ] && zinit creinstall $ZSH_COMPLETIONS_DIR
-# zinit fpath -f $ZSH_COMPLETIONS_DIR
 zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
 zinit snippet OMZL::git.zsh
-# zinit ice wait'!0' lucid
+zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
@@ -75,8 +71,6 @@ zinit light "zsh-users/zsh-completions"
 #zinit light "lukechilds/zsh-better-npm-completion"
 #zinit light "zdharma/history-search-multi-word"
 #zinit light "zsh-users/zsh-autosuggestions"
-
-[ -r "$PYENV_ROOT/completions/pyenv.zsh" ] && source "$PYENV_ROOT/completions/pyenv.zsh"
 
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 

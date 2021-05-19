@@ -31,13 +31,19 @@ if [ "$ASDF_ENABLED" = "true" ]; then
         for L in $ASDF_ENABLED_PLUGINS; do
             __setup_asdf $L
         done
-        if [ "$ASDF_SPEED" = "true" ]; then
+        if [ "$ASDF_TURBO" = "true" ]; then
             for L in $ASDF_ENABLED_PLUGINS; do
                 VERSIONS=($(echo $(_get_adsf_versions $L)))
                 for VERSION in $VERSIONS; do
-                    PATH="$ASDF_DIR/installs/$L/$VERSION/bin:$PATH"
+                    _VERSION_PATH="$ASDF_DIR/installs/$L/$VERSION/bin"
+                    if [ -z "$ASDF_TURBO_PATH" ]; then
+                        ASDF_TURBO_PATH=$_VERSION_PATH
+                    else
+                        ASDF_TURBO_PATH="$ASDF_TURBO_PATH:$_VERSION_PATH"
+                    fi
                 done
             done
+            [ -n "$ASDF_TURBO_PATH" ] && PATH="$ASDF_TURBO_PATH:$PATH"
         else
             PATH="$ASDF_DIR/shims:$PATH"
         fi

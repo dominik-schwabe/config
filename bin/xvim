@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-if [ -z $@ ]; then
-    echo "no file specified"
-    exit 1
-fi
-
-nvim --cmd "au VimEnter *.py :call VimCmdLineStartApp()" $1

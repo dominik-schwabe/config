@@ -8,10 +8,6 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="
-clang
-jq
-gnome-keyring
-inetutils
 alsa
 alsa-tools
 alsa-utils
@@ -23,6 +19,7 @@ base-devel
 bash-completion
 bluez
 bluez-utils
+clang
 cmake
 cmus
 cups
@@ -34,11 +31,14 @@ dosfstools
 efibootmgr
 gcc-fortran
 git
+gnome-keyring
 grub
 gutenprint
 gvfs
 gvfs-mtp
 gvim
+inetutils
+jq
 linux-firmware
 linux-zen
 mtpfs
@@ -57,14 +57,14 @@ python-pip
 rsync
 sshfs
 sudo
+tcl
+tk
 tmux
 unzip
 usbutils
 wget
 zip
 zsh
-tcl
-tk
 "
 
 GRAPHIC="

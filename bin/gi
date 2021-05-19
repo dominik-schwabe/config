@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-gi() curl -fLw '\n' https://www.gitignore.io/api/"${(j:,:)@}"
+curl -fLw '\n' https://www.gitignore.io/api/$(tr ' ' ',' <<< "$@") 2>/dev/null

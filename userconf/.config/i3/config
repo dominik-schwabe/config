@@ -210,8 +210,8 @@ bindsym $mod+less exec --no-startup-id playerctl previous
 bindsym $mod+y exec --no-startup-id playerctl play-pause
 bindsym $mod+x exec --no-startup-id playerctl next
 
-bindsym XF86Launch1 exec --no-startup-id ~/.bin/nolidswitchtoggle
-bindsym $mod+odiaeresis exec --no-startup-id pgrep $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
+bindsym XF86Launch1 exec --no-startup-id ~/.bin/nolidswitch
+bindsym $mod+odiaeresis exec --no-startup-id pgrep -u $UID $webbrowser || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
 bindsym $mod+period resize set width 360 px height 240 px; move container position 1006 px 0
 bindsym $mod+Shift+period resize set width 360 px height 240 px; move container position 0 0
 bindsym $mod+plus resize grow right 40 px; resize grow down 20 px
@@ -227,8 +227,8 @@ bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+udiaeresis move workspace to output right
 bindsym $mod+Tab workspace $ws1
 bindsym $mod+d exec --no-startup-id rofi -show drun
-bindsym $mod+F1 exec --no-startup-id exec bash -c "pkill picom || picom -b"
-bindsym --release $mod+numbersign exec --no-startup-id xkill
+bindsym $mod+F1 exec --no-startup-id killall picom || picom -b
+bindsym --release $mod+numbersign exec --no-startup-id killall xkill || xkill
 
 
 default_border pixel 1
