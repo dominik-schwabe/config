@@ -23,6 +23,25 @@ for file in $(find userconf -not -type d -printf '%P '); do
     ./create_symlink.sh $FORCE $CURRPATH/userconf/$file $HOME/$file
 done
 echo
+echo -n "redshift config"
+
+if LOCATION=$(curl -sL https://ipinfo.io/loc); then
+    LAT=$(echo $LOCATION | cut -f1 -d,)
+    LON=$(echo $LOCATION | cut -f2 -d,)
+echo "[redshift]
+temp-day=6500
+temp-night=3500
+location-provider=manual
+adjustment-method=vidmode
+
+[manual]
+lat=$LAT
+lon=$LON" > "$HOME/.config/redshift.conf"
+    echo -e " ${GREEN}success${RESET}"
+else
+    echo -e " ${RED}failure${RESET}"
+fi
+echo
 echo "tool setup"
 for file in $CURRPATH/tools/*; do
     echo -n "$(basename $file)"

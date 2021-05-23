@@ -73,7 +73,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "colorschemes
-Plug 'reewr/vim-monokai-phoenix'
+Plug 'crusoexia/vim-monokai'
 "better language behavior
 Plug 'sheerun/vim-polyglot'
 "completion
@@ -116,11 +116,15 @@ call plug#end()
 
 
 
-
 " ----------------------------------
 " --- Begin Plugin Configuration ---
 " ----------------------------------
 
+
+
+"monokai
+let g:monokai_gui_italic = 1
+let g:monokai_term_italic = 1
 
 "vim-matchup
 let g:matchup_matchparen_enabled = 1
@@ -402,6 +406,11 @@ let g:zoomwintab_remap = 0
 let g:eregex_default_enable = 0
 
 "vim-ripple
+let g:ripple_term_name = "term:// ripple"
+let g:ripple_repls = {
+\ "javascript": "node",
+\}
+
 let g:ripple_enable_mappings = 0
 
 function SendParagraph()
@@ -410,39 +419,48 @@ function SendParagraph()
     let max = line("$")
     let j = i
     let res = i
-    let gotempty = 0
+    let line = substitute(getline(i), "\t", repeat(" ", &tabstop), "g")
+    let indentation_of_first_line = strlen(substitute(line, "^\\( *\\).*$", "\\1", "g"))
     let last_was_empty = 0
     while j < max
         let j += 1
         let line = getline(j)
         if line =~ '^\s*$'
-          if last_was_empty == 0
-            let res = j
-            let last_number_of_space = strlen(substitute(lastline, "^\\( \\+\\).*$", "\\1", "g"))
-            if last_number_of_space == 0 | break | endif
-          endif
           let last_was_empty = 1
         else
-          if last_was_empty == 1 && !(strlen(substitute(line, "^\\( \\+\\).*$", "\\1", "g")) == last_number_of_space)
+          let line = substitute(line, "\t", repeat(" ", &tabstop), "g")
+          if last_was_empty == 1 && strlen(substitute(line, "^\\( *\\).*$", "\\1", "g")) <= indentation_of_first_line
             break
           endif
           let res = j
           let last_was_empty = 0
         endif
-        let lastline = line
     endwhile
-    let lines = join(getline(i, res), "\r\n")
-    call ripple#command("", "", lines)
-    if res < max
-        call cursor(res, 1)
+    let lines = join(filter(getline(i, res), "v:val !~ '^\\s*$'"), "\<cr>")
+    if len(lines)
+      let lastline = substitute(getline(res), "\t", repeat(" ", &tabstop), "g")
+      echom getline(res)
+      if strlen(substitute(lastline, "^\\( *\\).*$", "\\1", "g")) > indentation_of_first_line
+        let lines .= "\<cr>"
+      endif
+      call ripple#command("", "", lines)
+    endif
+    if j < max
+        call cursor(j, 1)
     else
         call cursor(max, 1)
     endif
 endfunction
 
 function SendSelection()
-  let lines = join(getline("'<", "'>"), "\r\n") . "\r\n"
-  call ripple#command("", "", lines)
+  let lines = filter(getline("'<", "'>"), "v:val !~ '^\\s*$'")
+  if len(lines)
+    let num_last_line_string = strlen(substitute(lines[-1], "^\\(\\s*\\).*$", "\\1", "g"))
+    echom num_last_line_string
+    let lines = join(lines, "\<cr>")
+    if num_last_line_string != 0 | let lines .= "\<cr>" | endif
+    call ripple#command("", "", lines)
+  endif
 endfunction
 
 function StartRepl()
@@ -467,14 +485,14 @@ let g:myLang = 0
 let g:myLangList = ['en_us', 'de_de']
 function! MySpellLang()
   let g:myLang = (g:myLang + 1) % (len(g:myLangList) + 1)
-  :if g:myLang == 0
-    :set nospell
-    :echo "nospell"
-  :else
-    :silent set spell
-    :silent let &spelllang=g:myLangList[g:myLang-1]
-    :echo "language:" g:myLangList[g:myLang-1]
-  :endif
+  if g:myLang == 0
+    set nospell
+    echo "nospell"
+  else
+    silent set spell
+    silent let &spelllang=g:myLangList[g:myLang-1]
+    echo "language:" g:myLangList[g:myLang-1]
+  endif
 endf
 nnoremap <F7> :call MySpellLang()<CR>
 inoremap <F7> <ESC>:call MySpellLang()<CR>
@@ -541,8 +559,19 @@ if $ASDF_DIR != "" && !empty(glob($ASDF_DIR . '/shims/python2'))
   let g:python_host_prog = $ASDF_DIR . '/shims/python2'
 endif
 
-colorscheme monokai-phoenix
+if (has("nvim")) | let $NVIM_TUI_ENABLE_TRUE_COLOR=1 | endif
+if (has("termguicolors")) | set termguicolors | endif
+
+colorscheme monokai
+set background=dark
+set t_Co=256
 syntax on
+if has("nvim")
+  hi LineNr guibg=none
+  hi Normal guibg=none
+  hi SignColumn guibg=none
+endif
+hi clear Conceal
 
 set splitbelow
 set splitright
@@ -570,12 +599,10 @@ set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
-set background=dark
 set backspace=indent,eol,start
 set relativenumber
 set nobackup
 set nowritebackup
-set t_Co=256
 set ttyfast
 
 noremap <F12> :ZoomWinTabToggle<CR>
@@ -594,9 +621,8 @@ vmap > >gv
 
 let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
-autocmd FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+au FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
@@ -604,11 +630,11 @@ tnoremap <C-k> <C-\><C-n><C-W>k
 tnoremap <C-l> <C-\><C-n><C-W>l
 tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
 tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
+
 if has("nvim")
-  set termguicolors
   au TermOpen * setlocal nonumber norelativenumber signcolumn=no
-  autocmd TermOpen,BufWinEnter,WinEnter term:* startinsert
-  autocmd TermClose term:* exec "bwipeout! " . expand("<abuf>")
+  au TermOpen,BufWinEnter,WinEnter term://* startinsert
+  au TermClose term://* exec "bwipeout! " . expand("<abuf>")
 endif
 
 "terminal colors
@@ -628,7 +654,6 @@ let g:terminal_color_12 = '#5f87af'
 let g:terminal_color_13 = '#f92672'
 let g:terminal_color_14 = '#66d9ef'
 let g:terminal_color_15 = '#f8f8f2'
-let g:neoterm_direct_open_repl=1
 
 "nvim-colorizer
 if has("nvim")

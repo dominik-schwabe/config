@@ -5,49 +5,11 @@
 [ -r ~/.customrc ] && . ~/.customrc
 [ -r ~/.aliasrc ] && . ~/.aliasrc
 
-ZSH_COMPLETIONS_DIR=$HOME/.zsh-completions
-[ -d $ZSH_COMPLETIONS_DIR ] || mkdir $ZSH_COMPLETIONS_DIR
-
-download_completion() {
-    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$2
-    if [ ! -r $COMPLETION_PATH ] && command -v curl 2>&1 >/dev/null; then
-        echo "downloading $2"
-        curl --create-dirs -sfLo $COMPLETION_PATH $1 || return 1
-        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${2}/{p;q}")
-        _INSTALLED_NEW_COMPLETION=true
-        if [ -z "$NAME_IN_COMPDEF" ]; then
-            sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
-            sed -i "1 i\\#compdef ${2}" $COMPLETION_PATH
-        fi
-    fi
-}
-
-command_completion() {
-    [ ! -r $ZSH_COMPLETIONS_DIR/_$1 ] && command -v $1 2>&1 >/dev/null && {
-        echo "generating completion '$@'"
-        $@ > $ZSH_COMPLETIONS_DIR/_$1 || return 1
-        _INSTALLED_NEW_COMPLETION=true
-    }
-}
-
-download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            pip
-download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            post_pip_asdf
-download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv               pipenv
-download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z           7z
-download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl youtube-dl
-command_completion kubectl completion zsh
-
 COMPLETION_WAITING_DOTS="true"
-bgnotify_threshold=5
-KEYTIMEOUT=15
-
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
-[ "$_INSTALLED_NEW_COMPLETION" = "true" ] && zinit creinstall $ZSH_COMPLETIONS_DIR
 zinit light "dominik-schwabe/vi-mode.zsh"
-zinit snippet OMZL::theme-and-appearance.zsh
 zinit snippet OMZL::completion.zsh
-zinit snippet OMZL::git.zsh
 zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
@@ -72,6 +34,7 @@ zinit light "zsh-users/zsh-completions"
 #zinit light "zdharma/history-search-multi-word"
 #zinit light "zsh-users/zsh-autosuggestions"
 
+[[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 bindkey -M vicmd 'k' history-substring-search-up
@@ -99,14 +62,8 @@ PROMPT_COLOR=${DEFAULT_COLOR:-green}
 [ "$UID" = "0" ] && PROMPT_COLOR=${ROOT_COLOR:-red}
 [ "$SSH_TTY" ] && PROMPT_COLOR=${SSH_COLOR:-blue}
 
-my_git_prompt_info() {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-    GIT_STATUS=$(git_prompt_status)
-    [[ $GIT_STATUS ]] && GIT_STATUS=" $GIT_STATUS"
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$GIT_STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX"
-}
-
-PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f$(my_git_prompt_info)%b >>> '
+git_prompt_info() { ref=$(git symbolic-ref HEAD 2> /dev/null) && echo " ${ref#refs/heads/}" }
+PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B%F{3}$(git_prompt_info)%f%b%b >>> '
 
 _get_asdf_versions_prompt() {
     VARIABLE_NAME="ASDF_$(tr '[a-z]' '[A-Z]' <<< $1)_VERSION"
@@ -123,26 +80,12 @@ _get_asdf_versions_prompt() {
     echo $VERSIONS
 }
 
-get_python_version() {
-    _get_asdf_versions_prompt python || echo system
-}
-
-get_node_version() {
-    _get_asdf_versions_prompt nodejs || echo system
-}
-
-ZSH_THEME_GIT_PROMPT_PREFIX=" %B%F{3}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%f%b"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%%"
-ZSH_THEME_GIT_PROMPT_ADDED="+"
-ZSH_THEME_GIT_PROMPT_MODIFIED="*"
-ZSH_THEME_GIT_PROMPT_RENAMED="~"
-ZSH_THEME_GIT_PROMPT_DELETED="!"
-ZSH_THEME_GIT_PROMPT_UNMERGED="?"
+get_python_version() { _get_asdf_versions_prompt python || echo system }
+get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
 RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
 # theme end
 
-setopt hist_ignore_dups hist_ignore_space interactivecomments noextendedhistory nosharehistory
+setopt hist_ignore_dups hist_ignore_space interactivecomments noextendedhistory nosharehistory auto_cd multios prompt_subst
 
 exit_zsh() { exit }
 zle -N exit_zsh

@@ -69,6 +69,7 @@ zsh
 
 GRAPHIC="
 thunderbird
+firefox
 accountsservice
 alacritty
 android-file-transfer
@@ -78,7 +79,6 @@ discord
 dunst
 evince
 feh
-firefox
 flameshot
 i3-wm
 i3lock
@@ -87,7 +87,7 @@ lightdm
 lightdm-gtk-greeter
 nm-connection-editor
 nomacs
-noto-fonts
+ttf-fira-mono
 pavucontrol
 perl-file-mimeinfo
 picom
@@ -127,9 +127,9 @@ texlive-most
 "
 
 AURPKG="
+birdtray
 cht.sh
 jmtpfs
-birdtray
 "
 
 installyay() {
@@ -147,24 +147,14 @@ INSTALLAUR=0
 while getopts "abglu" o &> /dev/null
 do
     case $o in
-        "a")
-            INSTALLBASE=1
-            INSTALLGRAPHICAL=1
-            INSTALLLATEX=1
-            INSTALLAUR=1
-            ;;
-        "b")
-            INSTALLBASE=1
-            ;;
-        "g")
-            INSTALLGRAPHICAL=1
-            ;;
-        "l")
-            INSTALLLATEX=1
-            ;;
-        "u")
-            INSTALLAUR=1
-            ;;
+        "a") INSTALLBASE=1
+             INSTALLGRAPHICAL=1
+             INSTALLLATEX=1
+             INSTALLAUR=1 ;;
+        "b") INSTALLBASE=1 ;;
+        "g") INSTALLGRAPHICAL=1 ;;
+        "l") INSTALLLATEX=1 ;;
+        "u") INSTALLAUR=1 ;;
     esac
 done
 
@@ -209,7 +199,7 @@ else
         echo
         echo $INSTALLSTRING
         echo
-        su -c "pacman -S $INSTALLSTRING" || exit 1
+        su -c "pacman -S --needed $INSTALLSTRING" || exit 1
     fi
 
     if [ $INSTALLBASE -eq 1 ]
@@ -218,8 +208,5 @@ else
         installyay
     fi
 
-    if [ $INSTALLAUR -eq 1 ]
-    then
-        yay -S $AURPKG
-    fi
+    [ $INSTALLAUR -eq 1 ] && yay -S --needed $AURPKG
 fi

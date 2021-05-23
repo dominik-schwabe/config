@@ -1,30 +1,43 @@
+env:
+  TERM: xterm-256color
+
 font:
   size: 9
+  normal:
+    family: Fira Mono
+    style: Regular
+  bold:
+    family: Fira Mono
+    style: Bold
+  italic:
+    family: Fira Mono
+    style: Italic
+  bold_italic:
+    family: Fira Mono
+    style: Bold Italic
   offset:
     x: 0
     y: 1
-  normal:
-    family: Noto Sans Mono
-  bold:
-    family: Noto Sans Mono
-  italic:
-    family: Noto Sans Mono
 
 # shell:
 #     program: /usr/bin/tmux
 #     args:
 #      - -u # force UTF-8 in tmux
+tabspaces: 4
 
 windows:
   decorations: none
+  padding:
+    x: 2
+    y: 2
 
 mouse:
   hide_when_typing: true
 
 colors:
   cursor:
-      text:   '#000000'
-      cursor: '#dddddd'
+    text:   '#000000'
+    cursor: '#dddddd'
 
   primary:
     background: '#111111'

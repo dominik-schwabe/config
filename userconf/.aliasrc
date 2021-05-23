@@ -11,6 +11,7 @@ alias tmux='tmux -u'
 
 alias ip='ip -color'
 
+alias ls='ls --color=tty'
 alias la='ls -A'
 alias ll='ls -l'
 alias lr="find -type f -exec basename {} \;"
