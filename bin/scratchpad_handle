@@ -2,8 +2,8 @@
 WINDOWNAME=$1
 shift
 SIZE=$1
+shift
 if ! xprop -name "$WINDOWNAME" 2>&1 >/dev/null; then
-    shift
     eval "$@" &!
 else
     if [[ $(i3-msg -t get_tree | jq ".. | select(.name? == \"__i3_scratch\") | .. | select(.name? == \"$WINDOWNAME\")") ]]

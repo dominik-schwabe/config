@@ -293,7 +293,7 @@ for_window [class="Steam" title=".*Steam - News.*"] move position center
 for_window [title="___dropdownterminal___"] floating enabled
 for_window [title="___dropdownterminal___"] border pixel 5
 for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
-for_window [title="___dropdownterminal___"] move position center;
+for_window [title="___dropdownterminal___"] move position center
 for_window [title="___dropdownterminal___"] sticky enable
 bindsym $mod+asciicircum exec --no-startup-id "~/.bin/scratchpad_handle ___dropdownterminal___ 80 $term -t ___dropdownterminal___ -o font.size=10"
 

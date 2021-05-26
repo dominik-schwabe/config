@@ -107,14 +107,14 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
-_pacman_update() {
-    LBUFFER="sudo pacman -Syu"
+_yay_update() {
+    LBUFFER="yay -Syu"
     RBUFFER=""
     zle accept-line
 }
 
-zle -N _pacman_update
-bindkey -M vicmd '^[[15~' _pacman_update
-bindkey -M viins '^[[15~' _pacman_update
-bindkey -M vicmd '^[[[E' _pacman_update
-bindkey -M viins '^[[[E' _pacman_update
+zle -N _yay_update
+bindkey -M vicmd '^[[15~' _yay_update
+bindkey -M viins '^[[15~' _yay_update
+bindkey -M vicmd '^[[[E' _yay_update
+bindkey -M viins '^[[[E' _yay_update
