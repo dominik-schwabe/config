@@ -1,7 +1,6 @@
 set cmdheight=2
 let g:polyglot_disabled = ['latex', 'tex']
 
-
 function InstallPluginManager()
   let l:directory = '$HOME/.vim/autoload/'
   let l:path = l:directory . 'plug.vim'
@@ -175,7 +174,7 @@ function SearchFilesRegex()
   let l:search = input("Search in files: ")
   call inputrestore()
   if !empty(l:search)
-    exec 'Ack ' . substitute(escape(search, ' '), '^-', '\[-\]', '')
+    exec 'Ack -i ' . substitute(escape(search, ' '), '^-', '\[-\]', '')
   endif
 endfunction
 nnoremap _ :call SearchFilesRegex()<CR>
@@ -195,6 +194,7 @@ tnoremap <silent> <F1> <C-\><C-n>:NERDTreeToggle<CR>
 nnoremap <silent> gt :NERDTreeFind<CR>
 
 "NERDCommenter
+let g:NERDCreateDefaultMappings = 0
 let g:NERDDefaultAlign='start'
 let g:NERDSpaceDelims = 1
 nmap gc <Plug>NERDCommenterToggle
@@ -654,6 +654,22 @@ let g:terminal_color_12 = '#5f87af'
 let g:terminal_color_13 = '#f92672'
 let g:terminal_color_14 = '#66d9ef'
 let g:terminal_color_15 = '#f8f8f2'
+
+function LatexSubstitude()
+  %s/\v\$.{-}\$/Udo/ge
+  %s/\v\\ref\{.{-}\}/eins/ge
+  %s/\v\\cite\{.{-}\}//ge
+  %s/\v\\.{-}\{.{-}\}/Udo/ge
+  %s/\v[ ]+.{-}\{.{-}\}/Udo/ge
+  %s/\v ?\\//ge
+  %s/\v +\././ge
+  %s/\v +\,/,/ge
+  %s/\v[^a-zA-Z0-9üäöß.?!(),]/ /ge
+  %s/\v +/ /ge
+endfunction
+
+" latex clean text for grammar check
+noremap <silent> gl :silent call LatexSubstitude()<cr>
 
 "nvim-colorizer
 if has("nvim")

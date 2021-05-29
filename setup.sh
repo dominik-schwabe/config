@@ -66,6 +66,31 @@ if [ -e "$CUSTOM_PATH" ]; then
     fi
 fi
 if ! [ -e "$CUSTOM_PATH" ]; then
-    cp ./customrc "$CUSTOM_PATH"
+    TEMP_FILE=$(mktemp)
+    echo "FILE 0
+    NORMAL 0
+    RESET 0
+    DIR 01;34
+    LINK 01;36
+    MULTIHARDLINK 00
+    FIFO 40;33
+    SOCK 01;35
+    DOOR 01;35
+    BLK 40;33;01
+    CHR 40;33;01
+    ORPHAN 40;31;01
+    MISSING 00
+    SETUID 37;41
+    SETGID 30;43
+    CAPABILITY 30;41
+    STICKY_OTHER_WRITABLE 30;42
+    OTHER_WRITABLE 34;42
+    STICKY 37;44
+    EXEC 01;32" > $TEMP_FILE
+    curl -sL https://raw.githubusercontent.com/trapd00r/LS_COLORS/master/LS_COLORS | sed -e '/^\(FILE\|NORMAL\|RESET\|DIR\|LINK\|MULTIHARDLINK\|FIFO\|SOCK\|DOOR\|BLK\|CHR\|ORPHAN\|MISSING\|SETUID\|SETGID\|CAPABILITY\|STICKY_OTHER_WRITABLE\|OTHER_WRITABLE\|STICKY\|EXEC\)\(\s.*\)\?$/d' >> $TEMP_FILE
+    dircolors -b $TEMP_FILE > $CUSTOM_PATH
+    cat ./customrc >> "$CUSTOM_PATH"
+    rm $TEMP_FILE
     echo -e "${GREEN}success${RESET}"
 fi
+
