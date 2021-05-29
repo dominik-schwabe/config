@@ -62,8 +62,14 @@ PROMPT_COLOR=${DEFAULT_COLOR:-green}
 [ "$UID" = "0" ] && PROMPT_COLOR=${ROOT_COLOR:-red}
 [ "$SSH_TTY" ] && PROMPT_COLOR=${SSH_COLOR:-blue}
 
-git_prompt_info() { ref=$(git symbolic-ref HEAD 2> /dev/null) && echo " ${ref#refs/heads/}" }
-PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B%F{3}$(git_prompt_info)%f%b%b >>> '
+git_prompt_info() {
+    if ref=$(git symbolic-ref HEAD 2>&1); then
+        echo " %F{3}${ref#refs/heads/}%f"
+    else
+        [ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ] && echo " %F{1}no branch%f"
+    fi
+}
+PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
 
 _get_asdf_versions_prompt() {
     VARIABLE_NAME="ASDF_$(tr '[a-z]' '[A-Z]' <<< $1)_VERSION"
