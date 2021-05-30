@@ -184,18 +184,20 @@ function SearchFilesRegex()
 endfunction
 
 nnoremap _ :call SearchFilesRegex()<cr>
-runtime plugin/grepper.vim
-let g:grepper.tools = ['rg', 'git', 'grep']
-let g:grepper.rg.grepprg .= ' -i'
-let g:grepper.git.grepprg .= 'i'
-let g:grepper.grep.grepprg .= ' -i'
-let g:grepper.prompt = 0
-let g:grepper.highlight = 1
-let g:grepper.stop = 1000
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
-nnoremap <c-_> :Grepper -cword<cr>
-xmap <c-_> <plug>(GrepperOperator)
+if !empty(globpath(&rtp, '/plugin/grepper.vim'))
+  runtime plugin/grepper.vim
+  let g:grepper.tools = ['rg', 'git', 'grep']
+  let g:grepper.rg.grepprg .= ' -i'
+  let g:grepper.git.grepprg .= 'i'
+  let g:grepper.grep.grepprg .= ' -i'
+  let g:grepper.prompt = 0
+  let g:grepper.highlight = 1
+  let g:grepper.stop = 1000
+  nmap gs <plug>(GrepperOperator)
+  xmap gs <plug>(GrepperOperator)
+  nnoremap <c-_> :Grepper -cword<cr>
+  xmap <c-_> <plug>(GrepperOperator)
+endif
 
 "NERDTree
 let NERDTreeQuitOnOpen=1

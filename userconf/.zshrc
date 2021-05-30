@@ -7,11 +7,12 @@
 [ -r ~/.aliasrc ] && . ~/.aliasrc
 
 COMPLETION_WAITING_DOTS="true"
+ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::completion.zsh
-zinit ice wait'!0' lucid
+zinit ice wait'0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
@@ -27,7 +28,7 @@ zinit ice wait'0' lucid
 zinit light "zdharma/fast-syntax-highlighting"
 zinit ice wait'0' lucid
 zinit light "MichaelAquilina/zsh-you-should-use"
-zinit ice wait'0' lucid
+zinit ice wait'0' lucid silent
 zinit light "kutsan/zsh-system-clipboard"
 zinit ice wait'0' lucid atload'zicompinit'
 zinit light "zsh-users/zsh-completions"
