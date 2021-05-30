@@ -83,6 +83,7 @@ curl -sL https://raw.githubusercontent.com/trapd00r/LS_COLORS/master/LS_COLORS |
 sed -i "s/\b38;5;074;1\b/38;5;127/g" $TEMP_FILE # js
 sed -i "s/\b38;5;40\b/01;31/g" $TEMP_FILE # archive
 sed -i "s/\b38;5;81\b/38;5;40/g" $TEMP_FILE # c
+sed -i "s/\b38;5;110\b/38;5;208/g" $TEMP_FILE # h
 sed -i "s/\b38;5;184\b/38;5;30/g" $TEMP_FILE # tex
 dircolors -b $TEMP_FILE > $GENERATED_PATH
 rm $TEMP_FILE

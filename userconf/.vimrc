@@ -1,3 +1,6 @@
+" let g:rooter_cd_cmd = 'lcd'
+let g:rooter_change_directory_for_non_project_files = 'current'
+let g:rooter_patterns = [">site-packages"]
 set cmdheight=2
 let g:polyglot_disabled = ['latex', 'tex']
 
@@ -181,7 +184,7 @@ endfunction
 
 nnoremap _ :call SearchFilesRegex()<cr>
 runtime plugin/grepper.vim
-let g:grepper.tools = ['git', 'rg', 'grep']
+let g:grepper.tools = ['rg', 'git', 'grep']
 let g:grepper.rg.grepprg .= ' -i'
 let g:grepper.git.grepprg .= 'i'
 let g:grepper.grep.grepprg .= ' -i'
@@ -623,6 +626,7 @@ noremap <right> <C-W>L
 noremap <up> <C-W>K
 noremap <down> <C-W>J
 nnoremap <silent> ö :noh<CR>
+noremap <c-g> 1<c-g>
 
 vmap < <gv
 vmap > >gv
