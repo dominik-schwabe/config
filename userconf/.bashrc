@@ -5,8 +5,9 @@ shopt -u autocd
 set -o vi
 
 [ -r ~/.envrc ] && . ~/.envrc
-[ -r ~/.aliasrc ] && . ~/.aliasrc
 [ -r ~/.customrc ] && . ~/.customrc
+[ -r ~/.genrc ] && . ~/.genrc
+[ -r ~/.aliasrc ] && . ~/.aliasrc
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
 . "$HOME/.shell_plugins/asdf/plugin.sh"

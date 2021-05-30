@@ -21,7 +21,7 @@ call InstallPluginManager()
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
 "greplike search
-Plug 'wincent/ferret'
+Plug 'mhinz/vim-grepper'
 "html expansion
 Plug 'mattn/emmet-vim'
 "multiple cursors
@@ -168,19 +168,27 @@ let g:rainbow_conf = {
 \}
 
 
-"ferret
+"vim-grepper
 function SearchFilesRegex()
   call inputsave()
   let l:search = input("Search in files: ")
   call inputrestore()
   if !empty(l:search)
-    exec 'Ack -i ' . substitute(escape(search, ' '), '^-', '\[-\]', '')
+    exec "Grepper -query '" . l:search . "'"
+    call histdel("@", -1)
   endif
 endfunction
-nnoremap _ :call SearchFilesRegex()<CR>
-nmap <leader>a <Plug>(FerretAckWord)
-let g:FerretMap = 0
-let g:FerretMaxResults=1000
+
+nnoremap _ :call SearchFilesRegex()<cr>
+runtime plugin/grepper.vim
+let g:grepper.tools = ['git', 'rg', 'grep']
+let g:grepper.rg.grepprg .= ' -i'
+let g:grepper.git.grepprg .= 'i'
+let g:grepper.grep.grepprg .= ' -i'
+let g:grepper.prompt = 0
+let g:grepper.highlight = 1
+let g:grepper.stop = 1000
+nmap <leader>a :Grepper -cword<cr>
 
 "NERDTree
 let NERDTreeQuitOnOpen=1

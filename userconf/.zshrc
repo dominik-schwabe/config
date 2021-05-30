@@ -3,6 +3,7 @@
 
 [ -r ~/.envrc ] && . ~/.envrc
 [ -r ~/.customrc ] && . ~/.customrc
+[ -r ~/.genrc ] && . ~/.genrc
 [ -r ~/.aliasrc ] && . ~/.aliasrc
 
 COMPLETION_WAITING_DOTS="true"
