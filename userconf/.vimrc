@@ -1,4 +1,3 @@
-" let g:rooter_cd_cmd = 'lcd'
 let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_patterns = [">site-packages"]
 set cmdheight=2
@@ -23,6 +22,8 @@ call InstallPluginManager()
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+"heuristically set buffer options
+" Plug 'tpope/vim-sleuth'
 "greplike search
 Plug 'mhinz/vim-grepper'
 "html expansion
@@ -191,7 +192,10 @@ let g:grepper.grep.grepprg .= ' -i'
 let g:grepper.prompt = 0
 let g:grepper.highlight = 1
 let g:grepper.stop = 1000
-nmap <leader>a :Grepper -cword<cr>
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+nnoremap <c-_> :Grepper -cword<cr>
+xmap <c-_> <plug>(GrepperOperator)
 
 "NERDTree
 let NERDTreeQuitOnOpen=1
@@ -591,9 +595,9 @@ set number
 set cursorline
 set ignorecase
 
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set autoindent
 set smartindent
 set expandtab
@@ -616,11 +620,13 @@ set nobackup
 set nowritebackup
 set ttyfast
 
+au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 noremap <F12> :ZoomWinTabToggle<CR>
 inoremap <F12> <ESC>:ZoomWinTabToggle<CR>
 noremap Q :qa<CR>
-noremap <silent> gs :vnew<CR>
-noremap <silent> gS :new<CR>
+" noremap <silent> gs :vnew<CR>
+" noremap <silent> gS :new<CR>
 noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K
@@ -634,7 +640,7 @@ vmap > >gv
 let PYTHONUNBUFFERED=1
 let $PYTHONUNBUFFERED=1
 
-au FileType tex,json,yaml,html,htmldjango,javascript,vim,c,cpp,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 indentexpr=""
+au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 indentexpr=""
 
 tnoremap <C-h> <C-\><C-n><C-W>h
 tnoremap <C-j> <C-\><C-n><C-W>j
