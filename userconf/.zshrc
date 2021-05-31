@@ -12,7 +12,7 @@ ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::completion.zsh
-zinit ice wait'0' lucid
+zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git

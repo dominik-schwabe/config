@@ -1,5 +1,3 @@
-let g:rooter_change_directory_for_non_project_files = 'current'
-let g:rooter_patterns = [">site-packages"]
 set cmdheight=2
 let g:polyglot_disabled = ['latex', 'tex']
 
@@ -123,7 +121,9 @@ call plug#end()
 " --- Begin Plugin Configuration ---
 " ----------------------------------
 
-
+"rooter
+let g:rooter_change_directory_for_non_project_files = 'current'
+let g:rooter_patterns = [">site-packages"]
 
 "monokai
 let g:monokai_gui_italic = 1
@@ -690,6 +690,7 @@ endfunction
 
 " latex clean text for grammar check
 noremap <silent> gl :silent call LatexSubstitude()<cr>
+nnoremap db dvb
 
 "nvim-colorizer
 if has("nvim")
