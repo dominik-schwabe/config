@@ -66,6 +66,7 @@ alias te="trans -brief de:en"
 alias td="trans -brief en:de"
 alias rs="asdf reshim"
 alias e="extract"
+alias pr='pr -n -c -m -t -w $(($(tput cols) - 10))'
 
 alias ev="vim ~/.config/nvim/init.lua"
 
