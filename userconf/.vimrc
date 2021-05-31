@@ -566,14 +566,12 @@ nnoremap <silent> - :call MyResize(1)<CR>
 
 vnoremap p "_dP
 
+let g:loaded_python_provider = 0
+let g:loaded_ruby_provider = 0
+
 let g:python3_host_prog = '/usr/bin/python3'
 if $ASDF_DIR != "" && !empty(glob($ASDF_DIR . '/shims/python3'))
   let g:python3_host_prog = $ASDF_DIR . '/shims/python3'
-endif
-
-let g:python_host_prog = '/usr/bin/python2'
-if $ASDF_DIR != "" && !empty(glob($ASDF_DIR . '/shims/python2'))
-  let g:python_host_prog = $ASDF_DIR . '/shims/python2'
 endif
 
 if (has("nvim")) | let $NVIM_TUI_ENABLE_TRUE_COLOR=1 | endif

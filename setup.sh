@@ -30,7 +30,7 @@ if LOCATION=$(curl -sL https://ipinfo.io/loc); then
     LON=$(echo $LOCATION | cut -f2 -d,)
 echo "[redshift]
 temp-day=6500
-temp-night=3000
+temp-night=2700
 location-provider=manual
 adjustment-method=vidmode
 
