@@ -1,17 +1,20 @@
 # clone pluginmanager if not exist
-[ -d ~/.zinit/bin ] || git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+[[ -d ~/.zinit/bin ]] || git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
 
-[ -r ~/.envrc ] && . ~/.envrc
-[ -r ~/.customrc ] && . ~/.customrc
-[ -r ~/.genrc ] && . ~/.genrc
-[ -r ~/.aliasrc ] && . ~/.aliasrc
+[[ -r ~/.envrc ]] && . ~/.envrc
+[[ -r ~/.customrc ]] && . ~/.customrc
+[[ -r ~/.genrc ]] && . ~/.genrc
+[[ -r ~/.aliasrc ]] && . ~/.aliasrc
+
+echo -n "\e[6 q"
 
 COMPLETION_WAITING_DOTS="true"
 ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
-zinit light "dominik-schwabe/vi-mode.zsh"
 zinit snippet OMZL::completion.zsh
+zinit ice wait'0' lucid
+zinit light "dominik-schwabe/vi-mode.zsh"
 zinit ice wait'!0' lucid
 zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
@@ -61,31 +64,37 @@ ROOT_COLOR="161"
 SSH_COLOR="214"
 
 PROMPT_COLOR=${DEFAULT_COLOR:-green}
-[ "$UID" = "0" ] && PROMPT_COLOR=${ROOT_COLOR:-red}
-[ "$SSH_TTY" ] && PROMPT_COLOR=${SSH_COLOR:-blue}
+[[ "$UID" = "0" ]] && PROMPT_COLOR=${ROOT_COLOR:-red}
+[[ "$SSH_TTY" ]] && PROMPT_COLOR=${SSH_COLOR:-blue}
 
 git_prompt_info() {
     if ref=$(git symbolic-ref HEAD 2>&1); then
         echo " %F{3}${ref#refs/heads/}%f"
     else
-        [ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ] && echo " %F{1}no branch%f"
+        [[ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ]] && echo " %F{1}no branch%f"
     fi
 }
 PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
 
+declare -u _GET_ASDF_VERSION_VARIABLE_NAME
 _get_asdf_versions_prompt() {
-    VARIABLE_NAME="ASDF_$(tr '[a-z]' '[A-Z]' <<< $1)_VERSION"
-    if DEFINED_NAME=$(export -p "$VARIABLE_NAME") 2>/dev/null && [[ "$DEFINED_NAME" = 'export'* ]]; then
-        eval "local VERSIONS=\$$VARIABLE_NAME"
-        [ -n "$VERSIONS" ] && {
-            echo "$VERSIONS"
+    _GET_ASDF_VERSION_VARIABLE_NAME=ASDF_$1_VERSION
+    if DEFINED_NAME=$(export -p "$_GET_ASDF_VERSION_VARIABLE_NAME") 2>/dev/null && [[ "$DEFINED_NAME" = 'export'* ]]; then
+        eval "_VERSIONS=\$$_GET_ASDF_VERSION_VARIABLE_NAME"
+        [[ -n "$_VERSIONS" ]] && {
+            echo "$_VERSIONS"
             return 0
         }
     fi
-    [ -r $HOME/.tool-versions ] || return 1
-    VERSIONS=$(sed -n -e "/^$1\s/{s/^$1\s//p;q}" < $HOME/.tool-versions)
-    [ -z "$VERSIONS" ] && return 1
-    echo $VERSIONS
+    [[ -r $HOME/.tool-versions ]] || return 1
+    while read LINE; do
+        IFS=" " read _ASDF_PROG_NAME _ASDF_PROG_VERSION <<< $LINE;
+        if [[ "$_ASDF_PROG_NAME" = $1 ]]; then
+            echo "$_ASDF_PROG_VERSION"
+            return 0
+        fi
+    done < "$HOME/.tool-versions"
+    return 1
 }
 
 get_python_version() { _get_asdf_versions_prompt python || echo system }
