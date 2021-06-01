@@ -128,7 +128,6 @@ texlive-most
 
 AURPKG="
 birdtray
-cht.sh
 jmtpfs
 "
 
@@ -138,11 +137,6 @@ installyay() {
     cd $YAYPATH
     makepkg -si
 }
-
-INSTALLBASE=0
-INSTALLGRAPHICAL=0
-INSTALLLATEX=0
-INSTALLAUR=0
 
 while getopts "abglu" o &> /dev/null
 do
@@ -158,55 +152,44 @@ do
     esac
 done
 
-PACMAN=0
-AUR=0
-
 INSTALLSTRING=""
-if [ $INSTALLBASE -eq 1 ]
-then
+if [ -n "$INSTALLBASE" ]; then
     echo -e "install ${RED}base${RESET}"
     INSTALLSTRING="${INSTALLSTRING} ${BASE}"
-    PACMAN=1
 fi
 
-if [ $INSTALLGRAPHICAL -eq 1 ]
-then
+if [ -n "$INSTALLGRAPHICAL" ]; then
     echo -e "install ${GREEN}graphical${RESET}"
     INSTALLSTRING="${INSTALLSTRING} ${GRAPHIC}"
-    PACMAN=1
 fi
 
-if [ $INSTALLLATEX -eq 1 ]
-then
+if [ -n "$INSTALLLATEX" ]; then
     echo -e "install ${ORANGE}latex${RESET}"
     INSTALLSTRING="${INSTALLSTRING} ${LATEX}"
-    PACMAN=1
 fi
 
-if [ $INSTALLAUR -eq 1 ]
-then
-    echo -e "install ${BLUE}aur${RESET}"
-fi
+[ -n "$INSTALLAUR" ] && echo -e "install ${BLUE}aur${RESET}"
 
-INSTALLSTRING=$((tr "\n" " " | sed -e "s/\s\+/ /g" -e "s/^\s\+|\s\+$//g") <<< $INSTALLSTRING)
+INSTALLSTRING=$(echo -n $INSTALLSTRING | tr "\n" " " | sed -e "s/\s\+/ /g" -e "s/^\s\+|\s\+$//g")
+AURPKG=$(echo -n $AURPKG | tr "\n" " " | sed -e "s/\s\+/ /g" -e "s/^\s\+|\s\+$//g")
 
-if [ $PACMAN -eq 0 -a $INSTALLAUR -eq 0 ]
-then
+if [ -z "$INSTALLSTRING" -a -z "$INSTALLAUR" ]; then
     echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -l (${ORANGE}latex${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
-else
-    if [ $PACMAN -eq 1 ]
-    then
-        echo
-        echo $INSTALLSTRING
-        echo
+    exit 1
+fi
+if [ -n "$INSTALLSTRING" ]; then
+    echo "$INSTALLSTRING"
+    if command -v sudo &>/dev/null; then
+        sudo pacman -S --needed $INSTALLSTRING || exit 1
+    else
         su -c "pacman -S --needed $INSTALLSTRING" || exit 1
     fi
-
-    if [ $INSTALLBASE -eq 1 ]
-    then
-        echo -e "installing ${BLUE}yay${RESET}"
-        installyay
-    fi
-
-    [ $INSTALLAUR -eq 1 ] && yay -S --needed $AURPKG
+fi
+if ! command -v yay &>/dev/null; then
+    echo -e "installing ${BLUE}yay${RESET}"
+    installyay || exit 1
+fi
+if [ -n "$INSTALLAUR" ]; then
+    echo "$AURPKG"
+    yay -S --needed $AURPKG || exit 1
 fi

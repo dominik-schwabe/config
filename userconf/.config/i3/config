@@ -321,7 +321,7 @@ exec --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id flameshot
 exec --no-startup-id telegram-desktop -startintray
 exec --no-startup-id discord --start-minimized
-exec --no-startup-id "sleep 3; birdtray"
+exec --no-startup-id "sleep 5; birdtray"
 
 assign [class="firefox"] $ws1
 assign [title="___startup_terminal___"] $ws2

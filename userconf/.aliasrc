@@ -19,15 +19,13 @@ alias l='ls -CF'
 
 alias vim='nvim'
 alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
-alias xvim='nvim -c ":ALEDisable | :call VimCmdLineStartApp()"'
-alias pxvim='pipenv run nvim -c ":ALEDisable | :call VimCmdLineStartApp()"'
-alias oldvim='/usr/bin/vim'
+alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no" -O'
+alias oldvim='/usr/bin/env vim'
 
 alias p='ipython'
 
 alias services-enabled='systemctl --type service --state enabled list-unit-files'
 alias services-disabled='systemctl --type service --state disabled list-unit-files'
-
 
 alias t='tmux attach -t 0 &>/dev/null || tmux new-session -t 0'
 alias ta='tmux attach -t'
@@ -60,15 +58,17 @@ alias pythonserver='python -m SimpleHTTPServer 8000'
 alias pip='post_pip_asdf() { pip ${@}; for i in ${@}; do [ "$i" = "install" ] && local IS_PIP_INSTALL=true; done; [ -n "$IS_PIP_INSTALL" -a "$ASDF_ENABLED" = "true" -a "$ASDF_TURBO" != "true" ] && { echo "reshimming ..."; asdf reshim; } }; post_pip_asdf'
 
 alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
-alias install_treesitter="cargo install --git https://github.com/tree-sitter/tree-sitter.git"
-alias install_trans="curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans"
-alias te="trans -brief de:en"
-alias td="trans -brief en:de"
-alias rs="asdf reshim"
-alias e="extract"
+alias install_treesitter='cargo install --git https://github.com/tree-sitter/tree-sitter.git'
+alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'
+alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh  && chmod 755 ~/bin/cht.sh'
+alias install_tldr='npm install -g tldr'
+alias te='trans -brief de:en'
+alias td='trans -brief en:de'
+alias rs='asdf reshim'
+alias e='extract'
 alias pr='pr -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 
-alias ev="vim ~/.config/nvim/init.lua"
+alias ev='vim ~/.config/nvim/init.lua'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
