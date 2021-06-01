@@ -6,9 +6,9 @@ width = int(argv[1])
 file = argv[2]
 try:
     for line in open(file, "r"):
-        line = line.strip()[:width]
+        line = line.expandtabs(2).strip()[:width]
         print(line + " "*(width - len(line)))
 except (IOError, BrokenPipeError):
     stderr.close()'
 width=$(($(tput cols)/2 - 6))
-pr -n -m -t -J -S" | " <(python3 -c "$python_prog" "$width" "$1")  <(python3 -c "$python_prog" "$width" "$2")
+pr -i" " -n -m -t -J -S" | " <(python3 -c "$python_prog" "$width" "$1")  <(python3 -c "$python_prog" "$width" "$2")

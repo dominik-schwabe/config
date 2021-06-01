@@ -19,7 +19,7 @@ alias l='ls -CF'
 
 alias vim='nvim'
 alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
-alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no" -O'
+alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'
 alias oldvim='/usr/bin/env vim'
 
 alias p='ipython'
@@ -66,7 +66,7 @@ alias te='trans -brief de:en'
 alias td='trans -brief en:de'
 alias rs='asdf reshim'
 alias e='extract'
-alias pr='pr -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
+alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 
 alias ev='vim ~/.config/nvim/init.lua'
 

@@ -642,16 +642,26 @@ let $PYTHONUNBUFFERED=1
 
 au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 indentexpr=""
 
-tnoremap <C-h> <C-\><C-n><C-W>h
-tnoremap <C-j> <C-\><C-n><C-W>j
-tnoremap <C-k> <C-\><C-n><C-W>k
-tnoremap <C-l> <C-\><C-n><C-W>l
+function TermGoDirection(dir)
+  echo winnr(a:dir)
+  if winnr() != winnr(a:dir)
+    let b:term_was_insert = 1
+  endif
+  exec "normal \<C-W>" . a:dir
+endfunction
+
+tnoremap <silent> <C-h> <C-\><C-n>:call TermGoDirection("h")<cr>
+tnoremap <silent> <C-j> <C-\><C-n>:call TermGoDirection("j")<cr>
+tnoremap <silent> <C-k> <C-\><C-n>:call TermGoDirection("k")<cr>
+tnoremap <silent> <C-l> <C-\><C-n>:call TermGoDirection("l")<cr>
 tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
-tnoremap <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
+tnoremap <silent> <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 
 if has("nvim")
   au TermOpen * setlocal nonumber norelativenumber signcolumn=no
-  au TermOpen,BufWinEnter,WinEnter term://* startinsert
+  au BufNew term://* b:term_was_insert = 0
+  au BufEnter term://* if get(b:, "term_was_insert", 1) == 1 | startinsert | endif
+  au TermLeave term://* let b:term_was_insert = 0
   au TermClose term://* exec "bwipeout! " . expand("<abuf>")
 endif
 
