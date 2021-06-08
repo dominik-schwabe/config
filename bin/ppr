@@ -2,13 +2,22 @@
 
 python_prog='from sys import argv
 from sys import stdout, stderr
+import unicodedata
+printable = {"Mn", "Mc", "Me"}
 width = int(argv[1])
 file = argv[2]
+
+def filter_non_printable(str):
+  return "".join(c for c in str if unicodedata.category(c) not in printable)
+
 try:
     for line in open(file, "r"):
-        line = line.expandtabs(2).strip()[:width]
+        line = line.expandtabs(2).strip()
+        line = unicodedata.normalize("NFC", line)
+        line = filter_non_printable(line)
+        line = line[:width]
         print(line + " "*(width - len(line)))
 except (IOError, BrokenPipeError):
     stderr.close()'
 width=$(($(tput cols)/2 - 6))
-pr -i" " -n -m -t -J -S" | " <(python3 -c "$python_prog" "$width" "$1")  <(python3 -c "$python_prog" "$width" "$2")
+pr -i" " -n -m -t -J -S'| ' <(python3 -c "$python_prog" "$width" "$1")  <(python3 -c "$python_prog" "$width" "$2")

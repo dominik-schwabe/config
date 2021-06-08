@@ -69,9 +69,14 @@ PROMPT_COLOR=${DEFAULT_COLOR:-green}
 
 git_prompt_info() {
     if ref=$(git symbolic-ref HEAD 2>&1); then
-        echo " %F{3}${ref#refs/heads/}%f"
+        branch=${ref#refs/heads/}
+        if [[ "$branch" = "master" ]]; then
+            echo " %F{1}$branch%f"
+        else
+            echo " %F{3}$branch%f"
+        fi
     else
-        [[ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ]] && echo " %F{1}no branch%f"
+        [[ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ]] && echo " %F{14}no branch%f"
     fi
 }
 PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '

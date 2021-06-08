@@ -68,8 +68,6 @@ zsh
 "
 
 GRAPHIC="
-thunderbird
-firefox
 accountsservice
 alacritty
 android-file-transfer
@@ -79,6 +77,7 @@ discord
 dunst
 evince
 feh
+firefox
 flameshot
 i3-wm
 i3lock
@@ -87,7 +86,6 @@ lightdm
 lightdm-gtk-greeter
 nm-connection-editor
 nomacs
-ttf-fira-mono
 pavucontrol
 perl-file-mimeinfo
 picom
@@ -102,10 +100,12 @@ thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
 thunar-volman
+thunderbird
 ttf-arphic-ukai
 ttf-arphic-uming
 ttf-baekmuk
 ttf-dejavu
+ttf-fira-mono
 ttf-sazanami
 tumbler
 wireless_tools

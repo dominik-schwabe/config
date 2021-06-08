@@ -327,7 +327,11 @@ exec --no-startup-id "sleep 5; birdtray"
 
 assign [class="firefox"] $ws1
 assign [title="___startup_terminal___"] $ws2
+for_window [class="steam_app*"] move workspace $ws4
+for_window [class="steam_app*"] focus
 assign [class="Steam"] $ws3
+assign [title="Steam"] $ws3
+assign [class="Zenity"] $ws3
 assign [class="discord"] $ws7
 for_window [class="Spotify" workspace="^(?!$ws7$)"] move container to workspace $ws7
 
