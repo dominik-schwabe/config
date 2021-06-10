@@ -659,7 +659,7 @@ tnoremap <silent> <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
 
 if has("nvim")
   au TermOpen * setlocal nonumber norelativenumber signcolumn=no
-  au BufNew term://* b:term_was_insert = 0
+  au BufEnter term://* if !exists('b:term_was_insert') | let b:term_was_insert = 1 | endif
   au BufEnter term://* if get(b:, "term_was_insert", 1) == 1 | startinsert | endif
   au TermLeave term://* let b:term_was_insert = 0
   au TermClose term://* exec "bwipeout! " . expand("<abuf>")
