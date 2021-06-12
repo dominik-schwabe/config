@@ -20,6 +20,8 @@ zinit light "$HOME/.shell_plugins/asdf"
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
 zinit ice wait'0' lucid
+zinit snippet OMZP::pip
+zinit ice wait'0' lucid
 zinit light "agkozak/zsh-z"
 zinit ice wait'0' lucid
 zinit light "t413/zsh-background-notify"

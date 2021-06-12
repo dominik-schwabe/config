@@ -55,8 +55,6 @@ alias pyl='[ "$ASDF_PYTHON_VERSION" = "system" ] && if [ -z "$_ASDF_PYTHON_VERSI
 alias pys='[ "$ASDF_TURBO" != "true" ] && [ "$ASDF_PYTHON_VERSION" != "system" ] && { _ASDF_PYTHON_VERSION=$ASDF_PYTHON_VERSION; export ASDF_PYTHON_VERSION=system; }'
 alias pythonserver='python -m SimpleHTTPServer 8000'
 
-alias pip='post_pip_asdf() { pip ${@}; for i in ${@}; do [ "$i" = "install" ] && local IS_PIP_INSTALL=true; done; [ -n "$IS_PIP_INSTALL" -a "$ASDF_ENABLED" = "true" -a "$ASDF_TURBO" != "true" ] && { echo "reshimming ..."; asdf reshim; } }; post_pip_asdf'
-
 alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
 alias install_treesitter='cargo install --git https://github.com/tree-sitter/tree-sitter.git'
 alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'

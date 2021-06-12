@@ -123,7 +123,7 @@ call plug#end()
 
 "rooter
 let g:rooter_change_directory_for_non_project_files = 'current'
-let g:rooter_patterns = [">site-packages"]
+let g:rooter_patterns = ['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages']
 
 "monokai
 let g:monokai_gui_italic = 1
@@ -215,7 +215,7 @@ let g:NERDCreateDefaultMappings = 0
 let g:NERDDefaultAlign='start'
 let g:NERDSpaceDelims = 1
 nmap gc <Plug>NERDCommenterToggle
-vmap gc <Plug>NERDCommenterToggle gv
+vmap gc <Plug>NERDCommenterToggle\|gv
 
 "bufexplorer
 let g:bufExplorerDefaultHelp=0
@@ -646,6 +646,8 @@ function TermGoDirection(dir)
   echo winnr(a:dir)
   if winnr() != winnr(a:dir)
     let b:term_was_insert = 1
+  else
+    let b:term_was_insert = 0
   endif
   exec "normal \<C-W>" . a:dir
 endfunction
@@ -655,13 +657,12 @@ tnoremap <silent> <C-j> <C-\><C-n>:call TermGoDirection("j")<cr>
 tnoremap <silent> <C-k> <C-\><C-n>:call TermGoDirection("k")<cr>
 tnoremap <silent> <C-l> <C-\><C-n>:call TermGoDirection("l")<cr>
 tnoremap <silent> <F2> <C-\><C-n>:ToggleBufExplorer<CR>
-tnoremap <silent> <F12> <C-\><C-n>:ZoomWinTabToggle<CR>
+tnoremap <silent> <F12> <C-\><C-n>:ZoomWinTabToggle<CR>i
 
 if has("nvim")
   au TermOpen * setlocal nonumber norelativenumber signcolumn=no
   au BufEnter term://* if !exists('b:term_was_insert') | let b:term_was_insert = 1 | endif
   au BufEnter term://* if get(b:, "term_was_insert", 1) == 1 | startinsert | endif
-  au TermLeave term://* let b:term_was_insert = 0
   au TermClose term://* exec "bwipeout! " . expand("<abuf>")
 endif
 
