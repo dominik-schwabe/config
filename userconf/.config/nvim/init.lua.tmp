@@ -25,7 +25,7 @@ require('packer').startup(function()
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-compe'
   use 'othree/eregex.vim'
-  -- use 'andersevenrud/compe-tmux'
+  use 'andersevenrud/compe-tmux'
   use 'hrsh7th/vim-vsnip'
   use 'nvim-treesitter/nvim-treesitter'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
@@ -49,7 +49,7 @@ require('packer').startup(function()
   use 'christoomey/vim-tmux-navigator'
   use 'jlanzarotta/bufexplorer'
   use 'bronson/vim-trailing-whitespace'
-  -- use 'airblade/vim-rooter'
+  use 'airblade/vim-rooter'
   use 'tpope/vim-surround'
   use 'tpope/vim-repeat'
   use 'tpope/vim-fugitive'
@@ -378,6 +378,10 @@ map("", "_", ":call v:lua.SearchFilesRegex()<cr>", def_opt)
 map("", "<leader>a", "<Plug>(FerretAckWord)", def_opt)
 g.FerretMap = 0
 g.FerretMaxResults = 1000
+
+-- rooter
+g.rooter_change_directory_for_non_project_files = 'current'
+g.rooter_patterns = { '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages', 'package.json', 'package-lock.json' }
 
 -- bufexplorer
 g.bufExplorerDefaultHelp=0

@@ -123,7 +123,7 @@ call plug#end()
 
 "rooter
 let g:rooter_change_directory_for_non_project_files = 'current'
-let g:rooter_patterns = ['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages']
+let g:rooter_patterns = ['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages', 'package.json', 'package-lock.json']
 
 "monokai
 let g:monokai_gui_italic = 1

@@ -6,7 +6,7 @@ if [ "$ASDF_ENABLED" = "true" ]; then
             echo "plugin could not be added"
             return 1
         }
-        [[ -z "$VERSIONS" ]] || [[ "${_ASDF_VERSIONS[$1]}" = "$VERSIONS" ]] && return 0
+        [[ -z "$VERSIONS" ]] && return 0
         VERSIONS=($(echo $VERSIONS))
         for VERSION in $VERSIONS; do
             [[ -e $ASDF_DIR/installs/$1/$VERSION ]] && continue
@@ -16,6 +16,7 @@ if [ "$ASDF_ENABLED" = "true" ]; then
                 return 1
             }
         done
+        [[ "${_ASDF_VERSIONS[$1]}" = "$VERSIONS" ]] && return 0
         asdf global $1 $(echo $VERSIONS)
         _ASDF_VERSIONS[$1]=$VERSIONS
     }
