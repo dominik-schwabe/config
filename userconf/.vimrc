@@ -74,6 +74,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "colorschemes
+" Plug 'tanvirtin/monokai.nvim'
 Plug 'crusoexia/vim-monokai'
 "better language behavior
 Plug 'sheerun/vim-polyglot'
@@ -294,7 +295,6 @@ if !exists('g:ycm_semantic_triggers')
 endif
 
 autocmd FileType tex setlocal conceallevel=1
-autocmd FileType tex :NoMatchParen
 
 "polyglot
 let g:python_highlight_space_errors = 0
@@ -577,10 +577,10 @@ endif
 if (has("nvim")) | let $NVIM_TUI_ENABLE_TRUE_COLOR=1 | endif
 if (has("termguicolors")) | set termguicolors | endif
 
+syntax on
 colorscheme monokai
 set background=dark
 set t_Co=256
-syntax on
 if has("nvim")
   hi LineNr guibg=none
   hi Normal guibg=none

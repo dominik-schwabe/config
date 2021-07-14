@@ -3,8 +3,7 @@
     echo "no tag given"
     exit 0
 }
-curl -sL --get "https://registry.hub.docker.com/v1/repositories/$1/tags" | jq -r '.[].name' 2>/dev/null
-[ $? ] && {
+( curl -sL --get "https://registry.hub.docker.com/v1/repositories/$1/tags" | jq -r '.[].name' 2>/dev/null ) || {
     echo "no repositorie found"
     exit 1
 }

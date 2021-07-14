@@ -10,6 +10,7 @@ echo -n "\e[6 q"
 
 COMPLETION_WAITING_DOTS="true"
 ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
+
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit snippet OMZL::completion.zsh
@@ -37,9 +38,6 @@ zinit ice wait'0' lucid silent
 zinit light "kutsan/zsh-system-clipboard"
 zinit ice wait'0' lucid atload'zicompinit'
 zinit light "zsh-users/zsh-completions"
-#zinit light "lukechilds/zsh-better-npm-completion"
-#zinit light "zdharma/history-search-multi-word"
-#zinit light "zsh-users/zsh-autosuggestions"
 
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -109,7 +107,7 @@ get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
 RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
 # theme end
 
-setopt hist_ignore_dups hist_ignore_space interactivecomments noextendedhistory nosharehistory auto_cd multios prompt_subst
+setopt hist_ignore_dups hist_ignore_space interactivecomments noextendedhistory nosharehistory auto_cd multios prompt_subst histignorealldups
 
 exit_zsh() { exit }
 zle -N exit_zsh
