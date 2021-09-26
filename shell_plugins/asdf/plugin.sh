@@ -30,7 +30,7 @@ if [ "$ASDF_ENABLED" = "true" ]; then
         done < "$HOME/.tool-versions"
     fi
 
-    export ASDF_DIR="$HOME/.asdf"
+    [[ -z "$ASDF_DIR" ]] && export ASDF_DIR="$HOME/.asdf"
     if [[ -e $ASDF_DIR ]] || git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR; then
         PATH="$ASDF_DIR/bin:$PATH"
         for L in $ASDF_ENABLED_PLUGINS; do

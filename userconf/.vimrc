@@ -632,7 +632,7 @@ noremap <right> <C-W>L
 noremap <up> <C-W>K
 noremap <down> <C-W>J
 nnoremap <silent> ö :noh<CR>
-noremap <c-g> 1<c-g>
+noremap <c-g> 2<c-g>
 
 vmap < <gv
 vmap > >gv

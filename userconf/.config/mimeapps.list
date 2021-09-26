@@ -1,5 +1,5 @@
 [Default Applications]
-x-scheme-handler/tg=userapp-Telegram Desktop-KF9VZ0.desktop
+x-scheme-handler/tg=userapp-Telegram Desktop-GCPG30.desktop
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/chrome=firefox.desktop
@@ -22,9 +22,10 @@ text/x-c++=nvim.desktop
 text/x-java=nvim.desktop
 text/xml=nvim.desktop
 text/x-csv=nvim.desktop
+audio/mpeg=mpv.desktop
 
 [Added Associations]
-x-scheme-handler/tg=userapp-Telegram Desktop-KF9VZ0.desktop;
+x-scheme-handler/tg=userapp-Telegram Desktop-KF9VZ0.desktop;userapp-Telegram Desktop-GCPG30.desktop;
 x-scheme-handler/http=firefox.desktop;
 x-scheme-handler/https=firefox.desktop;
 x-scheme-handler/chrome=firefox.desktop;
@@ -35,6 +36,3 @@ application/x-extension-shtml=firefox.desktop;
 application/xhtml+xml=firefox.desktop;
 application/x-extension-xhtml=firefox.desktop;
 application/x-extension-xht=firefox.desktop;
-
-
-# vi: ft=dosini
