@@ -102,4 +102,6 @@ if ! [ -e "$CUSTOM_PATH" ]; then
     cp ./customrc "$CUSTOM_PATH"
     echo -e "${GREEN}success${RESET}"
 fi
-
+echo
+echo -n "installing nerdfonts"
+./install_scripts/install_nerdfonts.sh

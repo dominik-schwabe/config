@@ -1,3 +1,8 @@
+require("options")
+require("mappings")
+require("plugins")
+
+local opt = vim.opt
 local o = vim.o
 local wo = vim.wo
 local bo = vim.bo
@@ -8,214 +13,14 @@ local api = vim.api
 local map = api.nvim_set_keymap
 local ncmd = api.nvim_command
 local exec =  api.nvim_exec
+
 vim.lsp.set_log_level("debug")
 
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-
-if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-  ncmd 'packadd packer.nvim'
-end
-
-require('packer').startup(function()
-  use 'tanvirtin/monokai.nvim'
-  use 'folke/tokyonight.nvim'
-  use 'wbthomason/packer.nvim'
-  use 'kyazdani42/nvim-tree.lua'
-  use 'neovim/nvim-lspconfig'
-  use 'hrsh7th/nvim-compe'
-  use 'othree/eregex.vim'
-  use 'andersevenrud/compe-tmux'
-  use 'hrsh7th/vim-vsnip'
-  use 'nvim-treesitter/nvim-treesitter'
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
-  use 'p00f/nvim-ts-rainbow'
-  use 'glepnir/galaxyline.nvim'
-  use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
-  use 'kevinhwang91/nvim-bqf'
-  use 'b3nj5m1n/kommentary'
-  use 'kabouzeid/nvim-lspinstall'
-  use 'rafamadriz/friendly-snippets'
-  use 'ray-x/lsp_signature.nvim'
-  use 'wincent/ferret'
-  use 'mg979/vim-visual-multi'
-  use 'Valloric/ListToggle'
-  use 'phaazon/hop.nvim'
-  use 'troydm/zoomwintab.vim'
-  use 'haya14busa/vim-asterisk'
-  use 'npxbr/glow.nvim'
-  use 'davidgranstrom/nvim-markdown-preview'
-  use 'norcalli/nvim-colorizer.lua'
-  use 'christoomey/vim-tmux-navigator'
-  use 'jlanzarotta/bufexplorer'
-  use 'bronson/vim-trailing-whitespace'
-  use 'airblade/vim-rooter'
-  use 'tpope/vim-surround'
-  use 'tpope/vim-repeat'
-  use 'tpope/vim-fugitive'
-  use 'hkupty/iron.nvim'
-  use 'lervag/vimtex'
-  use 'foosoft/vim-argwrap'
-  use 'AndrewRadev/sideways.vim'
-  use 'wellle/targets.vim'
-  use 'michaeljsmith/vim-indent-object'
-  use 'andymass/vim-matchup'
-  use 'AndrewRadev/splitjoin.vim'
-end)
-
-
 local def_opt = {noremap = true, silent = true}
-local expr_opt = {expr = true, noremap = true, silent = true}
-
-o.tabstop = 2
-o.shiftwidth = 2
-o.softtabstop = 2
-o.autoindent = true
-o.smartindent = true
-o.expandtab = true
-bo.tabstop = 2
-bo.shiftwidth = 2
-bo.softtabstop = 2
-bo.autoindent = true
-bo.smartindent = true
-bo.expandtab = true
-
-wo.number = true
-wo.relativenumber = true
-wo.wrap = false
-wo.cursorline = true
-wo.signcolumn = 'yes'
-
--- o.laststatus = 0
-o.completeopt = 'menuone,noselect'
--- o.background = 'dark'
-o.splitbelow = true
-o.splitright = true
-o.cmdheight = 2
-o.ignorecase = true
-o.clipboard='unnamed,unnamedplus'
-o.encoding = 'utf-8'
-o.scrolloff = 8
-o.hidden = true
-o.updatetime = 300
-o.shortmess = o.shortmess .. 'c'
-o.backspace = 'indent,eol,start'
-o.backup = false
-o.writebackup = false
-o.ttyfast = true
-o.termguicolors = true
-
-map('v', 'p', '"_dP', def_opt)
-map('', 'Q', ':qa<CR>', def_opt)
-map('', '<left>', '<C-W>H', def_opt)
-map('', '<right>', '<C-W>L', def_opt)
-map('', '<up>', '<C-W>K', def_opt)
-map('', '<down>', '<C-W>J', def_opt)
-map('n', 'ö', ':noh<CR>', def_opt)
-
-map('v', '<', '<gv', def_opt)
-map('v', '>', '>gv', def_opt)
-
-g.NVIM_TUI_ENABLE_TRUE_COLOR = 1
-g.PYTHONUNBUFFERED = 1
-
-map('', '<F1>', ':NvimTreeToggle<CR>', def_opt)
-map('i', '<F1>', ':NvimTreeToggle<CR>', def_opt)
-map('t', '<F1>', ':NvimTreeToggle<CR>', def_opt)
-
-_G.nvim_tree_find_file = function()
-  local cwd = fn.getcwd()
-  local cur_path = fn.expand('%:p:h')
-  require('nvim-tree').refresh()
-  require('nvim-tree.lib').change_dir(cur_path)
-  require('nvim-tree').find_file(true)
-  cmd('cd ' .. cwd)
-end
-map('', 'gt', ':call v:lua.nvim_tree_find_file()<cr>', def_opt)
-
-map('', '<C-h>', '<C-w>h', def_opt)
-map('', '<C-j>', '<C-w>j', def_opt)
-map('', '<C-k>', '<C-w>k', def_opt)
-map('', '<C-l>', '<C-w>l', def_opt)
+local expr_opt = {noremap = true, silent = true, expr = true}
 
 map('', '<C-p>', ':Telescope find_files<cr>', def_opt)
 map('i', '<C-p>', '<esc>:Telescope find_files<cr>', def_opt)
-
-local tree_cb = require'nvim-tree.config'.nvim_tree_callback
-g.nvim_tree_bindings = {
-  ['.'] = tree_cb('toggle_dotfiles'),
-  [','] = tree_cb('cd'),
-  ['u'] = tree_cb('dir_up'),
-  ['s'] = tree_cb('vsplit'),
-}
-g.nvim_tree_quit_on_open = 1
-g.nvim_tree_git_hl = 1
-g.nvim_tree_highlight_opened_files = 1
-g.nvim_tree_disable_window_picker = 1
-g.nvim_tree_hijack_netrw = 1
-g.nvim_tree_disable_netrw = 0
-
-g.nvim_tree_icons = {
- default = '   ',
- symlink = '   ',
- git = {
-   unstaged = '✗',
-   staged = '✓',
-   unmerged = '═',
-   renamed = '➜',
-   untracked = '★',
-   deleted = '✖',
-  },
- folder = {
-   default = '▸ ',
-   open = '▾ ',
-   empty = '▸ ',
-   empty_open = '▾ ',
-   symlink = '▸ ',
-   symlink_open = '▾ ',
-  },
-  lsp = {
-    hint = 'H ',
-    info = 'I ',
-    warning = 'W ',
-    error = 'E ',
-  }
- }
-
-
-
-
-map('t', '<C-h>', '<C-\\><C-n><C-W>h', def_opt)
-map('t', '<C-j>', '<C-\\><C-n><C-W>j', def_opt)
-map('t', '<C-k>', '<C-\\><C-n><C-W>k', def_opt)
-map('t', '<C-l>', '<C-\\><C-n><C-W>l', def_opt)
-
-exec([[au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4]], false)
-
-exec([[au BufEnter * set fo-=c fo-=r fo-=o]], false)
-
-exec([[au TermOpen * setlocal nonumber norelativenumber signcolumn=no]], false)
-exec([[au TermOpen,BufWinEnter,WinEnter term://* startinsert]], false)
-exec([[au TermClose term://* exec 'bwipeout! ' . expand('<abuf>')]], false)
-
--- terminal colors
-g.terminal_color_0  = '#000000'
-g.terminal_color_1  = '#ff0000'
-g.terminal_color_2  = '#3fff3f'
-g.terminal_color_3  = '#ed9d12'
-g.terminal_color_4  = '#5f87af'
-g.terminal_color_5  = '#f92782'
-g.terminal_color_6  = '#66d9ef'
-g.terminal_color_7  = '#f8f8f2'
-g.terminal_color_8  = '#ff0000'
-g.terminal_color_9  = '#ff3f3f'
-g.terminal_color_10 = '#3fff3f'
-g.terminal_color_11 = '#deed12'
-g.terminal_color_12 = '#5f87af'
-g.terminal_color_13 = '#f92672'
-g.terminal_color_14 = '#66d9ef'
-g.terminal_color_15 = '#f8f8f2'
-
 
 require'compe'.setup {
   enabled = true;
@@ -304,6 +109,23 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     extended_mode = true,
     max_file_lines = 1000,
+  },
+  ensure_installed = {
+    "bash",
+    "bibtex",
+    "c",
+    "cpp",
+    "css",
+    "dockerfile",
+    "html",
+    "javascript",
+    "json",
+    "latex",
+    "lua",
+    "python",
+    "typescript",
+    "vim",
+    "yaml"
   }
 }
 require('kommentary.config').configure_language('default', {
@@ -343,8 +165,6 @@ local servers = require'lspinstall'.installed_servers()
 for _, server in pairs(servers) do
   nvim_lsp[server].setup{on_attach = on_attach}
 end
-
-require'colorizer'.setup()
 
 -- vim-matchup
 g.matchup_matchparen_enabled = 1
@@ -448,29 +268,6 @@ end
 map("", "<F7>", ":call v:lua.NextSpellLang()<cr>", def_opt)
 map("i", "<F7>", ":call v:lua.NextSpellLang()<cr>", def_opt)
 
--- toggle terminal
-g.term_buf = 0
-g.term_win = 0
-_G.TermToggle = function(height)
-  if fn.win_gotoid(g.term_win) ~= 0 then
-    ncmd("hide")
-  else
-    ncmd('botright new')
-    api.nvim_win_set_height(0, height)
-    if g.term_buf ~= 0 and api.nvim_buf_is_loaded(g.term_buf) then
-      api.nvim_win_set_buf(0, g.term_buf)
-    else
-      fn.termopen(os.getenv("SHELL"), {detach = 0})
-      g.term_buf = fn.bufnr("")
-      bo.buflisted = false
-    end
-    ncmd("startinsert")
-    g.term_win = fn.win_getid()
-  end
-end
-map("", "<F10>", ":call v:lua.TermToggle(10)<cr>", def_opt)
-map("i", "<F10>", "<esc>:call v:lua.TermToggle(10)<cr>", def_opt)
-map("t", "<F10>", "<C-\\><C-n>:call v:lua.TermToggle(10)<cr>", def_opt)
 
 
 -- smart resize
@@ -533,7 +330,4 @@ cmd([[hi Normal guibg=none]])
 cmd([[hi SignColumn guibg=none]])
 cmd([[hi clear Conceal]])
 
-map('n', '<leader>e', 'g$', def_opt)
-map('n', '<leader>a', 'g^', def_opt)
-map('n', '<space>,', ',', def_opt)
-map('n', '<space>;', ';', def_opt)
+require("colorizer").setup()
