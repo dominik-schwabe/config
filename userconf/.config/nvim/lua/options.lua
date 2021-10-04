@@ -16,8 +16,6 @@ opt.wrap = false
 opt.cursorline = true
 opt.signcolumn = 'yes'
 
--- opt.laststatus = 0
--- opt.background = 'dark'
 opt.completeopt = {'menu', 'menuone', 'noselect'}
 opt.splitbelow = true
 opt.splitright = true

@@ -71,7 +71,7 @@ alias amount="udiskie"
 alias curl="curl -fsSL"
 alias top="bpytop"
 
-alias ev='vim ~/.config/nvim/init.lua'
+alias v='vim ~/.config/nvim/init.lua'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
