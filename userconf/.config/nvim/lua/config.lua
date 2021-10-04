@@ -41,6 +41,7 @@ M.gps_icons = {
   ["tag-name"] = '炙'
 }
 M.root_patterns = {
+  "=nvim",
   ".git",
   "_darcs",
   ".hg",

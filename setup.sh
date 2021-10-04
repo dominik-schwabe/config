@@ -19,9 +19,13 @@ echo "bin setup"
 ./create_symlink.sh $FORCE $CURRPATH/bin $HOME/.bin
 echo
 echo "config setup"
-for file in $(find userconf -not -type d -printf '%P '); do
-    ./create_symlink.sh $FORCE $CURRPATH/userconf/$file $HOME/$file
+NVIM_PATH=$CURRPATH/userconf/.config/nvim
+MIME_PATH=$CURRPATH/userconf/.config/mimeapps.list
+for file in $(find $CURRPATH/userconf -not -type d -not -path "$NVIM_PATH/*" -not -path "$MIME_PATH" -printf '%P '); do
+  ./create_symlink.sh $FORCE $CURRPATH/userconf/$file $HOME/$file
 done
+./create_symlink.sh $FORCE $NVIM_PATH $HOME/.config/nvim
+./create_symlink.sh -h $FORCE $MIME_PATH $HOME/.config/mimeapps.list
 echo
 echo -n "redshift config "
 
@@ -43,15 +47,7 @@ else
 fi
 echo
 echo "tool setup"
-for file in $CURRPATH/tools/*; do
-    echo -n "$(basename $file)"
-    $file
-    RET=$?
-    [ "$RET" = 3 ] && echo -e " ${MAGENTA}not supported${RESET}"
-    [ "$RET" = 2 ] && echo -e " ${BLUE}exists${RESET}"
-    [ "$RET" = 1 ] && echo -e " ${RED}failure${RESET}"
-    [ "$RET" = 0 ] && echo -e " ${GREEN}success${RESET}"
-done
+$CURRPATH/tools/install_tools.sh
 echo
 echo "folder links"
 ./create_symlink.sh $CURRPATH/shell_plugins $FORCE $HOME/.shell_plugins

@@ -5,10 +5,13 @@ BLUE="\e[34m"
 RED="\e[31m"
 RESET="\e[0m"
 
+SYMLINK="-s"
+
 while [ $# != "0" ]; do
-    while getopts "f" o
+    while getopts "fh" o
     do
         [ $o == "f" ] && FORCE="-f"
+        [ $o == "h" ] && SYMLINK=""
     done
     while [ $OPTIND -gt 1 ]; do
         shift
@@ -30,7 +33,7 @@ if ! [ -e "$SRCPATH" ]; then
 fi
 if [ -e "$DESTPATH" -o -L "$DESTPATH" ]; then
     if [ "$SRCPATH" -ef "$DESTPATH" ]; then
-        echo -e "${BLUE}exists${RESET} symlink $DESTPATH"
+        echo -e "${BLUE}exists${RESET} link $DESTPATH"
         exit 0
     elif [ -n "$FORCE" ]; then
         rm -rf "$DESTPATH"
@@ -42,10 +45,9 @@ fi
 if ! mkdir -p $(dirname "$DESTPATH"); then
     echo -e "${RED}failure${RESET} creating directory $DESTPATH"
     exit 1
-fi
-if ln -s "$SRCPATH" "$DESTPATH" &> /dev/null; then
-    echo -e "${GREEN}success${RESET} creating symlink $DESTPATH"
+else ln $SYMLINK "$SRCPATH" "$DESTPATH" &> /dev/null
+    echo -e "${GREEN}success${RESET} creating link $DESTPATH"
     exit 0
 fi
-echo -e "${RED}failure${RESET} creating symlink $DESTPATH"
+echo -e "${RED}failure${RESET} creating link $DESTPATH"
 exit 1
