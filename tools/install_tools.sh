@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd $(dirname $0)
+
 BIN=$HOME/bin
 LOCAL_PATH=$HOME/.local
 
