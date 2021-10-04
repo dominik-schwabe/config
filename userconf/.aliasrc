@@ -1,6 +1,4 @@
 alias ls='ls --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
 
 alias grep='grep -i --color=auto'
 alias fgrep='fgrep -i --color=auto'
@@ -9,18 +7,20 @@ alias fzf='fzf --color=16'
 alias less='less -i'
 alias tmux='tmux -u'
 
+alias pgrep='pgrep -iaf'
+alias pkill='pkill -if'
+
 alias ip='ip -color'
 
 alias ls='ls --color=tty'
-alias la='ls -A'
-alias ll='ls -l'
 alias lr="find -type f -exec basename {} \;"
-alias l='ls -CF'
+alias l='ls -lAthr'
 
 alias vim='nvim'
 alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
 alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'
 alias oldvim='/usr/bin/env vim'
+alias benchmark-nvim='rm -f /tmp/nvim-startuptime && nvim --startuptime /tmp/nvim-startuptime -c ":e /tmp/nvim-startuptime"'
 
 alias p='ipython'
 
@@ -66,6 +66,10 @@ alias rs='asdf reshim'
 alias e='extract'
 alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 alias ytdl='youtube-dl --extract-audio --audio-format m4a --format best'
+
+alias amount="udiskie"
+alias curl="curl -fsSL"
+alias top="bpytop"
 
 alias ev='vim ~/.config/nvim/init.lua'
 

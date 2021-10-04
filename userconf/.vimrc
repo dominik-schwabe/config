@@ -423,12 +423,11 @@ let g:zoomwintab_remap = 0
 let g:eregex_default_enable = 0
 
 "vim-ripple
+let g:ripple_enable_mappings = 0
 let g:ripple_term_name = "term:// ripple"
 let g:ripple_repls = {
 \ "javascript": "node",
 \}
-
-let g:ripple_enable_mappings = 0
 
 function SendParagraph()
     let i = line(".")

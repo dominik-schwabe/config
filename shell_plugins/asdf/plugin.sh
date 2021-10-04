@@ -1,4 +1,5 @@
-if [ "$ASDF_ENABLED" = "true" ]; then
+if [[ -z "$__ASDF_INIT" && "$ASDF_ENABLED" = "true" ]]; then
+    export __ASDF_INIT=true
     __setup_asdf() {
         declare -u _VERSIONS=$1_VERSION
         eval "VERSIONS=\$$_VERSIONS"
@@ -48,7 +49,7 @@ if [ "$ASDF_ENABLED" = "true" ]; then
                     fi
                 done
             done
-            [ -n "$ASDF_TURBO_PATH" ] && PATH="$ASDF_TURBO_PATH:$PATH"
+            [[ -n "$ASDF_TURBO_PATH" ]] && PATH="$ASDF_TURBO_PATH:$PATH"
         else
             PATH="$ASDF_DIR/shims:$PATH"
         fi

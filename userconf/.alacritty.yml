@@ -6,24 +6,29 @@ font:
   normal:
     family: FiraMono Nerd Font Mono
     style: Regular
+    # family: SauceCodePro Nerd Font Mono
+    # style: Medium
   bold:
     family: FiraMono Nerd Font Mono
+    # family: SauceCodePro Nerd Font Mono
     style: Bold
   italic:
     family: FiraMono Nerd Font Mono
+    # family: SauceCodePro Nerd Font Mono
     style: Italic
   bold_italic:
     family: FiraMono Nerd Font Mono
+    # family: SauceCodePro Nerd Font Mono
     style: Bold Italic
   offset:
     x: 0
-    y: -2
+    y: 0
 
 # shell:
 #     program: /usr/bin/tmux
 #     args:
 #      - -u # force UTF-8 in tmux
-tabspaces: 4
+tabspaces: 2
 
 windows:
   decorations: none
@@ -44,7 +49,7 @@ colors:
     foreground: '#dddddd'
 
   normal:
-    black:   '#000000'
+    black:   '#ffffff' # '#000000'
     red:     '#ff1111'
     green:   '#3fff3f'
     yellow:  '#ed9d12'
@@ -54,7 +59,7 @@ colors:
     white:   '#dddddd'
 
   bright:
-    black:   '#5f87af'
+    black:   '#ffffff' # '#5f87af'
     red:     '#ff3f3f'
     green:   '#3fff3f'
     yellow:  '#deed12'

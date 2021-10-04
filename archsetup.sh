@@ -68,11 +68,13 @@ zsh
 "
 
 GRAPHIC="
+udiskie
 accountsservice
 alacritty
 android-file-transfer
 arandr
 arc-gtk-theme
+autorandr
 discord
 dunst
 evince

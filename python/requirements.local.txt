@@ -1,12 +1,12 @@
-setuptools
-wheel
 black
+bpytop
 ipdb
 ipython
 ipython_autoimport
-jedi
 neovim-remote
 pipenv
 pylint
 pynvim
+setuptools
 telegram-send
+wheel

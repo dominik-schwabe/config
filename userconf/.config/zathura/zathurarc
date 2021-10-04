@@ -7,3 +7,5 @@ set recolor-darkcolor "#ffffff"
 set highlight-color "#00FF00"
 set highlight-active-color "#00FF00"
 set highlight-transparency 0.2
+set synctex true
+set synctex-editor-command "code -g %{input}:%{line}"
