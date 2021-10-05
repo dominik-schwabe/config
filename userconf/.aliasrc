@@ -70,6 +70,7 @@ alias ytdl='youtube-dl --extract-audio --audio-format m4a --format best'
 alias amount="udiskie"
 alias curl="curl -fsSL"
 alias top="bpytop"
+alias oldtop="/usr/bin/env top"
 
 alias v='vim ~/.config/nvim/init.lua'
 
