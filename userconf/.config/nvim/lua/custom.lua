@@ -23,34 +23,48 @@ function NextSpellLang()
   end
 end
 map("", "<F7>", "<cmd>lua NextSpellLang()<cr>", def_opt)
-map("i", "<F7>", "<cmd>lul NextSpellLang()<cr>", def_opt)
+map("i", "<F7>", "<cmd>lua NextSpellLang()<cr>", def_opt)
 
 -- toggle terminal
 local term_buf = 0
 local term_win = 0
-TermToggle = function(height)
-  if fn.win_gotoid(term_win) ~= 0 then
-    cmd("hide")
-  else
+function OpenTerm(height, bottom)
+  if bottom then
     cmd("botright new")
     api.nvim_win_set_height(0, height)
-    if term_buf ~= 0 and api.nvim_buf_is_loaded(term_buf) then
-      api.nvim_win_set_buf(0, term_buf)
-    else
-      fn.termopen(os.getenv("SHELL"), {detach = 0})
-      term_buf = fn.bufnr("")
-      api.nvim_buf_set_option(term_buf, "buflisted", false)
+  else
+    cmd("vertical botright new")
+  end
+  if term_buf ~= 0 and api.nvim_buf_is_loaded(term_buf) then
+    api.nvim_win_set_buf(0, term_buf)
+  else
+    fn.termopen(os.getenv("SHELL"), {detach = 0})
+    term_buf = fn.bufnr("")
+    api.nvim_buf_set_option(term_buf, "buflisted", false)
+  end
+  cmd("startinsert")
+  term_win = fn.win_getid()
+end
+
+function ToggleTerm(height, bottom)
+  if fn.win_gotoid(term_win) ~= 0 then
+    local this_window = fn.winnr()
+    local is_bottom = (this_window == fn.winnr("h")) and (this_window == fn.winnr("l")) and (this_window == fn.winnr("j"))
+    cmd("hide")
+    if is_bottom ~= bottom then
+      OpenTerm(height, bottom)
     end
-    cmd("startinsert")
-    term_win = fn.win_getid()
+  else
+    OpenTerm(height, bottom)
   end
 end
-map("", "<F10>", "<CMD>lua TermToggle(10, true)<CR>", def_opt)
-map("i", "<F10>", "<ESC>:lua TermToggle(10, true)<CR>", def_opt)
-map("t", "<F10>", "<CMD>lua TermToggle(10, true)<CR>", def_opt)
-map("", "<F10>", "<CMD>lua TermToggle(10, true)<CR>", def_opt)
-map("i", "<F10>", "<ESC>:lua TermToggle(10, true)<CR>", def_opt)
-map("t", "<F10>", "<CMD>lua TermToggle(10, true)<CR>", def_opt)
+
+map("", "<F10>", "<CMD>lua ToggleTerm(10, true)<CR>", def_opt)
+map("i", "<F10>", "<ESC>:lua ToggleTerm(10, true)<CR>", def_opt)
+map("t", "<F10>", "<CMD>lua ToggleTerm(10, true)<CR>", def_opt)
+map("", "<F22>", "<CMD>lua ToggleTerm(10, false)<CR>", def_opt)
+map("i", "<F22>", "<ESC>:lua ToggleTerm(10, false)<CR>", def_opt)
+map("t", "<F22>", "<CMD>lua ToggleTerm(10, false)<CR>", def_opt)
 
 -- smart resize
 local function resize_height (val) api.nvim_win_set_height(0, api.nvim_win_get_height(0) + val) end

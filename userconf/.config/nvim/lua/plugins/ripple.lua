@@ -23,7 +23,7 @@ local function num_leading_spaces(str)
 end
 
 local function is_whitespace(str)
-  return str:match([[^\s*$]])
+  return str:match([[^%s*$]])
 end
 
 local function filter(list, cb)
@@ -81,19 +81,20 @@ function SendParagraph()
   while j < max do
     j = j + 1
     line = fn.getline(j)
-      if is_whitespace(line) then
-        last_was_empty = true
-      else
-        line = replace_tab(line)
-        if last_was_empty and num_leading_spaces(line) <= indentation_of_first_line then
-          break
-      end
-      res = j
-      last_was_empty = false
+    if is_whitespace(line) then
+      last_was_empty = true
+    else
+      line = replace_tab(line)
+      if last_was_empty and num_leading_spaces(line) <= indentation_of_first_line then
+        break
+    end
+    res = j
+    last_was_empty = false
     end
   end
   SendLines(fn.getline(i, res))
   fn.cursor(j < max and j or max, i)
+  fn["repeat#set"](":lua SendParagraph()\n", v.count)
 end
 
 function SendSelection()
@@ -105,9 +106,7 @@ function SendSelection()
     if num_last_line_string ~= 0 then lines = lines .. "\n" end
     fn["ripple#command"]("", "", lines)
   end
-  fn["repeat#set"](":lua SendSelection()\n", v.count)
 end
-
 
 function SendBuffer()
   SendLines(fn.getline(0, "$"))
@@ -122,9 +121,9 @@ function SendLine()
   fn["repeat#set"](":lua SendLine()\n", v.count)
 end
 
-map("n", "<space><space>", "<CMD>lua SendLine()<CR>", {})
-map("v", "<C-space>", "<CMD>lua SendSelection()<CR>", def_opt)
-map("n", "<C-space>", "<CMD>lua SendParagraph()<CR>", def_opt)
-map("n", "<leader><space>", "<CMD>lua SendBuffer()<CR>", def_opt)
+map("n", "<space><space>", ":<c-u>lua SendLine()<CR>", {})
+map("v", "<C-space>", ":<c-u>lua SendSelection()<CR>", def_opt)
+map("n", "<C-space>", ":<c-u>lua SendParagraph()<CR>", def_opt)
+map("n", "<leader><space>", ":<c-u>lua SendBuffer()<CR>", def_opt)
 
 map("n", "<F4>", "<cmd>call ripple#open_repl(1)<CR>", def_opt)

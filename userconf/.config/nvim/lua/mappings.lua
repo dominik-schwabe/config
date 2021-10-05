@@ -64,7 +64,6 @@ map("t", "<C-k>", [[<C-\><C-n>:lua TermGoDirection('k')<CR>]], def_opt)
 map("t", "<C-l>", [[<C-\><C-n>:lua TermGoDirection('l')<CR>]], def_opt)
 cmd([[au BufEnter term://* lua EnterTerm()]])
 cmd([[au TermClose term://* lua vim.api.nvim_buf_delete("<abuf>", {force = true})]])
-map("", "<C-x>", "<CMD>Telescope grep_string<CR>", def_opt)
 
 function QuickfixMapping()
   buf_map(0, "n", "q", "<cmd>q<cr>", def_opt)
