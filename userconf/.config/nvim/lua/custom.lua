@@ -19,11 +19,8 @@ function SetSpell(lang)
   end
 end
 map("", "<space>ss", "<CMD>lua SetSpell('')<CR>", def_opt)
-map("i", "<space>ss", "<CMD>lua SetSpell('')<CR>", def_opt)
 map("", "<space>sd", "<CMD>lua SetSpell('de_de')<CR>", def_opt)
-map("i", "<space>sd", "<CMD>lua SetSpell('de_de')<CR>", def_opt)
 map("", "<space>se", "<CMD>lua SetSpell('en_us')<CR>", def_opt)
-map("i", "<space>se", "<CMD>lua SetSpell('en_us')<CR>", def_opt)
 
 -- toggle terminal
 local term_buf = 0
