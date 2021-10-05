@@ -1,5 +1,5 @@
 -- TODO: configure servers (nlsp)
--- TODO: formating
+-- TODO: formatting
 local map = vim.api.nvim_set_keymap
 local lsp = vim.lsp
 local cmd = vim.cmd

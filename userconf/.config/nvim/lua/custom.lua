@@ -1,3 +1,4 @@
+local o = vim.o
 local opt = vim.opt
 local g = vim.g
 local fn = vim.fn
@@ -7,23 +8,22 @@ local map = api.nvim_set_keymap
 
 local def_opt = {noremap = true, silent = true}
 
--- spellcheck TODO: use float
-g.LangIndex = 0
-g.LangList = {'en_us', 'de_de'}
-function NextSpellLang()
-  g.LangIndex = (g.LangIndex + 1) % (#g.LangList + 1)
-  if g.LangIndex == 0 then
+function SetSpell(lang)
+  if lang == "" or (o.spelllang == lang and o.spell) then
     opt.spell = false
     print("nospell")
   else
-    local lang = g.LangList[g.LangIndex]
     opt.spelllang = lang
     opt.spell = true
     print("language: " .. lang)
   end
 end
-map("", "<F7>", "<cmd>lua NextSpellLang()<cr>", def_opt)
-map("i", "<F7>", "<cmd>lua NextSpellLang()<cr>", def_opt)
+map("", "<space>ss", "<CMD>lua SetSpell('')<CR>", def_opt)
+map("i", "<space>ss", "<CMD>lua SetSpell('')<CR>", def_opt)
+map("", "<space>sd", "<CMD>lua SetSpell('de_de')<CR>", def_opt)
+map("i", "<space>sd", "<CMD>lua SetSpell('de_de')<CR>", def_opt)
+map("", "<space>se", "<CMD>lua SetSpell('en_us')<CR>", def_opt)
+map("i", "<space>se", "<CMD>lua SetSpell('en_us')<CR>", def_opt)
 
 -- toggle terminal
 local term_buf = 0

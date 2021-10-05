@@ -9,7 +9,6 @@ local cmd = vim.cmd
 local buf_map = api.nvim_buf_set_keymap
 local noremap = {noremap = true}
 
-map('n', 'x', '"_x', def_opt)
 map('x', 'p', '"_dP', def_opt)
 map('x', '<space>P', 'p', def_opt)
 map('', 'Q', ':qa<CR>', def_opt)
