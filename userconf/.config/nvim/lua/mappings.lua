@@ -67,10 +67,11 @@ map_info.hop = {
 map_info.kommentary = {
   mappings = {
     ["gc"] = {
-      {{"n"}, "<Plug>kommentary_line_default", silent_opt},
-      {{"x"}, "<Plug>kommentary_visual_default", silent_opt}
+      {{"n"}, "<CMD>CommentLine<CR>", silent_opt},
+      {{"x"}, "<CMD>CommentVisual<CR>", silent_opt}
     }
   },
+  commands = {"CommentLine", "CommentVisual"}
 }
 
 map_info.lspinstall = {

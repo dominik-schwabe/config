@@ -1,4 +1,4 @@
-require("pluginmappings").setup()
+require("mappings").setup()
 require("plugins")
 require("options")
 require("custom")

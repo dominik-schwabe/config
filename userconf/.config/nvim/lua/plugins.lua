@@ -7,7 +7,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
   cmd 'packadd packer.nvim'
 end
 
-local get_cmds = require("pluginmappings").get_cmds
+local get_cmds = require("mappings").get_cmds
 
 require('packer').startup(function(use)
   -- packer
@@ -66,7 +66,7 @@ require('packer').startup(function(use)
   -- use {'jakewvincent/texmagic.nvim', config = function() require("plugins.texmagic") end  }
 
   -- comment
-  use { 'b3nj5m1n/kommentary', config = function() require("plugins.kommentary") end }
+  use { 'b3nj5m1n/kommentary', config = function() require("plugins.kommentary") end, cmd = get_cmds("kommentary") }
 
   -- quickfix
   use { 'kevinhwang91/nvim-bqf', config = function() require("plugins.bqf") end }

@@ -33,6 +33,7 @@ opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
 
+g.kommentary_create_default_mappings = false
 g.Illuminate_ftblacklist = require("config").illuminate_blacklist
 
 g.terminal_color_0  = '#000000'

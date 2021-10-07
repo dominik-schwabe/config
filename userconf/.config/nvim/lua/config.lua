@@ -96,5 +96,9 @@ M.null_ls = {
     "isort",
   }
 }
+M.treesitter = {
+  ensure_installed = "all",
+  ignore_install = {"latex", "haskell"},
+}
 
 return M

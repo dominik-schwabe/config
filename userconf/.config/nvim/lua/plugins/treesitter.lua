@@ -3,6 +3,7 @@ local map = vim.api.nvim_set_keymap
 local def_opt = {noremap = true, silent = true}
 local noremap = {noremap = true}
 
+local treesitter_config = require("config").treesitter
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
@@ -72,8 +73,8 @@ require'nvim-treesitter.configs'.setup {
           [';'] = 'textsubjects-container-outer',
       }
   },
-  ensure_installed = "all",
-  ignore_install = {"latex", "haskell"},
+  ensure_installed = treesitter_config.ensure_installed,
+  ignore_install = treesitter_config.ignore_install,
   context_commentstring = {
     enable = true,
     enable_autocmd = false,
