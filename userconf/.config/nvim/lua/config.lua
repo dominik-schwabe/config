@@ -55,25 +55,28 @@ M.root_patterns = {
   -- "Pipfile.lock",
 }
 M.illuminate_blacklist = {
-  'Trouble',
-  'NvimTree',
-  'qf',
-  'vista',
-  'packer',
-  'help',
-  'term'
+  "Trouble",
+  "NvimTree",
+  "qf",
+  "vista",
+  "packer",
+  "help",
+  "term",
+  "fugitiveblame"
 }
 M.colorscheme = "monokai"
-M.language_server_settings = {
+M.lsp_configs = {
   latex = {
-    -- texlab = {
-    --   build = {
-    --     forwardSearchAfter = true;
-    --     onSave = true;
-    --   },
-    --   forwardSearch = {
-    --     executable = "zathura",
-    --     args = { "--synctex-forward", "%l:1:%f", "%p" }
+    -- settings = {
+    --   texlab = {
+    --     build = {
+    --       forwardSearchAfter = true;
+    --       onSave = true;
+    --     },
+    --     forwardSearch = {
+    --       executable = "zathura",
+    --       args = { "--synctex-forward", "%l:1:%f", "%p" }
+    --     }
     --   }
     -- }
   }
@@ -97,8 +100,27 @@ M.null_ls = {
   }
 }
 M.treesitter = {
-  ensure_installed = "all",
+  ensure_installed = "maintained",
   ignore_install = {"latex", "haskell"},
+}
+M.coc_extensions = {
+  'coc-clangd',
+  'coc-css',
+  'coc-docker',
+  'coc-html',
+  'coc-java',
+  'coc-json',
+  'coc-prettier',
+  'coc-pyright',
+  'coc-r-lsp',
+  'coc-sh',
+  'coc-snippets',
+  'coc-tsserver',
+  'coc-vimlsp',
+  'coc-vimtex',
+  'coc-yaml',
+  'coc-sumneko-lua',
+  'coc-texlab'
 }
 
 return M

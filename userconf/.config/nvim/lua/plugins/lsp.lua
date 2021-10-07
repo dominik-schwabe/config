@@ -14,8 +14,8 @@ lspinstall.setup()
 
 lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
 
-local function buf_set_keymap(...) api.nvim_buf_set_keymap(bufnr, ...) end
 local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) api.nvim_buf_set_keymap(bufnr, ...) end
   client.resolved_capabilities.document_formatting = false
   client.resolved_capabilities.document_range_formatting = false
   -- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -41,15 +41,13 @@ local on_attach = function(client, bufnr)
 end
 
 local lspconfig = require("lspconfig")
-local language_server_settings = require("config").language_server_settings
+local lsp_configs = require("config").lsp_configs
 local function setup_servers()
   local servers = lspinstall.installed_servers()
   for _, server in pairs(servers) do
-    local default_config = {
-      on_attach = on_attach,
-      capabilities = require('cmp_nvim_lsp').update_capabilities(lsp.protocol.make_client_capabilities()),
-      settings = language_server_settings[server] or {}
-    }
+    local default_config = lsp_configs[server] or {}
+    default_config.on_attach = on_attach
+    default_config.capabilities = require('cmp_nvim_lsp').update_capabilities(lsp.protocol.make_client_capabilities())
     lspconfig[server].setup(default_config)
   end
 end
@@ -70,7 +68,8 @@ for builtin, options in pairs(null_config) do
   end
 end
 map('n', '<space>f', '<cmd>echo "formatter is not loaded"<CR>', def_opt)
-local function nullls_on_attach()
+local function nullls_on_attach(client, bufnr)
+  local function buf_set_keymap(...) api.nvim_buf_set_keymap(bufnr, ...) end
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', def_opt)
 end
 null_ls.config({ sources = sources })

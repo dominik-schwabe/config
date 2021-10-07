@@ -1,4 +1,3 @@
-local g = vim.g
 local cmd = vim.cmd
 
 require('kommentary.config').configure_language('default', {

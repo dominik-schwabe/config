@@ -1,4 +1,5 @@
 local o = vim.o
+local b = vim.b
 local opt = vim.opt
 local fn = vim.fn
 local api = vim.api
@@ -118,14 +119,23 @@ function d(obj)
   print(vim.inspect(obj))
 end
 
--- show config of lspserver
-function LspConfig()
+-- show settings of lspserver
+function LspSettings()
   for _, client in pairs(vim.lsp.buf_get_clients()) do
     d(client.config.settings)
   end
 end
 
-cmd("command! LspConfig lua LspConfig()")
+cmd("command! LspSettings lua LspSettings()")
+
+-- show lsp root
+function LspRoot()
+  for _, client in pairs(vim.lsp.buf_get_clients()) do
+    d(client.config.root_dir)
+  end
+end
+
+cmd("command! LspRoot lua LspRoot()")
 
 -- term mode fix
 function TermGoDirection(dir)

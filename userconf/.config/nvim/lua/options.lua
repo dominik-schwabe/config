@@ -35,6 +35,7 @@ opt.termguicolors = true
 
 g.kommentary_create_default_mappings = false
 g.Illuminate_ftblacklist = require("config").illuminate_blacklist
+g.coc_global_extensions = require("config").coc_extensions
 
 g.terminal_color_0  = '#000000'
 g.terminal_color_1  = '#ff0000'
