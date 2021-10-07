@@ -24,7 +24,7 @@ function SearchFilesRegex()
   end
 end
 
-map("", "gs", "<plug>(GrepperOperator)", def_opt)
+map("n", "gs", "<plug>(GrepperOperator)", def_opt)
 map("n", "<c-_>", ":Grepper -cword<cr>", def_opt)
 map("x", "<c-_>", "<plug>(GrepperOperator)", def_opt)
 map("n", "_", "<CMD>lua SearchFilesRegex()<CR>", def_opt)

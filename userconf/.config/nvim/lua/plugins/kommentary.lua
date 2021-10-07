@@ -15,4 +15,4 @@ require('kommentary.config').configure_language('typescriptreact', {
 
 g.kommentary_create_default_mappings = false
 map('n', 'gc', '<Plug>kommentary_line_default', {silent = true})
-map('v', 'gc', '<Plug>kommentary_visual_default', {silent = true})
+map('x', 'gc', '<Plug>kommentary_visual_default', {silent = true})

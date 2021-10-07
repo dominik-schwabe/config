@@ -1,4 +1,3 @@
--- TODO: textobjects
 local map = vim.api.nvim_set_keymap
 
 local def_opt = {noremap = true, silent = true}
@@ -24,15 +23,45 @@ require'nvim-treesitter.configs'.setup {
     max_file_lines = 1000,
   },
   textobjects = {
-    swap = {
+    select = {
       enable = true,
-      swap_next = {
-        ["U"] = "@parameter.inner",
-      },
-      swap_previous = {
-        ["R"] = "@parameter.inner",
+      lookahead = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
       },
     },
+    move = {
+      enable = true,
+      set_jumps = true,
+      goto_next_start = {
+        ["]m"] = "@function.outer",
+        ["]]"] = "@class.outer",
+      },
+      goto_next_end = {
+        ["]M"] = "@function.outer",
+        ["]["] = "@class.outer",
+      },
+      goto_previous_start = {
+        ["[m"] = "@function.outer",
+        ["[["] = "@class.outer",
+      },
+      goto_previous_end = {
+        ["[M"] = "@function.outer",
+        ["[]"] = "@class.outer",
+      },
+    },
+    -- swap = {
+    --   enable = true,
+    --   swap_next = {
+    --     ["U"] = "@parameter.inner",
+    --   },
+    --   swap_previous = {
+    --     ["R"] = "@parameter.inner",
+    --   },
+    -- },
   },
   autotag = {
     enable = true,
@@ -45,6 +74,7 @@ require'nvim-treesitter.configs'.setup {
       }
   },
   ensure_installed = "all",
+  ignore_install = {"latex"},
   context_commentstring = {
     enable = true,
     enable_autocmd = false,
@@ -57,5 +87,5 @@ map("n", "<space>ti", ":TSInstall ", noremap)
 map("n", "<space>tu", "<CMD>TSUpdate<CR>", noremap)
 
 map("o", "m", ":<C-U>lua require('tsht').nodes()<CR>", def_opt)
-map("v", "m", ":lua require('tsht').nodes()", def_opt)
+map("x", "m", ":lua require('tsht').nodes()<CR>", def_opt)
 require("tsht").config.hint_keys = { "j", "f", "h", "g",  "d", "k", "s", "l", "a", "ö" }

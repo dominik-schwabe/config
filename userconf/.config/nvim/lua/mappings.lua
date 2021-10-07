@@ -1,3 +1,4 @@
+-- TODO: define all mappings here
 local def_opt = {noremap = true, silent = true}
 
 local fn = vim.fn
@@ -29,10 +30,10 @@ cmd("au CmdWinEnter * quit")
 map('v', '<', '<gv', def_opt)
 map('v', '>', '>gv', def_opt)
 
--- map('', '<C-h>', '<CMD>wincmd h<CR>', def_opt)
--- map('', '<C-j>', '<CMD>wincmd j<CR>', def_opt)
--- map('', '<C-k>', '<CMD>wincmd k<CR>', def_opt)
--- map('', '<C-l>', '<CMD>wincmd l<CR>', def_opt)
+map('i', '<C-h>', '<CMD>wincmd h<CR>', def_opt)
+map('i', '<C-j>', '<CMD>wincmd j<CR>', def_opt)
+map('i', '<C-k>', '<CMD>wincmd k<CR>', def_opt)
+map('i', '<C-l>', '<CMD>wincmd l<CR>', def_opt)
 
 map('t', '<C-h>', '<C-\\><C-n><C-W>h', def_opt)
 map('t', '<C-j>', '<C-\\><C-n><C-W>j', def_opt)
@@ -62,7 +63,7 @@ map("t", "<C-j>", [[<C-\><C-n>:lua TermGoDirection('j')<CR>]], def_opt)
 map("t", "<C-k>", [[<C-\><C-n>:lua TermGoDirection('k')<CR>]], def_opt)
 map("t", "<C-l>", [[<C-\><C-n>:lua TermGoDirection('l')<CR>]], def_opt)
 cmd([[au BufEnter term://* lua EnterTerm()]])
-cmd([[au TermClose term://* lua vim.api.nvim_buf_delete("<abuf>", {force = true})]])
+cmd([[au TermClose term://toggleterm,term://*ripple* lua vim.api.nvim_buf_delete("<abuf>", {force = true})]])
 
 function QuickfixMapping()
   buf_map(0, "n", "q", "<cmd>q<cr>", def_opt)

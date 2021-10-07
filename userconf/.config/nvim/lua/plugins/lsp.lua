@@ -1,9 +1,9 @@
--- TODO: configure servers (nlsp)
--- TODO: formatting
 local map = vim.api.nvim_set_keymap
+local api = vim.api
 local lsp = vim.lsp
 local cmd = vim.cmd
 local fn = vim.fn
+
 local def_opt = {noremap = true, silent = true}
 local nore_opt = {noremap = true}
 
@@ -14,8 +14,10 @@ lspinstall.setup()
 
 lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
 
+local function buf_set_keymap(...) api.nvim_buf_set_keymap(bufnr, ...) end
 local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  client.resolved_capabilities.document_formatting = false
+  client.resolved_capabilities.document_range_formatting = false
   -- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
   require'lsp_signature'.on_attach()
@@ -36,17 +38,19 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', def_opt)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', def_opt)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', def_opt)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', def_opt)
 end
 
+local lspconfig = require("lspconfig")
+local language_server_settings = require("config").language_server_settings
 local function setup_servers()
   local servers = lspinstall.installed_servers()
   for _, server in pairs(servers) do
     local default_config = {
       on_attach = on_attach,
-      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+      capabilities = require('cmp_nvim_lsp').update_capabilities(lsp.protocol.make_client_capabilities()),
+      settings = language_server_settings[server] or {}
     }
-    require'lspconfig'[server].setup(default_config)
+    lspconfig[server].setup(default_config)
   end
 end
 
@@ -56,6 +60,23 @@ lspinstall.post_install_hook = function ()
   setup_servers()
   cmd("bufdo e")
 end
+
+local null_ls = require("null-ls")
+local null_config = require("config").null_ls
+local sources = {}
+for builtin, options in pairs(null_config) do
+  for _, source in pairs(options) do
+    sources[#sources+1] = null_ls.builtins[builtin][source]
+  end
+end
+map('n', '<space>f', '<cmd>echo "formatter is not loaded"<CR>', def_opt)
+local function nullls_on_attach()
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', def_opt)
+end
+null_ls.config({ sources = sources })
+lspconfig["null-ls"].setup({
+  on_attach = nullls_on_attach
+})
 
 local signs = require("config").lsp_signs
 
@@ -70,3 +91,4 @@ map("n", "<space>ll", "<CMD>LspInfo<CR>", nore_opt)
 map("n", "<space>li", ":LspInstall ", nore_opt)
 map("n", "<space>lu", "<CMD>LspUpdate<CR>", nore_opt)
 map("n", "<space>lr", "<CMD>LspRestart<CR>", nore_opt)
+map("n", "<space>b", "<CMD>TexlabBuild<CR>", def_opt)

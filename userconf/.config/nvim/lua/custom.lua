@@ -36,6 +36,7 @@ function OpenTerm(height, bottom)
     api.nvim_win_set_buf(0, term_buf)
   else
     fn.termopen(os.getenv("SHELL"), {detach = 0})
+    cmd("file term://toggleterm")
     term_buf = fn.bufnr("")
     api.nvim_buf_set_option(term_buf, "buflisted", false)
   end
@@ -118,3 +119,11 @@ end
 function d(obj)
   print(vim.inspect(obj))
 end
+
+function LspConfig()
+  for _, client in pairs(vim.lsp.buf_get_clients()) do
+    d(client.config.settings)
+  end
+end
+
+map("n", "<space>ld", "<CMD>lua LspConfig()<CR>", def_opt)

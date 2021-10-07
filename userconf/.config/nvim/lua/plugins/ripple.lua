@@ -71,7 +71,7 @@ function SendLines(lines)
 end
 
 function SendParagraph()
-  local i = api.nvim_win_get_cursor(0)[1]
+  local i, c = unpack(api.nvim_win_get_cursor(0))
   local max = api.nvim_buf_line_count(0)
   local j = i
   local res = i
@@ -93,7 +93,7 @@ function SendParagraph()
     end
   end
   SendLines(fn.getline(i, res))
-  fn.cursor(j < max and j or max, i)
+  fn.cursor(j < max and j or max, c+1)
   fn["repeat#set"](":lua SendParagraph()\n", v.count)
 end
 

@@ -1,6 +1,9 @@
 local api = vim.api
 local bo = vim.bo
 local fn = vim.fn
+local map = api.nvim_set_keymap
+
+local def_opt = {noremap = true, silent = true}
 
 local lspkind = require('lspkind')
 local cmp = require('cmp')
@@ -27,12 +30,30 @@ end
 local tab = cmp.mapping(function(fallback)
   if fn.pumvisible() == 1 then
     cmp.select_next_item()
-  elseif not has_empty_before() and fn["vsnip#available"]() == 1 then
-    feedkey("<Plug>(vsnip-expand-or-jump)", "")
   else
     fallback()
   end
 end, { "i", "s" })
+
+local s_tab = cmp.mapping(function(fallback)
+  if fn.pumvisible() == 1 then
+    cmp.select_prev_item()
+  else
+    fallback()
+  end
+end, { "i", "s" })
+
+function JumpNext()
+  if fn["vsnip#jumpable"]() == 1 then
+    feedkey("<Plug>(vsnip-jump-next)", "")
+  end
+end
+
+function JumpPrev()
+  if fn["vsnip#jumpable"](-1) == 1 then
+    feedkey("<Plug>(vsnip-jump-prev)", "")
+  end
+end
 
 local toggle_completion = cmp.mapping(function ()
   if fn.pumvisible() == 1 then
@@ -41,16 +62,6 @@ local toggle_completion = cmp.mapping(function ()
     cmp.complete()
   end
 end)
-
-local s_tab = cmp.mapping(function(fallback)
-  if fn.pumvisible() == 1 then
-    cmp.select_prev_item()
-  elseif fn["vsnip#jumpable"](-1) == 1 then
-    feedkey("<Plug>(vsnip-jump-prev)", "")
-  else
-    fallback()
-  end
-end, { "i", "s" })
 
 cmp.setup({
   snippet = {
@@ -78,7 +89,6 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<Tab>'] = tab,
     ['<S-Tab>'] = s_tab,
-    ['<C-Space>'] = toggle_completion,
     ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
   },
   sources = {
@@ -91,3 +101,8 @@ cmp.setup({
     -- { name = 'latex_symbols' },
   }
 })
+
+map("", "<C-y>", "<CMD>lua JumpPrev()<CR>", {})
+map("i", "<C-y>", "<CMD>lua JumpPrev()<CR>", {})
+map("", "<C-x>", "<CMD>lua JumpNext()<CR>", {})
+map("i", "<C-x>", "<CMD>lua JumpNext()<CR>", {})

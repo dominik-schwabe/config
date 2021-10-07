@@ -64,5 +64,37 @@ M.illuminate_blacklist = {
   'term'
 }
 M.colorscheme = "monokai"
+M.language_server_settings = {
+  latex = {
+    -- texlab = {
+    --   build = {
+    --     forwardSearchAfter = true;
+    --     onSave = true;
+    --   },
+    --   forwardSearch = {
+    --     executable = "zathura",
+    --     args = { "--synctex-forward", "%l:1:%f", "%p" }
+    --   }
+    -- }
+  }
+}
+M.null_ls = {
+  code_actions = {},
+  diagnostics = {
+    -- "chktex",
+    -- "eslint_d",
+    -- "pylint"
+  },
+  formatting = {
+    "styler",
+    "shfmt",
+    "prettierd",
+    "black",
+    "clang_format",
+    "eslint_d",
+    "fixjson",
+    "isort",
+  }
+}
 
 return M
