@@ -88,7 +88,4 @@ end
 cmd [[au CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
 
 map("n", "<space>ll", "<CMD>LspInfo<CR>", nore_opt)
-map("n", "<space>li", ":LspInstall ", nore_opt)
-map("n", "<space>lu", "<CMD>LspUpdate<CR>", nore_opt)
 map("n", "<space>lr", "<CMD>LspRestart<CR>", nore_opt)
-map("n", "<space>b", "<CMD>TexlabBuild<CR>", def_opt)

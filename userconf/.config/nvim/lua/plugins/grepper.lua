@@ -1,9 +1,6 @@
 local fn = vim.fn
-local map = vim.api.nvim_set_keymap
 local cmd = vim.cmd
 local exec =  vim.api.nvim_exec
-
-local def_opt = {noremap = true, silent = true}
 
 cmd([[ runtime plugin/grepper.vim]])
 cmd([[ let g:grepper.tools = ['rg', 'git', 'grep'] ]])
@@ -24,7 +21,5 @@ function SearchFilesRegex()
   end
 end
 
-map("n", "gs", "<plug>(GrepperOperator)", def_opt)
-map("n", "<c-_>", ":Grepper -cword<cr>", def_opt)
-map("x", "<c-_>", "<plug>(GrepperOperator)", def_opt)
-map("n", "_", "<CMD>lua SearchFilesRegex()<CR>", def_opt)
+cmd("command! GrepWord Grepper -cword")
+cmd("command! SearchInFiles lua SearchFilesRegex()")

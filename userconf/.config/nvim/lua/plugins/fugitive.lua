@@ -26,6 +26,6 @@ function Gitblame()
   end
 end
 
-map("n", "<space>gd", "<cmd>lua Gitdiffsplit(false)<CR>", def_opt)
-map("n", "<space>gg", "<cmd>lua Gitdiffsplit(true)<CR>", noremap)
-map("n", "<space>gb", "<cmd>lua Gitblame()<CR>", def_opt)
+map("n", "<space>gd", "<CMD>lua Gitdiffsplit(false)<CR>", def_opt)
+map("n", "<space>gg", "<CMD>lua Gitdiffsplit(true)<CR>", noremap)
+map("n", "<space>gb", "<CMD>lua Gitblame()<CR>", def_opt)

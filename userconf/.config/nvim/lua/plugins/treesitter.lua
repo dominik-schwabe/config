@@ -3,7 +3,6 @@ local map = vim.api.nvim_set_keymap
 local def_opt = {noremap = true, silent = true}
 local noremap = {noremap = true}
 
-require('telescope').load_extension('projects')
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
@@ -88,4 +87,4 @@ map("n", "<space>tu", "<CMD>TSUpdate<CR>", noremap)
 
 map("o", "m", ":<C-U>lua require('tsht').nodes()<CR>", def_opt)
 map("x", "m", ":lua require('tsht').nodes()<CR>", def_opt)
-require("tsht").config.hint_keys = { "j", "f", "h", "g",  "d", "k", "s", "l", "a", "ö" }
+require("tsht").config.hint_keys = { "j", "f", "h", "g", "d", "k", "s", "l", "a", "ö" }

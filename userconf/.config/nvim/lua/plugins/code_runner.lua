@@ -1,7 +1,5 @@
-local vimpath = vim.fn.stdpath("config") .. "/code_runner.json"
 local subconfig = {
-  map = "<leader>r",
-  json_path = vimpath
+  json_path = vim.fn.stdpath("config") .. "/code_runner.json"
 }
 require("code_runner").setup({
   term = { position = "vert", size = 8 },

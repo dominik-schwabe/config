@@ -3,9 +3,7 @@ local fn = vim.fn
 local g = vim.g
 local v = vim.v
 local bo = vim.bo
-local map = api.nvim_set_keymap
-
-local def_opt = {noremap = true, silent = true}
+local cmd = vim.cmd
 
 g.ripple_enable_mappings = 0
 g.ripple_term_name = "term:// ripple"
@@ -121,9 +119,8 @@ function SendLine()
   fn["repeat#set"](":lua SendLine()\n", v.count)
 end
 
-map("n", "<space><space>", ":<c-u>lua SendLine()<CR>", {})
-map("v", "<C-space>", ":<c-u>lua SendSelection()<CR>", def_opt)
-map("n", "<C-space>", ":<c-u>lua SendParagraph()<CR>", def_opt)
-map("n", "<leader><space>", ":<c-u>lua SendBuffer()<CR>", def_opt)
-
-map("n", "<F4>", "<cmd>call ripple#open_repl(1)<CR>", def_opt)
+cmd("command! ReplSendLine lua SendLine()")
+cmd("command! ReplSendBuffer lua SendBuffer()")
+cmd("command! ReplSendSelection lua SendSelection()")
+cmd("command! ReplSendParagraph lua SendParagraph()")
+cmd("command! ReplOpen call ripple#open_repl(1)")

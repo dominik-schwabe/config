@@ -3,8 +3,6 @@ local bo = vim.bo
 local fn = vim.fn
 local map = api.nvim_set_keymap
 
-local def_opt = {noremap = true, silent = true}
-
 local lspkind = require('lspkind')
 local cmp = require('cmp')
 

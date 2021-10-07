@@ -1,15 +1,13 @@
 local o = vim.o
 local opt = vim.opt
-local g = vim.g
 local fn = vim.fn
 local api = vim.api
 local cmd = vim.cmd
-local map = api.nvim_set_keymap
 
 local def_opt = {noremap = true, silent = true}
 
 function SetSpell(lang)
-  if lang == "" or (o.spelllang == lang and o.spell) then
+  if lang == nil or (o.spelllang == lang and o.spell) then
     opt.spell = false
     print("nospell")
   else
@@ -18,9 +16,8 @@ function SetSpell(lang)
     print("language: " .. lang)
   end
 end
-map("", "<space>ss", "<CMD>lua SetSpell('')<CR>", def_opt)
-map("", "<space>sd", "<CMD>lua SetSpell('de_de')<CR>", def_opt)
-map("", "<space>se", "<CMD>lua SetSpell('en_us')<CR>", def_opt)
+
+cmd("command! -nargs=* SetSpell call luaeval('SetSpell(_A[1])', [<f-args>])")
 
 -- toggle terminal
 local term_buf = 0
@@ -57,12 +54,8 @@ function ToggleTerm(height, bottom)
   end
 end
 
-map("", "<F10>", "<CMD>lua ToggleTerm(10, true)<CR>", def_opt)
-map("i", "<F10>", "<ESC>:lua ToggleTerm(10, true)<CR>", def_opt)
-map("t", "<F10>", "<CMD>lua ToggleTerm(10, true)<CR>", def_opt)
-map("", "<F22>", "<CMD>lua ToggleTerm(10, false)<CR>", def_opt)
-map("i", "<F22>", "<ESC>:lua ToggleTerm(10, false)<CR>", def_opt)
-map("t", "<F22>", "<CMD>lua ToggleTerm(10, false)<CR>", def_opt)
+cmd("command! ToggleTermBottom lua ToggleTerm(10, true)")
+cmd("command! ToggleTermRight lua ToggleTerm(10, false)")
 
 -- smart resize
 local function resize_height (val) api.nvim_win_set_height(0, api.nvim_win_get_height(0) + val) end
@@ -87,8 +80,9 @@ function SmartResize(dir)
         end
     end
 end
-map("", "+", "<cmd>lua SmartResize(0)<cr>", def_opt)
-map("", "-", "<cmd>lua SmartResize(1)<cr>", def_opt)
+
+cmd("command! SmartResizeExpand lua SmartResize(0)")
+cmd("command! SmartResizeReduce lua SmartResize(1)")
 
 -- latex for grammar checking
 function LatexSubstitude()
@@ -103,14 +97,17 @@ function LatexSubstitude()
   cmd([[%s/\v[^a-zA-Z0-9üäöß.?!(),]/ /ge]])
   cmd([[%s/\v +/ /ge]])
 end
-map("n", "gl", "<CMD>lua LatexSubstitude()<CR>", def_opt)
+
+cmd("command! LatexSubstitude lua LatexSubstitude()")
 
 -- yank and substitude on selection
 function SubstitudeSelection()
   api.nvim_feedkeys(":s/\\(" .. fn.escape(fn.getreg("+"), "\\") .. "\\)/\\1", "n", true)
 end
-map("x", "<space>s", "<CMD>lua SubstitudeSelection()<CR>", def_opt)
 
+cmd("command! SubstitudeSelection lua SubstitudeSelection()")
+
+-- line percent
 function LinePercent()
     return string.format("%d%%", fn.line('.') * 100 / fn.line('$'))
 end
@@ -120,10 +117,84 @@ function d(obj)
   print(vim.inspect(obj))
 end
 
+-- show config of lspserver
 function LspConfig()
   for _, client in pairs(vim.lsp.buf_get_clients()) do
     d(client.config.settings)
   end
 end
 
-map("n", "<space>ld", "<CMD>lua LspConfig()<CR>", def_opt)
+cmd("command! LspConfig lua LspConfig()")
+
+-- term mode fix
+function TermGoDirection(dir)
+  b.term_was_normal_mode = fn.winnr() == fn.winnr(dir)
+  cmd("wincmd " .. dir)
+end
+
+function EnterTerm()
+  if not b.term_was_normal_mode then
+    cmd("startinsert")
+  end
+end
+
+cmd("command! -nargs=* TermGoDirection call luaeval('TermGoDirection(_A[1])', [<f-args>])")
+
+-- quickfix quit
+function QuickfixMapping()
+  buf_map(0, "n", "q", "<cmd>q<cr>", def_opt)
+end
+cmd([[au filetype qf lua QuickfixMapping()]])
+
+-- quickfix/loclist toggle
+local function window_exists(cb)
+  return function()
+    for _, win in ipairs(fn.getwininfo()) do
+      if cb(win) then
+        return true
+      end
+    end
+    return false
+  end
+end
+
+local function IsQuickfix(win) return win.quickfix == 1 and win.loclist == 0 end
+local function IsLoclist(win) return win.quickfix == 1 and win.loclist == 1 end
+
+local QuickfixExists = window_exists(IsQuickfix)
+local LoclistExists = window_exists(IsLoclist)
+
+function LoclistToggle()
+  if LoclistExists() then
+    cmd("lclose")
+  else
+    if not pcall(cmd, "lopen") then
+      print("Loclist ist empty")
+    end
+  end
+end
+
+function QuickfixToggle()
+  if QuickfixExists() then cmd("cclose") else cmd("copen") end
+end
+
+cmd("command! LoclistToggle lua LoclistToggle()")
+cmd("command! QuickfixToggle lua QuickfixToggle()")
+
+-- chmod
+function ChmodCurrent(x)
+  local path = fn.expand("%:p")
+  if fn.empty(fn.glob(path)) == 1 then
+    print("this file does not exist")
+    return
+  end
+  os.execute("chmod a" .. (x and "+" or "-") .. "x " .. path)
+  if x then
+    print("made executable")
+  else
+    print("removed execution rights")
+  end
+end
+
+cmd("command! ChmodSet lua ChmodCurrent(true)")
+cmd("command! ChmodRemove lua ChmodCurrent(false)")

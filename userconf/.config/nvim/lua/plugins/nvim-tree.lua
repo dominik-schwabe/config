@@ -1,6 +1,4 @@
-local def_opt = {noremap = true, silent = true}
 local g = vim.g
-local map = vim.api.nvim_set_keymap
 
 local cb = require('nvim-tree.config').nvim_tree_callback
 local mappings = {
@@ -66,9 +64,3 @@ require('nvim-tree').setup {
     }
   }
 }
-
-map('', '<F1>', '<ESC>:NvimTreeToggle<CR>', def_opt)
-map('i', '<F1>', '<ESC>:NvimTreeToggle<CR>', def_opt)
-map('t', '<F1>', '<CMD>NvimTreeToggle<CR>', def_opt)
-map('n', 'gt', '<ESC>:NvimTreeFindFile<CR>', def_opt)
-map('x', 'gt', '<ESC>:NvimTreeFindFile<CR>', def_opt)
