@@ -74,7 +74,7 @@ require'nvim-treesitter.configs'.setup {
       }
   },
   ensure_installed = "all",
-  ignore_install = {"latex"},
+  ignore_install = {"latex", "haskell"},
   context_commentstring = {
     enable = true,
     enable_autocmd = false,
