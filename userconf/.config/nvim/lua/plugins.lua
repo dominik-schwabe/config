@@ -20,9 +20,7 @@ require('packer').startup(function(use)
   use 'norcalli/nvim-colorizer.lua'
 
   -- complete
-  -- use { 'hrsh7th/nvim-cmp', requires = { "hrsh7th/cmp-nvim-lua", "kdheepak/cmp-latex-symbols", 'hrsh7th/cmp-path', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-vsnip', {'andersevenrud/compe-tmux', branch = 'cmp'}},
-  --   config = function() require'plugins.cmp' end
-  -- }
+  -- use { 'hrsh7th/nvim-cmp', requires = { "hrsh7th/cmp-nvim-lua", "kdheepak/cmp-latex-symbols", 'hrsh7th/cmp-path', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-vsnip', {'andersevenrud/compe-tmux', branch = 'cmp'}}, config = function() require'plugins.cmp' end }
 
   -- lsp
   -- use {'neovim/nvim-lspconfig', requires = {{'jose-elias-alvarez/null-ls.nvim', requires = {'nvim-lua/plenary.nvim'}}, 'RRethy/vim-illuminate', 'onsails/lspkind-nvim', {'RishabhRD/nvim-lsputils', requires = {'RishabhRD/popfix'}}, 'kabouzeid/nvim-lspinstall', { 'alexaandru/nvim-lspupdate', cmd = get_cmds("lspupdate") }, 'ray-x/lsp_signature.nvim', 'kosayoda/nvim-lightbulb'}, config = function () require("plugins.lsp") end}

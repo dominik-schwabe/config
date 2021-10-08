@@ -25,21 +25,25 @@ local feedkey = function(key, mode)
   api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
-local tab = cmp.mapping(function(fallback)
-  if fn.pumvisible() == 1 then
-    cmp.select_next_item()
-  else
-    fallback()
-  end
-end, { "i", "s" })
+local tab_complete = function(fallback)
+    if fn.pumvisible() == 1 then
+        feedkey("<C-n>", "n")
+    elseif cmp.visible() then
+        cmp.select_next_item()
+    else
+        fallback()
+    end
+end
 
-local s_tab = cmp.mapping(function(fallback)
-  if fn.pumvisible() == 1 then
-    cmp.select_prev_item()
-  else
-    fallback()
-  end
-end, { "i", "s" })
+local s_tab_complete = function(fallback)
+    if fn.pumvisible() == 1 then
+        feedkey("<C-p>", "n")
+    elseif cmp.visible() then
+        cmp.select_prev_item()
+    else
+        fallback()
+    end
+end
 
 function JumpNext()
   if fn["vsnip#jumpable"]() == 1 then
@@ -85,8 +89,8 @@ cmp.setup({
   mapping = {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<Tab>'] = tab,
-    ['<S-Tab>'] = s_tab,
+    ['<Tab>'] = tab_complete,
+    ['<S-Tab>'] = s_tab_complete,
     ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
   },
   sources = {

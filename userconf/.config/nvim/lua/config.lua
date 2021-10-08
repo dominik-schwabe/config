@@ -66,6 +66,18 @@ M.illuminate_blacklist = {
 }
 M.colorscheme = "monokai"
 M.lsp_configs = {
+  python =  {
+    flags = { debounce_text_changes = 300 },
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = false,
+          useLibraryCodeForTypes = false,
+          diagnosticMode = 'openFilesOnly',
+        }
+      }
+    }
+  },
   latex = {
     -- settings = {
     --   texlab = {
