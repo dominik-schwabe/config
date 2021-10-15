@@ -16,6 +16,7 @@ alias ls='ls --color=tty'
 alias lr="find -type f -exec basename {} \;"
 alias l='ls -lAthr'
 
+alias d='mkdir -p ~/.lucid && vim ~/.lucid/$(date -I).md'
 alias vim='nvim'
 alias pvim='pipenv --venv > /dev/null && pipenv run nvim'
 alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'

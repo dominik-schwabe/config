@@ -312,7 +312,7 @@ for_window [title="___todo___"] border pixel 5
 for_window [title="___todo___"] resize set width 80 ppt height 80 ppt
 for_window [title="___todo___"] move position center;
 for_window [title="___todo___"] sticky enable
-bindsym $mod+q exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
+bindsym $mod+q exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"set nowrap\\"' --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
 
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad

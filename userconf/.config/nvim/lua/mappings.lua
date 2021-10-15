@@ -24,10 +24,17 @@ map_info.asterisk = {
 map_info.bufexplorer = {
   mappings = {
     ["<F2>"] = {
-      {{"n", "x", "i", "t"}, "<ESC>:ToggleBufExplorer<CR>", def_opt},
+      {{"n", "x", "i"}, "<ESC>:ToggleBufExplorer<CR>", def_opt},
       {{"t"}, "<CMD>ToggleBufExplorer<CR>", def_opt}
     }
   }
+}
+
+map_info.markdown_preview = {
+  mappings = {
+    ["<space>m"] = {{{"n"}, "<CMD>MarkdownPreviewToggle<CR>", def_opt}}
+  },
+  commands = {"MarkdownPreviewToggle"}
 }
 
 map_info.code_runner = {
@@ -101,6 +108,10 @@ map_info.nvimtree = {
 map_info.ripple = {
   mappings = {
     ["<space><space>"] = {{{"n"}, ":<c-u>ReplSendLine<CR>", def_opt}},
+    ["<CR>"] = {
+      {{"n"}, ":<c-u>ReplSendLine<CR>", def_opt},
+      {{"x"}, ":<c-u>ReplSendSelection<CR>", def_opt}
+    },
     ["<C-space>"] = {
       {{"n"}, ":<c-u>ReplSendParagraph<CR>", def_opt},
       {{"x"}, ":<c-u>ReplSendSelection<CR>", def_opt}
