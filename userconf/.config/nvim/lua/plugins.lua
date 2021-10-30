@@ -23,7 +23,7 @@ require('packer').startup(function(use)
   -- use { 'hrsh7th/nvim-cmp', requires = { "hrsh7th/cmp-nvim-lua", "kdheepak/cmp-latex-symbols", 'hrsh7th/cmp-path', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-vsnip', {'andersevenrud/compe-tmux', branch = 'cmp'}}, config = function() require'plugins.cmp' end }
 
   -- lsp
-  -- use {'neovim/nvim-lspconfig', requires = {{'jose-elias-alvarez/null-ls.nvim', requires = {'nvim-lua/plenary.nvim'}}, 'RRethy/vim-illuminate', 'onsails/lspkind-nvim', {'RishabhRD/nvim-lsputils', requires = {'RishabhRD/popfix'}}, 'kabouzeid/nvim-lspinstall', { 'alexaandru/nvim-lspupdate', cmd = get_cmds("lspupdate") }, 'ray-x/lsp_signature.nvim', 'kosayoda/nvim-lightbulb'}, config = function () require("plugins.lsp") end}
+  -- use {'neovim/nvim-lspconfig', requires = {{'jose-elias-alvarez/null-ls.nvim', requires = {'nvim-lua/plenary.nvim'}}, 'RRethy/vim-illuminate', 'onsails/lspkind-nvim', {'RishabhRD/nvim-lsputils', requires = {'RishabhRD/popfix'}}, 'williamboman/nvim-lsp-installer', 'ray-x/lsp_signature.nvim', 'kosayoda/nvim-lightbulb'}, config = function () require("plugins.lsp") end}
   -- use {'liuchengxu/vista.vim', config = function() require("plugins.vista") end}
 
   -- coc
@@ -50,8 +50,7 @@ require('packer').startup(function(use)
   -- dap
   use { 'mfussenegger/nvim-dap', requires = {'Pocco81/DAPInstall.nvim', 'rcarriga/nvim-dap-ui'}, config = function() require("plugins.dap") end, cmd = get_cmds("dap") }
 
-  -- statusline TODO: use 'hoob3rt/lualine.nvim'
-  use { 'shadmansaleh/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons', {'SmiteshP/nvim-gps'}}, config = function() require'plugins.lualine' end }
+  use { 'nvim-lualine/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons', {'SmiteshP/nvim-gps'}}, config = function() require'plugins.lualine' end }
 
   -- repl
   use { 'urbainvaes/vim-ripple', config = function() require("plugins.ripple") end, cmd = get_cmds("ripple") }
@@ -100,5 +99,7 @@ require('packer').startup(function(use)
   use 'tpope/vim-repeat'
   use {'foosoft/vim-argwrap', cmd = get_cmds("argwrap")}
   use {'AndrewRadev/sideways.vim', cmd = get_cmds("sideways")}
-  -- 'sheerun/vim-polyglot',
+  use 'sheerun/vim-polyglot'
+  use 'ntpeters/vim-better-whitespace'
+  use 'jiangmiao/auto-pairs'
 end)

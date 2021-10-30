@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-for ARG in $@; do
+for ARG in "$@"; do
     xdg-open "$ARG" &>/dev/null &!
 done
 exit 0

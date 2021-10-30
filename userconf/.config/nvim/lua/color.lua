@@ -14,8 +14,6 @@ g.onedark_style = 'deep'
 
 cmd('syntax on')
 
--- cmd('colorscheme tokyonight')
--- cmd('colorscheme onedark')
 cmd('colorscheme ' .. require("config").colorscheme)
 
 cmd([[ hi LineNr guibg=none ]])

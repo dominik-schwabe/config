@@ -1,6 +1,7 @@
 local opt = vim.opt
 local g = vim.g
 local fn = vim.fn
+local config = require("config")
 
 opt.foldenable = false
 opt.tabstop = 2
@@ -34,8 +35,10 @@ opt.ttyfast = true
 opt.termguicolors = true
 
 g.kommentary_create_default_mappings = false
-g.Illuminate_ftblacklist = require("config").illuminate_blacklist
-g.coc_global_extensions = require("config").coc_extensions
+g.Illuminate_ftblacklist = config.illuminate_blacklist
+g.coc_global_extensions = config.coc_extensions
+g.better_whitespace_filetypes_blacklist = config.whitespace_blacklist
+g.better_whitespace_guicolor='#880000'
 
 g.terminal_color_0  = '#000000'
 g.terminal_color_1  = '#ff0000'

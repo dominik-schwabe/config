@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+readarray -t CONNECTIONS <<<$(nmcli -t -f NAME connection)
+for CONNECTION in "${CONNECTIONS[@]}"; do
+  TYPE=$(nmcli connection show "$CONNECTION" | grep connection.type: | tr -s " " | cut -d " " -f2-)
+  echo $CONNECTION
+  if grep -E -i "(wireless|ethernet)" <<< "$TYPE" &>/dev/null; then
+    nmcli connection modify "$CONNECTION" \
+      ipv4.dns "8.8.8.8 8.8.4.4" \
+      ipv4.ignore-auto-dns "yes" \
+      ipv6.dns "2001:4860:4860::8888 2001:4860:4860::8844" \
+      ipv6.ignore-auto-dns "yes"
+  fi
+done

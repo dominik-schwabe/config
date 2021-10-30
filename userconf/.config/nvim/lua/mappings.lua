@@ -83,15 +83,9 @@ map_info.kommentary = {
 
 map_info.lspinstall = {
   mappings = {
-    ["<space>li"] = {{{"n"}, ":LspInstall ", nore_opt}}
-  },
-}
-
-map_info.lspupdate = {
-  mappings = {
+    ["<space>li"] = {{{"n"}, ":LspInstall ", nore_opt}},
     ["<space>lu"] = {{{"n"}, "<CMD>LspUpdate<CR>", nore_opt}}
   },
-  commands = {"LspUpdate"}
 }
 
 map_info.nvimtree = {

@@ -31,7 +31,6 @@ command_completion() {
 }
 
 download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            pip
-download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            post_pip_asdf
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv               pipenv
 download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z           7z
 download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl youtube-dl

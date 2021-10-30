@@ -8,7 +8,8 @@ local cmd = vim.cmd
 g.ripple_enable_mappings = 0
 g.ripple_term_name = "term:// ripple"
 g.ripple_repls = {
-  javascript= "node",
+  javascript = "node",
+  r = "radian",
 }
 
 local function replace_tab(str)

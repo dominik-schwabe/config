@@ -1,23 +1,34 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-python_prog='from sys import argv
-from sys import stdout, stderr
+from sys import argv, stdout, stderr
+from os import popen
+
+# from shutil import get_terminal_size
+from itertools import zip_longest
 import unicodedata
-printable = {"Mn", "Mc", "Me"}
-width = int(argv[1])
-file = argv[2]
+
+PRINTABLE = {"Mn", "Mc", "Me"}
+WIDTH = int(popen("tput cols", "r").read()) // 2 - 2
+# WIDTH = get_terminal_size().columns // 2 - 2
+FILE1, FILE2 = argv[1], argv[2]
+COL_FORMAT = f"{WIDTH}.{WIDTH}"
+LINE_FORMAT = f"{{:{COL_FORMAT}}} | {{:{COL_FORMAT}}}"
+
 
 def filter_non_printable(str):
-  return "".join(c for c in str if unicodedata.category(c) not in printable)
+    return "".join(c for c in str if unicodedata.category(c) not in PRINTABLE)
+
+
+def normalize_line(line):
+    line = line.expandtabs(2).strip()
+    line = unicodedata.normalize("NFC", line)
+    line = filter_non_printable(line)
+    return line
+
 
 try:
-    for line in open(file, "r"):
-        line = line.expandtabs(2).strip()
-        line = unicodedata.normalize("NFC", line)
-        line = filter_non_printable(line)
-        line = line[:width]
-        print(line + " "*(width - len(line)))
+    with open(FILE1, "r") as f1, open(FILE2, "r") as f2:
+        for line1, line2 in zip_longest(f1, f2, fillvalue=""):
+            print(LINE_FORMAT.format(normalize_line(line1), normalize_line(line2)))
 except (IOError, BrokenPipeError):
-    stderr.close()'
-width=$(($(tput cols)/2 - 6))
-pr -i" " -n -m -t -J -S'| ' <(python3 -c "$python_prog" "$width" "$1")  <(python3 -c "$python_prog" "$width" "$2")
+    stderr.close()
