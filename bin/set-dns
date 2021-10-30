@@ -7,8 +7,8 @@ for CONNECTION in "${CONNECTIONS[@]}"; do
   if grep -E -i "(wireless|ethernet)" <<< "$TYPE" &>/dev/null; then
     nmcli connection modify "$CONNECTION" \
       ipv4.dns "8.8.8.8 8.8.4.4" \
-      ipv4.ignore-auto-dns "yes" \
       ipv6.dns "2001:4860:4860::8888 2001:4860:4860::8844" \
-      ipv6.ignore-auto-dns "yes"
+      # ipv4.ignore-auto-dns "yes" \
+      # ipv6.ignore-auto-dns "yes"
   fi
 done
