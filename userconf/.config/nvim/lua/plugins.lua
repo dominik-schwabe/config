@@ -23,8 +23,12 @@ require('packer').startup(function(use)
   -- use { 'hrsh7th/nvim-cmp', requires = { "hrsh7th/cmp-nvim-lua", "kdheepak/cmp-latex-symbols", 'hrsh7th/cmp-path', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-vsnip', {'andersevenrud/compe-tmux', branch = 'cmp'}}, config = function() require'plugins.cmp' end }
 
   -- lsp
-  -- use {'neovim/nvim-lspconfig', requires = {{'jose-elias-alvarez/null-ls.nvim', requires = {'nvim-lua/plenary.nvim'}}, 'RRethy/vim-illuminate', 'onsails/lspkind-nvim', {'RishabhRD/nvim-lsputils', requires = {'RishabhRD/popfix'}}, 'williamboman/nvim-lsp-installer', 'ray-x/lsp_signature.nvim', 'kosayoda/nvim-lightbulb'}, config = function () require("plugins.lsp") end}
+  -- TODO: setup b0o/schemastore.nvim
+  -- use {'neovim/nvim-lspconfig', requires = {{'jose-elias-alvarez/null-ls.nvim', requires = {'nvim-lua/plenary.nvim'}}, 'RRethy/vim-illuminate', 'onsails/lspkind-nvim', {'RishabhRD/nvim-lsputils', requires = {'RishabhRD/popfix'}}, 'williamboman/nvim-lsp-installer', 'ray-x/lsp_signature.nvim', 'kosayoda/nvim-lightbulb', 'b0o/schemastore.nvim'}, config = function () require("plugins.lsp") end}
   -- use {'liuchengxu/vista.vim', config = function() require("plugins.vista") end}
+
+  -- lint
+  use {'mfussenegger/nvim-lint', config = function() require("plugins.nvim-lint") end}
 
   -- coc
   use {"neoclide/coc.nvim", branch = "release", config = function() require("plugins.coc") end}
@@ -32,13 +36,16 @@ require('packer').startup(function(use)
   -- treesitter
   use {
     'nvim-treesitter/nvim-treesitter',
-    requires = {'p00f/nvim-ts-rainbow', 'nvim-treesitter/nvim-treesitter-textobjects', 'mfussenegger/nvim-ts-hint-textobject', 'romgrk/nvim-treesitter-context', 'RRethy/nvim-treesitter-textsubjects', 'windwp/nvim-ts-autotag'},
+    requires = {'p00f/nvim-ts-rainbow', 'nvim-treesitter/nvim-treesitter-textobjects', 'mfussenegger/nvim-ts-hint-textobject', 'romgrk/nvim-treesitter-context', 'RRethy/nvim-treesitter-textsubjects', 'windwp/nvim-ts-autotag', 'David-Kunz/treesitter-unit'},
     run = ':TSUpdate',
     config = function() require("plugins.treesitter") end,
   }
 
   -- telescope
   use { 'nvim-telescope/telescope.nvim', requires = {'nvim-lua/plenary.nvim'}, config = function() require("plugins.telescope") end, cmd = get_cmds("telescope") }
+
+  -- notify
+  use { 'rcarriga/nvim-notify', config = function() require("plugins.nvim-notify") end}
 
   -- tree
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', config = function() require("plugins.nvim-tree") end, cmd = get_cmds("nvimtree") }
@@ -101,5 +108,4 @@ require('packer').startup(function(use)
   use {'AndrewRadev/sideways.vim', cmd = get_cmds("sideways")}
   use 'sheerun/vim-polyglot'
   use 'ntpeters/vim-better-whitespace'
-  use 'jiangmiao/auto-pairs'
 end)

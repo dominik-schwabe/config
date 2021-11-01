@@ -144,5 +144,14 @@ M.whitespace_blacklist = {
   'markdown',
   'fugitive'
 }
+M.linters = {
+  -- text = {"languagetool"},
+  tex = {"chktex"},
+  cpp = {"cppcheck"},
+  javascript = {"eslint"},
+  markdown = {"markdownlint"},
+  python = {"pyling"},
+  lua = {"luacheck"},
+}
 
 return M

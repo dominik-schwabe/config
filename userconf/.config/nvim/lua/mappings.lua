@@ -47,10 +47,10 @@ map_info.code_runner = {
 map_info.dap = {
   mappings = {
     ["<F5>"] = {{{"n", "x", "i"}, "<CMD>DapBreakpoint<CR>", def_opt}},
-    ["<F8>"] = {{{"n", "x", "i"}, "<CMD>DapContinue<CR>", def_opt}},
     ["<F7>"] = {{{"n", "x", "i"}, "<CMD>DapStepOver<CR>", def_opt}},
+    ["<F8>"] = {{{"n", "x", "i"}, "<CMD>DapContinue<CR>", def_opt}},
     ["<F19>"] = {{{"n", "x", "i"}, "<CMD>DapStepInto<CR>", def_opt}},
-    ["<F9>"] = {{{"n", "x", "i"}, "<CMD>DapUiToggle<CR>", def_opt}}
+    ["<F21>"] = {{{"n", "x", "i"}, "<CMD>DapUiToggle<CR>", nore_opt}}
   },
   commands = {"DapBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapUiToggle"}
 }
@@ -86,6 +86,20 @@ map_info.lspinstall = {
     ["<space>li"] = {{{"n"}, ":LspInstall ", nore_opt}},
     ["<space>lu"] = {{{"n"}, "<CMD>LspUpdate<CR>", nore_opt}}
   },
+}
+
+map_info.nvim_lint = {
+  mappings ={
+    ["<F9>"] = {{{"n", "i"}, "<CMD>Lint<CR>", nore_opt}}
+  },
+  commands = {"Lint"}
+}
+
+map_info.treesitter_unit = {
+  mappings = {
+    ["iu"] = {{{"x", "o"}, "<CMD>lua require'treesitter-unit'.select(true)<CR>", def_opt}},
+    ["au"] = {{{"x", "o"}, "<CMD>lua require'treesitter-unit'.select()<CR>", def_opt}},
+  }
 }
 
 map_info.nvimtree = {
