@@ -7,9 +7,15 @@ local treesitter_config = require("config").treesitter
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
+    disable = treesitter_config.highlight_disable
   },
   incremental_selection = {
     enable = true,
+    keymaps = {
+      init_selection = ")",
+      node_incremental = ")",
+      node_decremental = "(",
+    }
   },
   matchup = {
     enable = true,
@@ -65,13 +71,6 @@ require'nvim-treesitter.configs'.setup {
   },
   autotag = {
     enable = true,
-  },
-  textsubjects = {
-      enable = true,
-      keymaps = {
-          ['.'] = 'textsubjects-smart',
-          [';'] = 'textsubjects-container-outer',
-      }
   },
   ensure_installed = treesitter_config.ensure_installed,
   ignore_install = treesitter_config.ignore_install,

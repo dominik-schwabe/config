@@ -7,7 +7,7 @@ alias fzf='fzf --color=16'
 alias less='less -i'
 alias tmux='tmux -u'
 
-alias pgrep='pgrep -iaf'
+alias pgrep+='pgrep -iaf'
 alias pkill='pkill -if'
 
 alias ip='ip -color'

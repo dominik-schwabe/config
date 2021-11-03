@@ -14,8 +14,7 @@ set $term alacritty
 #set $term termite
 #set $term xfce4-terminal
 #set $term gnome-terminal
-set $webbrowser firefox
-set $webbrowserprocess GeckoMain
+set $webbrowser brave
 set $guifilebrowser thunar
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -178,7 +177,7 @@ bar {
     tray_padding 0
     font pango:DejaVu Sans Mono 9
     position bottom
-    status_command python3 ~/.config/i3/i3pystatus.conf
+    status_command python3 ~/.i3/i3pystatus.conf
     workspace_buttons yes
     separator_symbol "❱  ❰"
     colors {
@@ -214,7 +213,7 @@ bindsym $mod+y exec --no-startup-id playerctl play-pause
 bindsym $mod+x exec --no-startup-id playerctl next
 
 bindsym XF86Launch1 exec --no-startup-id ~/.bin/nolidswitch
-bindsym $mod+odiaeresis exec --no-startup-id pgrep -u $UID "($webbrowserprocess|$webbrowser)" || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
+bindsym $mod+odiaeresis exec --no-startup-id pgrep -u $UID "$webbrowser" || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
 bindsym $mod+period resize set width 360 px height 240 px; move container position 1006 px 0
 bindsym $mod+Shift+period resize set width 360 px height 240 px; move container position 0 0
 bindsym $mod+Shift+plus resize grow right 40 px; resize grow down 20 px
@@ -327,6 +326,7 @@ exec --no-startup-id discord --start-minimized
 exec --no-startup-id "sleep 5; birdtray"
 
 assign [class="firefox"] $ws1
+assign [class="Brave-browser"] $ws1
 for_window [class="steam_app*"] move workspace $ws4
 for_window [class="steam_app*"] focus
 assign [class="Steam"] $ws3

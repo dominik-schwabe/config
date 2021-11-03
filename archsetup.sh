@@ -68,6 +68,7 @@ zsh
 "
 
 GRAPHIC="
+noto-fonts-emoji
 udiskie
 accountsservice
 alacritty
@@ -130,6 +131,7 @@ texlive-most
 
 AURPKG="
 birdtray
+brave-bin
 jmtpfs
 "
 

@@ -114,6 +114,7 @@ M.null_ls = {
 M.treesitter = {
   ensure_installed = "maintained",
   ignore_install = {"latex", "haskell"},
+  highlight_disable = {}
 }
 M.coc_extensions = {
   'coc-clangd',
@@ -145,8 +146,8 @@ M.whitespace_blacklist = {
   'fugitive'
 }
 M.linters = {
-  -- text = {"languagetool"},
-  tex = {"chktex"},
+  text = {"languagetool"},
+  tex = {"chktex", "languagetool"},
   cpp = {"cppcheck"},
   javascript = {"eslint"},
   markdown = {"markdownlint"},
