@@ -36,7 +36,7 @@ require('packer').startup(function(use)
   -- treesitter
   use {
     'nvim-treesitter/nvim-treesitter',
-    requires = {'p00f/nvim-ts-rainbow', 'nvim-treesitter/nvim-treesitter-textobjects', 'mfussenegger/nvim-ts-hint-textobject', 'romgrk/nvim-treesitter-context', 'windwp/nvim-ts-autotag', 'David-Kunz/treesitter-unit'},
+    requires = {'nvim-treesitter/playground', 'p00f/nvim-ts-rainbow', 'nvim-treesitter/nvim-treesitter-textobjects', 'mfussenegger/nvim-ts-hint-textobject', 'romgrk/nvim-treesitter-context', 'windwp/nvim-ts-autotag', 'David-Kunz/treesitter-unit'},
     run = ':TSUpdate',
     config = function() require("plugins.treesitter") end,
   }

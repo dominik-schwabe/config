@@ -1,0 +1,4 @@
+eslint
+neovim
+npm-check-updates
+prettier
