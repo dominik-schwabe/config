@@ -21,5 +21,10 @@ function SearchFilesRegex()
   end
 end
 
-cmd("command! GrepWord Grepper -cword")
+function GrepWord()
+  cmd('Grepper -cword')
+  fn.histdel("@", -1)
+end
+
+cmd("command! GrepWord lua GrepWord()")
 cmd("command! SearchInFiles lua SearchFilesRegex()")

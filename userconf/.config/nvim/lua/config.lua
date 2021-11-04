@@ -64,7 +64,7 @@ M.illuminate_blacklist = {
   "term",
   "fugitiveblame"
 }
-M.colorscheme = "monokai"
+M.colorscheme = "tokyonight"
 M.lsp_configs = {
   python =  {
     flags = { debounce_text_changes = 300 },
