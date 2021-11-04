@@ -14,9 +14,9 @@ require('packer').startup(function(use)
   use {'wbthomason/packer.nvim', config = function() require("plugins.packer") end }
 
   -- color
-  use 'folke/tokyonight.nvim'
+  -- use 'folke/tokyonight.nvim'
   -- use 'navarasu/onedark.nvim'
-  -- use 'tanvirtin/monokai.nvim'
+  use 'tanvirtin/monokai.nvim'
   use 'norcalli/nvim-colorizer.lua'
 
   -- complete
