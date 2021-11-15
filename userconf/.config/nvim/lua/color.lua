@@ -13,11 +13,6 @@ cmd('syntax on')
 
 cmd('colorscheme ' .. require("config").colorscheme)
 
-local function highlight(group, color)
-  vim.cmd('highlight ' .. group .. ' guifg = ' .. color)
-end
-
-
 local monokai = require("monokai")
 local colors = monokai.classic
 monokai.setup {
@@ -61,6 +56,10 @@ monokai.setup {
     -- TSTitle = { fg = colors.green },
   }
 }
+
+cmd([[ hi LineNr guibg=none ]])
+cmd([[ hi Normal guibg=none ]])
+cmd([[ hi SignColumn guibg=none ]])
 
 cmd [[ hi def link LspReferenceText CursorLine ]]
 cmd [[ hi def link LspReferenceWrite CursorLine ]]

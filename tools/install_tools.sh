@@ -13,8 +13,8 @@ RESET="\e[0m"
 declare -A TOOLS=(
   ["nvim"]="neovim/neovim"
   ["rg"]="BurntSushi/ripgrep"
-  ["fzf"]="junegunn/fzf" 
-  ["fd"]="sharkdp/fd" 
+  ["fzf"]="junegunn/fzf"
+  ["fd"]="sharkdp/fd"
   ["jq"]="stedolan/jq"
 )
 

@@ -39,7 +39,6 @@ local mappings = {
   { key = "s",     cb = cb("vsplit")},
 }
 g.nvim_tree_quit_on_open = 1
-g.nvim_tree_hide_dotfiles = 1
 g.nvim_tree_git_hl = 1
 g.nvim_tree_highlight_opened_files = 2
 g.nvim_tree_disable_window_picker = 1
@@ -47,14 +46,21 @@ g.nvim_tree_refresh_wait = 100
 g.nvim_tree_respect_buf_cwd = 1
 
 require('nvim-tree').setup {
-  auto_close          = false,
-  hijack_cursor       = false,
-  update_cwd          = true,
-  disable_netrw       = false,
-  hijack_netrw        = true,
+  auto_close = false,
+  hijack_cursor = false,
+  update_cwd = true,
+  disable_netrw = false,
+  hijack_netrw = true,
+  update_to_buf_dir = {
+    enable = true,
+    auto_open = true
+  },
   update_focused_file = {
-    enable      = true,
+    enable = true,
     update_cwd  = true,
+  },
+  filters = {
+    dotfiles = true,
   },
   view = {
     width = 32,

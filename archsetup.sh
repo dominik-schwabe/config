@@ -68,6 +68,7 @@ zsh
 "
 
 GRAPHIC="
+xcolor
 noto-fonts-emoji
 udiskie
 accountsservice

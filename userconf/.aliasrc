@@ -45,7 +45,7 @@ alias R='R --no-save'
 alias dst='sudo systemctl start docker.socket'
 alias dsp='sudo systemctl stop docker.socket'
 
-alias ssh='ssh -xC'
+alias ssh='TERM=xterm-256color ssh -xC'
 alias xssh='ssh -YC'
 alias lssh='ssh -L 3000:localhost:3000 -L 5000:localhost:5000'
 

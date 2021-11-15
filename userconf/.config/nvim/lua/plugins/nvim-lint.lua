@@ -7,6 +7,7 @@ local linters = require("config").linters
 lint.linters_by_ft = linters
 
 function Lint()
+  cmd("silent write")
   lint.try_lint()
   local filetype = bo.filetype
   local ft_linters = linters[filetype]

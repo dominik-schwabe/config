@@ -48,7 +48,7 @@ require('packer').startup(function(use)
   use { 'rcarriga/nvim-notify', config = function() require("plugins.nvim-notify") end}
 
   -- tree
-  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', config = function() require("plugins.nvim-tree") end, cmd = get_cmds("nvimtree") }
+  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', config = function() require("plugins.nvim-tree") end }
 
   -- snippets
   use 'hrsh7th/vim-vsnip'

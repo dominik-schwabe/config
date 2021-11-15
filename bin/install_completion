@@ -34,6 +34,9 @@ download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plu
 download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv               pipenv
 download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z           7z
 download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl youtube-dl
+download_completion https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo              cargo
+download_completion https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust                  rustc
 command_completion kubectl completion zsh
+command_completion rustup completions zsh
 
 zinit creinstall $ZSH_COMPLETIONS_DIR

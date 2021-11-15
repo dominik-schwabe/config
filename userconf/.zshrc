@@ -1,5 +1,5 @@
 # clone pluginmanager if not exist
-[[ -d ~/.zinit/bin ]] || git clone https://github.com/zdharma/zinit.git ~/.zinit/bin
+[[ -d ~/.zinit/bin ]] || git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin
 
 [[ -r ~/.envrc ]] && . ~/.envrc
 [[ -r ~/.customrc ]] && . ~/.customrc
@@ -31,7 +31,7 @@ zinit light "zsh-users/zsh-history-substring-search"
 zinit ice wait'0' lucid
 zinit light "zsh-vi-more/vi-increment"
 zinit ice wait'0' lucid
-zinit light "zdharma/fast-syntax-highlighting"
+zinit light "zdharma-continuum/fast-syntax-highlighting"
 zinit ice wait'0' lucid
 zinit light "MichaelAquilina/zsh-you-should-use"
 zinit ice wait'0' lucid silent

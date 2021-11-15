@@ -29,7 +29,7 @@ def score_asset(asset):
 url = f"https://api.github.com/repos/{sys.argv[1]}/releases"
 with urlopen(url) as file:
     j = json.loads(file.read().decode("utf-8"))
-    
+
 release = next(x for x in j if not x["prerelease"])
 assets = release["assets"]
 for asset in assets:

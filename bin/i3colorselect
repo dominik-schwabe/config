@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+pkill -u $UID xcolor || {
+    COLOR=$(xcolor)
+    echo -n "$COLOR" | xsel --clipboard
+    notify-send $COLOR
+}

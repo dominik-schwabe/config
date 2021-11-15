@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+[ -f "$1" ] || {
+    echo "file is does not exist"
+    exit  1
+}
+MIMETYPE=$(file -b --mime-type "$1")
+TYPE=$(dirname $MIMETYPE)
+[[ "$TYPE" != "image" ]] && {
+    echo "file is not a image"
+    exit  1
+}
+xclip -selection clipboard -t "$MIMETYPE" -i "$1"

@@ -16,6 +16,7 @@ set $term alacritty
 #set $term gnome-terminal
 set $webbrowser brave
 set $guifilebrowser thunar
+set $playerctl playerctl --player spotify,cmus,chromium
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -203,14 +204,14 @@ bindsym $mod+plus exec --no-startup-id pamixer -i 5
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -time 0 +5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -time 0 -5
 bindsym XF86ScreenSaver exec --no-startup-id i3lock -c 000000
-bindsym XF86AudioNext exec --no-startup-id playerctl next
-bindsym XF86AudioPrev exec --no-startup-id playerctl previous
-bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
-bindsym XF86AudioStop exec --no-startup-id playerctl pause
+bindsym XF86AudioNext exec --no-startup-id "$playerctl next"
+bindsym XF86AudioPrev exec --no-startup-id "$playerctl previous"
+bindsym XF86AudioPlay exec --no-startup-id "$playerctl  play-pause"
+bindsym XF86AudioStop exec --no-startup-id "$playerctl pause"
 
-bindsym $mod+less exec --no-startup-id playerctl previous
-bindsym $mod+y exec --no-startup-id playerctl play-pause
-bindsym $mod+x exec --no-startup-id playerctl next
+bindsym $mod+less exec --no-startup-id "$playerctl previous"
+bindsym $mod+y exec --no-startup-id "$playerctl play-pause"
+bindsym $mod+x exec --no-startup-id "$playerctl next"
 
 bindsym XF86Launch1 exec --no-startup-id ~/.bin/nolidswitch
 bindsym $mod+odiaeresis exec --no-startup-id pgrep -u $UID "$webbrowser" || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
@@ -229,8 +230,9 @@ bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+udiaeresis move workspace to output right
 bindsym $mod+Tab workspace $ws1
 bindsym $mod+d exec --no-startup-id rofi -show drun
-bindsym $mod+F1 exec --no-startup-id killall picom || picom -b
-bindsym --release $mod+numbersign exec --no-startup-id killall xkill || xkill
+bindsym $mod+F1 exec --no-startup-id pkill -u $UID picom || picom -b
+bindsym --release $mod+c exec --no-startup-id $HOME/.bin/i3colorselect
+bindsym --release $mod+numbersign exec --no-startup-id pkill -u $UID xkill || xkill
 
 
 default_border pixel 1
@@ -311,7 +313,7 @@ for_window [title="___todo___"] border pixel 5
 for_window [title="___todo___"] resize set width 80 ppt height 80 ppt
 for_window [title="___todo___"] move position center;
 for_window [title="___todo___"] sticky enable
-bindsym $mod+q exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"set nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase\\"' --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
+bindsym $mod+0 exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"set nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase\\"' --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
 
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
@@ -324,6 +326,7 @@ exec --no-startup-id flameshot
 exec --no-startup-id telegram-desktop -startintray
 exec --no-startup-id discord --start-minimized
 exec --no-startup-id "sleep 5; birdtray"
+exec --no-startup-id spotify
 
 assign [class="firefox"] $ws1
 assign [class="Brave-browser"] $ws1
