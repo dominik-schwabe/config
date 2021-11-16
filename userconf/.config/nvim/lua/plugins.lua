@@ -14,7 +14,7 @@ require("packer").startup(function(use)
 	use({
 		"wbthomason/packer.nvim",
 		config = function()
-			require("plugins.packer")
+			require("./plugins.packer")
 		end,
 	})
 
@@ -137,11 +137,11 @@ require("packer").startup(function(use)
 
 	-- repl
 	use({
-		"urbainvaes/vim-ripple",
+		"hkupty/iron.nvim",
 		config = function()
-			require("plugins.ripple")
+			require("plugins.iron")
 		end,
-		cmd = get_cmds("ripple"),
+		cmd = get_cmds("iron"),
 	})
 
 	-- git
@@ -153,7 +153,7 @@ require("packer").startup(function(use)
 	})
 
 	-- symbols
-	use({ "simrat39/symbols-outline.nvim", cmds = get_cmds("symbols_outline") })
+	use({ "simrat39/symbols-outline.nvim" })
 
 	-- tmux
 	use({
@@ -173,7 +173,6 @@ require("packer").startup(function(use)
 			require("plugins.vimtex")
 		end,
 	})
-	-- use {'jakewvincent/texmagic.nvim', config = function() require("plugins.texmagic") end  }
 
 	-- comment
 	use({
@@ -240,8 +239,8 @@ require("packer").startup(function(use)
 		end,
 		cmd = get_cmds("todo_comments"),
 	})
-	-- use 'pwntester/octo.nvim' -- github issues and pull request
-	-- use 'matbme/JABS.nvim'
+	-- use("pwntester/octo.nvim") -- github issues and pull request
+	-- use("matbme/JABS.nvim")
 
 	-- legacy
 	use({

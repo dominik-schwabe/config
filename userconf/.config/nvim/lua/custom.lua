@@ -35,8 +35,8 @@ function OpenTerm(height, bottom)
     api.nvim_win_set_buf(0, term_buf)
   else
     fn.termopen(os.getenv("SHELL"), {detach = 0})
-    cmd("file term://toggleterm")
     term_buf = fn.bufnr("")
+    api.nvim_buf_set_name(term_buf, "term://toggleterm")
     api.nvim_buf_set_option(term_buf, "buflisted", false)
   end
   cmd("startinsert")

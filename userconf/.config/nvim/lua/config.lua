@@ -49,7 +49,6 @@ M.root_patterns = {
 	".svn",
 	"Makefile",
 	"package.json",
-	">site-packages",
 	-- "requirements.txt",
 	-- "Pipfile",
 	-- "Pipfile.lock",
@@ -151,6 +150,9 @@ M.linters = {
 	markdown = { "markdownlint" },
 	python = { "pyling" },
 	lua = { "luacheck" },
+}
+M.repls = {
+	python = 'ipython'
 }
 
 return M

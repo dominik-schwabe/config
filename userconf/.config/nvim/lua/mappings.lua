@@ -120,9 +120,8 @@ map_info.nvimtree = {
 	commands = { "NvimTreeToggle", "NvimTreeFindFile" },
 }
 
-map_info.ripple = {
+map_info.iron = {
 	mappings = {
-		["<space><space>"] = { { { "n" }, ":<c-u>ReplSendLine<CR>", def_opt } },
 		["<CR>"] = {
 			{ { "n" }, ":<c-u>ReplSendLine<CR>", def_opt },
 			{ { "x" }, ":<c-u>ReplSendSelection<CR>", def_opt },
