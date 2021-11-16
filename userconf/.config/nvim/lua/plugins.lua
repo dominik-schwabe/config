@@ -40,7 +40,6 @@ require("packer").startup(function(use)
 	})
 
 	-- lsp
-	-- TODO: setup b0o/schemastore.nvim
 	use({
 		"neovim/nvim-lspconfig",
 		after = "cmp-nvim-lsp",
@@ -102,7 +101,6 @@ require("packer").startup(function(use)
 	-- tree
 	use({
 		"kyazdani42/nvim-tree.lua",
-		event = "VimEnter",
 		requires = "kyazdani42/nvim-web-devicons",
 		config = function()
 			require("plugins.nvim-tree")
@@ -112,7 +110,7 @@ require("packer").startup(function(use)
 	-- snippets
 	use({
 		"L3MON4D3/LuaSnip",
-		event = "BufRead",
+		event = "VimEnter",
 		requires = { "rafamadriz/friendly-snippets" },
 		config = function()
 			require("luasnip.loaders.from_vscode").lazy_load()
@@ -230,7 +228,6 @@ require("packer").startup(function(use)
 	})
 	use({
 		"ahmedkhalf/project.nvim",
-		after = "nvim-tree.lua",
 		config = function()
 			require("plugins.project")
 		end,

@@ -14,58 +14,9 @@ lspkind.init({
 	symbol_map = require("config").lspkind_symbol_map,
 })
 
-local has_empty_before = function()
-	if bo.buftype == "prompt" then
-		return false
-	end
-	local line, col = unpack(api.nvim_win_get_cursor(0))
-	return api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(0, col):match("^%s*$") ~= nil
-end
-
-local t = function(key)
-	return api.nvim_replace_termcodes(key, true, true, true)
-end
-
 local feedkey = function(key, mode)
-	api.nvim_feedkeys(t(key), mode, true)
+	api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
-
-local tab_complete = function(fallback)
-	if fn.pumvisible() == 1 then
-		feedkey("<C-n>", "n")
-	elseif cmp.visible() then
-		cmp.select_next_item()
-	else
-		fallback()
-	end
-end
-
-local s_tab_complete = function(fallback)
-	if fn.pumvisible() == 1 then
-		feedkey("<C-p>", "n")
-	elseif cmp.visible() then
-		cmp.select_prev_item()
-	else
-		fallback()
-	end
-end
-
-local alt_tab_complete = function(fallback)
-	if cmp.visible() then
-		cmp.select_next_item()
-	else
-		fallback()
-	end
-end
-
-local alt_s_tab_complete = function(fallback)
-	if cmp.visible() then
-		cmp.select_prev_item()
-	else
-		fallback()
-	end
-end
-
 
 function JumpNext()
 	if luasnip and luasnip.jumpable(1) then
@@ -111,8 +62,8 @@ cmp.setup({
 	mapping = {
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<Tab>"] = tab_complete,
-		["<S-Tab>"] = s_tab_complete,
+		["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+		["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
 		["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
 	},
 	sources = {
