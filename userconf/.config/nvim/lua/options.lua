@@ -37,9 +37,6 @@ opt.termguicolors = true
 g.kommentary_create_default_mappings = false
 g.Illuminate_ftblacklist = config.illuminate_blacklist
 g.coc_global_extensions = config.coc_extensions
-g.better_whitespace_filetypes_blacklist = config.whitespace_blacklist
-g.better_whitespace_guicolor = "#880000"
-g.current_line_whitespace_disabled_hard = 1
 
 g.terminal_color_0 = "#000000"
 g.terminal_color_1 = "#ff0000"

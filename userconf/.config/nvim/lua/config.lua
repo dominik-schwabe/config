@@ -126,16 +126,6 @@ M.coc_extensions = {
 	"coc-sumneko-lua",
 	"coc-texlab",
 }
-M.whitespace_blacklist = {
-	"diff",
-	"git",
-	"gitcommit",
-	"unite",
-	"qf",
-	"help",
-	"markdown",
-	"fugitive",
-}
 M.linters = {
 	text = { "languagetool" },
 	tex = { "chktex", "languagetool" },
