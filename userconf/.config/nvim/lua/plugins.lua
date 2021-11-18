@@ -25,14 +25,13 @@ require("packer").startup(function(use)
 	-- complete
 	use({
 		"hrsh7th/nvim-cmp",
-		after = "LuaSnip",
 		requires = {
-			{ "hrsh7th/cmp-nvim-lua", after = "nvim-cmp" },
-			{ "hrsh7th/cmp-path", after = "nvim-cmp" },
-			{ "hrsh7th/cmp-buffer", after = "nvim-cmp" },
-			{ "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
-			{ "saadparwaiz1/cmp_luasnip", after = "nvim-cmp" },
-			{ "andersevenrud/compe-tmux", branch = "cmp", after = "nvim-cmp" },
+			{ "hrsh7th/cmp-nvim-lua" },
+			{ "hrsh7th/cmp-path" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "andersevenrud/compe-tmux", branch = "cmp" },
 		},
 		config = function()
 			require("plugins.cmp")
@@ -42,7 +41,6 @@ require("packer").startup(function(use)
 	-- lsp
 	use({
 		"neovim/nvim-lspconfig",
-		after = "cmp-nvim-lsp",
 		requires = {
 			{ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" } },
 			"RRethy/vim-illuminate",
@@ -110,7 +108,6 @@ require("packer").startup(function(use)
 	-- snippets
 	use({
 		"L3MON4D3/LuaSnip",
-		event = "VimEnter",
 		requires = { "rafamadriz/friendly-snippets" },
 		config = function()
 			require("luasnip.loaders.from_vscode").lazy_load()
