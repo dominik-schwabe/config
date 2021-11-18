@@ -47,6 +47,7 @@ M.root_patterns = {
 	".hg",
 	".bzr",
 	".svn",
+	".latexmkrc",
 	"Makefile",
 	"package.json",
 	-- "requirements.txt",
@@ -66,13 +67,6 @@ M.illuminate_blacklist = {
 }
 M.colorscheme = "monokai"
 M.lsp_configs = {
-	jsonls = {
-		settings = {
-			json = {
-				schemas = require("schemastore").json.schemas(),
-			},
-		},
-	},
 	-- latex = {
 	-- 	settings = {
 	-- 	  texlab = {

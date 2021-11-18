@@ -39,6 +39,13 @@ local lsp_installer = require("nvim-lsp-installer")
 local lspconfig = require("lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
+lsp_configs.jsonls = {
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas(),
+    },
+  },
+}
 
 lsp_installer.settings({
   log_level = vim.log.levels.ERROR,
