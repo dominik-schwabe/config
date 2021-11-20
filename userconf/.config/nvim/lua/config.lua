@@ -6,6 +6,16 @@ M.lsp_signs = {
 	Hint = " ",
 	Information = " ",
 }
+M.whitespace_blacklist = {
+	"diff",
+	"git",
+	"gitcommit",
+	"unite",
+	"qf",
+	"help",
+	"markdown",
+	"fugitive",
+}
 M.lspkind_symbol_map = {
 	Text = "",
 	Method = "",
@@ -64,6 +74,7 @@ M.illuminate_blacklist = {
 	"term",
 	"fugitiveblame",
 	"lsputil_codeaction_list",
+	"",
 }
 M.colorscheme = "monokai"
 M.lsp_configs = {
@@ -136,7 +147,7 @@ M.linters = {
 	lua = { "luacheck" },
 }
 M.repls = {
-	python = 'ipython'
+	python = "ipython",
 }
 
 return M

@@ -70,7 +70,7 @@ PROMPT_COLOR=${DEFAULT_COLOR:-green}
 git_prompt_info() {
     if ref=$(git symbolic-ref HEAD 2>&1); then
         branch=${ref#refs/heads/}
-        if [[ "$branch" = "master" ]]; then
+        if [[ "$branch" = "master" || "$branch" = "main" ]]; then
             echo " %F{1}$branch%f"
         else
             echo " %F{3}$branch%f"
