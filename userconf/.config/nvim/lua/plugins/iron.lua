@@ -72,7 +72,6 @@ function SendLines(lines)
 		if #lines == 1 and (bo.ft == "python" or bo.ft == "r") then
 			iron.core.send(bo.ft, { "\27[200~" .. lines[1] .. "\27[201~" })
 		else
-			d(lines)
 			iron.core.send(bo.ft, lines)
 		end
 	end
