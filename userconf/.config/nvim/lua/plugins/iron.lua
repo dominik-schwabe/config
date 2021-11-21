@@ -1,21 +1,11 @@
 local api = vim.api
 local fn = vim.fn
 local g = vim.g
-local v = vim.v
 local bo = vim.bo
 local cmd = vim.cmd
 
 vim.g.iron_map_defaults = 0
 vim.g.iron_map_extended = 0
-
---   nmap <localleader>t    <Plug>(iron-send-motion)
---   vmap <localleader>v    <Plug>(iron-visual-send)
---   nmap <localleader>r    <Plug>(iron-repeat-cmd)
---   nmap <localleader>l    <Plug>(iron-send-line)
---   nmap <localleader><CR> <Plug>(iron-cr)
---   nmap <localleader>i    <plug>(iron-interrupt)
---   nmap <localleader>q    <Plug>(iron-exit)
---   nmap <localleader>c    <Plug>(iron-clear)
 
 local iron = require("iron")
 
@@ -75,19 +65,16 @@ local function fix_indent(lines)
 end
 
 function SendLines(lines)
-	if #lines == 0 then
-		return
-	end
 	lines = transform(lines, replace_tab)
 	lines = remove_empty_lines(lines)
 	lines = fix_indent(lines)
 	if #lines ~= 0 then
-		local num_last_line_string = num_leading_spaces(lines[#lines])
-		lines = table.concat(lines, "\n")
-		if num_last_line_string ~= 0 then
-			lines = lines .. "\n"
+		if #lines == 1 and (bo.ft == "python" or bo.ft == "r") then
+			iron.core.send(bo.ft, { "\27[200~" .. lines[1] .. "\27[201~" })
+		else
+			d(lines)
+			iron.core.send(bo.ft, lines)
 		end
-		iron.core.send(bo.ft, lines)
 	end
 end
 
@@ -131,7 +118,7 @@ function SendLine()
 	local l, c = unpack(api.nvim_win_get_cursor(0))
 	local line = fn.getline(l)
 	if not is_whitespace(line) then
-		iron.core.send_line()
+		SendLines({ line })
 	end
 	pcall(api.nvim_win_set_cursor, 0, { l + 1, c })
 end
@@ -141,21 +128,54 @@ function ReplOpen()
 end
 
 local function repl_open_cmd(buff, _)
-  api.nvim_command("botright vertical split")
-  api.nvim_set_current_buf(buff)
+	api.nvim_command("botright vertical split")
+	api.nvim_set_current_buf(buff)
 
 	local winnr = fn.bufwinnr(buff)
-  local winid = fn.win_getid(winnr)
-  api.nvim_win_set_option(winid, "winfixwidth", true)
-  local timer = vim.loop.new_timer()
-  timer:start(0, 0, vim.schedule_wrap(function()
-		api.nvim_buf_set_name(buff, "term://ironrepl")
-	end))
-  return winid
+	local winid = fn.win_getid(winnr)
+	api.nvim_win_set_option(winid, "winfixwidth", true)
+	local timer = vim.loop.new_timer()
+	timer:start(
+		0,
+		0,
+		vim.schedule_wrap(function()
+			api.nvim_buf_set_name(buff, "term://ironrepl")
+		end)
+	)
+	return winid
 end
 
+local extend = require("iron.util.tables").extend
+
+local format = function(open, close, cr)
+	return function(lines)
+		if #lines == 1 then
+			return { lines[1] .. cr }
+		else
+			local new = { open .. lines[1] }
+			for line = 2, #lines do
+				table.insert(new, lines[line])
+			end
+			return extend(new, close)
+		end
+	end
+end
+
+iron.core.add_repl_definitions({
+	r = {
+		R = {
+			command = { "R" },
+			format = format("\27[200~", "\27[201~\r", "\r"),
+		},
+		radian = {
+			command = { "radian" },
+			format = format("\27[200~", "\27[201~", "\r"),
+		},
+	},
+})
+
 iron.core.set_config({
-  preferred = require("config").repls,
+	preferred = require("config").repls,
 	visibility = require("iron.visibility").single,
 	repl_open_cmd = repl_open_cmd,
 	memory_management = require("iron.scope").singleton,

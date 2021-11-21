@@ -15,6 +15,8 @@ M.whitespace_blacklist = {
 	"help",
 	"markdown",
 	"fugitive",
+	"TelescopePrompt",
+	"Trouble",
 }
 M.lspkind_symbol_map = {
 	Text = "",
@@ -148,6 +150,7 @@ M.linters = {
 }
 M.repls = {
 	python = "ipython",
+	r = "radian",
 }
 
 return M

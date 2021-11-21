@@ -72,11 +72,7 @@ cmp.setup({
 		{ name = "luasnip" },
 		{ name = "path" },
 		{ name = "tmux" },
-		{ name = "buffer", opts = {
-			get_bufnrs = function()
-				return api.nvim_list_bufs()
-			end,
-		} },
+		{ name = "buffer" },
 	},
 })
 

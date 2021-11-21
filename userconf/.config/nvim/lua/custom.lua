@@ -1,6 +1,7 @@
 local o = vim.o
 local b = vim.b
 local opt = vim.opt
+local bo = vim.bo
 local fn = vim.fn
 local api = vim.api
 local cmd = vim.cmd
@@ -227,6 +228,15 @@ cmd("command! ChmodSet lua ChmodCurrent(true)")
 cmd("command! ChmodRemove lua ChmodCurrent(false)")
 
 -- trailing whitespace
+local function contains(list, x)
+	for _, v in pairs(list) do
+		if v == x then
+			return true
+		end
+	end
+	return false
+end
+
 local whitespace_blacklist = config.whitespace_blacklist
 local window_matches = {}
 
@@ -236,6 +246,9 @@ local trailing_patterns = {
 }
 
 function TrailingHighlight(mode)
+	if b.disable_trailing == nil then
+		b.disable_trailing = (not api.nvim_buf_get_option(0, "modifiable")) or contains(whitespace_blacklist, bo.ft)
+	end
 	if b.disable_trailing then
 		mode = nil
 	elseif mode == "auto" then
@@ -265,6 +278,5 @@ cmd([[augroup TrailingWhitespace
     au!
     au InsertLeave * lua TrailingHighlight("n")
     au InsertEnter * lua TrailingHighlight("i")
-    au WinEnter,BufEnter * lua TrailingHighlight("auto")
-    au FileType ]] .. table.concat(whitespace_blacklist, ",") .. [[ let b:disable_trailing=v:true
+    au BufEnter * lua TrailingHighlight("auto")
   augroup END]])
