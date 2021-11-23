@@ -124,7 +124,7 @@ map_info.iron = {
 	mappings = {
 		["<CR>"] = {
 			{ { "n" }, ":<c-u>ReplSendLine<CR>", def_opt },
-			{ { "x" }, ":<c-u>ReplSendSelection<CR>", def_opt },
+			{ { "x" }, ":<c-u>ReplSendSelection<CR>gv", def_opt },
 		},
 		["<C-space>"] = {
 			{ { "n" }, ":<c-u>ReplSendParagraph<CR>", def_opt },

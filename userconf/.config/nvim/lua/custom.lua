@@ -241,14 +241,11 @@ local whitespace_blacklist = config.whitespace_blacklist
 local window_matches = {}
 
 local trailing_patterns = {
-	n = [[\s\+$]],
-	i = [[\s\+\%#\@<!$]],
+	n = [[\(\s\|\r\)\+$]],
+	i = [[\(\s\|\r\)\+\%#\@<!$]],
 }
 
 function TrailingHighlight(mode)
-	if b.disable_trailing == nil then
-		b.disable_trailing = (not api.nvim_buf_get_option(0, "modifiable")) or contains(whitespace_blacklist, bo.ft)
-	end
 	if b.disable_trailing then
 		mode = nil
 	elseif mode == "auto" then
@@ -274,9 +271,20 @@ function TrailingHighlight(mode)
 	end
 end
 
+function UpdateTrailingHiglight()
+	local filetype = fn.expand("<afile>")
+	if filetype == "" then
+		filetype = api.nvim_buf_get_option(0, "filetype")
+	end
+	b.disable_trailing = contains(whitespace_blacklist, filetype) or not api.nvim_buf_get_option(0 , "modifiable")
+	TrailingHighlight("auto")
+end
+
 cmd([[augroup TrailingWhitespace
     au!
     au InsertLeave * lua TrailingHighlight("n")
     au InsertEnter * lua TrailingHighlight("i")
     au BufEnter * lua TrailingHighlight("auto")
+		au FileType * lua UpdateTrailingHiglight()
+		au OptionSet modifiable lua UpdateTrailingHiglight()
   augroup END]])

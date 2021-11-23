@@ -18,26 +18,6 @@ local feedkey = function(key, mode)
 	api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
-function JumpNext()
-	if luasnip and luasnip.jumpable(1) then
-		feedkey("<Plug>luasnip-jump-next", "")
-	end
-end
-
-function JumpPrev()
-	if luasnip and luasnip.jumpable(-1) then
-		feedkey("<Plug>luasnip-jump-prev", "")
-	end
-end
-
-local toggle_completion = cmp.mapping(function()
-	if fn.pumvisible() == 1 then
-		cmp.close()
-	else
-		cmp.complete()
-	end
-end)
-
 cmp.setup({
 	snippet = {
 		expand = function(args)
@@ -76,7 +56,23 @@ cmp.setup({
 	},
 })
 
-map("", "<C-y>", "<CMD>lua JumpPrev()<CR>", {})
-map("i", "<C-y>", "<CMD>lua JumpPrev()<CR>", {})
-map("", "<C-x>", "<CMD>lua JumpNext()<CR>", {})
-map("i", "<C-x>", "<CMD>lua JumpNext()<CR>", {})
+function JumpPrev()
+	if luasnip and luasnip.jumpable(-1) then
+		luasnip.jump(-1)
+	else
+		feedkey("<C-y>", "n")
+	end
+end
+
+function JumpNext()
+	if luasnip and luasnip.jumpable(1) then
+		luasnip.jump(1)
+	else
+		feedkey("<C-x>", "n")
+	end
+end
+
+map("", "<C-y>", "<CMD>lua JumpPrev()<CR>", { noremap = true })
+map("i", "<C-y>", "<CMD>lua JumpPrev()<CR>", { noremap = true })
+map("", "<C-x>", "<CMD>lua JumpNext()<CR>", { noremap = true })
+map("i", "<C-x>", "<CMD>lua JumpNext()<CR>", { noremap = true })

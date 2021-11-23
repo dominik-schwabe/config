@@ -64,7 +64,7 @@ cmd([[ hi SignColumn guibg=none ]])
 cmd([[ hi def link LspReferenceText CursorLine ]])
 cmd([[ hi def link LspReferenceWrite CursorLine ]])
 cmd([[ hi def link LspReferenceRead CursorLine ]])
-cmd([[ hi TrailingWhitespace guibg=#880000 ]])
 cmd([[ hi clear Conceal ]])
+cmd([[ hi TrailingWhitespace guibg=#880000 ]])
 
 require("colorizer").setup()
