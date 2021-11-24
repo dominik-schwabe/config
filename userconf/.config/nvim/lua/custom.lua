@@ -271,12 +271,12 @@ function TrailingHighlight(mode)
 	end
 end
 
-function UpdateTrailingHiglight()
-	local filetype = fn.expand("<afile>")
+function UpdateTrailingHighlight()
+	local filetype = fn.expand("<amatch>")
 	if filetype == "" then
 		filetype = api.nvim_buf_get_option(0, "filetype")
 	end
-	b.disable_trailing = contains(whitespace_blacklist, filetype) or not api.nvim_buf_get_option(0 , "modifiable")
+	b.disable_trailing = contains(whitespace_blacklist, filetype) or not api.nvim_buf_get_option(0, "modifiable")
 	TrailingHighlight("auto")
 end
 
@@ -285,6 +285,6 @@ cmd([[augroup TrailingWhitespace
     au InsertLeave * lua TrailingHighlight("n")
     au InsertEnter * lua TrailingHighlight("i")
     au BufEnter * lua TrailingHighlight("auto")
-		au FileType * lua UpdateTrailingHiglight()
-		au OptionSet modifiable lua UpdateTrailingHiglight()
+		au FileType * lua UpdateTrailingHighlight()
+		au OptionSet modifiable lua UpdateTrailingHighlight()
   augroup END]])

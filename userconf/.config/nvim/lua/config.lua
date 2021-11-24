@@ -77,6 +77,7 @@ M.illuminate_blacklist = {
 	"fugitiveblame",
 	"lsputil_codeaction_list",
 	"",
+	"markdown",
 }
 M.colorscheme = "monokai"
 M.lsp_configs = {

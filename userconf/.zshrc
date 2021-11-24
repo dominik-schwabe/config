@@ -15,29 +15,29 @@ ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit snippet OMZL::completion.zsh
 zinit ice wait'0' lucid
-zinit light "dominik-schwabe/vi-mode.zsh"
+zinit light dominik-schwabe/vi-mode.zsh
 zinit ice wait'!0' lucid
-zinit light "$HOME/.shell_plugins/asdf"
+zinit light $HOME/.shell_plugins/asdf
 zinit ice wait'0' lucid
 zinit snippet OMZP::git
 zinit ice wait'0' lucid
 zinit snippet OMZP::pip
 zinit ice wait'0' lucid
-zinit light "agkozak/zsh-z"
+zinit light agkozak/zsh-z
 zinit ice wait'0' lucid
-zinit light "t413/zsh-background-notify"
+zinit light t413/zsh-background-notify
 zinit ice wait'0' lucid
-zinit light "zsh-users/zsh-history-substring-search"
+zinit light zsh-users/zsh-history-substring-search
 zinit ice wait'0' lucid
-zinit light "zsh-vi-more/vi-increment"
+zinit light zsh-vi-more/vi-increment
 zinit ice wait'0' lucid
-zinit light "zdharma-continuum/fast-syntax-highlighting"
+zinit light zdharma-continuum/fast-syntax-highlighting
 zinit ice wait'0' lucid
-zinit light "MichaelAquilina/zsh-you-should-use"
+zinit light MichaelAquilina/zsh-you-should-use
 zinit ice wait'0' lucid silent
-zinit light "kutsan/zsh-system-clipboard"
+zinit light kutsan/zsh-system-clipboard
 zinit ice wait'0' lucid atload'zicompinit'
-zinit light "zsh-users/zsh-completions"
+zinit light zsh-users/zsh-completions
 
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"

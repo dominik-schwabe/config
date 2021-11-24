@@ -27,7 +27,7 @@ opt.encoding = "utf-8"
 opt.scrolloff = 8
 opt.hidden = true
 opt.updatetime = 300
-opt.shortmess:remove({ "c" })
+opt.shortmess:remove({ "c", "F" })
 opt.backspace = "indent,eol,start"
 opt.backup = false
 opt.writebackup = false
