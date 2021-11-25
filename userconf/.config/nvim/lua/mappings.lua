@@ -78,14 +78,13 @@ map_info.hop = {
 	commands = { "HopChar1", "HopWord" },
 }
 
-map_info.kommentary = {
+map_info.comment_nvim = {
 	mappings = {
 		["gc"] = {
-			{ { "n" }, "<CMD>CommentLine<CR>", silent_opt },
-			{ { "x" }, "<CMD>CommentVisual<CR>", silent_opt },
+			{ { "n", "x" }, "<CMD>Comment<CR>", silent_opt },
 		},
 	},
-	commands = { "CommentLine", "CommentVisual" },
+	commands = { "Comment" },
 }
 
 map_info.lspinstall = {
@@ -124,7 +123,7 @@ map_info.iron = {
 	mappings = {
 		["<CR>"] = {
 			{ { "n" }, ":<c-u>ReplSendLine<CR>", def_opt },
-			{ { "x" }, ":<c-u>ReplSendSelection<CR>gv", def_opt },
+			{ { "x" }, ":<c-u>ReplSendSelection<CR>", def_opt },
 		},
 		["<C-space>"] = {
 			{ { "n" }, ":<c-u>ReplSendParagraph<CR>", def_opt },

@@ -173,11 +173,11 @@ require("packer").startup(function(use)
 
 	-- comment
 	use({
-		"b3nj5m1n/kommentary",
+		"numToStr/Comment.nvim",
 		config = function()
-			require("plugins.kommentary")
+			require("plugins.comment-nvim")
 		end,
-		cmd = get_cmds("kommentary"),
+		cmd = get_cmds("comment_nvim"),
 	})
 
 	-- quickfix
