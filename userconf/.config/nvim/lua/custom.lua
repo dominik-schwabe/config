@@ -202,7 +202,7 @@ function QuickfixToggle()
 	if QuickfixExists() then
 		cmd("cclose")
 	else
-		cmd("copen")
+		cmd("botright copen")
 	end
 end
 

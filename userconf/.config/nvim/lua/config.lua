@@ -81,6 +81,8 @@ M.illuminate_blacklist = {
 	"lsputil_codeaction_list",
 	"",
 	"markdown",
+	"yaml",
+	"json",
 }
 M.colorscheme = "monokai"
 M.lsp_configs = {

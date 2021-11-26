@@ -11,4 +11,4 @@ require('Comment').setup({
     },
 })
 
-cmd('command! Comment lua require("Comment").toggle()')
+cmd('command! Comment lua require("Comment.api").gcc("char")')

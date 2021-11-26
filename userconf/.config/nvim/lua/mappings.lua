@@ -78,13 +78,14 @@ map_info.hop = {
 	commands = { "HopChar1", "HopWord" },
 }
 
-map_info.comment_nvim = {
+map_info.kommentary = {
 	mappings = {
 		["gc"] = {
-			{ { "n", "x" }, "<CMD>Comment<CR>", silent_opt },
+			{ { "n" }, "<CMD>CommentLine<CR>", silent_opt },
+			{ { "x" }, "<CMD>CommentVisual<CR>", silent_opt },
 		},
 	},
-	commands = { "Comment" },
+	commands = { "CommentLine", "CommentVisual" },
 }
 
 map_info.lspinstall = {
