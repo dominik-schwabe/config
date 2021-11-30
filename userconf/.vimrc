@@ -38,7 +38,7 @@ Plug 'tpope/vim-repeat'
 "beautiful statusbar
 Plug 'itchyny/lightline.vim'
 "colorschemes
-Plug 'crusoexia/vim-monokai'
+Plug 'Reewr/vim-monokai-phoenix'
 "better language behavior
 Plug 'sheerun/vim-polyglot'
 "explore directory
@@ -167,7 +167,7 @@ nnoremap <silent> - :call MyResize(1)<CR>
 if has("termguicolors") | set termguicolors | endif
 
 syntax on
-colorscheme monokai
+colorscheme monokai-phoenix
 set background=dark
 hi clear Conceal
 

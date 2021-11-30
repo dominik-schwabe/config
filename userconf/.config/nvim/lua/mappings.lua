@@ -205,19 +205,19 @@ map_info.default = {
 		["<"] = { { { "x" }, "<gv", def_opt } },
 		[">"] = { { { "x" }, ">gv", def_opt } },
 		["<C-h>"] = {
-			{ { "n", "x", "i" }, "<CMD>wincmd h<CR>", unique_opt },
+			{ { "n", "x", "i" }, "<CMD>wincmd h<CR>", nore_opt },
 			{ { "t" }, "<C-\\><C-n>:TermGoDirection h<CR>", def_opt },
 		},
 		["<C-j>"] = {
-			{ { "n", "x", "i" }, "<CMD>wincmd j<CR>", unique_opt },
+			{ { "n", "x", "i" }, "<CMD>wincmd j<CR>", nore_opt },
 			{ { "t" }, "<C-\\><C-n>:TermGoDirection j<CR>", def_opt },
 		},
 		["<C-k>"] = {
-			{ { "n", "x", "i" }, "<CMD>wincmd k<CR>", unique_opt },
+			{ { "n", "x", "i" }, "<CMD>wincmd k<CR>", nore_opt },
 			{ { "t" }, "<C-\\><C-n>:TermGoDirection k<CR>", def_opt },
 		},
 		["<C-l>"] = {
-			{ { "n", "x", "i" }, "<CMD>wincmd l<CR>", unique_opt },
+			{ { "n", "x", "i" }, "<CMD>wincmd l<CR>", nore_opt },
 			{ { "t" }, "<C-\\><C-n>:TermGoDirection l<CR>", def_opt },
 		},
 		["db"] = { { { "n" }, "dvb", def_opt } },

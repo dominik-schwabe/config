@@ -1,6 +1,7 @@
 local api = vim.api
 local fn = vim.fn
 local g = vim.g
+local o = vim.o
 local bo = vim.bo
 local cmd = vim.cmd
 
@@ -103,8 +104,21 @@ function SendParagraph()
 	fn.cursor(j < max and j or max, c + 1)
 end
 
+local function get_visual_selection()
+	local line_start, column_start = unpack(fn.getpos("'<"), 2, 3)
+	local line_end, column_end = unpack(fn.getpos("'>"), 2, 3)
+	local lines = fn.getline(line_start, line_end)
+	if #lines == 0 then
+		return ""
+	end
+	column_end = column_end - (o.selection == "inclusive" and 0 or 1)
+	lines[#lines] = lines[#lines]:sub(0, column_end)
+	lines[1] = lines[1]:sub(column_start)
+	return lines
+end
+
 function SendSelection()
-	local lines = remove_empty_lines(fn.getline("'<", "'>"))
+	local lines = remove_empty_lines(get_visual_selection())
 	lines = fix_indent(lines)
 	SendLines(lines)
 end

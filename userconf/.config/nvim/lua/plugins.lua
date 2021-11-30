@@ -264,12 +264,6 @@ require("packer").startup(function(use)
 	use("wellle/targets.vim")
 	use("michaeljsmith/vim-indent-object")
 	use("tpope/vim-surround")
-	use({
-		"othree/eregex.vim",
-		config = function()
-			require("plugins.eregex")
-		end,
-	})
 	use("mg979/vim-visual-multi")
 	use("tpope/vim-repeat")
 	use({ "foosoft/vim-argwrap", cmd = get_cmds("argwrap") })
