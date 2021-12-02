@@ -121,8 +121,24 @@ M.null_ls = {
 		"styler",
 	},
 }
+local treesitter_min = {
+	"bash",
+	"comment",
+	"css",
+	"html",
+	"javascript",
+	"json",
+	"lua",
+	"python",
+	"r",
+	"tsx",
+	"typescript",
+	"vim",
+	"yaml",
+}
+local ensure_installed = os.getenv("NVIM_TREESITTER_MAINTAINED") == "true" and "maintained" or treesitter_min
 M.treesitter = {
-	ensure_installed = "maintained",
+	ensure_installed = ensure_installed,
 	ignore_install = { "latex" },
 	highlight_disable = {},
 }

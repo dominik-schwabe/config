@@ -146,7 +146,6 @@ local function repl_open_cmd(buff, _)
 
 	local winnr = fn.bufwinnr(buff)
 	local winid = fn.win_getid(winnr)
-	api.nvim_win_set_option(winid, "winfixwidth", true)
 	local timer = vim.loop.new_timer()
 	timer:start(
 		0,
@@ -189,7 +188,7 @@ iron.core.add_repl_definitions({
 
 iron.core.set_config({
 	preferred = require("config").repls,
-	visibility = require("iron.visibility").single,
+	visibility = require("iron.visibility").toggle,
 	repl_open_cmd = repl_open_cmd,
 	memory_management = require("iron.scope").singleton,
 })

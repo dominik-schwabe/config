@@ -131,7 +131,10 @@ map_info.iron = {
 			{ { "x" }, ":<c-u>ReplSendSelection<CR>", def_opt },
 		},
 		["<leader><space>"] = { { { "n" }, ":<c-u>ReplSendBuffer<CR>", def_opt } },
-		["<F4>"] = { { { "n" }, "<cmd>ReplOpen<CR>", def_opt } },
+		["<F4>"] = {
+			{ { "n" }, ":ReplOpen<CR><ESC>", def_opt },
+			{ { "i" }, "<cmd>ReplOpen<CR>", def_opt },
+		},
 	},
 	commands = { "ReplSendLine", "ReplSendParagraph", "ReplSendSelection", "ReplSendBuffer", "ReplOpen" },
 }

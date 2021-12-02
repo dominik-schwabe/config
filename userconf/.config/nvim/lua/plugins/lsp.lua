@@ -1,13 +1,16 @@
 local map = vim.api.nvim_set_keymap
 local api = vim.api
-local lsp = vim.lsp
 local cmd = vim.cmd
 local fn = vim.fn
 
 local def_opt = { noremap = true, silent = true }
 local nore_opt = { noremap = true }
 
-lsp.handlers["textDocument/codeAction"] = require("lsputil.codeAction").code_action_handler
+-- local lsp_signature = require("lsp_signature")
+
+-- lsp_signature.setup({
+-- 	floating_window = false,
+-- })
 
 local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
@@ -16,7 +19,7 @@ local on_attach = function(client, bufnr)
 	client.resolved_capabilities.document_formatting = false
 	client.resolved_capabilities.document_range_formatting = false
 
-	require("lsp_signature").on_attach()
+	-- lsp_signature.on_attach()
 	require("illuminate").on_attach(client)
 	buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", def_opt)
 	buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", def_opt)
@@ -41,13 +44,13 @@ local lsp_installer = require("nvim-lsp-installer")
 local lspconfig = require("lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
-lsp_configs.jsonls = {
-	settings = {
-		json = {
-			schemas = require("schemastore").json.schemas(),
-		},
-	},
-}
+-- lsp_configs.jsonls = {
+-- 	settings = {
+-- 		json = {
+-- 			schemas = require("schemastore").json.schemas(),
+-- 		},
+-- 	},
+-- }
 
 lsp_installer.settings({
 	log_level = vim.log.levels.ERROR,

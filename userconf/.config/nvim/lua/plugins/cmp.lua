@@ -52,7 +52,7 @@ cmp.setup({
 		{ name = "luasnip" },
 		{ name = "path" },
 		{ name = "tmux" },
-		{ name = "buffer" },
+		-- { name = "buffer" },
 	},
 })
 

@@ -45,11 +45,10 @@ require("packer").startup(function(use)
 			{ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" } },
 			"RRethy/vim-illuminate",
 			"onsails/lspkind-nvim",
-			{ "RishabhRD/nvim-lsputils", requires = { "RishabhRD/popfix" } },
 			"williamboman/nvim-lsp-installer",
-			"ray-x/lsp_signature.nvim",
+			-- "ray-x/lsp_signature.nvim",
 			"kosayoda/nvim-lightbulb",
-			"b0o/schemastore.nvim",
+			-- "b0o/schemastore.nvim",
 		},
 		config = function()
 			require("plugins.lsp")
