@@ -36,8 +36,6 @@ zinit ice wait'0' lucid
 zinit light MichaelAquilina/zsh-you-should-use
 zinit ice wait'0' lucid silent
 zinit light kutsan/zsh-system-clipboard
-zinit ice wait'0' lucid silent
-zinit light lljbash/zsh-renew-tmux-env
 zinit ice wait'0' lucid atload'zicompinit'
 zinit light zsh-users/zsh-completions
 
