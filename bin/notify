@@ -47,8 +47,7 @@ RET=$?
 SECONDSEND=$(date +"%s")
 ENDTIME=$(date +"%d.%m.%Y %H:%M")
 
-STATUS=$(printf '\u2718')
-[ "$RET" = "0" ] && STATUS=$(printf '\u2713')
+[ "$RET" = "0" ] && STATUS=$(printf '\u2713') || STATUS=$(printf '\u2718')
 
 SECONDS=$(( $SECONDSEND-$SECONDSSTART ))
 

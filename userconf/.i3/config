@@ -114,8 +114,6 @@ bindsym $mod+7 workspace $ws7
 bindsym $mod+o workspace $ws2
 bindsym $mod+i workspace $ws3
 bindsym $mod+u workspace $ws4
-bindsym $mod+8 workspace $ws5
-bindsym $mod+9 workspace $ws6
 bindsym $mod+p workspace $ws7
 
 # move focused container to workspace
@@ -123,8 +121,6 @@ bindsym $mod+Shift+odiaeresis move container to workspace $ws1; workspace $ws1
 bindsym $mod+Shift+o move container to workspace $ws2; workspace $ws2
 bindsym $mod+Shift+i move container to workspace $ws3; workspace $ws3
 bindsym $mod+Shift+u move container to workspace $ws4; workspace $ws4
-bindsym $mod+Shift+8 move container to workspace $ws5; workspace $ws5
-bindsym $mod+Shift+9 move container to workspace $ws6; workspace $ws6
 bindsym $mod+Shift+p move container to workspace $ws7; workspace $ws7
 
 bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1

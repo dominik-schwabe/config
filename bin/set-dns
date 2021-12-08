@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readarray -t CONNECTIONS <<<$(nmcli -t -f NAME connection)
+readarray -t CONNECTIONS <<< $(nmcli -t -f NAME connection)
 for CONNECTION in "${CONNECTIONS[@]}"; do
   TYPE=$(nmcli connection show "$CONNECTION" | grep connection.type: | tr -s " " | cut -d " " -f2-)
   echo $CONNECTION

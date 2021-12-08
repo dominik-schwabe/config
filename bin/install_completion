@@ -25,13 +25,16 @@ download_completion() {
 command_completion() {
     [ ! -r $ZSH_COMPLETIONS_DIR/_$1 ] && command -v $1 2>&1 >/dev/null && {
         echo "generating completion '$@'"
-        $@ > $ZSH_COMPLETIONS_DIR/_$1 || return 1
+        COMPLETION_FILE="$ZSH_COMPLETIONS_DIR/_$1"
+        $@ > "$COMPLETION_FILE" || {
+            rm "$COMPLETION_FILE"
+            return 1
+        }
         _INSTALLED_NEW_COMPLETION=true
     }
 }
 
 download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            pip
-download_completion https://raw.githubusercontent.com/iboyperson/zsh-pipenv/master/_pipenv               pipenv
 download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z           7z
 download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl youtube-dl
 download_completion https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo              cargo
@@ -39,5 +42,7 @@ download_completion https://raw.githubusercontent.com/rust-lang/zsh-config/maste
 download_completion https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf              asdf
 command_completion kubectl completion zsh
 command_completion rustup completions zsh
+command_completion pipenv --completion
+command_completion pdm completion
 
 zinit creinstall $ZSH_COMPLETIONS_DIR

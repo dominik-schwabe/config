@@ -224,6 +224,7 @@ map_info.default = {
 			{ { "t" }, "<C-\\><C-n>:TermGoDirection l<CR>", def_opt },
 		},
 		["db"] = { { { "n" }, "dvb", def_opt } },
+		["cb"] = { { { "n" }, "cvb", def_opt } },
 		["<C-g>"] = { { { "n" }, "2<C-g>", nore_opt } },
 		["<leader>x"] = { { { "n", "x" }, "<CMD>ChmodSet<CR>", def_opt } },
 		["<leader>X"] = { { { "n", "x" }, "<CMD>ChmodRemove<CR>", def_opt } },
