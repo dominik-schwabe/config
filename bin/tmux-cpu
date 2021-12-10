@@ -11,8 +11,10 @@ function get_load(){
 }
 
 BEGIN {
+    time=ARGV[1]
+    if (!time) time = 2
     split(get_load(), cpu_before)
-    system("sleep 2")
+    system("sleep " time)
     split(get_load(), cpu_after)
     user = cpu_after[2] - cpu_before[2];
     nice = cpu_after[3] - cpu_before[3];
