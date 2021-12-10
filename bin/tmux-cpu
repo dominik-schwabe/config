@@ -1,0 +1,29 @@
+#!/usr/bin/awk -f
+
+function get_load(){
+    file = "/proc/stat"
+    if ((getline cpu_line < file) <= 0) {
+        print "cpu unknown"
+        exit 1
+    }
+    close(file)
+    return cpu_line
+}
+
+BEGIN {
+    split(get_load(), cpu_before)
+    system("sleep 2")
+    split(get_load(), cpu_after)
+    user = cpu_after[2] - cpu_before[2];
+    nice = cpu_after[3] - cpu_before[3];
+    sys  = cpu_after[4] - cpu_before[4];
+    idle = cpu_after[5] - cpu_before[5];
+    busy_cpu = user + nice + sys
+    all_cpu = busy_cpu + idle
+    load = busy_cpu/all_cpu * 100
+    if (load < 50.0) fg="##00FF00"
+    else if (load < 80.0) fg="##DEED12"
+    else fg="##FF0000"
+    printf("#[fg=%s] %3d%%\n", fg, load)
+    fflush(stdout)
+}

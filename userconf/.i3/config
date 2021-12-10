@@ -199,7 +199,7 @@ bindsym $mod+underscore exec --no-startup-id pamixer -d 5
 bindsym $mod+plus exec --no-startup-id pamixer -i 5
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -time 0 +5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -time 0 -5
-bindsym XF86ScreenSaver exec --no-startup-id i3lock -c 000000
+bindsym XF86ScreenSaver exec --no-startup-id "playerctl -a pause ; exec i3lock -c 000000"
 bindsym XF86AudioNext exec --no-startup-id "$playerctl next"
 bindsym XF86AudioPrev exec --no-startup-id "$playerctl previous"
 bindsym XF86AudioPlay exec --no-startup-id "$playerctl  play-pause"
@@ -320,8 +320,8 @@ bindsym $mod+adiaeresis exec --no-startup-id "~/.bin/scratchpad_thunderbird"
 exec --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id flameshot
 exec --no-startup-id telegram-desktop -startintray
-exec --no-startup-id discord --start-minimized
-exec --no-startup-id "sleep 5; birdtray"
+exec --no-startup-id "sleep 10; discord --start-minimized"
+exec --no-startup-id "sleep 10; birdtray"
 exec --no-startup-id spotify
 
 assign [class="firefox"] $ws1

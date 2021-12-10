@@ -166,7 +166,7 @@ map_info.todo_comments = {
 
 map_info.trouble = {
 	mappings = {
-		["ä"] = { { { "n", "x" }, "<cmd>TroubleToggle lsp_document_diagnostics<cr>", def_opt } },
+		["ä"] = { { { "n", "x" }, "<cmd>TroubleToggle document_diagnostics<cr>", def_opt } },
 	},
 	commands = { "TroubleToggle" },
 }
