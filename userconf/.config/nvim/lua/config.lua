@@ -163,11 +163,11 @@ M.coc_extensions = {
 }
 M.linters = {
 	text = { "languagetool" },
-	tex = { "chktex", "languagetool" },
+	tex = { "chktex" },
 	cpp = { "cppcheck" },
 	javascript = { "eslint" },
 	markdown = { "markdownlint" },
-	python = { "pyling" },
+	python = { "pylint" },
 	lua = { "luacheck" },
 }
 M.repls = {
