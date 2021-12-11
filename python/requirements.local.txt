@@ -4,6 +4,7 @@ ipdb
 ipython
 ipython_autoimport
 neovim-remote
+pdm
 pipenv
 pylint
 pynvim
