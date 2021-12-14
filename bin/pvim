@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+resolve_python() {
+	if [[ "$1" == "/" || "$1" == "$HOME" ]]; then
+		return 0
+	elif [[ -f "$1/pyproject.toml" ]]; then
+		return 1
+	elif [[ -f "$1/Pipfile" || -f "$1/Pipfile.lock" ]]; then
+		return 2
+	fi
+	return $(resolve_python "$(dirname $1)")
+}
+
+FILE_PATH=$(realpath ${1-"."})
+PROGRAM=$(resolve_python "$FILE_PATH")
+if [[ $PROGRAM == 1 ]]; then
+	pdm run $EDITOR $FILE_PATH
+elif [[ $PROGRAM == 2 ]]; then
+	pipenv --venv >/dev/null && pipenv run $EDITOR $1
+fi
+
+echo "no environment found"
+exit 1

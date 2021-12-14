@@ -12,25 +12,7 @@ local feedkey = function(key, mode)
   api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
-g.coc_global_extensions = {
-  'coc-clangd',
-  'coc-css',
-  'coc-emmet',
-  'coc-docker',
-  'coc-html',
-  'coc-java',
-  'coc-json',
-  'coc-prettier',
-  'coc-pyright',
-  'coc-r-lsp',
-  'coc-sh',
-  'coc-snippets',
-  'coc-tsserver',
-  'coc-ultisnips',
-  'coc-vimlsp',
-  'coc-vimtex',
-  'coc-yaml'
-}
+g.coc_global_extensions = require("config").coc_extensions
 
 local function check_back_space()
   local col = fn.col('.') - 1
