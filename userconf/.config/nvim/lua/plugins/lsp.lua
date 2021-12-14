@@ -81,9 +81,9 @@ local function nullls_on_attach(client, bufnr)
 	end
 	buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", def_opt)
 end
-null_ls.config({ sources = sources })
-lspconfig["null-ls"].setup({
+null_ls.setup({
 	on_attach = nullls_on_attach,
+	sources = sources,
 })
 
 local signs = require("config").lsp_signs
