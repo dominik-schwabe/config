@@ -4,7 +4,7 @@ require("tmux").setup({
     redirect_to_clipboard = true,
     sync_clipboard = false,
     sync_deletes = true,
-    sync_unnamed = true
+    sync_unnamed = true,
   },
   navigation = { enable_default_keybindings = true },
 })

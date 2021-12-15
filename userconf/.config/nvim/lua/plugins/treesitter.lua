@@ -1,31 +1,31 @@
 local map = vim.api.nvim_set_keymap
 
-local def_opt = {noremap = true, silent = true}
-local noremap = {noremap = true}
+local def_opt = { noremap = true, silent = true }
+local noremap = { noremap = true }
 
 local treesitter_config = require("config").treesitter
-require'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup({
   playground = {
     enable = true,
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
     keybindings = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
+      toggle_query_editor = "o",
+      toggle_hl_groups = "i",
+      toggle_injected_languages = "t",
+      toggle_anonymous_nodes = "a",
+      toggle_language_display = "I",
+      focus_language = "f",
+      unfocus_language = "F",
+      update = "R",
+      goto_node = "<cr>",
+      show_help = "?",
     },
   },
   highlight = {
     enable = true,
-    disable = treesitter_config.highlight_disable
+    disable = treesitter_config.highlight_disable,
   },
   incremental_selection = {
     enable = true,
@@ -33,7 +33,7 @@ require'nvim-treesitter.configs'.setup {
       init_selection = ")",
       node_incremental = ")",
       node_decremental = "(",
-    }
+    },
   },
   matchup = {
     enable = true,
@@ -95,8 +95,8 @@ require'nvim-treesitter.configs'.setup {
   context_commentstring = {
     enable = true,
     enable_autocmd = false,
-  }
-}
+  },
+})
 
 map("n", "<space>tt", "<CMD>TSModuleInfo<CR>", noremap)
 map("n", "<space>tc", "<CMD>TSConfigInfo<CR>", noremap)

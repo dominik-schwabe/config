@@ -3,8 +3,8 @@ local bo = vim.bo
 local cmd = vim.cmd
 local fn = vim.fn
 local map = api.nvim_set_keymap
-local def_opt = {noremap = true, silent = true}
-local noremap = {noremap = true}
+local def_opt = { noremap = true, silent = true }
+local noremap = { noremap = true }
 
 function Gitdiffsplit(custom)
   if fn["fugitive#CanDiffoff"](fn.bufnr("%")) == 0 then

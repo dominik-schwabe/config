@@ -1,6 +1,6 @@
 local fn = vim.fn
 local cmd = vim.cmd
-local exec =  vim.api.nvim_exec
+local exec = vim.api.nvim_exec
 
 cmd([[ runtime plugin/grepper.vim]])
 cmd([[ let g:grepper.tools = ['rg', 'git', 'grep'] ]])
@@ -22,7 +22,7 @@ function SearchFilesRegex()
 end
 
 function GrepWord()
-  cmd('Grepper -cword')
+  cmd("Grepper -cword")
   fn.histdel("@", -1)
 end
 

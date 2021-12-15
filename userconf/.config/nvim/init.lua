@@ -9,7 +9,7 @@ local fn = vim.fn
 local api = vim.api
 
 function TermDelete()
-	api.nvim_buf_delete(fn.expand("<abuf>"), { force = true })
+  api.nvim_buf_delete(fn.expand("<abuf>"), { force = true })
 end
 
 cmd("au CmdWinEnter * quit")

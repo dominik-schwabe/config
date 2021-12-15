@@ -1,5 +1,5 @@
 local map = vim.api.nvim_set_keymap
-local def_opt = {noremap = true}
+local def_opt = { noremap = true }
 
 map("", "<space>p", "<NOP>", def_opt)
 map("", "<space>pi", ":PackerInstall<CR>", def_opt)

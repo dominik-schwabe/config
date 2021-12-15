@@ -4,9 +4,9 @@ local g = vim.g
 local fn = vim.fn
 local map = api.nvim_set_keymap
 
-local def_opt = {noremap = true, silent = true}
-local nore_opt = {noremap = true}
-local silent_opt = {silent = true}
+local def_opt = { noremap = true, silent = true }
+local nore_opt = { noremap = true }
+local silent_opt = { silent = true }
 
 local feedkey = function(key, mode)
   api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
@@ -15,8 +15,8 @@ end
 g.coc_global_extensions = require("config").coc_extensions
 
 local function check_back_space()
-  local col = fn.col('.') - 1
-  return (col == 0) or (fn.getline('.'):sub(col, col):match("%s") ~= nil)
+  local col = fn.col(".") - 1
+  return (col == 0) or (fn.getline("."):sub(col, col):match("%s") ~= nil)
 end
 
 function Tab()
@@ -44,7 +44,6 @@ map("i", "<S-TAB>", "<CMD>lua S_Tab()<CR>", def_opt)
 -- map("i", "<c-space>", "call coc#refresh()", def_opt)
 
 cmd([[inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]])
-
 
 map("n", "[g", "<Plug>(coc-diagnostic-prev)", {})
 map("n", "]g", "<Plug>(coc-diagnostic-next)", {})

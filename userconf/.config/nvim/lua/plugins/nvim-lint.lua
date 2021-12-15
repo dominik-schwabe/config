@@ -1,7 +1,7 @@
 cmd = vim.cmd
 bo = vim.bo
 
-local lint = require('lint')
+local lint = require("lint")
 local linters = require("config").linters
 
 lint.linters_by_ft = linters

@@ -1,1 +1,1 @@
-require('texmagic').setup({})
+require("texmagic").setup({})
