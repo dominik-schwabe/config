@@ -100,6 +100,15 @@ M.lsp_configs = {
 	-- 	  }
 	-- 	}
 	-- },
+	pyright = {
+		settings = {
+			python = {
+				analysis = {
+					diagnosticMode = "openFilesOnly"
+				}
+			}
+		}
+	}
 }
 M.null_ls = {
 	code_actions = {},

@@ -23,36 +23,36 @@ require("packer").startup(function(use)
 	use("norcalli/nvim-colorizer.lua")
 
 	-- complete
-	-- use({
-	-- 	"hrsh7th/nvim-cmp",
-	-- 	requires = {
-	-- 		{ "hrsh7th/cmp-nvim-lua" },
-	-- 		{ "hrsh7th/cmp-path" },
-	-- 		{ "hrsh7th/cmp-buffer" },
-	-- 		{ "hrsh7th/cmp-nvim-lsp" },
-	-- 		{ "saadparwaiz1/cmp_luasnip" },
-	-- 		{ "andersevenrud/compe-tmux", branch = "cmp" },
-	-- 	},
-	-- 	config = function()
-	-- 		require("plugins.cmp")
-	-- 	end,
-	-- })
+	use({
+		"hrsh7th/nvim-cmp",
+		requires = {
+			{ "hrsh7th/cmp-nvim-lua" },
+			{ "hrsh7th/cmp-path" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "andersevenrud/compe-tmux", branch = "cmp" },
+		},
+		config = function()
+			require("plugins.cmp")
+		end,
+	})
 
 	-- lsp
-	-- use({
-	-- 	"neovim/nvim-lspconfig",
-	-- 	requires = {
-	-- 		"RRethy/vim-illuminate",
-	-- 		"onsails/lspkind-nvim",
-	-- 		"williamboman/nvim-lsp-installer",
-	-- 		-- "ray-x/lsp_signature.nvim",
-	-- 		"kosayoda/nvim-lightbulb",
-	-- 		-- "b0o/schemastore.nvim",
-	-- 	},
-	-- 	config = function()
-	-- 		require("plugins.lsp")
-	-- 	end,
-	-- })
+	use({
+		"neovim/nvim-lspconfig",
+		requires = {
+			"RRethy/vim-illuminate",
+			"onsails/lspkind-nvim",
+			"williamboman/nvim-lsp-installer",
+			-- "ray-x/lsp_signature.nvim",
+			"kosayoda/nvim-lightbulb",
+			-- "b0o/schemastore.nvim",
+		},
+		config = function()
+			require("plugins.lsp")
+		end,
+	})
 
 	-- null-ls
 	use({
@@ -73,13 +73,13 @@ require("packer").startup(function(use)
 	})
 
 	-- coc
-	use({
-		"neoclide/coc.nvim",
-		branch = "release",
-		config = function()
-			require("plugins.coc")
-		end,
-	})
+	-- use({
+	-- 	"neoclide/coc.nvim",
+	-- 	branch = "release",
+	-- 	config = function()
+	-- 		require("plugins.coc")
+	-- 	end,
+	-- })
 
 	-- treesitter
 	use({
@@ -119,13 +119,13 @@ require("packer").startup(function(use)
 	})
 
 	-- snippets
-	-- use({
-	-- 	"L3MON4D3/LuaSnip",
-	-- 	requires = { "rafamadriz/friendly-snippets" },
-	-- 	config = function()
-	-- 		require("luasnip.loaders.from_vscode").lazy_load()
-	-- 	end,
-	-- })
+	use({
+		"L3MON4D3/LuaSnip",
+		requires = { "rafamadriz/friendly-snippets" },
+		config = function()
+			require("luasnip.loaders.from_vscode").lazy_load()
+		end,
+	})
 
 	-- dap
 	use({
