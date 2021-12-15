@@ -42,7 +42,6 @@ require("packer").startup(function(use)
 	-- use({
 	-- 	"neovim/nvim-lspconfig",
 	-- 	requires = {
-	-- 		{ "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" } },
 	-- 		"RRethy/vim-illuminate",
 	-- 		"onsails/lspkind-nvim",
 	-- 		"williamboman/nvim-lsp-installer",
@@ -55,6 +54,15 @@ require("packer").startup(function(use)
 	-- 	end,
 	-- })
 
+	-- null-ls
+	use({
+		"jose-elias-alvarez/null-ls.nvim",
+		requires = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("plugins.null-ls")
+		end,
+	})
+
 	-- lint
 	use({
 		"mfussenegger/nvim-lint",
@@ -65,7 +73,13 @@ require("packer").startup(function(use)
 	})
 
 	-- coc
-	use {"neoclide/coc.nvim", branch = "release", config = function() require("plugins.coc") end}
+	use({
+		"neoclide/coc.nvim",
+		branch = "release",
+		config = function()
+			require("plugins.coc")
+		end,
+	})
 
 	-- treesitter
 	use({
@@ -105,13 +119,13 @@ require("packer").startup(function(use)
 	})
 
 	-- snippets
-	use({
-		"L3MON4D3/LuaSnip",
-		requires = { "rafamadriz/friendly-snippets" },
-		config = function()
-			require("luasnip.loaders.from_vscode").lazy_load()
-		end,
-	})
+	-- use({
+	-- 	"L3MON4D3/LuaSnip",
+	-- 	requires = { "rafamadriz/friendly-snippets" },
+	-- 	config = function()
+	-- 		require("luasnip.loaders.from_vscode").lazy_load()
+	-- 	end,
+	-- })
 
 	-- dap
 	use({

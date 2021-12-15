@@ -69,8 +69,8 @@ endfunction]])
 cmd([[autocmd CursorHold * silent call CocActionAsync('highlight')]])
 cmd([[nmap <space>rn <Plug>(coc-rename)]])
 
-cmd([[xmap <leader>f <Plug>(coc-format-selected)]])
-cmd([[nmap <leader>f <Plug>(coc-format-selected)]])
+-- cmd([[xmap <leader>f <Plug>(coc-format-selected)]])
+-- cmd([[nmap <leader>f <Plug>(coc-format-selected)]])
 
 cmd([[augroup mygroup
   autocmd!
@@ -98,7 +98,7 @@ cmd([[command! -nargs=0 Format :call CocAction('format')]])
 cmd([[command! -nargs=? Fold :call   CocAction('fold', <f-args>)]])
 cmd([[command! -nargs=0 OR :call     CocAction('runCommand', 'editor.action.organizeImport')]])
 
-cmd([[nnoremap <silent><nowait> <space>f <CMD>Format<CR>]])
+-- cmd([[nnoremap <silent><nowait> <space>f <CMD>Format<CR>]])
 -- nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 -- nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 -- nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>

@@ -247,6 +247,9 @@ map_info.default = {
 		["<space>ss"] = { { { "n", "x" }, "<CMD>SetSpell<CR>", def_opt } },
 		["<space>sd"] = { { { "n", "x" }, "<CMD>SetSpell de_de<CR>", def_opt } },
 		["<space>se"] = { { { "n", "x" }, "<CMD>SetSpell en_us<CR>", def_opt } },
+		["n"] = { { { "n", "x" }, "nzzzv", def_opt } },
+		["N"] = { { { "n", "x" }, "Nzzzv", def_opt } },
+		["J"] = { { { "n", "x" }, "mzJ`z", def_opt } },
 	},
 }
 
