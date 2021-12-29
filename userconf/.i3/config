@@ -309,7 +309,7 @@ for_window [title="___todo___"] border pixel 5
 for_window [title="___todo___"] resize set width 80 ppt height 80 ppt
 for_window [title="___todo___"] move position center;
 for_window [title="___todo___"] sticky enable
-bindsym $mod+0 exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"set nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase\\"' --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
+bindsym $mod+0 exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"set clipboard=unnamedplus nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase\\"' --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
 
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
@@ -322,7 +322,8 @@ exec --no-startup-id flameshot
 exec --no-startup-id telegram-desktop -startintray
 exec --no-startup-id "sleep 10; discord --start-minimized"
 exec --no-startup-id "sleep 10; birdtray"
-exec --no-startup-id spotify
+exec --no-startup-id "sleep 5; spotify"
+exec --no-startup-id unclutter --timeout 0.7
 
 assign [class="firefox"] $ws1
 assign [class="Brave-browser"] $ws1

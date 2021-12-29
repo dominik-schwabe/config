@@ -99,5 +99,5 @@ if ! [ -e "$CUSTOM_PATH" ]; then
     echo -e "${GREEN}success${RESET}"
 fi
 echo
-echo -n "installing nerdfonts"
+echo "installing nerdfonts"
 ./install_scripts/install_nerdfonts.sh

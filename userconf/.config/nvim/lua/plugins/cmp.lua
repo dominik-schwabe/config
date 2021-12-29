@@ -47,9 +47,9 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
   },
   sources = {
+    { name = "luasnip" },
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
-    { name = "luasnip" },
     { name = "path" },
     { name = "tmux" },
     -- { name = "buffer" },

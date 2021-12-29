@@ -19,8 +19,6 @@ call InstallPluginManager()
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
-"multiple cursors
-Plug 'mg979/vim-visual-multi'
 "jump fast to location
 Plug 'easymotion/vim-easymotion', { 'on': ['<Plug>(easymotion-overwin-f)', '<Plug>(easymotion-overwin-f2)'] }
 "improve search

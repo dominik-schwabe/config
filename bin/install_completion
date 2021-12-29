@@ -40,6 +40,7 @@ download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-comple
 download_completion https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo              cargo
 download_completion https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust                  rustc
 download_completion https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf              asdf
+download_completion https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd           fd
 command_completion kubectl completion zsh
 command_completion rustup completions zsh
 command_completion pipenv --completion
