@@ -8,9 +8,9 @@ RED="\e[31m"
 RESET="\e[0m"
 
 declare -A FONT_URLS=(
-  ["Fira Mono Regular Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Regular/complete/Fira%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
-  ["Fira Mono Medium Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Medium/complete/Fira%20Mono%20Medium%20Nerd%20Font%20Complete%20Mono.otf
-  ["Fira Mono Bold Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Bold/complete/Fira%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.otf
+  ["Fura Mono Regular Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Regular/complete/Fura%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
+  ["Fura Mono Medium Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Medium/complete/Fura%20Mono%20Medium%20Nerd%20Font%20Complete%20Mono.otf
+  ["Fura Mono Bold Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Bold/complete/Fura%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.otf
   ["Sauce Code Pro Nerd Font Complete Mono.ttf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete%20Mono.ttf
   ["Sauce Code Pro Medium Nerd Font Complete Mono.ttf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/SourceCodePro/Medium/complete/Sauce%20Code%20Pro%20Medium%20Nerd%20Font%20Complete%20Mono.ttf
   ["Sauce Code Pro Bold Nerd Font Complete Mono.ttf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/SourceCodePro/Bold/complete/Sauce%20Code%20Pro%20Bold%20Nerd%20Font%20Complete%20Mono.ttf
