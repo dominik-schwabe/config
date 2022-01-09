@@ -102,9 +102,13 @@ M.lsp_configs = {
   -- },
   pyright = {
     settings = {
+      pyright = {
+        disableOrganizeImports = true,
+      },
       python = {
         analysis = {
           diagnosticMode = "openFilesOnly",
+          useLibraryCodeForTypes = false,
         },
       },
     },
@@ -122,7 +126,7 @@ M.null_ls = {
     "shfmt",
     "prettierd",
     "black",
-    "clang_format",
+    -- "clang_format",
     "eslint_d",
     "fixjson",
     "isort",

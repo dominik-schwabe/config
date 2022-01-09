@@ -228,7 +228,7 @@ bindsym $mod+Tab workspace $ws1
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+F1 exec --no-startup-id pkill -u $UID picom || picom -b
 bindsym --release $mod+c exec --no-startup-id $HOME/.bin/i3colorselect
-bindsym --release $mod+numbersign exec --no-startup-id pkill -u $UID xkill || xkill
+bindsym --release $mod+Delete exec --no-startup-id pkill -u $UID xkill || xkill
 
 
 default_border pixel 1
