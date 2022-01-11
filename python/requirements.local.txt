@@ -3,7 +3,12 @@ bpytop
 ipdb
 ipython
 ipython_autoimport
+isort
+jedi
+matplotlib
 neovim-remote
+numpy
+pandas
 pdm
 pipenv
 pylint

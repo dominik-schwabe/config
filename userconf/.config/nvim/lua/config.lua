@@ -122,16 +122,14 @@ M.null_ls = {
     -- "pylint"
   },
   formatting = {
-    "styler",
-    "shfmt",
-    "prettierd",
     "black",
-    -- "clang_format",
+    "clang_format",
     "eslint_d",
-    "fixjson",
     "isort",
-    "stylua",
+    "prettierd",
+    "shfmt",
     "styler",
+    "stylua",
   },
 }
 local treesitter_min = {

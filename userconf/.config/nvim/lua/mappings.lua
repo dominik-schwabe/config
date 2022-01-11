@@ -64,10 +64,13 @@ map_info.dap = {
 
 map_info.grepper = {
   mappings = {
-    ["<c-_>"] = { { { "n" }, "<CMD>GrepWord<CR>", def_opt } },
+    ["<c-_>"] = {
+      { { "n" }, "<CMD>GrepWord<CR>", def_opt },
+      { { "x" }, "<ESC>:GrepVisual<CR>", def_opt },
+    },
     ["_"] = { { { "n" }, "<CMD>SearchInFiles<CR>", def_opt } },
   },
-  commands = { "GrepWord", "SearchInFiles" },
+  commands = { "GrepWord", "SearchInFiles", "GrepVisual" },
 }
 
 map_info.hop = {
@@ -251,7 +254,8 @@ map_info.default = {
     ["<space>se"] = { { { "n", "x" }, "<CMD>SetSpell en_us<CR>", def_opt } },
     -- ["n"] = { { { "n", "x" }, "nzzzv", def_opt } },
     -- ["N"] = { { { "n", "x" }, "Nzzzv", def_opt } },
-    ["J"] = { { { "n", "x" }, "mzJ`z", def_opt } },
+    -- ["J"] = { { { "n", "x" }, "mzJ`z", def_opt } },
+    ["<space>."] = { { { "n", "x" }, "<CMD>TrimWhitespace<CR>", def_opt } },
   },
 }
 

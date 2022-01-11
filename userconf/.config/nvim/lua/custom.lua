@@ -281,10 +281,30 @@ function UpdateTrailingHighlight()
 end
 
 cmd([[augroup TrailingWhitespace
-    au!
-    au InsertLeave * lua TrailingHighlight("n")
-    au InsertEnter * lua TrailingHighlight("i")
-    au BufEnter * lua TrailingHighlight("auto")
-		au FileType * lua UpdateTrailingHighlight()
-		au OptionSet modifiable lua UpdateTrailingHighlight()
-  augroup END]])
+  au!
+  au InsertLeave * lua TrailingHighlight("n")
+  au InsertEnter * lua TrailingHighlight("i")
+  au BufEnter * lua TrailingHighlight("auto")
+  au FileType * lua UpdateTrailingHighlight()
+  au OptionSet modifiable lua UpdateTrailingHighlight()
+augroup END]])
+
+function TrimWhitespace()
+  local buffer = api.nvim_buf_get_number(0)
+  if not api.nvim_buf_get_option(buffer, "modifiable") then
+    print("not modifiable")
+    return
+  end
+  local lines = api.nvim_buf_get_lines(buffer, 0, -1, false)
+  for i=1,#lines do
+    lines[i] = lines[i]:gsub("%s+$", "")
+  end
+  local end_index = #lines
+  while end_index > 0 and lines[end_index] == "" do
+    lines[end_index] = nil
+    end_index = end_index - 1
+  end
+  api.nvim_buf_set_lines(0, 0, -1, false, lines)
+end
+
+cmd("command! TrimWhitespace lua TrimWhitespace()")

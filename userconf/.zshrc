@@ -1,7 +1,8 @@
 # clone pluginmanager if not exist
 [[ -d ~/.zinit/bin ]] || git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin
 
-[[ -r ~/.envrc ]] && . ~/.envrc
+[[ -r ~/.profile ]] && . ~/.profile
+[[ -r ~/.shenvrc ]] && . ~/.shenvrc
 [[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc

@@ -2,6 +2,7 @@ local map = vim.api.nvim_set_keymap
 local api = vim.api
 local cmd = vim.cmd
 local fn = vim.fn
+local lsp = vim.lsp
 
 local def_opt = { noremap = true, silent = true }
 local nore_opt = { noremap = true }
@@ -52,6 +53,12 @@ local lsp_configs = config.lsp_configs
 -- 	},
 -- }
 
+-- lspconfig["r_language_server"].setup({
+--   on_attach = on_attach,
+--   capabilities = cmp_nvim_lsp.update_capabilities(lsp.protocol.make_client_capabilities()),
+--   flags = { debounce_text_changes = 150 },
+-- })
+
 lsp_installer.settings({
   log_level = vim.log.levels.ERROR,
   max_concurrent_installers = 4,
@@ -60,7 +67,11 @@ lsp_installer.settings({
 lsp_installer.on_server_ready(function(server)
   local opts = lsp_configs[server.name] or {}
   opts.on_attach = on_attach
-  opts.capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local capabilities = lsp.protocol.make_client_capabilities()
+  if server.name == "clangd" then
+    capabilities.offsetEncoding = { "utf-16" }
+  end
+  opts.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
   opts.flags = { debounce_text_changes = 150 }
   server:setup(opts)
 end)

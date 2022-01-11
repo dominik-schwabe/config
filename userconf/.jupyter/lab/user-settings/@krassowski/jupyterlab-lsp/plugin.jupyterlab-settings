@@ -1,0 +1,23 @@
+{
+    "language_servers": {
+        "pyright": {
+            "priority": 100,
+            "serverSettings": {
+                "python.analysis.useLibraryCodeForTypes": false,
+                "python.analysis.diagnosticMode": "openFilesOnly",
+                "python.analysis.useLibraryCodeForTypes": false,
+                "pyright.disableLanguageServices": false,
+                "pyright.disableOrganizeImports": false,
+                "python.analysis.autoImportCompletions": true,
+                "python.analysis.autoSearchPaths": true,
+                "python.analysis.extraPaths": [],
+                "python.analysis.logLevel": "Information",
+                "python.analysis.stubPath": "typings",
+                "python.analysis.typeCheckingMode": "basic",
+                "python.analysis.typeshedPaths": [],
+                "python.pythonPath": "python",
+                "python.venvPath": "",
+            }
+        }
+    }
+}

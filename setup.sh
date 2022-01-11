@@ -21,10 +21,12 @@ echo
 echo "config setup"
 NVIM_PATH=$CURRPATH/userconf/.config/nvim
 MIME_PATH=$CURRPATH/userconf/.config/mimeapps.list
-for file in $(find $CURRPATH/userconf -not -type d -not -path "$NVIM_PATH/*" -not -path "$MIME_PATH" -printf '%P '); do
+JUPYTER_PATH=$CURRPATH/userconf/.jupyter
+for file in $(find $CURRPATH/userconf -not -type d -not -path "$NVIM_PATH/*" -not -path "$MIME_PATH" -not -path "$JUPYTER_PATH/*" -printf '%P '); do
   ./create_symlink.sh $FORCE $CURRPATH/userconf/$file $HOME/$file
 done
 ./create_symlink.sh $FORCE $NVIM_PATH $HOME/.config/nvim
+./create_symlink.sh $FORCE $JUPYTER_PATH $HOME/.jupyter
 ./create_symlink.sh -h $FORCE $MIME_PATH $HOME/.config/mimeapps.list
 echo
 echo -n "redshift config "

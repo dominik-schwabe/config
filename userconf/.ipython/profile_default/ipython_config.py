@@ -136,7 +136,7 @@ c.TerminalIPythonApp.display_banner = True
 # c.InteractiveShell.autocall = 0
 
 ## Autoindent IPython code entered interactively.
-c.InteractiveShell.autoindent = True
+# c.InteractiveShell.autoindent = True
 
 ## Enable magic commands to be called without the leading %.
 # c.InteractiveShell.automagic = True
@@ -235,7 +235,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 ## Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-# c.TerminalInteractiveShell.display_completions = 'multicolumn'
+c.TerminalInteractiveShell.display_completions = 'column'
 
 ## Shortcut style to use at the prompt. 'vi' or 'emacs'.
 c.TerminalInteractiveShell.editing_mode = "vi"
@@ -479,7 +479,7 @@ c.Completer.jedi_compute_type_timeout = 400
 
 ## Experimental: Use Jedi to generate autocompletions. Default to True if jedi is
 #  installed.
-c.Completer.use_jedi = False
+c.Completer.use_jedi = True
 
 # ------------------------------------------------------------------------------
 # IPCompleter(Completer) configuration

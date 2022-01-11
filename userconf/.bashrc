@@ -4,7 +4,8 @@ shopt -s cmdhist
 shopt -u autocd
 set -o vi
 
-[[ -r ~/.envrc ]] && . ~/.envrc
+[[ -r ~/.profile ]] && . ~/.profile
+[[ -r ~/.shenvrc ]] && . ~/.shenvrc
 [[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
