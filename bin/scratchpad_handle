@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-HELP="the -i, -c, -t options are optional but at least one has to be present
+HELP="move a window from/to the scratchpad in i3wm
+the -i, -c, -t options are optional but at least one has to be present
   -h help
   -i window instance
   -c window class
@@ -42,10 +43,6 @@ SELECT=""
 SELECTOR=""
 
 add_select_arg() {
-  echo $1
-  echo $2
-  echo $3
-  echo $4
   if [[ -n $4 ]]; then
     [[ -n $SELECT && $3 == true ]] && SELECT="$SELECT and "
     [[ -n $SELECTOR ]] && SELECTOR="$SELECTOR "
@@ -60,8 +57,6 @@ add_select_arg name title $ADDTITLE "$TITLE"
 add_select_arg class class $ADDCLASS "$CLASS"
 add_select_arg instance instance $ADDINSTANCE "$INSTANCE"
 
-echo $SELECT
-echo $SELECTOR
 [[ -z $SELECT ]] && {
   echo "$HELP"
   exit
