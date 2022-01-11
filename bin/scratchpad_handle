@@ -1,25 +1,23 @@
 #!/usr/bin/env bash
 
-HELP="
-the -i, -c, -t options are optional but at least one has to be present
+HELP="the -i, -c, -t options are optional but at least one has to be present
   -h help
   -i window instance
   -c window class
   -t window title
   -n add next selector option (-i, -t, -c) only to i3 selector (use when next option is regex)
   -p program to execute if window does not exist (e.g. start the window program)
-  -s size of the window in ppt
-"
+  -s size of the window in ppt"
 
 ADDTITLE=true
 ADDINSTANCE=true
 ADDCLASS=true
 
 ADDNEXT=true
-while getopts "i:c:t:s:p:n:h" o &> /dev/null
+while getopts "i:c:t:s:p:nh" o &> /dev/null
 do
   case $o in
-    "h") echo $HELP
+    "h") echo "$HELP"
          exit
          ;;
     "i") INSTANCE=$OPTARG
@@ -44,13 +42,17 @@ SELECT=""
 SELECTOR=""
 
 add_select_arg() {
+  echo $1
+  echo $2
+  echo $3
+  echo $4
   if [[ -n $4 ]]; then
     [[ -n $SELECT && $3 == true ]] && SELECT="$SELECT and "
     [[ -n $SELECTOR ]] && SELECTOR="$SELECTOR "
     if [[ $3 == true ]]; then
-      SELECT="${SELECT}.${1}? == \"${4}\""
+      export SELECT="${SELECT}.${1}? == \"${4}\""
     fi
-    SELECTOR="${SELECTOR}${2}=\"${4}\""
+    export SELECTOR="${SELECTOR}${2}=\"${4}\""
   fi
 }
 
@@ -58,7 +60,12 @@ add_select_arg name title $ADDTITLE "$TITLE"
 add_select_arg class class $ADDCLASS "$CLASS"
 add_select_arg instance instance $ADDINSTANCE "$INSTANCE"
 
-[[ -z SELECT ]] && exit
+echo $SELECT
+echo $SELECTOR
+[[ -z $SELECT ]] && {
+  echo "$HELP"
+  exit
+}
 SELECTOR="[$SELECTOR]"
 
 EXISTS_QUERY=".. | select($SELECT) | .id"
