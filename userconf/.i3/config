@@ -295,27 +295,27 @@ for_window [title="___dropdownterminal___"] border pixel 5
 for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
 for_window [title="___dropdownterminal___"] move position center
 for_window [title="___dropdownterminal___"] sticky enable
-bindsym $mod+asciicircum exec --no-startup-id "~/.bin/scratchpad_handle ___dropdownterminal___ 80 $term -t ___dropdownterminal___ -o font.size=10"
+bindsym $mod+asciicircum exec --no-startup-id "scratchpad_handle -t ___dropdownterminal___ -s 80 -p dropdown_terminal"
 
 for_window [title="___musicplayer___"] floating enabled
 for_window [title="___musicplayer___"] border pixel 5
 for_window [title="___musicplayer___"] resize set width 90 ppt height 90 ppt
 for_window [title="___musicplayer___"] move position center;
 for_window [title="___musicplayer___"] sticky enable
-bindsym $mod+m exec --no-startup-id "~/.bin/scratchpad_handle ___musicplayer___ 90 $term -t ___musicplayer___ -e cmus"
+bindsym $mod+m exec --no-startup-id "scratchpad_handle -t ___musicplayer___ -s 90 -p musicplayer"
 
 for_window [title="___todo___"] floating enabled
 for_window [title="___todo___"] border pixel 5
 for_window [title="___todo___"] resize set width 80 ppt height 80 ppt
 for_window [title="___todo___"] move position center;
 for_window [title="___todo___"] sticky enable
-bindsym $mod+0 exec --no-startup-id "~/.bin/scratchpad_handle ___todo___ 80 $term -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd '\\"set clipboard=unnamedplus nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase\\"' --cmd '\\"au TextChanged * write\\"' --cmd '\\"au VimLeavePre * write\\"' --cmd '\\"noremap Q :xa<cr>\\"'"
+bindsym $mod+0 exec --no-startup-id "scratchpad_handle -t ___todo___ -s 80 -p todo"
 
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] border pixel 5
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] sticky enable
-bindsym $mod+adiaeresis exec --no-startup-id "~/.bin/scratchpad_thunderbird"
+bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -n -t \\".*Mozilla Thunderbird\\" -i Mail -c Thunderbird"
 
 exec --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id flameshot

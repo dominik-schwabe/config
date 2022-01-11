@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+alacritty -t ___todo___ -o font.size=10 -e nvim -u NONE ~/.todo --cmd "set clipboard=unnamedplus nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase" --cmd "au TextChanged * write" --cmd "au VimLeavePre * write" --cmd "noremap Q :xa<cr>"

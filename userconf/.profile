@@ -8,6 +8,7 @@ export NODE_PATH="$HOME/.local/lib/node_modules"
 export NPM_CONFIG_PREFIX="$HOME/.local"
 
 export PIPENV_MAX_DEPTH=100
+export PIPENV_VENV_IN_PROJECT=1
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
