@@ -67,8 +67,8 @@ EXISTS_QUERY=".. | select($SELECT) | .id"
 IS_SCRATCH_QUERY='.. | select(.name? == "__i3_scratch") | '$EXISTS_QUERY
 
 TREE=$(i3-msg -t get_tree)
-if [[ $(echo $TREE | jq "$EXISTS_QUERY") ]]; then
-  if [[ $(echo $TREE | jq "$IS_SCRATCH_QUERY") ]]; then
+if [[ $(jq "$EXISTS_QUERY" <<< "$TREE") ]]; then
+  if [[ $(jq "$IS_SCRATCH_QUERY" <<< "$TREE") ]]; then
     i3-msg "$SELECTOR scratchpad show; $SELECTOR resize set width $SIZE ppt height $SIZE ppt; $SELECTOR move position center" &>/dev/null
   else
     i3-msg "$SELECTOR move scratchpad" &>/dev/null

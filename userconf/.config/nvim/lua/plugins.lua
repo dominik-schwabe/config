@@ -10,6 +10,13 @@ end
 local get_cmds = require("mappings").get_cmds
 
 require("packer").startup(function(use)
+  -- use({
+  --   "PlatyPew/format-installer.nvim",
+  --   config = function()
+  --     require("format-installer").setup()
+  --   end,
+  -- })
+
   -- packer
   use({
     "wbthomason/packer.nvim",
@@ -227,6 +234,17 @@ require("packer").startup(function(use)
     end,
   })
 
+  -- enhanced increment decrement
+  use({
+    "monaqa/dial.nvim",
+    config = function()
+      require("plugins.dial")
+    end,
+  })
+
+  -- yank rotate
+  use("svermeulen/vim-yoink")
+
   -- nvim
   use({
     "phaazon/hop.nvim",
@@ -249,6 +267,7 @@ require("packer").startup(function(use)
     end,
     cmd = get_cmds("todo_comments"),
   })
+
   -- use("pwntester/octo.nvim") -- github issues and pull request
   -- use("matbme/JABS.nvim")
 

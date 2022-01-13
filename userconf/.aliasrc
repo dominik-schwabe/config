@@ -69,7 +69,7 @@ alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 alias ytdl='youtube-dl --extract-audio --audio-format m4a --format best'
 
 alias pij='pipenv install jupyter jupyterlab-code-formatter jupyterlab-vim'
-alias prj='pipenv run jupyter lab'
+alias prj='pipenv run jupyter lab --ip "*" --no-browser'
 
 alias amount="udiskie"
 alias curl="curl -fsSL"

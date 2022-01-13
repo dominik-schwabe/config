@@ -4,7 +4,6 @@ local no_opt = {}
 local def_opt = { noremap = true, silent = true }
 local nore_opt = { noremap = true }
 local silent_opt = { silent = true }
-local unique_opt = { unique = true, noremap = true, silent = true }
 
 local map_info = {}
 
@@ -195,6 +194,26 @@ map_info.sideways = {
     ["U"] = { { { "n" }, ":SidewaysRight<CR>", def_opt } },
   },
   commands = { "SidewaysLeft", "SidewaysRight" },
+}
+
+map_info.yoink = {
+  mappings = {
+    ["ü"] = { { { "n" }, "<plug>(YoinkRotateBack)", {} } },
+    ["Ü"] = { { { "n" }, "<plug>(YoinkRotateForward)", {} } },
+    ["p"] = { { { "n" }, "<plug>(YoinkPaste_p)", {} } },
+    ["P"] = { { { "n" }, "<plug>(YoinkPaste_P)", {} } },
+    ["gp"] = { { { "n" }, "<plug>(YoinkPaste_gp)", {} } },
+    ["gP"] = { { { "n" }, "<plug>(YoinkPaste_gP)", {} } },
+  },
+}
+
+map_info.dial = {
+  mappings = {
+    ["<C-a>"] = { { { "n", "v" }, "<Plug>(dial-increment)", {} } },
+    ["<C-x>"] = { { { "n", "v" }, "<Plug>(dial-decrement)", {} } },
+    ["g<C-a>"] = { { { "v" }, "<Plug>(dial-increment-additional)", {} } },
+    ["g<C-x>"] = { { { "v" }, "<Plug>(dial-decrement-additional)", {} } },
+  },
 }
 
 map_info.default = {

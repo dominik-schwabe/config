@@ -22,7 +22,7 @@ opt.splitbelow = true
 opt.splitright = true
 opt.cmdheight = 2
 opt.ignorecase = true
-opt.clipboard = { "unnamed", "unnamedplus" }
+opt.clipboard = { "unnamedplus" }
 opt.encoding = "utf-8"
 opt.scrolloff = 8
 opt.hidden = true
@@ -34,9 +34,22 @@ opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
 
+g.yoinkIncludeDeleteOperations = 1
 g.kommentary_create_default_mappings = false
 g.Illuminate_ftblacklist = config.illuminate_blacklist
 g.coc_global_extensions = config.coc_extensions
+g.clipboard = {
+  name = "xsel_override",
+  copy = {
+    ["+"] = "xsel --input --clipboard",
+    ["*"] = "xsel --input --primary",
+  },
+  paste = {
+    ["+"] = "xsel --output --clipboard",
+    ["*"] = "xsel --output --primary",
+  },
+  cache_enabled = 1,
+}
 
 g.terminal_color_0 = "#000000"
 g.terminal_color_1 = "#ff0000"

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+while getopts "r:o:ad" o &>/dev/null; do
+	case $o in
+	"o") EXTERN_OUTPUT=$OPTARG ;;
+	"r") EXTERN_RESOLUTION=$OPTARG ;;
+	"a") AUTO=true ;;
+	"d") RESET=true ;;
+	esac
+done
+
+XRANDROUT="$(xrandr)"
+OUTPUTS=$(awk 'BEGIN {
+    IS_FIRST=1
+    IS_EXTERN=0
+}
+! /^ / {
+    IS_EXTERN=0
+}
+/\sconnected/ && ! /primary/ {
+    if (IS_FIRST==0) {print ""}
+    printf "%-10s",$1
+    IS_EXTERN=1
+    IS_FIRST=0
+}
+/^ / { if (IS_EXTERN==1) {printf " %s",$1} }
+
+END {print ""}' <<<"$XRANDROUT")
+ALL_OUTPUTS=$(awk '/connected/ && ! /primary/ { print $1 }' <<< "$XRANDROUT")
+DISABLE_COMMAND=""
+for OUTPUT in $ALL_OUTPUTS; do
+	DISABLE_COMMAND="$DISABLE_COMMAND --output $OUTPUT --off"
+done
+
+PRIMARY_OUTPUT=$(awk -F'[ +]' '/primary/ {print $1}' <<< "$XRANDROUT")
+PIRMARY_RESOLUTION=$(awk '{if (IS_PRIMARY) { print $1; exit } }; /primary/ {IS_PRIMARY=1};' <<< "$XRANDROUT")
+
+if [[ -n "$AUTO" ]]; then
+	[[ -z "$EXTERN_OUTPUT" ]] && EXTERN_OUTPUT=$(awk '{print $1; exit}' <<<"$OUTPUTS")
+	[[ -z "$EXTERN_RESOLUTION" ]] && EXTERN_RESOLUTION=$(awk '{print $2; exit}' <<<"$OUTPUTS")
+fi
+
+if [[ -z "$RESET" ]]; then
+	if [[ -z "$EXTERN_OUTPUT" || -z $EXTERN_RESOLUTION ]]; then
+		echo "$OUTPUTS"
+		exit 0
+	fi
+	xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --same-as LVDS1 --output "$PRIMARY_OUTPUT" --scale-from "$EXTERN_RESOLUTION"
+else
+	xrandr $DISABLE_COMMAND --output "$PRIMARY_OUTPUT" --mode "$PIRMARY_RESOLUTION" --scale-from "$PIRMARY_RESOLUTION"
+fi

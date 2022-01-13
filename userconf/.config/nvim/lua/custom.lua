@@ -289,8 +289,8 @@ cmd([[augroup TrailingWhitespace
   au OptionSet modifiable lua UpdateTrailingHighlight()
 augroup END]])
 
-function TrimWhitespace()
-  local buffer = api.nvim_buf_get_number(0)
+function TrimWhitespace(buffer)
+  buffer = api.nvim_buf_get_number(buffer)
   if not api.nvim_buf_get_option(buffer, "modifiable") then
     print("not modifiable")
     return
@@ -304,7 +304,7 @@ function TrimWhitespace()
     lines[end_index] = nil
     end_index = end_index - 1
   end
-  api.nvim_buf_set_lines(0, 0, -1, false, lines)
+  api.nvim_buf_set_lines(buffer, 0, -1, false, lines)
 end
 
-cmd("command! TrimWhitespace lua TrimWhitespace()")
+cmd("command! TrimWhitespace lua TrimWhitespace(0)")
