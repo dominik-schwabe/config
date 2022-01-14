@@ -45,19 +45,13 @@ local lsp_installer = require("nvim-lsp-installer")
 local lspconfig = require("lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
--- lsp_configs.jsonls = {
--- 	settings = {
--- 		json = {
--- 			schemas = require("schemastore").json.schemas(),
--- 		},
--- 	},
--- }
 
--- lspconfig["r_language_server"].setup({
---   on_attach = on_attach,
---   capabilities = cmp_nvim_lsp.update_capabilities(lsp.protocol.make_client_capabilities()),
---   flags = { debounce_text_changes = 150 },
--- })
+lspconfig["r_language_server"].setup({
+  on_attach = on_attach,
+  capabilities = cmp_nvim_lsp.update_capabilities(lsp.protocol.make_client_capabilities()),
+  flags = { debounce_text_changes = 150 },
+  settings = config.lsp_configs.r_language_server.settings,
+})
 
 lsp_installer.settings({
   log_level = vim.log.levels.ERROR,

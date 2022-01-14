@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
 
-while getopts "r:o:ad" o &>/dev/null; do
-	case $o in
-	"o") EXTERN_OUTPUT=$OPTARG ;;
-	"r") EXTERN_RESOLUTION=$OPTARG ;;
-	"a") AUTO=true ;;
-	"d") RESET=true ;;
-	esac
+HELP='mirror your primary monitor with an external monitor
+  -a infer all non specified options automatically
+  -o external output to activate
+  -r resolution of external monitor
+  -h horizontal stack above
+  -v vertical stack right
+  -d make only your primary screen active (e.g. reset mirroring)
+  -i invert stack (-h -> below, -v -> left)
+  -p take maximal resolution from primary instead of external monitor'
+TYPE="mirror"
+while getopts "r:o:adhvip" o &>/dev/null; do
+  case $o in
+    "o") EXTERN_OUTPUT=$OPTARG ;;
+    "r") EXTERN_RESOLUTION=$OPTARG ;;
+    "a") AUTO=true ;;
+    "d") RESET=true ;;
+    "h") TYPE="horizontal" ;;
+    "v") TYPE="vertical" ;;
+    "i") INVERT=true ;;
+    "p") PRIMARY=true ;;
+  esac
 done
 
 XRANDROUT="$(xrandr)"
@@ -26,26 +40,55 @@ OUTPUTS=$(awk 'BEGIN {
 /^ / { if (IS_EXTERN==1) {printf " %s",$1} }
 
 END {print ""}' <<<"$XRANDROUT")
-ALL_OUTPUTS=$(awk '/connected/ && ! /primary/ { print $1 }' <<< "$XRANDROUT")
+ALL_OUTPUTS=$(awk '/connected/ && ! /primary/ { print $1 }' <<<"$XRANDROUT")
 DISABLE_COMMAND=""
 for OUTPUT in $ALL_OUTPUTS; do
-	DISABLE_COMMAND="$DISABLE_COMMAND --output $OUTPUT --off"
+  DISABLE_COMMAND="$DISABLE_COMMAND --output $OUTPUT --off"
 done
 
-PRIMARY_OUTPUT=$(awk -F'[ +]' '/primary/ {print $1}' <<< "$XRANDROUT")
-PIRMARY_RESOLUTION=$(awk '{if (IS_PRIMARY) { print $1; exit } }; /primary/ {IS_PRIMARY=1};' <<< "$XRANDROUT")
+PRIMARY_OUTPUT=$(awk -F'[ +]' '/primary/ {print $1}' <<<"$XRANDROUT")
+PRIMARY_RESOLUTION=$(awk '{if (IS_PRIMARY) { print $1; exit } }; /primary/ {IS_PRIMARY=1};' <<<"$XRANDROUT")
 
 if [[ -n "$AUTO" ]]; then
-	[[ -z "$EXTERN_OUTPUT" ]] && EXTERN_OUTPUT=$(awk '{print $1; exit}' <<<"$OUTPUTS")
-	[[ -z "$EXTERN_RESOLUTION" ]] && EXTERN_RESOLUTION=$(awk '{print $2; exit}' <<<"$OUTPUTS")
+  [[ -z "$EXTERN_OUTPUT" ]] && EXTERN_OUTPUT=$(awk '{print $1; exit}' <<<"$OUTPUTS")
+  [[ -z "$EXTERN_RESOLUTION" ]] && EXTERN_RESOLUTION=$(awk '{print $2; exit}' <<<"$OUTPUTS")
 fi
 
 if [[ -z "$RESET" ]]; then
-	if [[ -z "$EXTERN_OUTPUT" || -z $EXTERN_RESOLUTION ]]; then
-		echo "$OUTPUTS"
-		exit 0
-	fi
-	xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --same-as LVDS1 --output "$PRIMARY_OUTPUT" --scale-from "$EXTERN_RESOLUTION"
+  if [[ -z "$EXTERN_OUTPUT" || -z $EXTERN_RESOLUTION ]]; then
+    echo "$HELP"
+    echo
+    if [[ -n $OUTPUTS ]]; then
+      echo "$OUTPUTS"
+    else
+      echo "no external monitors detected"
+    fi
+    exit 0
+  fi
+  if [[ $TYPE == "mirror" ]]; then
+    if [[ $PRIMARY == "true" ]]; then
+      xrandr --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$PRIMARY_RESOLUTION" --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --scale-from "$PRIMARY_RESOLUTION" --same-as "$PRIMARY_OUTPUT"
+    else
+      xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --scale-from "$EXTERN_RESOLUTION" --same-as "$PRIMARY_OUTPUT" --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$EXTERN_RESOLUTION"
+    fi
+  else
+    if [[ $TYPE == "horizontal" ]]; then
+      if [[ $INVERT == "true" ]]; then
+        DIRECTION="--left-of"
+      else
+        DIRECTION="--right-of"
+      fi
+    elif [[ $TYPE == "vertical" ]]; then
+      if [[ $INVERT == "true" ]]; then
+        DIRECTION="--below"
+      else
+        DIRECTION="--above"
+      fi
+    else
+      exit 1
+    fi
+    xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" $DIRECTION "$PRIMARY_OUTPUT" --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from $PRIMARY_RESOLUTION
+  fi
 else
-	xrandr $DISABLE_COMMAND --output "$PRIMARY_OUTPUT" --mode "$PIRMARY_RESOLUTION" --scale-from "$PIRMARY_RESOLUTION"
+  xrandr $DISABLE_COMMAND --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$PRIMARY_RESOLUTION"
 fi

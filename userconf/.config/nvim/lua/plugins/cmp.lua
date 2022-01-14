@@ -52,7 +52,7 @@ cmp.setup({
     { name = "nvim_lua" },
     { name = "path" },
     { name = "tmux" },
-    -- { name = "buffer" },
+    { name = "buffer" },
   },
 })
 

@@ -10,9 +10,15 @@ dial.augends["custom#pyboolean"] = dial.common.enum_cyclic({
   strlist = { "True", "False" },
 })
 
+dial.augends["custom#rboolean"] = dial.common.enum_cyclic({
+  name = "boolean",
+  strlist = { "TRUE", "FALSE" },
+})
+
 dial.config.searchlist.normal = {
   "custom#boolean",
   "custom#pyboolean",
+  "custom#rboolean",
   "number#decimal#int",
   "number#hex",
   "number#binary",

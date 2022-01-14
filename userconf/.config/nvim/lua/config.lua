@@ -100,6 +100,15 @@ M.lsp_configs = {
   -- 	  }
   -- 	}
   -- },
+
+  -- jsonls = {
+  --   settings = {
+  --     json = {
+  --       schemas = require("schemastore").json.schemas(),
+  --     },
+  --   },
+  -- },
+
   pyright = {
     settings = {
       pyright = {
@@ -109,6 +118,17 @@ M.lsp_configs = {
         analysis = {
           diagnosticMode = "openFilesOnly",
           useLibraryCodeForTypes = false,
+        },
+      },
+    },
+  },
+
+  r_language_server = {
+    settings = {
+      r = {
+        lsp = {
+          diagnostics = false,
+          max_completions = 20,
         },
       },
     },
@@ -127,7 +147,9 @@ M.null_ls = {
     "eslint_d",
     "isort",
     "prettierd",
-    "shfmt",
+    shfmt = {
+      extra_args = { "-i", "2", "-ci" },
+    },
     "styler",
     "stylua",
   },
@@ -159,7 +181,7 @@ local ensure_installed = os.getenv("NVIM_TREESITTER_MAINTAINED") == "true" and "
 M.treesitter = {
   ensure_installed = ensure_installed,
   ignore_install = { "latex" },
-  highlight_disable = {},
+  highlight_disable = { "r" },
 }
 M.coc_extensions = {
   "coc-clangd",
@@ -192,6 +214,10 @@ M.linters = {
 M.repls = {
   python = "ipython",
   r = "radian",
+}
+M.colorizer_disable_filetypes = {
+  "r",
+  "term",
 }
 
 return M

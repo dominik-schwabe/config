@@ -2,7 +2,6 @@
 [[ -d ~/.zinit/bin ]] || git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin
 
 [[ -r ~/.profile ]] && . ~/.profile
-[[ -r ~/.shenvrc ]] && . ~/.shenvrc
 [[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc

@@ -7,8 +7,13 @@ local config = require("config")
 local null_ls = require("null-ls")
 local sources = {}
 for builtin, options in pairs(config.null_ls) do
-  for _, source in pairs(options) do
-    sources[#sources + 1] = null_ls.builtins[builtin][source]
+  local target =  null_ls.builtins[builtin]
+  for key, value in pairs(options) do
+    if type(key) == "string" then
+      sources[#sources + 1] = target[key].with(value)
+    else
+      sources[#sources + 1] = target[value]
+    end
   end
 end
 
