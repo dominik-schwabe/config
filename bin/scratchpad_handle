@@ -1,33 +1,5 @@
 #!/usr/bin/env luajit
 
-local function kind_of(obj)
-  if type(obj) ~= "table" then
-    return type(obj)
-  end
-  local i = 1
-  for _ in pairs(obj) do
-    if obj[i] ~= nil then
-      i = i + 1
-    else
-      return "table"
-    end
-  end
-  if i == 1 then
-    return "table"
-  else
-    return "array"
-  end
-end
-
-local function escape_str(s)
-  local in_char = { "\\", '"', "/", "\b", "\f", "\n", "\r", "\t" }
-  local out_char = { "\\", '"', "/", "b", "f", "n", "r", "t" }
-  for i, c in ipairs(in_char) do
-    s = s:gsub(c, "\\" .. out_char[i])
-  end
-  return s
-end
-
 local function skip_delim(str, pos, delim, err_if_missing)
   pos = pos + #str:match("^%s*", pos)
   if str:sub(pos, pos) ~= delim then
@@ -231,7 +203,6 @@ local function get_node(nodes)
       if key ~= "name" then
         prop = node.window_properties
       end
-      print(key, value, prop[key])
       if prop[key] ~= value then
         found = false
       end
@@ -253,7 +224,6 @@ local function hide_linked_nodes()
 end
 
 local function hide_node()
-  print('i3-msg "' .. selector .. '" move scratchpad')
   os.execute("i3-msg '" .. selector .. "' move scratchpad")
 end
 
