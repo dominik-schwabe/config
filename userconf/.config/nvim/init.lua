@@ -20,4 +20,5 @@ cmd("au BufEnter term://* lua EnterTerm()")
 -- cmd("au TermClose term://toggleterm,term://ironrepl call nvim_input('<CR>')")
 cmd("au TermClose term://toggleterm,term://ironrepl lua TermDelete()")
 
+cmd("command! Test lua d(require('utils').get_visual_selection(0))")
 require("plugins.colorizer")

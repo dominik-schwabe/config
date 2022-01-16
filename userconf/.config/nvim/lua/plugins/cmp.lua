@@ -18,6 +18,16 @@ local feedkey = function(key, mode)
   api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
+local cmp_formats = {
+  buffer = "[Buffer]",
+  nvim_lsp = "[LSP]",
+  luasnip = "[Snippet]",
+  tmux = "[Tmux]",
+  nvim_lua = "[Lua]",
+  latex_symbols = "[Latex]",
+  path = "[Path]",
+}
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -25,19 +35,14 @@ cmp.setup({
     end,
   },
   formatting = {
-    format = function(entry, vim_item)
-      vim_item.kind = lspkind.presets.default[vim_item.kind]
-      vim_item.menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        luasnip = "[Snippet]",
-        tmux = "[Tmux]",
-        nvim_lua = "[Lua]",
-        latex_symbols = "[Latex]",
-        path = "[Path]",
-      })[entry.source.name]
-      return vim_item
-    end,
+    format = lspkind.cmp_format({
+      with_text = false,
+      maxwidth = 50,
+      before = function(entry, vim_item)
+        vim_item.menu = cmp_formats[entry.source.name]
+        return vim_item
+      end,
+    }),
   },
   mapping = {
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),

@@ -15,26 +15,30 @@ ADDINSTANCE=true
 ADDCLASS=true
 
 ADDNEXT=true
-while getopts "i:c:t:s:p:nh" o &> /dev/null
-do
+while getopts "i:c:t:s:p:nh" o &>/dev/null; do
   case $o in
-    "h") echo "$HELP"
-         exit
-         ;;
-    "i") INSTANCE=$OPTARG
-         ADDINSTANCE=$ADDNEXT
-         ;;
-    "c") CLASS=$OPTARG
-         ADDCLASS=$ADDNEXT
-         ;;
-    "t") TITLE=$OPTARG
-         ADDTITLE=$ADDNEXT
-         ;;
-    "s") SIZE=$OPTARG;;
-    "p") PROGRAM=$OPTARG;;
-    "n") ADDNEXT=false
-         continue
-         ;;
+    "h")
+      echo "$HELP"
+      exit
+      ;;
+    "i")
+      INSTANCE=$OPTARG
+      ADDINSTANCE=$ADDNEXT
+      ;;
+    "c")
+      CLASS=$OPTARG
+      ADDCLASS=$ADDNEXT
+      ;;
+    "t")
+      TITLE=$OPTARG
+      ADDTITLE=$ADDNEXT
+      ;;
+    "s") SIZE=$OPTARG ;;
+    "p") PROGRAM=$OPTARG ;;
+    "n")
+      ADDNEXT=false
+      continue
+      ;;
   esac
   ADDNEXT=true
 done
@@ -67,14 +71,15 @@ EXISTS_QUERY=".. | select($SELECT) | .id"
 IS_SCRATCH_QUERY='.. | select(.name? == "__i3_scratch") | '$EXISTS_QUERY
 
 TREE=$(i3-msg -t get_tree)
-if [[ $(jq "$EXISTS_QUERY" <<< "$TREE") ]]; then
-  if [[ $(jq "$IS_SCRATCH_QUERY" <<< "$TREE") ]]; then
-    i3-msg "$SELECTOR scratchpad show; $SELECTOR resize set width $SIZE ppt height $SIZE ppt; $SELECTOR move position center" &>/dev/null
+if [[ $(jq "$EXISTS_QUERY" <<<"$TREE") ]]; then
+  if [[ $(jq "$IS_SCRATCH_QUERY" <<<"$TREE") ]]; then
+    i3-msg "fullscreen disable; $SELECTOR scratchpad show; $SELECTOR resize set width $SIZE ppt height $SIZE ppt; $SELECTOR move position center" &>/dev/null
   else
     i3-msg "$SELECTOR move scratchpad" &>/dev/null
   fi
 else
   if [[ $PROGRAM ]]; then
-    eval "$PROGRAM" &!
+    i3-msg "fullscreen disable"
+    eval "$PROGRAM"
   fi
 fi

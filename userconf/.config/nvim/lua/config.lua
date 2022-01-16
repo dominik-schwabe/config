@@ -151,7 +151,9 @@ M.null_ls = {
       extra_args = { "-i", "2", "-ci" },
     },
     "styler",
-    "stylua",
+    stylua = {
+      extra_args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
+    },
   },
 }
 local treesitter_min = {

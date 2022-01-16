@@ -1,3 +1,7 @@
-bind -f common y player-prev
+# bind -f common y player-prev
 bind -f common z win-add-p
+bind -f common q quit
+bind -f common y player-pause
+bind -f common x player-next
+bind -f common < player-prev
 colorscheme night
