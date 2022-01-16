@@ -292,32 +292,32 @@ for_window [class="Steam" title=".*Steam - News.*"] floating enabled
 for_window [class="Steam" title=".*Steam - News.*"] resize set width 800 px height 600 px
 for_window [class="Steam" title=".*Steam - News.*"] move position center
 
-for_window [title="___dropdownterminal___"] floating enabled
-for_window [title="___dropdownterminal___"] border pixel 5
-for_window [title="___dropdownterminal___"] resize set width 80 ppt height 80 ppt
-for_window [title="___dropdownterminal___"] move position center
-for_window [title="___dropdownterminal___"] sticky enable
-bindsym $mod+asciicircum exec --no-startup-id "scratchpad_handle -t ___dropdownterminal___ -s 80 -p dropdown_terminal"
+for_window [title="___linked_dropdownterminal___"] floating enabled
+for_window [title="___linked_dropdownterminal___"] border pixel 5
+for_window [title="___linked_dropdownterminal___"] resize set width 80 ppt height 80 ppt
+for_window [title="___linked_dropdownterminal___"] move position center
+for_window [title="___linked_dropdownterminal___"] sticky enable
+bindsym $mod+asciicircum exec --no-startup-id "scratchpad_handle -t ___linked_dropdownterminal___ -s 80 -p dropdown_terminal"
 
-for_window [title="___musicplayer___"] floating enabled
-for_window [title="___musicplayer___"] border pixel 5
-for_window [title="___musicplayer___"] resize set width 90 ppt height 90 ppt
-for_window [title="___musicplayer___"] move position center;
-for_window [title="___musicplayer___"] sticky enable
-bindsym $mod+m exec --no-startup-id "scratchpad_handle -t ___musicplayer___ -s 90 -p musicplayer"
+for_window [title="___linked_musicplayer___"] floating enabled
+for_window [title="___linked_musicplayer___"] border pixel 5
+for_window [title="___linked_musicplayer___"] resize set width 90 ppt height 90 ppt
+for_window [title="___linked_musicplayer___"] move position center;
+for_window [title="___linked_musicplayer___"] sticky enable
+bindsym $mod+m exec --no-startup-id "scratchpad_handle -t ___linked_musicplayer___ -s 90 -p musicplayer"
 
-for_window [title="___todo___"] floating enabled
-for_window [title="___todo___"] border pixel 5
-for_window [title="___todo___"] resize set width 80 ppt height 80 ppt
-for_window [title="___todo___"] move position center;
-for_window [title="___todo___"] sticky enable
-bindsym $mod+0 exec --no-startup-id "scratchpad_handle -t ___todo___ -s 80 -p todo"
+for_window [title="___linked_todo___"] floating enabled
+for_window [title="___linked_todo___"] border pixel 5
+for_window [title="___linked_todo___"] resize set width 80 ppt height 80 ppt
+for_window [title="___linked_todo___"] move position center;
+for_window [title="___linked_todo___"] sticky enable
+bindsym $mod+0 exec --no-startup-id "scratchpad_handle -t ___linked_todo___ -s 80 -p todo"
 
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] border pixel 5
 for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] sticky enable
-bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -n -t \\".*Mozilla Thunderbird\\" -i Mail -c Thunderbird"
+bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -s 90 -n -t \\".*Mozilla Thunderbird\\" -i Mail -c Thunderbird"
 
 exec_always --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id flameshot
