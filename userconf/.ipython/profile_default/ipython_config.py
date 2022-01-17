@@ -47,8 +47,8 @@ def get_installed_extensions(extensions):
     return installed_extensions
 
 
-extensions = ["autoreload", "ipython_autoimport"]
-c.InteractiveShellApp.extensions = get_installed_extensions(extensions)
+extensions = ["ipython_autoimport"]
+c.InteractiveShellApp.extensions = ["autoreload"] + get_installed_extensions(extensions)
 
 ## lines of code to run at IPython startup.
 c.InteractiveShellApp.exec_lines = ["autoreload 2"]
