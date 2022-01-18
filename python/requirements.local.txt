@@ -9,7 +9,6 @@ matplotlib
 neovim-remote
 numpy
 pandas
-pdm
 pipenv
 pylint
 pynvim

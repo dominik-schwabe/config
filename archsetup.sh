@@ -49,11 +49,8 @@ openresolv
 openssh
 pacman-contrib
 pamixer
-pipewire
-pipewire-alsa
-wireplumber
-pipewire-jack
-pipewire-zeroconf
+pulseaudio-alsa
+pulseaudio-bluetooth
 pulsemixer
 python
 python-pip
