@@ -168,6 +168,7 @@ syntax on
 colorscheme monokai-phoenix
 set background=dark
 hi clear Conceal
+hi CursorLineNr term=none cterm=none gui=none
 
 set splitbelow
 set splitright

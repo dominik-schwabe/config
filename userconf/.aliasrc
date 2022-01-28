@@ -66,10 +66,10 @@ alias td='trans -brief en:de'
 alias rs='asdf reshim'
 alias e='extract'
 alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
-alias ytdl='youtube-dl --extract-audio --audio-format m4a --format best'
+alias ytdl='yt-dlp --extract-audio --audio-format m4a --format best'
 
 alias pij='pipenv install --skip-lock jupyter jupyterlab-code-formatter jupyterlab-vim && pipenv install --skip-lock --dev black isort && pipenv lock'
-alias prj='pipenv run jupyter lab --ip "*" --no-browser'
+alias prj='pipenv run jupyter lab --no-browser'
 
 alias pipu='pip install -U --upgrade-strategy eager'
 

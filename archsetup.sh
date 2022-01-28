@@ -8,6 +8,7 @@ VIOLET="\e[35m"
 RESET="\e[0m"
 
 BASE="
+luajit
 alsa
 alsa-tools
 alsa-utils
@@ -68,6 +69,8 @@ zsh
 "
 
 GRAPHIC="
+mpv
+yt-dlp
 xcolor
 noto-fonts-emoji
 udiskie

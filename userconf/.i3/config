@@ -192,7 +192,7 @@ bar {
 
 
 bindsym XF86AudioMute exec --no-startup-id pamixer --toggle-mute
-bindsym XF86AudioMicMute exec --no-startup-id pamixer --source 48 --toggle-mute
+bindsym XF86AudioMicMute exec --no-startup-id pamixer --source 1 --toggle-mute
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5
 bindsym $mod+underscore exec --no-startup-id pamixer -d 5
@@ -304,7 +304,7 @@ for_window [title="___linked_musicplayer___"] border pixel 5
 for_window [title="___linked_musicplayer___"] resize set width 90 ppt height 90 ppt
 for_window [title="___linked_musicplayer___"] move position center;
 for_window [title="___linked_musicplayer___"] sticky enable
-bindsym $mod+m exec --no-startup-id "scratchpad_handle -t ___linked_musicplayer___ -s 90 -p musicplayer"
+bindsym $mod+Shift+y exec --no-startup-id "scratchpad_handle -t ___linked_musicplayer___ -s 90 -p musicplayer"
 
 for_window [title="___linked_todo___"] floating enabled
 for_window [title="___linked_todo___"] border pixel 5
