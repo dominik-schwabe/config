@@ -7,11 +7,13 @@ alias fzf='fzf --color=16'
 alias less='less -i'
 alias tmux='tmux -u'
 
+alias diff='diff --color=auto'
+
 alias pgrep+='pgrep -iaf'
 alias pkill='pkill -if'
 alias rg='rg -i'
 
-alias ip='ip -color'
+alias ip='ip -color=auto'
 
 alias ls='ls --color=tty'
 alias lr="find -type f -exec basename {} \;"
@@ -73,10 +75,10 @@ alias prj='pipenv run jupyter lab --no-browser'
 
 alias pipu='pip install -U --upgrade-strategy eager'
 
-alias amount="udiskie"
-alias curl="curl -fsSL"
-alias top="bpytop"
-alias oldtop="/usr/bin/env top"
+alias amount='udiskie'
+alias curl='curl -fsSL'
+alias top='bpytop'
+alias oldtop='/usr/bin/env top'
 
 alias v='vim ~/.config/nvim/init.lua'
 
