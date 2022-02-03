@@ -22,7 +22,7 @@ if [[ -f "$PROJ_PATH/pyproject.toml" ]]; then
 	pdm run $EDITOR $FILE_PATH
 elif [[ -f "$PROJ_PATH/Pipfile" || -f "$1/Pipfile.lock" ]]; then
 	echo "found pipenv"
-	pipenv --venv >/dev/null && pipenv run $EDITOR $1
+	pipenv --venv >/dev/null && pipenv run $EDITOR $FILE_PATH
 else
 	echo "no environment found"
 	exit 1
