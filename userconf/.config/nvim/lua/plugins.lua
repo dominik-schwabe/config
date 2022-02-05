@@ -97,7 +97,7 @@ require("packer").startup(function(use)
       "nvim-treesitter/nvim-treesitter-textobjects",
       "mfussenegger/nvim-ts-hint-textobject",
       "romgrk/nvim-treesitter-context",
-      "windwp/nvim-ts-autotag",
+      -- "windwp/nvim-ts-autotag",
       "David-Kunz/treesitter-unit",
     },
     run = ":TSUpdate",

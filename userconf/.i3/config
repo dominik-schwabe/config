@@ -139,6 +139,11 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+Delete exit
 bindsym $mod+Shift+Ctrl+Delete exec --no-startup-id reboot
 
+bindsym $mod+plus resize grow left 10 px or 10 ppt; resize grow right 10 px or 10 ppt
+bindsym $mod+Shift+plus resize grow down 10 px or 10 ppt; resize grow up 10 px or 10 ppt
+bindsym $mod+underscore resize shrink left 10 px or 10 ppt; resize shrink right 10 px or 10 ppt
+bindsym $mod+Shift+underscore resize shrink down 10 px or 10 ppt; resize shrink up 10 px or 10 ppt
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
     # These bindings trigger as soon as you enter the resize mode
@@ -195,8 +200,8 @@ bindsym XF86AudioMute exec --no-startup-id pamixer --toggle-mute
 bindsym XF86AudioMicMute exec --no-startup-id pamixer --source 1 --toggle-mute
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5
-bindsym $mod+underscore exec --no-startup-id pamixer -d 5
-bindsym $mod+plus exec --no-startup-id pamixer -i 5
+bindsym $mod+n exec --no-startup-id pamixer -d 5
+bindsym $mod+m exec --no-startup-id pamixer -i 5
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -time 0 +5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -time 0 -5
 bindsym XF86ScreenSaver exec --no-startup-id "playerctl -a pause ; exec i3lock -c 000000"
@@ -213,8 +218,6 @@ bindsym XF86Launch1 exec --no-startup-id ~/.bin/nolidswitch
 bindsym $mod+odiaeresis exec --no-startup-id pgrep -u $UID "$webbrowser" || $webbrowser; exec --no-startup-id i3-msg "workspace $ws1"
 bindsym $mod+period resize set width 360 px height 240 px; move container position 1006 px 0
 bindsym $mod+Shift+period resize set width 360 px height 240 px; move container position 0 0
-bindsym $mod+Shift+plus resize grow right 40 px; resize grow down 20 px
-bindsym $mod+Shift+underscore resize shrink right 40 px; resize shrink down 20 px
 bindsym $mod+comma resize set width 800 px height 600 px; move container position center;
 bindsym $mod+Shift comma sticky toggle
 bindsym $mod+Shift+Return exec $guifilebrowser

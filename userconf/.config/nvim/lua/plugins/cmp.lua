@@ -8,7 +8,7 @@ local luasnip = require("luasnip")
 local cmp = require("cmp")
 
 lspkind.init({
-  with_text = true,
+  mode = "symbol",
   -- preset = 'codicons',
   preset = "default",
   symbol_map = require("config").lspkind_symbol_map,
