@@ -87,9 +87,9 @@ require("nvim-treesitter.configs").setup({
     --   },
     -- },
   },
-  -- autotag = {
-  --   enable = true,
-  -- },
+  autotag = {
+    enable = true,
+  },
   ensure_installed = treesitter_config.ensure_installed,
   ignore_install = treesitter_config.ignore_install,
   context_commentstring = {
