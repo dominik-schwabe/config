@@ -6,7 +6,7 @@ local noremap = { noremap = true }
 local treesitter_config = require("config").treesitter
 require("nvim-treesitter.configs").setup({
   playground = {
-    enable = true,
+    enable = false,
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
@@ -36,7 +36,7 @@ require("nvim-treesitter.configs").setup({
     },
   },
   matchup = {
-    enable = true,
+    enable = false,
   },
   indent = {
     enable = false,

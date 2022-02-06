@@ -130,7 +130,7 @@ require("packer").startup(function(use)
     "L3MON4D3/LuaSnip",
     requires = { "rafamadriz/friendly-snippets" },
     config = function()
-      require("luasnip.loaders.from_vscode").lazy_load()
+      require("plugins.luasnip")
     end,
   })
 
@@ -243,7 +243,7 @@ require("packer").startup(function(use)
   })
 
   -- yank rotate
-  use("svermeulen/vim-yoink")
+  -- use("svermeulen/vim-yoink")
 
   -- nvim
   use({
