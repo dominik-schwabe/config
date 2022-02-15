@@ -3,7 +3,7 @@ local cmd = vim.cmd
 local function stopinsert()
   cmd("stopinsert")
 end
-require("telescope").load_extension("projects")
+
 require("telescope").setup({
   defaults = {
     sorting_strategy = "ascending",

@@ -254,11 +254,17 @@ require("packer").startup(function(use)
     end,
   })
   use({
-    "ahmedkhalf/project.nvim",
+    "jedi2610/nvim-rooter.lua",
     config = function()
-      require("plugins.project")
+      require("plugins.nvim-rooter")
     end,
   })
+  -- use({
+  --   "ahmedkhalf/project.nvim",
+  --   config = function()
+  --     require("plugins.project")
+  --   end,
+  -- })
   use({
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
@@ -301,4 +307,5 @@ require("packer").startup(function(use)
   use({ "foosoft/vim-argwrap", cmd = get_cmds("argwrap") })
   use({ "AndrewRadev/sideways.vim", cmd = get_cmds("sideways") })
   use("sheerun/vim-polyglot")
+  use("AndrewRadev/splitjoin.vim")
 end)

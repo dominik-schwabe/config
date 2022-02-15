@@ -146,15 +146,15 @@ map_info.telescope = {
     ["<C-p>"] = { { { "n", "x", "i" }, "<CMD>Telescope find_files<CR>", def_opt } },
     ["<F11>"] = { { { "n", "x", "i" }, "<CMD>Telescope live_grep<CR>", def_opt } },
     ["z="] = { { { "n" }, "<CMD>Telescope spell_suggest<CR><ESC>", def_opt } },
-    ["<space>jj"] = { { { "n", "x" }, "<CMD>Telescope resume<CR>", def_opt } },
-    ["<space>jc"] = { { { "n", "x" }, "<CMD>Telescope highlights<CR>", def_opt } },
-    ["<space>jk"] = { { { "n", "x" }, "<CMD>Telescope keymaps<CR>", def_opt } },
-    ["<space>jgb"] = { { { "n", "x" }, "<CMD>Telescope git_branches<CR>", def_opt } },
-    ["<space>jgs"] = { { { "n", "x" }, "<CMD>Telescope git_status<CR>", def_opt } },
-    ["<space>jh"] = { { { "n", "x" }, "<CMD>Telescope help_tags<CR>", def_opt } },
-    ["<space>jl"] = { { { "n", "x" }, "<CMD>Telescope jumplist<CR>", def_opt } },
-    ["<space>js"] = { { { "n", "x" }, "<CMD>Telescope document_symbols<CR>", def_opt } },
-    ["<space>jb"] = { { { "n", "x" }, "<CMD>Telescope current_buffer_fuzzy_find<CR>", def_opt } },
+    ["<space>,,"] = { { { "n", "x" }, "<CMD>Telescope resume<CR>", def_opt } },
+    ["<space>,c"] = { { { "n", "x" }, "<CMD>Telescope highlights<CR>", def_opt } },
+    ["<space>,k"] = { { { "n", "x" }, "<CMD>Telescope keymaps<CR>", def_opt } },
+    ["<space>,gb"] = { { { "n", "x" }, "<CMD>Telescope git_branches<CR>", def_opt } },
+    ["<space>,gs"] = { { { "n", "x" }, "<CMD>Telescope git_status<CR>", def_opt } },
+    ["<space>,h"] = { { { "n", "x" }, "<CMD>Telescope help_tags<CR>", def_opt } },
+    ["<space>,l"] = { { { "n", "x" }, "<CMD>Telescope jumplist<CR>", def_opt } },
+    ["<space>,s"] = { { { "n", "x" }, "<CMD>Telescope document_symbols<CR>", def_opt } },
+    ["<space>,b"] = { { { "n", "x" }, "<CMD>Telescope current_buffer_fuzzy_find<CR>", def_opt } },
   },
   commands = { "Telescope" },
 }
@@ -216,6 +216,11 @@ map_info.dial = {
   },
 }
 
+map_info.split_join = {
+  mappings = {
+  },
+}
+
 map_info.default = {
   mappings = {
     ["p"] = { { { "x" }, '"_dP', def_opt } },
@@ -226,7 +231,6 @@ map_info.default = {
     ["<up>"] = { { { "n", "x" }, "<CMD>wincmd K<CR>", def_opt } },
     ["<down>"] = { { { "n", "x" }, "<CMD>wincmd J<CR>", def_opt } },
     ["ö"] = { { { "n", "x" }, "<CMD>noh<CR>", def_opt } },
-    ["<space>k"] = { { { "n", "x" }, "lua d(vim.fn.mode())", def_opt } },
     ["<"] = { { { "x" }, "<gv", def_opt } },
     [">"] = { { { "x" }, ">gv", def_opt } },
     ["<C-h>"] = {
