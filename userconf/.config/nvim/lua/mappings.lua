@@ -196,16 +196,16 @@ map_info.sideways = {
   commands = { "SidewaysLeft", "SidewaysRight" },
 }
 
-map_info.yoink = {
-  mappings = {
-    ["ü"] = { { { "n" }, "<plug>(YoinkRotateBack)", {} } },
-    ["Ü"] = { { { "n" }, "<plug>(YoinkRotateForward)", {} } },
-    ["p"] = { { { "n" }, "<plug>(YoinkPaste_p)", {} } },
-    ["P"] = { { { "n" }, "<plug>(YoinkPaste_P)", {} } },
-    ["gp"] = { { { "n" }, "<plug>(YoinkPaste_gp)", {} } },
-    ["gP"] = { { { "n" }, "<plug>(YoinkPaste_gP)", {} } },
-  },
-}
+-- map_info.yoink = {
+--   mappings = {
+--     ["ü"] = { { { "n" }, "<plug>(YoinkRotateBack)", {} } },
+--     ["Ü"] = { { { "n" }, "<plug>(YoinkRotateForward)", {} } },
+--     ["p"] = { { { "n" }, "<plug>(YoinkPaste_p)", {} } },
+--     ["P"] = { { { "n" }, "<plug>(YoinkPaste_P)", {} } },
+--     ["gp"] = { { { "n" }, "<plug>(YoinkPaste_gp)", {} } },
+--     ["gP"] = { { { "n" }, "<plug>(YoinkPaste_gP)", {} } },
+--   },
+-- }
 
 map_info.dial = {
   mappings = {
