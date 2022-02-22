@@ -237,6 +237,7 @@ require("packer").startup(function(use)
   -- enhanced increment decrement
   use({
     "monaqa/dial.nvim",
+    requires = "nvim-lua/plenary.nvim",
     config = function()
       require("plugins.dial")
     end,
@@ -301,11 +302,10 @@ require("packer").startup(function(use)
   use("haya14busa/vim-asterisk")
   use("wellle/targets.vim")
   use("michaeljsmith/vim-indent-object")
-  use("tpope/vim-surround")
   use("mg979/vim-visual-multi")
+  use("tpope/vim-surround")
   use("tpope/vim-repeat")
+  use("tpope/vim-sleuth")
   use({ "foosoft/vim-argwrap", cmd = get_cmds("argwrap") })
   use({ "AndrewRadev/sideways.vim", cmd = get_cmds("sideways") })
-  use("sheerun/vim-polyglot")
-  use("AndrewRadev/splitjoin.vim")
 end)

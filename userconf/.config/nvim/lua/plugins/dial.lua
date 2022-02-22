@@ -1,28 +1,26 @@
-local dial = require("dial")
+local augend = require("dial.augend")
 
-dial.augends["custom#boolean"] = dial.common.enum_cyclic({
-  name = "boolean",
-  strlist = { "true", "false" },
+require("dial.config").augends:register_group({
+  default = {
+    augend.constant.new({
+      elements = { "true", "false" },
+      word = true,
+      cyclic = true,
+    }),
+    augend.constant.new({
+      elements = { "True", "False" },
+      word = true,
+      cyclic = true,
+    }),
+    augend.constant.new({
+      elements = { "TRUE", "FALSE" },
+      word = true,
+      cyclic = true,
+    }),
+    augend.integer.alias.decimal,
+    augend.integer.alias.hex,
+    augend.integer.alias.binary,
+    augend.date.alias["%Y/%m/%d"],
+    augend.date.alias["%H:%M:%S"],
+  },
 })
-
-dial.augends["custom#pyboolean"] = dial.common.enum_cyclic({
-  name = "boolean",
-  strlist = { "True", "False" },
-})
-
-dial.augends["custom#rboolean"] = dial.common.enum_cyclic({
-  name = "boolean",
-  strlist = { "TRUE", "FALSE" },
-})
-
-dial.config.searchlist.normal = {
-  "custom#boolean",
-  "custom#pyboolean",
-  "custom#rboolean",
-  "number#decimal#int",
-  "number#hex",
-  "number#binary",
-  "date#[%Y/%m/%d]",
-  "date#[%H:%M:%S]",
-  "markup#markdown#header",
-}

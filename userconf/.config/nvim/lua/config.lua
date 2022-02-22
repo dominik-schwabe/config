@@ -184,7 +184,7 @@ local ensure_installed = os.getenv("NVIM_TREESITTER_MAINTAINED") == "true" and "
 M.treesitter = {
   ensure_installed = ensure_installed,
   ignore_install = { "latex" },
-  highlight_disable = { "r" },
+  highlight_disable = { "r", "i3config" },
 }
 M.coc_extensions = {
   "coc-clangd",

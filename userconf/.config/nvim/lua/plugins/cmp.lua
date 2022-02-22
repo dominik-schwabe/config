@@ -47,7 +47,7 @@ cmp.setup({
   mapping = {
     ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
     ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-    ['<C-n>'] = cmp.mapping(cmp.mapping.complete(), { "i" }),
+    ["<C-n>"] = cmp.mapping(cmp.mapping.complete(), { "i" }),
     ["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
     ["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
@@ -58,7 +58,14 @@ cmp.setup({
     { name = "nvim_lua" },
     { name = "path" },
     { name = "tmux" },
-    { name = "buffer" },
+    {
+      name = "buffer",
+      -- option = {
+      --   get_bufnrs = function()
+      --     return vim.api.nvim_list_bufs()
+      --   end,
+      -- },
+    },
   },
 })
 

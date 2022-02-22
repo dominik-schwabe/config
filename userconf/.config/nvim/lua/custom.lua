@@ -6,6 +6,7 @@ local fn = vim.fn
 local api = vim.api
 local cmd = vim.cmd
 local buf_map = vim.api.nvim_buf_set_keymap
+local opt = vim.opt
 
 local config = require("config")
 

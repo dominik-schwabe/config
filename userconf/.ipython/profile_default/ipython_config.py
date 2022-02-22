@@ -51,7 +51,7 @@ extensions = ["ipython_autoimport"]
 c.InteractiveShellApp.extensions = ["autoreload"] + get_installed_extensions(extensions)
 
 ## lines of code to run at IPython startup.
-c.InteractiveShellApp.exec_lines = ["autoreload 2"]
+c.InteractiveShellApp.exec_lines = ["autoreload 2", "%alias_magic d debug"]
 
 ## dotted module name of an IPython extension to load.
 # c.InteractiveShellApp.extra_extension = ''
@@ -139,7 +139,7 @@ c.TerminalIPythonApp.display_banner = True
 # c.InteractiveShell.autoindent = True
 
 ## Enable magic commands to be called without the leading %.
-# c.InteractiveShell.automagic = True
+c.InteractiveShell.automagic = True
 
 ## The part of the banner to be printed before the profile
 # c.InteractiveShell.banner1 = "Python 3.8.2 (default, Feb 26 2020, 22:21:03) \nType 'copyright', 'credits' or 'license' for more information\nIPython 7.13.0 -- An enhanced Interactive Python. Type '?' for help.\n"
@@ -235,7 +235,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 ## Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
 #  documentation for more information.
-c.TerminalInteractiveShell.display_completions = 'column'
+c.TerminalInteractiveShell.display_completions = "column"
 
 ## Shortcut style to use at the prompt. 'vi' or 'emacs'.
 c.TerminalInteractiveShell.editing_mode = "vi"

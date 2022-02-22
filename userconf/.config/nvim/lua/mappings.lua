@@ -152,7 +152,7 @@ map_info.telescope = {
     ["<space>,gb"] = { { { "n", "x" }, "<CMD>Telescope git_branches<CR>", def_opt } },
     ["<space>,gs"] = { { { "n", "x" }, "<CMD>Telescope git_status<CR>", def_opt } },
     ["<space>,h"] = { { { "n", "x" }, "<CMD>Telescope help_tags<CR>", def_opt } },
-    ["<space>,l"] = { { { "n", "x" }, "<CMD>Telescope jumplist<CR>", def_opt } },
+    ["<space>j"] = { { { "n", "x" }, "<CMD>Telescope jumplist<CR>", def_opt } },
     ["<space>,s"] = { { { "n", "x" }, "<CMD>Telescope document_symbols<CR>", def_opt } },
     ["<space>,b"] = { { { "n", "x" }, "<CMD>Telescope current_buffer_fuzzy_find<CR>", def_opt } },
   },
@@ -161,7 +161,7 @@ map_info.telescope = {
 
 map_info.todo_comments = {
   mappings = {
-    ["<space>-"] = { { { "n" }, "<CMD>:TodoQuickFix<CR>", def_opt } },
+    ["<space>-"] = { { { "n" }, "<CMD>:TodoQuickFix<CR><ESC>", def_opt } },
   },
   commands = { "TodoQuickFix" },
 }
@@ -213,11 +213,6 @@ map_info.dial = {
     ["<C-x>"] = { { { "n", "v" }, "<Plug>(dial-decrement)", {} } },
     ["g<C-a>"] = { { { "v" }, "<Plug>(dial-increment-additional)", {} } },
     ["g<C-x>"] = { { { "v" }, "<Plug>(dial-decrement-additional)", {} } },
-  },
-}
-
-map_info.split_join = {
-  mappings = {
   },
 }
 
