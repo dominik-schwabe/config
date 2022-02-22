@@ -35,8 +35,8 @@ opt.ttyfast = true
 opt.termguicolors = true
 
 
--- g.splitjoin_split_mapping = '<space>o'
--- g.splitjoin_join_mapping  = '<space>j'
+g.splitjoin_split_mapping = '<space>o'
+g.splitjoin_join_mapping  = '<space>j'
 g.yoinkIncludeDeleteOperations = 1
 g.kommentary_create_default_mappings = false
 g.Illuminate_ftblacklist = config.illuminate_blacklist
