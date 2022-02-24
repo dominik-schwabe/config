@@ -308,4 +308,40 @@ function TrimWhitespace(buffer)
   api.nvim_buf_set_lines(buffer, 0, -1, false, lines)
 end
 
+-- fn.expand("<cword>")
+-- call histadd('input', a:flags.query)
+-- let s:prompt_op = 'cancelled'
+-- "   'cancelled':  don't start searching
+-- "   'flag_tool':  don't start searching; toggle -tool flag
+-- "   'flag_dir':   don't start searching; toggle -dir flag
+-- "   'flag_side':  don't start searching; toggle -side flag
+-- "   'cr':         start searching
+-- setqflist([])
+-- fun! s:RgHighlight(txt)
+--   let @/=escape(substitute(a:txt, '"', '', 'g'), '|')
+--   call feedkeys(":let &hlsearch=1\<CR>", 'n')
+-- endfun
+--
+-- let options = {
+--       \ 'cmd':       s:cmdline,
+--       \ 'work_dir':  s:tmp_work_dir,
+--       \ 'flags':     a:flags,
+--       \ 'addexpr':   a:flags.quickfix ? 'caddexpr' : 'laddexpr',
+--       \ 'window':    winnr(),
+--       \ 'tabpage':   tabpagenr(),
+--       \ 'stdoutbuf': '',
+--       \ 'num_matches': 0,
+--       \ }
+--
+-- let opts = {
+--       \ 'on_stdout': function('s:on_stdout_nvim'),
+--       \ 'on_stderr': function('s:on_stdout_nvim'),
+--       \ 'on_exit':   function('s:on_exit'),
+--       \ 'stdin': 'null'
+--       \ }
+-- setqflist
+-- let s:id = jobstart(cmd, extend(options, opts))
+-- if exists('s:id')
+--   silent! call jobstop(s:id)
+-- endif
 cmd("command! TrimWhitespace lua TrimWhitespace(0)")

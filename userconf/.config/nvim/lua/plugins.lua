@@ -54,6 +54,12 @@ require("packer").startup(function(use)
       "williamboman/nvim-lsp-installer",
       -- "ray-x/lsp_signature.nvim",
       "kosayoda/nvim-lightbulb",
+      {
+        "j-hui/fidget.nvim",
+        config = function()
+          require("fidget").setup({})
+        end,
+      },
       -- "b0o/schemastore.nvim",
     },
     config = function()

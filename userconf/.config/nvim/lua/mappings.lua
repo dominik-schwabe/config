@@ -228,6 +228,9 @@ map_info.default = {
     ["ö"] = { { { "n", "x" }, "<CMD>noh<CR>", def_opt } },
     ["<"] = { { { "x" }, "<gv", def_opt } },
     [">"] = { { { "x" }, ">gv", def_opt } },
+    ["<C-w>"] = {
+      { { "n", "x", "i" }, "<CMD>write<CR>", nore_opt },
+    },
     ["<C-h>"] = {
       { { "n", "x", "i" }, "<CMD>wincmd h<CR>", nore_opt },
       { { "t" }, "<C-\\><C-n>:TermGoDirection h<CR>", def_opt },

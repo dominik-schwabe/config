@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 
 HELP='mirror your primary monitor with an external monitor
-  -a infer all non specified options automatically
-  -o external output to activate
-  -r resolution of external monitor
-  -h horizontal stack above
-  -v vertical stack right
+  -a use sane defaults for all non specified options (you probably always want to use this)
+  -o external output to activate (-a -> take the first found non primary output)
+  -s resolution of external monitor (-a -> take max resolution)
+  -t external display above primary
+  -b external display below primary
+  -l external display left of primary
+  -r external display right of primary
   -d make only your primary screen active (e.g. reset mirroring)
-  -i invert stack (-h -> below, -v -> left)
   -p take maximal resolution from primary instead of external monitor'
 TYPE="mirror"
 while getopts "r:o:adhvip" o &>/dev/null; do
   case $o in
-    "o") EXTERN_OUTPUT=$OPTARG ;;
-    "r") EXTERN_RESOLUTION=$OPTARG ;;
     "a") AUTO=true ;;
+    "o") EXTERN_OUTPUT=$OPTARG ;;
+    "s") EXTERN_RESOLUTION=$OPTARG ;;
+    "t") TYPE="top" ;;
+    "b") TYPE="bottom" ;;
+    "l") TYPE="left" ;;
+    "r") TYPE="right" ;;
     "d") RESET=true ;;
-    "h") TYPE="horizontal" ;;
-    "v") TYPE="vertical" ;;
-    "i") INVERT=true ;;
     "p") PRIMARY=true ;;
   esac
 done
@@ -72,18 +74,14 @@ if [[ -z "$RESET" ]]; then
       xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --scale-from "$EXTERN_RESOLUTION" --same-as "$PRIMARY_OUTPUT" --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$EXTERN_RESOLUTION"
     fi
   else
-    if [[ $TYPE == "horizontal" ]]; then
-      if [[ $INVERT == "true" ]]; then
-        DIRECTION="--left-of"
-      else
-        DIRECTION="--right-of"
-      fi
-    elif [[ $TYPE == "vertical" ]]; then
-      if [[ $INVERT == "true" ]]; then
-        DIRECTION="--below"
-      else
+    if [[ $TYPE == "top" ]]; then
         DIRECTION="--above"
-      fi
+    elif [[ $TYPE == "bottom" ]]; then
+        DIRECTION="--below"
+    elif [[ $TYPE == "left" ]]; then
+        DIRECTION="--left-of"
+    elif [[ $TYPE == "right" ]]; then
+        DIRECTION="--right-of"
     else
       exit 1
     fi

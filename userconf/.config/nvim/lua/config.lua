@@ -123,7 +123,6 @@ M.lsp_configs = {
       },
     },
   },
-
   r_language_server = {
     settings = {
       r = {
