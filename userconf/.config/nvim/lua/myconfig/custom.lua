@@ -6,9 +6,10 @@ local fn = vim.fn
 local api = vim.api
 local cmd = vim.cmd
 local buf_map = vim.api.nvim_buf_set_keymap
-local opt = vim.opt
 
-local config = require("config")
+local get_visual_selection = require("myconfig.utils").get_visual_selection
+
+local config = require("myconfig.config")
 
 local def_opt = { noremap = true, silent = true }
 
@@ -297,7 +298,7 @@ function TrimWhitespace(buffer)
     return
   end
   local lines = api.nvim_buf_get_lines(buffer, 0, -1, false)
-  for i=1,#lines do
+  for i = 1, #lines do
     lines[i] = lines[i]:gsub("%s+$", "")
   end
   local end_index = #lines
@@ -308,40 +309,79 @@ function TrimWhitespace(buffer)
   api.nvim_buf_set_lines(buffer, 0, -1, false, lines)
 end
 
--- fn.expand("<cword>")
--- call histadd('input', a:flags.query)
--- let s:prompt_op = 'cancelled'
--- "   'cancelled':  don't start searching
--- "   'flag_tool':  don't start searching; toggle -tool flag
--- "   'flag_dir':   don't start searching; toggle -dir flag
--- "   'flag_side':  don't start searching; toggle -side flag
--- "   'cr':         start searching
--- setqflist([])
--- fun! s:RgHighlight(txt)
---   let @/=escape(substitute(a:txt, '"', '', 'g'), '|')
---   call feedkeys(":let &hlsearch=1\<CR>", 'n')
--- endfun
---
--- let options = {
---       \ 'cmd':       s:cmdline,
---       \ 'work_dir':  s:tmp_work_dir,
---       \ 'flags':     a:flags,
---       \ 'addexpr':   a:flags.quickfix ? 'caddexpr' : 'laddexpr',
---       \ 'window':    winnr(),
---       \ 'tabpage':   tabpagenr(),
---       \ 'stdoutbuf': '',
---       \ 'num_matches': 0,
---       \ }
---
--- let opts = {
---       \ 'on_stdout': function('s:on_stdout_nvim'),
---       \ 'on_stderr': function('s:on_stdout_nvim'),
---       \ 'on_exit':   function('s:on_exit'),
---       \ 'stdin': 'null'
---       \ }
--- setqflist
--- let s:id = jobstart(cmd, extend(options, opts))
--- if exists('s:id')
---   silent! call jobstop(s:id)
--- endif
 cmd("command! TrimWhitespace lua TrimWhitespace(0)")
+
+function ReloadConfig()
+  for name, _ in pairs(package.loaded) do
+    if name:match("^myconfig") then
+      package.loaded[name] = nil
+    end
+  end
+
+  dofile(vim.env.MYVIMRC)
+end
+
+local curr_rg_job = nil
+local Job = require("plenary.job")
+function Rg(string, raw, maximum)
+  if string == "" then
+    return
+  end
+  if curr_rg_job ~= nil then
+    curr_rg_job:shutdown()
+  end
+  local args = { string, "-H", "--no-heading", "--vimgrep" }
+  if raw then
+    args[#args + 1] = "--fixed-strings"
+  end
+  -- local filepath = fn.expand("%:p:h")
+  curr_rg_job = Job:new({
+    command = "rg",
+    args = args,
+    interactive = false,
+    cwd = fn.getcwd(),
+    -- maximum_results = maximum,
+    on_exit = function(j, return_val)
+      if return_val ~= 0 then
+        vim.schedule_wrap(function()
+          vim.notify(table.concat(j:stderr_result(), "\n"), "ERR")
+        end)()
+      else
+        vim.schedule_wrap(function()
+          vim.fn.setqflist({}, "r", { title = "Search Results", lines = j:result() })
+          api.nvim_command("cwindow")
+        end)()
+      end
+    end,
+  })
+  curr_rg_job:after(function()
+    curr_rg_job = nil
+  end)
+  curr_rg_job:start()
+end
+
+function RgWord()
+  Rg(vim.fn.expand("<cword>"), true)
+end
+
+function RgInput()
+  fn.inputsave()
+  local query = fn.input("Search in files: ")
+  fn.inputrestore()
+  if not (query == "") then
+    return Rg(query, false)
+  end
+end
+
+function RgVisual()
+  local selection = get_visual_selection(0)
+  if #selection == 0 then
+    print("empty selection")
+    return
+  end
+  Rg(table.concat(get_visual_selection(0), ""), true)
+end
+
+cmd("command! RgWord lua RgWord()")
+cmd("command! RgInput lua RgInput()")
+cmd("command! RgVisual lua RgVisual()")

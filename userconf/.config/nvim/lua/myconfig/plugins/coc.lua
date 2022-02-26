@@ -12,7 +12,7 @@ local feedkey = function(key, mode)
   api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
-g.coc_global_extensions = require("config").coc_extensions
+g.coc_global_extensions = require("myconfig.config").coc_extensions
 
 local function check_back_space()
   local col = fn.col(".") - 1

@@ -11,7 +11,7 @@ lspkind.init({
   mode = "symbol",
   -- preset = 'codicons',
   preset = "default",
-  symbol_map = require("config").lspkind_symbol_map,
+  symbol_map = require("myconfig.config").lspkind_symbol_map,
 })
 
 local feedkey = function(key, mode)

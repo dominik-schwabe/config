@@ -1,5 +1,5 @@
 local gps = require("nvim-gps")
-gps.setup({ icons = require("config").gps_icons })
+gps.setup({ icons = require("myconfig.config").gps_icons })
 
 local config = {
   extensions = { "quickfix" },

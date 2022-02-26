@@ -3,7 +3,7 @@ local api = vim.api
 
 local def_opt = { noremap = true, silent = true }
 
-local config = require("config")
+local config = require("myconfig.config")
 local null_ls = require("null-ls")
 local sources = {}
 for builtin, options in pairs(config.null_ls) do

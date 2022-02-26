@@ -11,7 +11,7 @@ g.tokyonight_terminal_colors = false
 
 cmd("syntax on")
 
-cmd("colorscheme " .. require("config").colorscheme)
+cmd("colorscheme " .. require("myconfig.config").colorscheme)
 
 local monokai = require("monokai")
 local colors = monokai.classic

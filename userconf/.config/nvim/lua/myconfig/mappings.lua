@@ -61,17 +61,6 @@ map_info.dap = {
   commands = { "DapBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapUiToggle" },
 }
 
-map_info.grepper = {
-  mappings = {
-    ["<c-_>"] = {
-      { { "n" }, "<CMD>GrepWord<CR>", def_opt },
-      { { "x" }, "<ESC>:GrepVisual<CR>", def_opt },
-    },
-    ["_"] = { { { "n" }, "<CMD>SearchInFiles<CR>", def_opt } },
-  },
-  commands = { "GrepWord", "SearchInFiles", "GrepVisual" },
-}
-
 map_info.hop = {
   mappings = {
     ["m"] = { { { "n" }, "<CMD>HopChar1<CR>", def_opt } },
@@ -218,6 +207,7 @@ map_info.dial = {
 
 map_info.default = {
   mappings = {
+    ["<space>v"] = { { { "n", "x" }, "<CMD>lua ReloadConfig()<CR>", def_opt } },
     ["p"] = { { { "x" }, '"_dP', def_opt } },
     ["<space>P"] = { { { "x" }, "p", def_opt } },
     ["Q"] = { { { "n", "x" }, ":qa<CR>", def_opt } },
@@ -277,6 +267,12 @@ map_info.default = {
     -- ["N"] = { { { "n", "x" }, "Nzzzv", def_opt } },
     -- ["J"] = { { { "n", "x" }, "mzJ`z", def_opt } },
     ["<space>."] = { { { "n", "x" }, "<CMD>TrimWhitespace<CR>", def_opt } },
+    ["<space>x"] = { { { "n", "x" }, "<CMD>lua Rg('setup', 10)<CR>", def_opt } },
+    ["<c-_>"] = {
+      { { "n" }, "<CMD>RgWord<CR>", def_opt },
+      { { "x" }, "<ESC>:RgVisual<CR>", def_opt },
+    },
+    ["_"] = { { { "n" }, "<CMD>RgInput<CR>", def_opt } },
   },
 }
 

@@ -9,7 +9,7 @@ g.iron_map_defaults = 0
 g.iron_map_extended = 0
 
 local iron = require("iron")
-local get_visual_selection = require("utils").get_visual_selection
+local get_visual_selection = require("myconfig.utils").get_visual_selection
 
 g.ripple_enable_mappings = 0
 g.ripple_term_name = "term:// ripple"
@@ -175,7 +175,7 @@ iron.core.add_repl_definitions({
 })
 
 iron.core.set_config({
-  preferred = require("config").repls,
+  preferred = require("myconfig.config").repls,
   visibility = require("iron.visibility").toggle,
   repl_open_cmd = repl_open_cmd,
   memory_management = require("iron.scope").singleton,

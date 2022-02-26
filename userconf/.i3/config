@@ -224,6 +224,7 @@ bindsym $mod+Shift+Return exec $guifilebrowser
 bindsym Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot 's%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot of SCREEN has been taken'
 bindsym Shift+Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot 'w%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot of WINDOW has been taken'
 bindsym $mod+Return exec --no-startup-id $term
+bindsym $mod+t exec --no-startup-id $term
 bindsym $mod+Home exec --no-startup-id xbacklight -time 0 +1
 bindsym $mod+End exec --no-startup-id xbacklight -time 0 -1
 bindsym $mod+udiaeresis move workspace to output next

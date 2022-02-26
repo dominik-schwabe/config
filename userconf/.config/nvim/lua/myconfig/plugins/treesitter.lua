@@ -3,7 +3,7 @@ local map = vim.api.nvim_set_keymap
 local def_opt = { noremap = true, silent = true }
 local noremap = { noremap = true }
 
-local treesitter_config = require("config").treesitter
+local treesitter_config = require("myconfig.config").treesitter
 require("nvim-treesitter.configs").setup({
   playground = {
     enable = false,
@@ -42,6 +42,13 @@ require("nvim-treesitter.configs").setup({
     enable = false,
   },
   rainbow = {
+    colors = {
+      '#bb00bb',
+      '#00bb00',
+      '#bbbb00',
+      '#00bbbb',
+      '#bb0000',
+    },
     enable = true,
     extended_mode = true,
     max_file_lines = 1000,

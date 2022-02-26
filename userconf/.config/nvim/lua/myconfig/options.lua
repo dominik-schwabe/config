@@ -1,7 +1,7 @@
 local opt = vim.opt
 local g = vim.g
 local fn = vim.fn
-local config = require("config")
+local config = require("myconfig.config")
 
 opt.foldenable = false
 opt.tabstop = 2

@@ -7,7 +7,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
   cmd("packadd packer.nvim")
 end
 
-local get_cmds = require("mappings").get_cmds
+local get_cmds = require("myconfig.mappings").get_cmds
 
 require("packer").startup(function(use)
   -- use({
@@ -21,9 +21,11 @@ require("packer").startup(function(use)
   use({
     "wbthomason/packer.nvim",
     config = function()
-      require("./plugins.packer")
+      require("myconfig.plugins.packer")
     end,
   })
+  -- stdlib
+  use("nvim-lua/plenary.nvim")
 
   -- color
   use("tanvirtin/monokai.nvim")
@@ -41,7 +43,7 @@ require("packer").startup(function(use)
       { "andersevenrud/cmp-tmux" },
     },
     config = function()
-      require("plugins.cmp")
+      require("myconfig.plugins.cmp")
     end,
   })
 
@@ -63,7 +65,7 @@ require("packer").startup(function(use)
       -- "b0o/schemastore.nvim",
     },
     config = function()
-      require("plugins.lsp")
+      require("myconfig.plugins.lsp")
     end,
   })
 
@@ -72,7 +74,7 @@ require("packer").startup(function(use)
     "jose-elias-alvarez/null-ls.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("plugins.null-ls")
+      require("myconfig.plugins.null-ls")
     end,
   })
 
@@ -80,7 +82,7 @@ require("packer").startup(function(use)
   use({
     "mfussenegger/nvim-lint",
     config = function()
-      require("plugins.nvim-lint")
+      require("myconfig.plugins.nvim-lint")
     end,
     cmd = get_cmds("nvim_lint"),
   })
@@ -90,7 +92,7 @@ require("packer").startup(function(use)
   -- 	"neoclide/coc.nvim",
   -- 	branch = "release",
   -- 	config = function()
-  -- 		require("plugins.coc")
+  -- 		require("myconfig.plugins.coc")
   -- 	end,
   -- })
 
@@ -108,7 +110,7 @@ require("packer").startup(function(use)
     },
     run = ":TSUpdate",
     config = function()
-      require("plugins.treesitter")
+      require("myconfig.plugins.treesitter")
     end,
   })
 
@@ -117,7 +119,7 @@ require("packer").startup(function(use)
     "nvim-telescope/telescope.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("plugins.telescope")
+      require("myconfig.plugins.telescope")
     end,
     cmd = get_cmds("telescope"),
   })
@@ -127,7 +129,7 @@ require("packer").startup(function(use)
     "kyazdani42/nvim-tree.lua",
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
-      require("plugins.nvim-tree")
+      require("myconfig.plugins.nvim-tree")
     end,
   })
 
@@ -136,7 +138,7 @@ require("packer").startup(function(use)
     "L3MON4D3/LuaSnip",
     requires = { "rafamadriz/friendly-snippets" },
     config = function()
-      require("plugins.luasnip")
+      require("myconfig.plugins.luasnip")
     end,
   })
 
@@ -145,7 +147,7 @@ require("packer").startup(function(use)
     "mfussenegger/nvim-dap",
     requires = { "Pocco81/DAPInstall.nvim", "rcarriga/nvim-dap-ui" },
     config = function()
-      require("plugins.dap")
+      require("myconfig.plugins.dap")
     end,
     cmd = get_cmds("dap"),
   })
@@ -154,7 +156,7 @@ require("packer").startup(function(use)
     "nvim-lualine/lualine.nvim",
     requires = { "kyazdani42/nvim-web-devicons", { "SmiteshP/nvim-gps" } },
     config = function()
-      require("plugins.lualine")
+      require("myconfig.plugins.lualine")
     end,
   })
 
@@ -162,7 +164,7 @@ require("packer").startup(function(use)
   use({
     "hkupty/iron.nvim",
     config = function()
-      require("plugins.iron")
+      require("myconfig.plugins.iron")
     end,
     cmd = get_cmds("iron"),
   })
@@ -171,7 +173,7 @@ require("packer").startup(function(use)
   use({
     "tpope/vim-fugitive",
     config = function()
-      require("plugins.fugitive")
+      require("myconfig.plugins.fugitive")
     end,
   })
 
@@ -182,7 +184,7 @@ require("packer").startup(function(use)
   use({
     "aserowy/tmux.nvim",
     config = function()
-      require("plugins.tmux")
+      require("myconfig.plugins.tmux")
     end,
     cond = function()
       return os.getenv("TMUX") ~= nil
@@ -193,7 +195,7 @@ require("packer").startup(function(use)
   use({
     "lervag/vimtex",
     config = function()
-      require("plugins.vimtex")
+      require("myconfig.plugins.vimtex")
     end,
   })
 
@@ -201,7 +203,7 @@ require("packer").startup(function(use)
   use({
     "b3nj5m1n/kommentary",
     config = function()
-      require("plugins.kommentary")
+      require("myconfig.plugins.kommentary")
     end,
     cmd = get_cmds("kommentary"),
   })
@@ -210,14 +212,14 @@ require("packer").startup(function(use)
   use({
     "kevinhwang91/nvim-bqf",
     config = function()
-      require("plugins.bqf")
+      require("myconfig.plugins.bqf")
     end,
   })
   use({
     "folke/trouble.nvim",
     requires = { "kyazdani42/nvim-web-devicons" },
     config = function()
-      require("plugins.trouble")
+      require("myconfig.plugins.trouble")
     end,
     cmd = get_cmds("trouble"),
   })
@@ -226,7 +228,7 @@ require("packer").startup(function(use)
   use({
     "CRAG666/code_runner.nvim",
     config = function()
-      require("plugins.code_runner")
+      require("myconfig.plugins.code_runner")
     end,
     cmd = get_cmds("code_runner"),
   })
@@ -236,7 +238,7 @@ require("packer").startup(function(use)
     "iamcco/markdown-preview.nvim",
     run = "cd app && npm install",
     config = function()
-      require("plugins.markdown-preview")
+      require("myconfig.plugins.markdown-preview")
     end,
   })
 
@@ -245,7 +247,7 @@ require("packer").startup(function(use)
     "monaqa/dial.nvim",
     requires = "nvim-lua/plenary.nvim",
     config = function()
-      require("plugins.dial")
+      require("myconfig.plugins.dial")
     end,
   })
 
@@ -257,26 +259,20 @@ require("packer").startup(function(use)
     "phaazon/hop.nvim",
     cmd = get_cmds("hop"),
     config = function()
-      require("plugins.hop")
+      require("myconfig.plugins.hop")
     end,
   })
   use({
     "jedi2610/nvim-rooter.lua",
     config = function()
-      require("plugins.nvim-rooter")
+      require("myconfig.plugins.nvim-rooter")
     end,
   })
-  -- use({
-  --   "ahmedkhalf/project.nvim",
-  --   config = function()
-  --     require("plugins.project")
-  --   end,
-  -- })
   use({
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
     config = function()
-      require("plugins.todo-comments")
+      require("myconfig.plugins.todo-comments")
     end,
     cmd = get_cmds("todo_comments"),
   })
@@ -286,22 +282,15 @@ require("packer").startup(function(use)
 
   -- legacy
   use({
-    "mhinz/vim-grepper",
-    config = function()
-      require("plugins.grepper")
-    end,
-    cmd = get_cmds("grepper"),
-  })
-  use({
     "jlanzarotta/bufexplorer",
     config = function()
-      require("plugins.bufexplorer")
+      require("myconfig.plugins.bufexplorer")
     end,
   })
   use({
     "troydm/zoomwintab.vim",
     config = function()
-      require("plugins.zoomwintab")
+      require("myconfig.plugins.zoomwintab")
     end,
     cmd = get_cmds("zoomwintabtoggle"),
   })
