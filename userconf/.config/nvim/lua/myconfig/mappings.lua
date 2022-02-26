@@ -133,7 +133,7 @@ map_info.iron = {
 map_info.telescope = {
   mappings = {
     ["<C-p>"] = { { { "n", "x", "i" }, "<CMD>Telescope find_files<CR>", def_opt } },
-    ["<F11>"] = { { { "n", "x", "i" }, "<CMD>Telescope live_grep<CR>", def_opt } },
+    ["_"] = { { { "n", "x", "i" }, "<CMD>Telescope live_grep<CR>", def_opt } },
     ["z="] = { { { "n" }, "<CMD>Telescope spell_suggest<CR><ESC>", def_opt } },
     ["<space>,,"] = { { { "n", "x" }, "<CMD>Telescope resume<CR>", def_opt } },
     ["<space>,c"] = { { { "n", "x" }, "<CMD>Telescope highlights<CR>", def_opt } },
@@ -141,7 +141,7 @@ map_info.telescope = {
     ["<space>,gb"] = { { { "n", "x" }, "<CMD>Telescope git_branches<CR>", def_opt } },
     ["<space>,gs"] = { { { "n", "x" }, "<CMD>Telescope git_status<CR>", def_opt } },
     ["<space>,h"] = { { { "n", "x" }, "<CMD>Telescope help_tags<CR>", def_opt } },
-    ["<space>j"] = { { { "n", "x" }, "<CMD>Telescope jumplist<CR>", def_opt } },
+    ["<space>,j"] = { { { "n", "x" }, "<CMD>Telescope jumplist<CR>", def_opt } },
     ["<space>,s"] = { { { "n", "x" }, "<CMD>Telescope document_symbols<CR>", def_opt } },
     ["<space>,b"] = { { { "n", "x" }, "<CMD>Telescope current_buffer_fuzzy_find<CR>", def_opt } },
   },
@@ -272,7 +272,7 @@ map_info.default = {
       { { "n" }, "<CMD>RgWord<CR>", def_opt },
       { { "x" }, "<ESC>:RgVisual<CR>", def_opt },
     },
-    ["_"] = { { { "n" }, "<CMD>RgInput<CR>", def_opt } },
+    -- ["_"] = { { { "n" }, "<CMD>RgInput<CR>", def_opt } },
   },
 }
 
