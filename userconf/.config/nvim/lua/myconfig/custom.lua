@@ -330,7 +330,7 @@ function Rg(string, raw, maximum)
   if curr_rg_job ~= nil then
     curr_rg_job:shutdown()
   end
-  local args = { string, "-H", "--no-heading", "--vimgrep" }
+  local args = { string, "-i", "-H", "--no-heading", "--vimgrep" }
   if raw then
     args[#args + 1] = "--fixed-strings"
   end
