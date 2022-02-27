@@ -330,10 +330,11 @@ function Rg(string, raw, maximum)
   if curr_rg_job ~= nil then
     curr_rg_job:shutdown()
   end
-  local args = { string, "-i", "-H", "--no-heading", "--vimgrep" }
+  local args = { "-i", "-H", "--no-heading", "--vimgrep" }
   if raw then
     args[#args + 1] = "--fixed-strings"
   end
+  args[#args+1] = string
   -- local filepath = fn.expand("%:p:h")
   curr_rg_job = Job:new({
     command = "rg",
@@ -348,7 +349,9 @@ function Rg(string, raw, maximum)
         end)()
       else
         vim.schedule_wrap(function()
-          vim.fn.setqflist({}, "r", { title = "Search Results", lines = j:result() })
+          args[#args] = '"' .. vim.fn.escape(args[#args], '"') .. '"'
+          local command = "rg " .. table.concat(args, " ")
+          vim.fn.setqflist({}, "r", { title = command, lines = j:result() })
           api.nvim_command("cwindow")
         end)()
       end
