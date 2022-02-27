@@ -274,7 +274,6 @@ require("packer").startup(function(use)
     config = function()
       require("myconfig.plugins.todo-comments")
     end,
-    cmd = get_cmds("todo_comments"),
   })
 
   -- use("pwntester/octo.nvim") -- github issues and pull request

@@ -133,7 +133,7 @@ map_info.iron = {
 map_info.telescope = {
   mappings = {
     ["<C-p>"] = { { { "n", "x", "i" }, "<CMD>Telescope find_files<CR>", def_opt } },
-    ["_"] = { { { "n", "x", "i" }, "<CMD>Telescope live_grep<CR>", def_opt } },
+    ["_"] = { { { "n", "x" }, "<CMD>Telescope live_grep<CR>", def_opt } },
     ["z="] = { { { "n" }, "<CMD>Telescope spell_suggest<CR><ESC>", def_opt } },
     ["<space>,,"] = { { { "n", "x" }, "<CMD>Telescope resume<CR>", def_opt } },
     ["<space>,c"] = { { { "n", "x" }, "<CMD>Telescope highlights<CR>", def_opt } },
@@ -150,7 +150,7 @@ map_info.telescope = {
 
 map_info.todo_comments = {
   mappings = {
-    ["<space>-"] = { { { "n" }, "<CMD>:TodoQuickFix<CR><ESC>", def_opt } },
+    ["<space>-"] = { { { "n" }, ":TodoQuickFix<CR>", def_opt } },
   },
   commands = { "TodoQuickFix" },
 }
