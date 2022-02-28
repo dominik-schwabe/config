@@ -352,7 +352,7 @@ function Rg(string, raw, maximum)
           args[#args] = '"' .. vim.fn.escape(args[#args], '"') .. '"'
           local command = "rg " .. table.concat(args, " ")
           vim.fn.setqflist({}, "r", { title = command, lines = j:result() })
-          api.nvim_command("cwindow")
+          api.nvim_command("botright copen")
         end)()
       end
     end,
