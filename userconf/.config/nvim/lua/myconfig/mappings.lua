@@ -219,7 +219,7 @@ map_info.default = {
     ["<"] = { { { "x" }, "<gv", def_opt } },
     [">"] = { { { "x" }, ">gv", def_opt } },
     ["<C-w>"] = {
-      { { "n", "x", "i" }, "<CMD>write<CR>", nore_opt },
+      { { "n", "x", "i" }, "<CMD>mark ' | echo 'marked ' .. expand('%:p:t') .. ' ' .. line('.') <CR>", nore_opt },
     },
     ["<C-h>"] = {
       { { "n", "x", "i" }, "<CMD>wincmd h<CR>", nore_opt },
