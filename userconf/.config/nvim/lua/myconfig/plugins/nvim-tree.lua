@@ -38,14 +38,9 @@ local mappings = {
   { key = "u", cb = cb("dir_up") },
   { key = "s", cb = cb("vsplit") },
 }
-g.nvim_tree_quit_on_open = 1
-g.nvim_tree_git_hl = 1
-g.nvim_tree_highlight_opened_files = 2
-g.nvim_tree_disable_window_picker = 1
-g.nvim_tree_refresh_wait = 100
-g.nvim_tree_respect_buf_cwd = 1
 
 require("nvim-tree").setup({
+  disable_window_picker = 1,
   auto_close = false,
   hijack_cursor = false,
   update_cwd = true,
@@ -67,6 +62,20 @@ require("nvim-tree").setup({
     mappings = {
       custom_only = true,
       list = mappings,
+    },
+  },
+  git = {
+    enabled = true,
+    ignore = true,
+    timeout = 500,
+  },
+  actions = {
+    open_file = {
+      quit_on_open = true,
+      resize_window = true,
+      window_picker = {
+        enable = false,
+      },
     },
   },
 })
