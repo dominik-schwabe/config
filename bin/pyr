@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+read PROGRAM ROOT_PATH <<<$(python_project_root .)
+
+echo $ROOT_PATH
+[[ -n "$ROOT_PATH" ]] && cd $ROOT_PATH
+if [[ $PROGRAM == "pdm" ]]; then
+  pdm run $@
+elif [[ $PROGRAM == "pipenv" ]]; then
+  pipenv run $@
+fi

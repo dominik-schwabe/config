@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+PACKAGES="jupyter jupyterlab-code-formatter jupyterlab-vim"
+DEV_PACKAGES="black isort"
+
+FILE_PATH=$(realpath -m ${1-"."})
+
+read PROGRAM ROOT_PATH <<<$(python_project_root $1)
+
+[[ -n "$ROOT_PATH" ]] && cd $ROOT_PATH
+if [[ $PROGRAM == "pdm" ]]; then
+  pdm add $PACKAGES && pdm add --dev $DEV_PACKAGES
+elif [[ $PROGRAM == "pipenv" ]]; then
+	pipenv install --skip-lock $PACKAGES && pipenv install --skip-lock --dev $DEV_PACKAGES && pipenv lock
+fi
