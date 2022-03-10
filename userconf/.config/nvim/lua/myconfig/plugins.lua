@@ -62,7 +62,7 @@ require("packer").startup(function(use)
           require("fidget").setup({})
         end,
       },
-      -- "b0o/schemastore.nvim",
+      "b0o/schemastore.nvim",
     },
     config = function()
       require("myconfig.plugins.lsp")

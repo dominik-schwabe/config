@@ -101,14 +101,27 @@ M.lsp_configs = {
   -- 	}
   -- },
 
-  -- jsonls = {
-  --   settings = {
-  --     json = {
-  --       schemas = require("schemastore").json.schemas(),
-  --     },
-  --   },
-  -- },
-
+  jsonls = {
+    settings = {
+      json = {
+        schemas = vim.list_extend({
+          -- {
+          --   fileMatch = { "*test.json" },
+          --   url = os.getenv("HOME") .. "/experiments/schema-test.json",
+          -- },
+        }, require("schemastore").json.schemas()),
+      },
+    },
+  },
+  yamlls = {
+    settings = {
+      -- yaml = {
+      --   schemas = {
+      --     [os.getenv("HOME") .. "/experiments/schema-test.json"] = "*test.yaml",
+      --   },
+      -- },
+    },
+  },
   pyright = {
     settings = {
       pyright = {

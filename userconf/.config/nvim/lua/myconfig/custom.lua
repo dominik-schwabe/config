@@ -343,16 +343,27 @@ function Rg(string, raw, maximum)
     cwd = fn.getcwd(),
     -- maximum_results = maximum,
     on_exit = function(j, return_val)
-      if return_val ~= 0 then
+      if return_val == 0 then
         vim.schedule_wrap(function()
-          vim.notify(table.concat(j:stderr_result(), "\n"), "ERR")
+          print("luL")
+          args[#args] = '"' .. vim.fn.escape(args[#args], '"') .. '"'
+          local command = "rg " .. table.concat(args, " ")
+          local lines = j:result()
+          if #lines == 0 then
+            vim.notify("nothing found", "ERR")
+          else
+            vim.fn.setqflist({}, "r", { title = command, lines = lines })
+            api.nvim_command("botright copen")
+          end
         end)()
       else
         vim.schedule_wrap(function()
-          args[#args] = '"' .. vim.fn.escape(args[#args], '"') .. '"'
-          local command = "rg " .. table.concat(args, " ")
-          vim.fn.setqflist({}, "r", { title = command, lines = j:result() })
-          api.nvim_command("botright copen")
+          local lines = j:stderr_result()
+          if #lines == 0 then
+            vim.notify("nothing was returned", "ERR")
+          else
+            vim.notify(table.concat(lines, "\n"), "ERR")
+        end
         end)()
       end
     end,
