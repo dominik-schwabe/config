@@ -24,6 +24,7 @@ require("packer").startup(function(use)
       require("myconfig.plugins.packer")
     end,
   })
+
   -- stdlib
   use("nvim-lua/plenary.nvim")
 

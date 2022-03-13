@@ -67,7 +67,6 @@ lsp_installer.on_server_ready(function(server)
     opts = tbl_merge(opts, {
       settings = { json = { schemas = { require("schemastore").json.schemas() } } },
     })
-    d(opts)
   end
   opts.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
   opts.flags = { debounce_text_changes = 150 }
