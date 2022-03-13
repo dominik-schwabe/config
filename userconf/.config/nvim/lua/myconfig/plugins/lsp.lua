@@ -6,6 +6,7 @@ local lsp = vim.lsp
 
 local def_opt = { noremap = true, silent = true }
 local nore_opt = { noremap = true }
+local tbl_merge = require("myconfig.utils").tbl_merge
 
 -- local lsp_signature = require("lsp_signature")
 
@@ -62,6 +63,11 @@ lsp_installer.on_server_ready(function(server)
   local capabilities = lsp.protocol.make_client_capabilities()
   if server.name == "clangd" then
     capabilities.offsetEncoding = { "utf-16" }
+  elseif server.name == "jsonls" then
+    opts = tbl_merge(opts, {
+      settings = { json = { schemas = { require("schemastore").json.schemas() } } },
+    })
+    d(opts)
   end
   opts.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
   opts.flags = { debounce_text_changes = 150 }
