@@ -115,11 +115,12 @@ M.lsp_configs = {
   },
   yamlls = {
     settings = {
-      -- yaml = {
-      --   schemas = {
-      --     [os.getenv("HOME") .. "/experiments/schema-test.json"] = "*test.yaml",
-      --   },
-      -- },
+      yaml = {
+        schemas = {
+          [os.getenv("HOME") .. "/comparefile/schema/sw-config.schema.json"] = "*sw-config.yaml",
+          [os.getenv("HOME") .. "/comparefile/schema/sw-plugin-config.schema.json"] = "sw-plugin-config.yaml",
+        },
+      },
     },
   },
   pyright = {
