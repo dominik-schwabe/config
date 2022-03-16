@@ -33,7 +33,7 @@ alias services-disabled='systemctl --type service --state disabled list-unit-fil
 
 alias t='tmux attach -t 0 &>/dev/null || tmux new-session -t 0'
 alias tt='tmux attach -t 1 &>/dev/null || tmux new-session -t 1'
-alias ttt='tmux attach -t 1 &>/dev/null || tmux new-session -t 1'
+alias ttt='tmux attach -t 2 &>/dev/null || tmux new-session -t 2'
 alias ta='tmux attach -t'
 alias tad='tmux attach -d -t'
 alias ts='tmux new-session -s'
