@@ -11,6 +11,10 @@ echo -n "\e[6 q"
 COMPLETION_WAITING_DOTS="true"
 ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
 
+FZF_DEFAULT_COMMAND="fd --type file --color=always"
+FZF_ALT_C_COMMAND="fd --type directory --color=always"
+FZF_DEFAULT_OPTS="--ansi"
+
 # plugins
 source "$HOME/.zinit/bin/zinit.zsh"
 zinit snippet OMZL::completion.zsh
@@ -38,6 +42,7 @@ zinit ice wait'0' lucid silent
 zinit light kutsan/zsh-system-clipboard
 zinit ice wait'0' lucid atload'zicompinit'
 zinit light zsh-users/zsh-completions
+zinit snippet 'https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh'
 
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -140,3 +145,9 @@ bindkey -M vicmd '^[[15~' _yay_update
 bindkey -M viins '^[[15~' _yay_update
 bindkey -M vicmd '^[[[E' _yay_update
 bindkey -M viins '^[[[E' _yay_update
+
+bindkey -r -M vicmd '\ec'
+bindkey -r -M viins '\ec'
+
+bindkey -M vicmd '^P' fzf-cd-widget
+bindkey -M viins '^P' fzf-cd-widget

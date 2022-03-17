@@ -10,13 +10,15 @@ require("telescope").setup({
     mappings = {
       i = {
         ["<C-p>"] = require("telescope.actions").close,
-        ["<F11>"] = require("telescope.actions").close,
+        ["<C-k>"] = require("telescope.actions").move_selection_previous,
+        ["<C-j>"] = require("telescope.actions").move_selection_next,
         ["<C-c>"] = stopinsert,
         ["<ESC>"] = require("telescope.actions").close,
       },
       n = {
         ["<C-p>"] = require("telescope.actions").close,
-        ["<F11>"] = require("telescope.actions").close,
+        ["<C-k>"] = require("telescope.actions").move_selection_previous,
+        ["<C-j>"] = require("telescope.actions").move_selection_next,
       },
     },
     layout_config = { horizontal = { prompt_position = "top" } },
