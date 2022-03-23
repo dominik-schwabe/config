@@ -323,7 +323,8 @@ end
 
 local curr_rg_job = nil
 local Job = require("plenary.job")
-function Rg(string, raw, maximum)
+function Rg(string, raw, boundry, maximum)
+  print(string)
   if string == "" then
     return
   end
@@ -332,9 +333,12 @@ function Rg(string, raw, maximum)
   end
   local args = { "-i", "-H", "--no-heading", "--vimgrep" }
   if raw then
-    args[#args + 1] = "--fixed-strings"
+    string = vim.fn.escape(string, "^$.*+?()[]{}|")
   end
-  args[#args+1] = string
+  if boundry then
+    string = "\\b" .. string .. "\\b"
+  end
+  args[#args + 1] = string
   -- local filepath = fn.expand("%:p:h")
   curr_rg_job = Job:new({
     command = "rg",
@@ -363,7 +367,7 @@ function Rg(string, raw, maximum)
             vim.notify("nothing was returned", "ERR")
           else
             vim.notify(table.concat(lines, "\n"), "ERR")
-        end
+          end
         end)()
       end
     end,
@@ -375,7 +379,7 @@ function Rg(string, raw, maximum)
 end
 
 function RgWord()
-  Rg(vim.fn.expand("<cword>"), true)
+  Rg(vim.fn.expand("<cword>"), true, true)
 end
 
 function RgInput()
