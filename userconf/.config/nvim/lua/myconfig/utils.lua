@@ -2,7 +2,7 @@ local fn = vim.fn
 local o = vim.o
 local api = vim.api
 
-M = {}
+local M = {}
 
 function M.get_visual_selection(buffer)
   local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))

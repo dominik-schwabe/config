@@ -114,6 +114,12 @@ require("packer").startup(function(use)
       require("myconfig.plugins.treesitter")
     end,
   })
+  use({
+    "m-demare/hlargs.nvim",
+    config = function()
+      require("hlargs").setup({color = "#04c99b"}) -- "#02b4ef"
+    end,
+  })
 
   -- telescope
   use({

@@ -326,7 +326,7 @@ bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -s 90 -n -t \\".
 exec_always --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id flameshot
 exec --no-startup-id telegram-desktop -startintray
-exec --no-startup-id "sleep 10; discord --start-minimized"
+exec --no-startup-id "sleep 10; launch_discord"
 exec --no-startup-id "sleep 10; birdtray"
 exec --no-startup-id "sleep 5; spotify"
 exec --no-startup-id unclutter --timeout 0.7
