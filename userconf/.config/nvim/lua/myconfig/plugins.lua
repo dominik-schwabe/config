@@ -117,7 +117,7 @@ require("packer").startup(function(use)
   use({
     "m-demare/hlargs.nvim",
     config = function()
-      require("hlargs").setup({color = "#04c99b"}) -- "#02b4ef"
+      require("hlargs").setup({color = "#00ffaf"}) -- "#5fafff" "#04c99b" "#02b4ef"
     end,
   })
 
