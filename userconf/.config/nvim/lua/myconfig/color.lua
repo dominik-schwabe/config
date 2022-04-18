@@ -15,6 +15,8 @@ cmd("colorscheme " .. require("myconfig.config").colorscheme)
 
 local monokai = require("monokai")
 local colors = monokai.classic
+
+colors.green = "#87ff00"
 monokai.setup({
   custom_hlgroups = {
     LineNr = {},
@@ -92,6 +94,7 @@ cmd([[ hi LineNr guibg=none ]])
 cmd([[ hi Normal guibg=none ]])
 cmd([[ hi SignColumn guibg=none ]])
 
+cmd([[ hi MatchParen guibg=#ff5ddd guifg=black ]])
 cmd([[ hi def link LspReferenceText CursorLine ]])
 cmd([[ hi def link LspReferenceWrite CursorLine ]])
 cmd([[ hi def link LspReferenceRead CursorLine ]])
