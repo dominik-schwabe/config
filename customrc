@@ -7,7 +7,6 @@
 # export NODEJS_VERSION="16.11.1"
 # export ASDF_ENABLED_PLUGINS=(nodejs python)
 # export ASDF_TURBO="true"
-# export NVIM_TREESITTER_MAINTAINED="true"
 
 
 # vi: ft=sh

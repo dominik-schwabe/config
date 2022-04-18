@@ -1,9 +1,7 @@
 local api = vim.api
 local fn = vim.fn
 local g = vim.g
-local o = vim.o
 local bo = vim.bo
-local cmd = vim.cmd
 
 g.iron_map_defaults = 0
 g.iron_map_extended = 0
@@ -66,7 +64,7 @@ local function fix_indent(lines)
   end)
 end
 
-function SendLines(lines)
+local function send_lines(lines)
   lines = transform(lines, replace_tab)
   lines = remove_empty_lines(lines)
   lines = fix_indent(lines)
@@ -79,7 +77,7 @@ function SendLines(lines)
   end
 end
 
-function SendParagraph()
+local function send_paragraph()
   local i, c = unpack(api.nvim_win_get_cursor(0))
   local max = api.nvim_buf_line_count(0)
   local j = i
@@ -101,30 +99,30 @@ function SendParagraph()
       last_was_empty = false
     end
   end
-  SendLines(fn.getline(i, res))
+  send_lines(fn.getline(i, res))
   fn.cursor(j < max and j or max, c + 1)
 end
 
-function SendSelection()
+local function send_selection()
   local lines = remove_empty_lines(get_visual_selection(0))
   lines = fix_indent(lines)
-  SendLines(lines)
+  send_lines(lines)
 end
 
-function SendBuffer()
-  SendLines(fn.getline(0, "$"))
+local function send_buffer()
+  send_lines(fn.getline(0, "$"))
 end
 
-function SendLine()
+local function send_line()
   local l, c = unpack(api.nvim_win_get_cursor(0))
   local line = fn.getline(l)
   if not is_whitespace(line) then
-    SendLines({ line })
+    send_lines({ line })
   end
   pcall(api.nvim_win_set_cursor, 0, { l + 1, c })
 end
 
-function ReplOpen()
+local function repl_open()
   iron.core.repl_for(bo.ft)
 end
 
@@ -147,7 +145,7 @@ end
 
 local extend = require("iron.util.tables").extend
 
-local format = function(open, close, cr)
+local function format(open, close, cr)
   return function(lines)
     if #lines == 1 then
       return { lines[1] .. cr }
@@ -181,8 +179,8 @@ iron.core.set_config({
   memory_management = require("iron.scope").singleton,
 })
 
-cmd("command! ReplSendLine lua SendLine()")
-cmd("command! ReplSendBuffer lua SendBuffer()")
-cmd("command! ReplSendSelection lua SendSelection()")
-cmd("command! ReplSendParagraph lua SendParagraph()")
-cmd("command! ReplOpen lua ReplOpen()")
+vim.api.nvim_create_user_command("ReplSendLine", send_line, {})
+vim.api.nvim_create_user_command("ReplSendBuffer", send_buffer, {})
+vim.api.nvim_create_user_command("ReplSendSelection", send_selection, {})
+vim.api.nvim_create_user_command("ReplSendParagraph", send_paragraph, {})
+vim.api.nvim_create_user_command("ReplOpen", repl_open, {})

@@ -18,33 +18,6 @@ M.whitespace_blacklist = {
   "TelescopePrompt",
   "Trouble",
 }
-M.lspkind_symbol_map = {
-  Text = "",
-  Method = "",
-  Function = "",
-  Constructor = "",
-  Field = "ﰠ",
-  Variable = "",
-  Class = "ﴯ",
-  Interface = "",
-  Module = "",
-  Property = "ﰠ",
-  Unit = "塞",
-  Value = "",
-  Enum = "",
-  Keyword = "",
-  Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
-  EnumMember = "",
-  Constant = "",
-  Struct = "פּ",
-  Event = "",
-  Operator = "",
-  TypeParameter = "",
-}
 M.gps_icons = {
   ["class-name"] = " ",
   ["function-name"] = " ",
@@ -193,9 +166,8 @@ local treesitter_min = {
   "vim",
   "yaml",
 }
-local ensure_installed = os.getenv("NVIM_TREESITTER_MAINTAINED") == "true" and "maintained" or treesitter_min
 M.treesitter = {
-  ensure_installed = ensure_installed,
+  ensure_installed = treesitter_min,
   ignore_install = { "latex" },
   highlight_disable = { "r", "i3config" },
 }

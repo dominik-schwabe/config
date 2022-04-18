@@ -90,7 +90,6 @@ map_info.nvim_lint = {
   mappings = {
     ["<F9>"] = { { { "n", "i" }, "<CMD>Lint<CR>", nore_opt } },
   },
-  commands = { "Lint" },
 }
 
 map_info.treesitter_unit = {

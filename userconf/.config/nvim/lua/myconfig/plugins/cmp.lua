@@ -1,17 +1,13 @@
 local api = vim.api
-local bo = vim.bo
-local fn = vim.fn
 local map = api.nvim_set_keymap
 
 local lspkind = require("lspkind")
 local luasnip = require("luasnip")
 local cmp = require("cmp")
 
-lspkind.init({
+lspkind.setup({
   mode = "symbol",
-  -- preset = 'codicons',
-  preset = "default",
-  symbol_map = require("myconfig.config").lspkind_symbol_map,
+  symbols = "mdi",
 })
 
 local feedkey = function(key, mode)
@@ -44,15 +40,15 @@ cmp.setup({
       end,
     }),
   },
-  mapping = {
-    ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-    ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+  mapping = cmp.mapping.preset.insert({
+    ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "s" }),
+    ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "s" }),
     ["<C-n>"] = cmp.mapping(cmp.mapping.complete(), { "i" }),
-    ["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
-    ["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+    ["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "s" }),
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-  },
-  sources = {
+  }),
+  sources = cmp.config.sources({
     { name = "nvim_lsp" },
     { name = "luasnip" },
     { name = "nvim_lua" },
@@ -66,7 +62,7 @@ cmp.setup({
       --   end,
       -- },
     },
-  },
+  }),
 })
 
 function JumpPrev()

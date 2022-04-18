@@ -85,6 +85,8 @@ alias oldtop='/usr/bin/env top'
 
 alias v='vim ~/.config/nvim/init.lua'
 
+alias grhs='git reset --soft HEAD^'
+
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
 source ~/.kubectl.alias

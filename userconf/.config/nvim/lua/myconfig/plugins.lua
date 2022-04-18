@@ -16,6 +16,14 @@ require("packer").startup(function(use)
   --     require("format-installer").setup()
   --   end,
   -- })
+  use({
+    "kevinhwang91/nvim-fFHighlight",
+    config = function()
+      require("fFHighlight").setup()
+    end,
+  })
+  use("github/copilot.vim")
+  -- use("zbirenbaum/copilot-cmp")
 
   -- packer
   use({
@@ -85,7 +93,6 @@ require("packer").startup(function(use)
     config = function()
       require("myconfig.plugins.nvim-lint")
     end,
-    cmd = get_cmds("nvim_lint"),
   })
 
   -- coc
@@ -117,7 +124,7 @@ require("packer").startup(function(use)
   use({
     "m-demare/hlargs.nvim",
     config = function()
-      require("hlargs").setup({color = "#00ffaf"}) -- "#5fafff" "#04c99b" "#02b4ef"
+      require("hlargs").setup({ color = "#00ffaf" }) -- "#5fafff" "#04c99b" "#02b4ef"
     end,
   })
 

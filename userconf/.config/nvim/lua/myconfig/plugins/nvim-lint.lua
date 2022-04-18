@@ -1,12 +1,12 @@
-cmd = vim.cmd
-bo = vim.bo
+local cmd = vim.cmd
+local bo = vim.bo
 
 local lint = require("lint")
 local linters = require("myconfig.config").linters
 
 lint.linters_by_ft = linters
 
-function Lint()
+local function lint_buffer()
   cmd("silent write")
   lint.try_lint()
   local filetype = bo.filetype
@@ -18,4 +18,4 @@ function Lint()
   end
 end
 
-cmd("command! Lint lua Lint()")
+vim.api.nvim_create_user_command("Lint", lint_buffer, {})
