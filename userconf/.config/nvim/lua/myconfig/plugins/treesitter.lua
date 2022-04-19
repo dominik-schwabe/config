@@ -1,5 +1,3 @@
-local map = vim.api.nvim_set_keymap
-
 local def_opt = { noremap = true, silent = true }
 local noremap = { noremap = true }
 
@@ -102,11 +100,13 @@ require("nvim-treesitter.configs").setup({
   additional_vim_regex_highlighting = false,
 })
 
-map("n", "<space>tt", "<CMD>TSModuleInfo<CR>", noremap)
-map("n", "<space>tc", "<CMD>TSConfigInfo<CR>", noremap)
-map("n", "<space>ti", ":TSInstall ", noremap)
-map("n", "<space>tu", "<CMD>TSUpdate<CR>", noremap)
+vim.keymap.set("n", "<space>tt", "<CMD>TSModuleInfo<CR>", noremap)
+vim.keymap.set("n", "<space>tc", "<CMD>TSConfigInfo<CR>", noremap)
+vim.keymap.set("n", "<space>ti", ":TSInstall ", noremap)
+vim.keymap.set("n", "<space>tu", "<CMD>TSUpdate<CR>", noremap)
 
-map("o", "m", ":<C-U>lua require('tsht').nodes()<CR>", def_opt)
-map("x", "m", ":lua require('tsht').nodes()<CR>", def_opt)
-require("tsht").config.hint_keys = { "j", "f", "h", "g", "d", "k", "s", "l", "a", "ö" }
+local tsht = require("tsht")
+tsht.config.hint_keys = { "j", "f", "h", "g", "d", "k", "s", "l", "a", "ö" }
+
+vim.keymap.set("o", "m", ":<C-U>lua require('tsht').nodes()<CR>", def_opt)
+vim.keymap.set("x", "m", ":lua require('tsht').nodes()<CR>", def_opt)

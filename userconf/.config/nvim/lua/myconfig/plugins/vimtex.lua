@@ -1,5 +1,4 @@
 local g = vim.g
-local cmd = vim.cmd
 
 g.vimtex_compiler_progname = "nvr"
 g.vimtex_complete_enabled = 0
@@ -14,5 +13,7 @@ g.vimtex_quickfix_open_on_warning = 0
 g.tex_conceal = "abdmg"
 g.texflavor = "latex"
 
-cmd([[au FileType tex setlocal conceallevel=1]], false)
-cmd([[au FileType tex :NoMatchParen]], false)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "tex",
+  command = "setlocal conceallevel=1",
+})

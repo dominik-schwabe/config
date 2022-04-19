@@ -1,6 +1,4 @@
-local map = vim.api.nvim_set_keymap
-
 local def_opt = { noremap = true, silent = true }
 
-map("", "<F3>", "<ESC>:Vista!!<CR>", def_opt)
-map("i", "<F3>", "<ESC>:Vista!!<CR>", def_opt)
+vim.keymap.set("", "<F3>", "<ESC>:Vista!!<CR>", def_opt)
+vim.keymap.set("i", "<F3>", "<ESC>:Vista!!<CR>", def_opt)

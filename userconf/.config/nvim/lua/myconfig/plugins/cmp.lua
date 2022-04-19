@@ -1,5 +1,4 @@
 local api = vim.api
-local map = api.nvim_set_keymap
 
 local lspkind = require("lspkind")
 local luasnip = require("luasnip")
@@ -72,7 +71,7 @@ cmp.setup({
   }),
 })
 
-function JumpPrev()
+local function jump_prev()
   if luasnip and luasnip.jumpable(-1) then
     luasnip.jump(-1)
   else
@@ -80,7 +79,7 @@ function JumpPrev()
   end
 end
 
-function JumpNext()
+local function jump_next()
   if luasnip and luasnip.jumpable(1) then
     luasnip.jump(1)
   else
@@ -88,7 +87,7 @@ function JumpNext()
   end
 end
 
-map("", "<C-y>", "<CMD>lua JumpPrev()<CR>", { noremap = true })
-map("i", "<C-y>", "<CMD>lua JumpPrev()<CR>", { noremap = true })
-map("", "<C-x>", "<CMD>lua JumpNext()<CR>", { noremap = true })
-map("i", "<C-x>", "<CMD>lua JumpNext()<CR>", { noremap = true })
+vim.keymap.set("", "<C-y>", jump_prev, { noremap = true })
+vim.keymap.set("i", "<C-y>", jump_prev, { noremap = true })
+vim.keymap.set("", "<C-x>", jump_next, { noremap = true })
+vim.keymap.set("i", "<C-x>", jump_next, { noremap = true })

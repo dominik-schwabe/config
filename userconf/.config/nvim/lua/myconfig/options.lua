@@ -34,7 +34,6 @@ opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
 
-
 g.splitjoin_split_mapping = '<space>o'
 g.splitjoin_join_mapping  = '<space>j'
 g.yoinkIncludeDeleteOperations = 1

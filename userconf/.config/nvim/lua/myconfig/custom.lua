@@ -4,13 +4,10 @@ local opt = vim.opt
 local fn = vim.fn
 local api = vim.api
 local cmd = vim.cmd
-local buf_map = vim.api.nvim_buf_set_keymap
 
 local get_visual_selection = require("myconfig.utils").get_visual_selection
 
 local config = require("myconfig.config")
-
-local def_opt = { noremap = true, silent = true }
 
 local function set_spell(lang)
   if lang == nil or (o.spelllang == lang and o.spell) then
@@ -179,7 +176,7 @@ end, { nargs = 1 })
 
 -- quickfix quit
 local function quickfix_mapping()
-  buf_map(0, "n", "q", "<cmd>q<cr>", def_opt)
+  vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = true })
 end
 
 vim.api.nvim_create_autocmd("FileType", {

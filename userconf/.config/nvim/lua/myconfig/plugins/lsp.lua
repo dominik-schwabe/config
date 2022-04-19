@@ -1,42 +1,33 @@
-local map = vim.api.nvim_set_keymap
-local api = vim.api
 local cmd = vim.cmd
 local fn = vim.fn
 local lsp = vim.lsp
+local lsp_buf = vim.lsp.buf
 
-local def_opt = { noremap = true, silent = true }
 local nore_opt = { noremap = true }
 local tbl_merge = require("myconfig.utils").tbl_merge
 
--- local lsp_signature = require("lsp_signature")
-
--- lsp_signature.setup({
--- 	floating_window = false,
--- })
-
 local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...)
-    api.nvim_buf_set_keymap(bufnr, ...)
-  end
   client.resolved_capabilities.document_formatting = false
   client.resolved_capabilities.document_range_formatting = false
 
-  -- lsp_signature.on_attach()
   require("illuminate").on_attach(client)
-  buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", def_opt)
-  buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", def_opt)
-  buf_set_keymap("n", "<C-y>", "<Cmd>lua vim.lsp.buf.hover()<CR>", def_opt)
-  buf_set_keymap("i", "<C-y>", "<Cmd>lua vim.lsp.buf.hover()<CR>", def_opt)
-  buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", def_opt)
-  buf_set_keymap("n", "<C-e>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", def_opt)
-  buf_set_keymap("i", "<C-e>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", def_opt)
-  buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", def_opt)
-  buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", def_opt)
-  buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", def_opt)
-  buf_set_keymap("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", def_opt)
-  buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", def_opt)
-  buf_set_keymap("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", def_opt)
-  buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", def_opt)
+  local map_opt = { buffer = bufnr, noremap = true, silent = true }
+  vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
+  vim.keymap.set("n", "gd", lsp_buf.definition, map_opt)
+  vim.keymap.set("n", "<C-y>", lsp_buf.hover, map_opt)
+  vim.keymap.set("i", "<C-y>", lsp_buf.hover, map_opt)
+  vim.keymap.set("n", "gi", lsp_buf.implementation, map_opt)
+  vim.keymap.set("n", "<C-e>", lsp_buf.signature_help, map_opt)
+  vim.keymap.set("i", "<C-e>", lsp_buf.signature_help, map_opt)
+  vim.keymap.set("n", "<space>wa", lsp_buf.add_workspace_folder, map_opt)
+  vim.keymap.set("n", "<space>wr", lsp_buf.remove_workspace_folder, map_opt)
+  vim.keymap.set("n", "<space>wl", function()
+    D(lsp_buf.list_workspace_folders())
+  end, map_opt)
+  vim.keymap.set("n", "<space>D", lsp_buf.type_definition, map_opt)
+  vim.keymap.set("n", "<space>rn", lsp_buf.rename, map_opt)
+  vim.keymap.set("n", "<space>ca", lsp_buf.code_action, map_opt)
+  vim.keymap.set("n", "gr", lsp_buf.references, map_opt)
 end
 
 local config = require("myconfig.config")
@@ -80,7 +71,9 @@ for type, icon in pairs(signs) do
   fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
-cmd([[au CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]])
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  callback = require("nvim-lightbulb").update_lightbulb,
+})
 
-map("n", "<space>ll", "<CMD>LspInfo<CR>", nore_opt)
-map("n", "<space>lr", "<CMD>LspRestart<CR>", nore_opt)
+vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>", nore_opt)
+vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", nore_opt)

@@ -1,4 +1,7 @@
 local g = vim.g
+local o = vim.o
+local cmd = vim.cmd
+local fn = vim.fn
 
 M = {}
 
@@ -32,6 +35,9 @@ local palette = {
   yellow = "#e6db74",
   orange = "#fd971f",
   purple = "#ae81ff",
+  match_paren = "#dd5888",
+  trailing = "#880000",
+  neon_purple = "#ff5fff",
   red = "#e95678",
   diff_add = "#3d5213",
   diff_remove = "#4a0f23",
@@ -79,7 +85,7 @@ hl.syntax = {
   Label = { fg = palette.pink },
   LineNr = { bg = "none" },
   Macro = { fg = palette.pink },
-  MatchParen = { bg = "#dd5888", fg = "black" },
+  MatchParen = { bg = palette.match_paren, fg = "black" },
   ModeMsg = { fg = palette.white, bold = true },
   MoreMsg = { fg = palette.white, bold = true },
   NonText = { fg = palette.base5 },
@@ -257,23 +263,31 @@ hl.lsp = {
 hl.other = {
   CursorWord0 = { bg = palette.white, fg = palette.black },
   CursorWord1 = { bg = palette.white, fg = palette.black },
-  TrailingWhitespace = { bg = "#880000" },
+  TrailingWhitespace = { bg = palette.trailing },
   dbui_tables = { fg = palette.white },
+  VM_Cursor_hl = { link = "Visual" },
+  VM_Mono = { bg = palette.neon_purple, fg = palette.black },
+  VM_Cursor = { link = "PmenuSel" },
+  VM_Extend = { link = "PmenuSel" },
+  VM_Insert = { link = "Cursor" },
+  MultiCursor = { link = "Visual" },
 }
 
 function M.setup()
-  vim.cmd("hi clear")
-  if vim.fn.exists("syntax_on") then
-    vim.cmd("syntax reset")
+  cmd("hi clear")
+  if fn.exists("syntax_on") then
+    cmd("syntax reset")
   end
-  vim.o.background = "dark"
-  vim.o.termguicolors = true
-  vim.g.colors_name = "monokai"
+  o.background = "dark"
+  o.termguicolors = true
+  g.colors_name = "monokai"
   for _, group in pairs(hl) do
     for hl_group, colors in pairs(group) do
       vim.api.nvim_set_hl(0, hl_group, colors)
     end
   end
+
+  g.VM_theme_set_by_colorscheme = true
 
   g.terminal_color_0 = "#000000"
   g.terminal_color_1 = "#ff0000"
