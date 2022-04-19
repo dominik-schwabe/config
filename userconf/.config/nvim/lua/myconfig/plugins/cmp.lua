@@ -20,13 +20,14 @@ local feedkey = function(key, mode)
 end
 
 local cmp_formats = {
-  buffer = "[Buffer]",
-  nvim_lsp = "[LSP]",
-  luasnip = "[Snippet]",
-  tmux = "[Tmux]",
-  nvim_lua = "[Lua]",
-  latex_symbols = "[Latex]",
-  path = "[Path]",
+  buffer = "[buf]",
+  nvim_lsp = "[lsp]",
+  luasnip = "[snip]",
+  tmux = "[tmux]",
+  nvim_lua = "[lua]",
+  path = "[path]",
+  rg = "[rg]",
+  copilot = "[cp]",
 }
 
 cmp.setup({
@@ -54,6 +55,7 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
   }),
   sources = cmp.config.sources({
+    { name = "copilot" },
     { name = "nvim_lsp" },
     { name = "luasnip" },
     { name = "nvim_lua" },

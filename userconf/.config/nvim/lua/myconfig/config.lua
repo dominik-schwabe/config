@@ -6,18 +6,6 @@ M.lsp_signs = {
   Hint = " ",
   Information = " ",
 }
-M.whitespace_blacklist = {
-  "diff",
-  "git",
-  "gitcommit",
-  "unite",
-  "qf",
-  "help",
-  "markdown",
-  "fugitive",
-  "TelescopePrompt",
-  "Trouble",
-}
 M.gps_icons = {
   ["class-name"] = " ",
   ["function-name"] = " ",
@@ -42,22 +30,33 @@ M.root_patterns = {
   -- "Pipfile",
   -- "Pipfile.lock",
 }
-M.illuminate_blacklist = {
+M.whitespace_blacklist = {
+  "TelescopePrompt",
   "Trouble",
-  "NvimTree",
-  "qf",
-  "vista",
-  "packer",
+  "diff",
+  "fugitive",
+  "git",
+  "gitcommit",
   "help",
-  "term",
-  "fugitiveblame",
-  "lsputil_codeaction_list",
-  "",
   "markdown",
-  "yaml",
-  "json",
+  "qf",
+  "unite",
 }
-M.colorscheme = "monokai"
+M.illuminate_blacklist = {
+  "",
+  "NvimTree",
+  "Trouble",
+  "fugitiveblame",
+  "help",
+  "json",
+  "lsputil_codeaction_list",
+  "markdown",
+  "packer",
+  "qf",
+  "term",
+  "vista",
+  "yaml",
+}
 M.lsp_configs = {
   -- latex = {
   -- 	settings = {
@@ -172,25 +171,6 @@ local treesitter_min = {
 M.treesitter = {
   ensure_installed = treesitter_min,
   highlight_disable = {},
-}
-M.coc_extensions = {
-  "coc-clangd",
-  "coc-css",
-  "coc-docker",
-  "coc-html",
-  "coc-java",
-  "coc-json",
-  "coc-prettier",
-  "coc-pyright",
-  "coc-r-lsp",
-  "coc-sh",
-  "coc-snippets",
-  "coc-tsserver",
-  "coc-vimlsp",
-  "coc-vimtex",
-  "coc-yaml",
-  "coc-sumneko-lua",
-  "coc-texlab",
 }
 M.linters = {
   text = { "languagetool" },

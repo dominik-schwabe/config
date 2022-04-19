@@ -4,12 +4,14 @@ local def_opt = { noremap = true, silent = true }
 local noremap = { noremap = true }
 
 local treesitter_config = require("myconfig.config").treesitter
+local rainbow = require("myconfig.color").rainbow
+
 require("nvim-treesitter.configs").setup({
   playground = {
     enable = false,
     disable = {},
-    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-    persist_queries = false, -- Whether the query persists across vim sessions
+    updatetime = 25,
+    persist_queries = false,
     keybindings = {
       toggle_query_editor = "o",
       toggle_hl_groups = "i",
@@ -42,14 +44,7 @@ require("nvim-treesitter.configs").setup({
     enable = false,
   },
   rainbow = {
-    colors = {
-      "#bb00bb",
-      "#00cc00",
-      "#5eaeee",
-      "#dd5ddd",
-      "#dd0000",
-      "#dddd00",
-    },
+    colors = rainbow,
     enable = true,
     extended_mode = true,
     max_file_lines = 1000,
@@ -104,7 +99,7 @@ require("nvim-treesitter.configs").setup({
     enable = true,
     enable_autocmd = false,
   },
-  additional_vim_regex_highlighting = true,
+  additional_vim_regex_highlighting = false,
 })
 
 map("n", "<space>tt", "<CMD>TSModuleInfo<CR>", noremap)

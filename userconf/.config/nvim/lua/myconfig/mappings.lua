@@ -1,5 +1,3 @@
-local map = vim.api.nvim_set_keymap
-
 local no_opt = {}
 local def_opt = { noremap = true, silent = true }
 local nore_opt = { noremap = true }
@@ -283,7 +281,7 @@ function M.setup()
       for _, mapping in pairs(mappings) do
         local modes, command, map_opts = unpack(mapping)
         for _, mode in pairs(modes) do
-          map(mode, key, command, map_opts)
+          vim.keymap.set(mode, key, command, map_opts)
         end
       end
     end

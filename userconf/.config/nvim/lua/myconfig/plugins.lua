@@ -22,8 +22,19 @@ require("packer").startup(function(use)
       require("fFHighlight").setup()
     end,
   })
-  use("github/copilot.vim")
-  -- use("zbirenbaum/copilot-cmp")
+  use({
+    "zbirenbaum/copilot.lua",
+    event = { "VimEnter" },
+    config = function()
+      vim.defer_fn(function()
+        require("copilot").setup()
+      end, 100)
+    end,
+  })
+  use({
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua", "nvim-cmp" },
+  })
 
   -- packer
   use({
@@ -37,7 +48,6 @@ require("packer").startup(function(use)
   use("nvim-lua/plenary.nvim")
 
   -- color
-  use("tanvirtin/monokai.nvim")
   use("norcalli/nvim-colorizer.lua")
 
   -- complete
