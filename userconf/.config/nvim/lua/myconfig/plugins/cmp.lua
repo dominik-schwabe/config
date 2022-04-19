@@ -5,9 +5,14 @@ local lspkind = require("lspkind")
 local luasnip = require("luasnip")
 local cmp = require("cmp")
 
-lspkind.setup({
+-- lspkind.setup({
+--   mode = "symbol",
+--   symbols = "mdi",
+-- })
+
+lspkind.init({
   mode = "symbol",
-  symbols = "mdi",
+  presets = "mdi",
 })
 
 local feedkey = function(key, mode)

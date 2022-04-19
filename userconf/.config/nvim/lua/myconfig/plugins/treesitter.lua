@@ -44,10 +44,10 @@ require("nvim-treesitter.configs").setup({
   rainbow = {
     colors = {
       "#bb00bb",
-      "#00dd00",
-      "#5fafff",
+      "#00cc00",
+      "#5eaeee",
       "#dd5ddd",
-      "#ee0000",
+      "#dd0000",
       "#dddd00",
     },
     enable = true,
@@ -104,6 +104,7 @@ require("nvim-treesitter.configs").setup({
     enable = true,
     enable_autocmd = false,
   },
+  additional_vim_regex_highlighting = true,
 })
 
 map("n", "<space>tt", "<CMD>TSModuleInfo<CR>", noremap)

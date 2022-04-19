@@ -94,7 +94,7 @@ cmd([[ hi LineNr guibg=none ]])
 cmd([[ hi Normal guibg=none ]])
 cmd([[ hi SignColumn guibg=none ]])
 
-cmd([[ hi MatchParen guibg=#ff5ddd guifg=black ]])
+cmd([[ hi MatchParen guibg=#dd5888 guifg=black ]])
 cmd([[ hi def link LspReferenceText CursorLine ]])
 cmd([[ hi def link LspReferenceWrite CursorLine ]])
 cmd([[ hi def link LspReferenceRead CursorLine ]])

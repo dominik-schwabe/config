@@ -145,15 +145,18 @@ M.null_ls = {
 }
 local treesitter_min = {
   "bash",
+  "bibtex",
   "c",
   "comment",
   "cpp",
   "css",
   "dockerfile",
   "html",
+  "http",
   "java",
   "javascript",
   "json",
+  "latex",
   "lua",
   "make",
   "markdown",
@@ -168,8 +171,7 @@ local treesitter_min = {
 }
 M.treesitter = {
   ensure_installed = treesitter_min,
-  ignore_install = { "latex" },
-  highlight_disable = { "r", "i3config" },
+  highlight_disable = {},
 }
 M.coc_extensions = {
   "coc-clangd",

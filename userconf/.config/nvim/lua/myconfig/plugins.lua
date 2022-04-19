@@ -61,7 +61,7 @@ require("packer").startup(function(use)
     "neovim/nvim-lspconfig",
     requires = {
       "RRethy/vim-illuminate",
-      "onsails/lspkind-nvim",
+      "onsails/lspkind.nvim",
       "williamboman/nvim-lsp-installer",
       -- "ray-x/lsp_signature.nvim",
       "kosayoda/nvim-lightbulb",
