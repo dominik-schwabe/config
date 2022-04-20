@@ -106,7 +106,7 @@ vim.keymap.set("n", "<space>ti", ":TSInstall ", noremap)
 vim.keymap.set("n", "<space>tu", "<CMD>TSUpdate<CR>", noremap)
 
 local tsht = require("tsht")
-tsht.config.hint_keys = { "j", "f", "h", "g", "d", "k", "s", "l", "a", "ö" }
+tsht.config.hint_keys = { "j", "f", "h", "g", "d", "k", "s", "l", "a" }
 
 vim.keymap.set("o", "m", ":<C-U>lua require('tsht').nodes()<CR>", def_opt)
 vim.keymap.set("x", "m", ":lua require('tsht').nodes()<CR>", def_opt)
