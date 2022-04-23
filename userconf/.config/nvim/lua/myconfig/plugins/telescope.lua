@@ -21,6 +21,18 @@ require("telescope").setup({
         ["<C-j>"] = require("telescope.actions").move_selection_next,
       },
     },
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+      "--max-filesize=1M",
+      "--ignore-file",
+      ".gitignore",
+    },
     layout_config = { horizontal = { prompt_position = "top" } },
   },
 })
