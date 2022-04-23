@@ -28,7 +28,7 @@ require("telescope").setup({
       "--with-filename",
       "--line-number",
       "--column",
-      "--smart-case",
+      "--ignore-case",
       "--max-filesize=1M",
       "--ignore-file",
       ".gitignore",
