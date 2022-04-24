@@ -134,7 +134,7 @@ require("packer").startup(function(use)
   use({
     "m-demare/hlargs.nvim",
     config = function()
-      require("hlargs").setup({ color = "#00ffaf" }) -- "#5fafff" "#04c99b" "#02b4ef"
+      require("myconfig.plugins.hlargs")
     end,
   })
 
@@ -292,6 +292,7 @@ require("packer").startup(function(use)
       require("myconfig.plugins.nvim-rooter")
     end,
   })
+
   use({
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",

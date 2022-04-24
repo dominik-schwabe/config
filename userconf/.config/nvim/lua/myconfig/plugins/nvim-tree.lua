@@ -1,5 +1,3 @@
-local g = vim.g
-
 local cb = require("nvim-tree.config").nvim_tree_callback
 local mappings = {
   { key = { "<CR>", "o", "<2-LeftMouse>" }, cb = cb("edit") },

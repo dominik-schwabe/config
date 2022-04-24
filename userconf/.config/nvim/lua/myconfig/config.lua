@@ -15,6 +15,11 @@ M.gps_icons = {
 }
 M.root_patterns = {
   "=nvim",
+  "=site-packages",
+  "=node_modules",
+  "node_modules",
+  "package.json",
+  "package-lock.json",
   ".git",
   "_darcs",
   ".hg",
@@ -26,9 +31,6 @@ M.root_patterns = {
   "Pipfile",
   "Pipfile.lock",
   "requirements.txt",
-  -- "requirements.txt",
-  -- "Pipfile",
-  -- "Pipfile.lock",
 }
 M.whitespace_blacklist = {
   "TelescopePrompt",
