@@ -15,7 +15,6 @@ M.gps_icons = {
 }
 M.root_patterns = {
   "=nvim",
-  "=site-packages",
   "=node_modules",
   "node_modules",
   "package.json",
