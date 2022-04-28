@@ -187,6 +187,8 @@ hl.treesitter = {
   TSType = { fg = palette.aqua },
   TSVariable = { fg = palette.white },
   TSVariableBuiltin = { fg = palette.orange },
+
+  markdownTSStringEscape = { bg = palette.base6}
 }
 
 hl.diagnostics = {
