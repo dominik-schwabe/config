@@ -10,32 +10,6 @@ end
 local get_cmds = require("myconfig.mappings").get_cmds
 
 require("packer").startup(function(use)
-  -- use({
-  --   "PlatyPew/format-installer.nvim",
-  --   config = function()
-  --     require("format-installer").setup()
-  --   end,
-  -- })
-  use({
-    "kevinhwang91/nvim-fFHighlight",
-    config = function()
-      require("fFHighlight").setup()
-    end,
-  })
-  use({
-    "zbirenbaum/copilot.lua",
-    event = { "VimEnter" },
-    config = function()
-      vim.defer_fn(function()
-        require("copilot").setup()
-      end, 100)
-    end,
-  })
-  use({
-    "zbirenbaum/copilot-cmp",
-    after = { "copilot.lua", "nvim-cmp" },
-  })
-
   -- packer
   use({
     "wbthomason/packer.nvim",
@@ -105,15 +79,6 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- coc
-  -- use({
-  -- 	"neoclide/coc.nvim",
-  -- 	branch = "release",
-  -- 	config = function()
-  -- 		require("myconfig.plugins.coc")
-  -- 	end,
-  -- })
-
   -- treesitter
   use({
     "nvim-treesitter/nvim-treesitter",
@@ -176,12 +141,28 @@ require("packer").startup(function(use)
     cmd = get_cmds("dap"),
   })
 
+  -- statusline
   use({
     "nvim-lualine/lualine.nvim",
     requires = { "kyazdani42/nvim-web-devicons", { "SmiteshP/nvim-gps" } },
     config = function()
       require("myconfig.plugins.lualine")
     end,
+  })
+
+  -- copilot
+  use({
+    "zbirenbaum/copilot.lua",
+    event = { "VimEnter" },
+    config = function()
+      vim.defer_fn(function()
+        require("copilot").setup()
+      end, 100)
+    end,
+  })
+  use({
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua", "nvim-cmp" },
   })
 
   -- repl
@@ -239,6 +220,8 @@ require("packer").startup(function(use)
       require("myconfig.plugins.bqf")
     end,
   })
+
+  -- trouble
   use({
     "folke/trouble.nvim",
     requires = { "kyazdani42/nvim-web-devicons" },
@@ -275,10 +258,15 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- yank rotate
-  -- use("svermeulen/vim-yoink")
+  -- find highlight
+  use({
+    "kevinhwang91/nvim-fFHighlight",
+    config = function()
+      require("fFHighlight").setup()
+    end,
+  })
 
-  -- nvim
+  -- hop
   use({
     "phaazon/hop.nvim",
     cmd = get_cmds("hop"),
@@ -286,6 +274,8 @@ require("packer").startup(function(use)
       require("myconfig.plugins.hop")
     end,
   })
+
+  -- rooter
   use({
     "jedi2610/nvim-rooter.lua",
     config = function()
@@ -293,6 +283,7 @@ require("packer").startup(function(use)
     end,
   })
 
+  -- todo
   use({
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
@@ -322,10 +313,9 @@ require("packer").startup(function(use)
   use("wellle/targets.vim")
   use("michaeljsmith/vim-indent-object")
   use("mg979/vim-visual-multi")
-  use("tpope/vim-surround")
   use("tpope/vim-repeat")
+  use("tpope/vim-surround")
   use("tpope/vim-sleuth")
-  use("AndrewRadev/splitjoin.vim")
   use({ "foosoft/vim-argwrap", cmd = get_cmds("argwrap") })
   use({ "AndrewRadev/sideways.vim", cmd = get_cmds("sideways") })
 end)

@@ -1,5 +1,4 @@
-local def_opt = { noremap = true, silent = true }
-local noremap = { noremap = true }
+local def_opt = { silent = true }
 
 local treesitter_config = require("myconfig.config").treesitter
 local rainbow = require("myconfig.color").rainbow
@@ -100,10 +99,10 @@ require("nvim-treesitter.configs").setup({
   additional_vim_regex_highlighting = false,
 })
 
-vim.keymap.set("n", "<space>tt", "<CMD>TSModuleInfo<CR>", noremap)
-vim.keymap.set("n", "<space>tc", "<CMD>TSConfigInfo<CR>", noremap)
-vim.keymap.set("n", "<space>ti", ":TSInstall ", noremap)
-vim.keymap.set("n", "<space>tu", "<CMD>TSUpdate<CR>", noremap)
+vim.keymap.set("n", "<space>tt", "<CMD>TSModuleInfo<CR>")
+vim.keymap.set("n", "<space>tc", "<CMD>TSConfigInfo<CR>")
+vim.keymap.set("n", "<space>ti", ":TSInstall ")
+vim.keymap.set("n", "<space>tu", "<CMD>TSUpdate<CR>")
 
 local tsht = require("tsht")
 tsht.config.hint_keys = { "j", "f", "h", "g", "d", "k", "s", "l", "a" }

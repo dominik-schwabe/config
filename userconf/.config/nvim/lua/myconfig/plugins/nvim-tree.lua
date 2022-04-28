@@ -38,16 +38,10 @@ local mappings = {
 }
 
 require("nvim-tree").setup({
-  disable_window_picker = 1,
-  auto_close = false,
   hijack_cursor = false,
   update_cwd = true,
   disable_netrw = false,
   hijack_netrw = true,
-  update_to_buf_dir = {
-    enable = true,
-    auto_open = true,
-  },
   update_focused_file = {
     enable = true,
     update_cwd = true,
@@ -63,7 +57,6 @@ require("nvim-tree").setup({
     },
   },
   git = {
-    enabled = true,
     ignore = true,
     timeout = 500,
   },

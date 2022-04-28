@@ -1,6 +1,6 @@
 local no_opt = {}
-local def_opt = { noremap = true, silent = true }
-local nore_opt = { noremap = true }
+local def_opt = { silent = true }
+local nore_opt = {}
 local silent_opt = { silent = true }
 
 local map_info = {}

@@ -1,4 +1,4 @@
-local def_opt = { noremap = true, silent = true }
+local def_opt = { silent = true }
 
 local config = require("myconfig.config")
 local null_ls = require("null-ls")

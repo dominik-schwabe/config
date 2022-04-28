@@ -1,9 +1,7 @@
-local cmd = vim.cmd
 local fn = vim.fn
 local lsp = vim.lsp
 local lsp_buf = vim.lsp.buf
 
-local nore_opt = { noremap = true }
 local tbl_merge = require("myconfig.utils").tbl_merge
 
 local on_attach = function(client, bufnr)
@@ -11,7 +9,7 @@ local on_attach = function(client, bufnr)
   client.resolved_capabilities.document_range_formatting = false
 
   require("illuminate").on_attach(client)
-  local map_opt = { buffer = bufnr, noremap = true, silent = true }
+  local map_opt = { buffer = bufnr, silent = true }
   vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
   vim.keymap.set("n", "gd", lsp_buf.definition, map_opt)
   vim.keymap.set("n", "<C-y>", lsp_buf.hover, map_opt)
@@ -75,5 +73,5 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
   callback = require("nvim-lightbulb").update_lightbulb,
 })
 
-vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>", nore_opt)
-vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", nore_opt)
+vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>")
+vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>")

@@ -87,7 +87,7 @@ local function jump_next()
   end
 end
 
-vim.keymap.set("", "<C-y>", jump_prev, { noremap = true })
-vim.keymap.set("i", "<C-y>", jump_prev, { noremap = true })
-vim.keymap.set("", "<C-x>", jump_next, { noremap = true })
-vim.keymap.set("i", "<C-x>", jump_next, { noremap = true })
+vim.keymap.set("", "<C-y>", jump_prev)
+vim.keymap.set("i", "<C-y>", jump_prev)
+vim.keymap.set("", "<C-x>", jump_next)
+vim.keymap.set("i", "<C-x>", jump_next)
