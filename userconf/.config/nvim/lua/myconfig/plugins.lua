@@ -18,6 +18,8 @@ require("packer").startup(function(use)
     end,
   })
 
+  use("mizlan/iswap.nvim")
+
   -- stdlib
   use("nvim-lua/plenary.nvim")
 

@@ -34,37 +34,28 @@ local lspconfig = require("lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
 
-lspconfig["r_language_server"].setup({
-  on_attach = on_attach,
-  capabilities = cmp_nvim_lsp.update_capabilities(lsp.protocol.make_client_capabilities()),
-  flags = { debounce_text_changes = 150 },
-  settings = config.lsp_configs.r_language_server.settings,
-})
-
-lsp_installer.settings({
+lsp_installer.setup({
+  ensure_installed = config.lsp_ensure_installed,
   log_level = vim.log.levels.ERROR,
-  max_concurrent_installers = 4,
 })
 
-lsp_installer.on_server_ready(function(server)
-  local opts = lsp_configs[server.name] or {}
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+
+for _, server in pairs(lsp_installer.get_installed_servers()) do
+  local server_name = server.name
+  local opts = lsp_configs[server_name] or {}
   opts.on_attach = on_attach
-  local capabilities = lsp.protocol.make_client_capabilities()
-  if server.name == "clangd" then
-    capabilities.offsetEncoding = { "utf-16" }
-  elseif server.name == "jsonls" then
+  opts.capabilities = capabilities
+  if server_name == "jsonls" then
     opts = tbl_merge(opts, {
       settings = { json = { schemas = { require("schemastore").json.schemas() } } },
     })
   end
-  opts.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
-  opts.flags = { debounce_text_changes = 150 }
-  server:setup(opts)
-end)
+  lspconfig[server_name].setup(opts)
+end
 
-local signs = config.lsp_signs
-
-for type, icon in pairs(signs) do
+for type, icon in pairs(config.lsp_signs) do
   local hl = "LspDiagnosticsSign" .. type
   fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end

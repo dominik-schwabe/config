@@ -58,6 +58,7 @@ M.illuminate_blacklist = {
   "vista",
   "yaml",
 }
+M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls" }
 M.lsp_configs = {
   -- latex = {
   -- 	settings = {
