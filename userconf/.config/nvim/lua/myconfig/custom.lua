@@ -373,7 +373,18 @@ local function rg(string, raw, boundry, maximum)
   if curr_rg_job ~= nil then
     curr_rg_job:shutdown()
   end
-  local args = { "-i", "-H", "--no-heading", "--vimgrep" }
+  -- "--line-number",
+  -- "--column",
+  local args = {
+    "--color=never",
+    "--ignore-case",
+    "--with-filename",
+    "--no-heading",
+    "--vimgrep",
+    "--max-filesize=1M",
+    "--ignore-file",
+    ".gitignore",
+  }
   if raw then
     string = vim.fn.escape(string, "^$.*+?()[]{}|")
   end
