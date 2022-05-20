@@ -5,7 +5,7 @@ set default-fg "#dcdccc"
 set recolor-lightcolor "#111111"
 set recolor-darkcolor "#ffffff"
 set highlight-color "#00FF00"
-set highlight-active-color "#00FF00"
-set highlight-transparency 0.2
+set highlight-active-color "#00AA00"
+set highlight-transparency 0.5
 set synctex true
 set synctex-editor-command "code -g %{input}:%{line}"

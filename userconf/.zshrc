@@ -1,5 +1,5 @@
 # clone pluginmanager if not exist
-[[ -d ~/.zinit/bin ]] || git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin
+[[ -d ~/.zi/bin ]] || git clone https://github.com/z-shell/zi.git ~/.zi/bin
 
 [[ -r ~/.profile ]] && . ~/.profile
 [[ -r ~/.customrc ]] && . ~/.customrc
@@ -16,33 +16,33 @@ FZF_ALT_C_COMMAND="fd --type directory --color=always"
 FZF_DEFAULT_OPTS="--ansi"
 
 # plugins
-source "$HOME/.zinit/bin/zinit.zsh"
-zinit snippet OMZL::completion.zsh
-zinit ice wait'0' lucid
-zinit light dominik-schwabe/vi-mode.zsh
-zinit ice wait'!0' lucid
-zinit light $HOME/.shell_plugins/asdf
-zinit ice wait'0' lucid
-zinit snippet OMZP::git
-zinit ice wait'0' lucid
-zinit snippet OMZP::pip
-zinit ice wait'0' lucid
-zinit light agkozak/zsh-z
-zinit ice wait'0' lucid
-zinit light t413/zsh-background-notify
-zinit ice wait'0' lucid
-zinit light zsh-users/zsh-history-substring-search
-zinit ice wait'0' lucid
-zinit light zsh-vi-more/vi-increment
-zinit ice wait'0' lucid
-zinit light zdharma-continuum/fast-syntax-highlighting
-zinit ice wait'0' lucid
-zinit light MichaelAquilina/zsh-you-should-use
-zinit ice wait'0' lucid silent
-zinit light kutsan/zsh-system-clipboard
-zinit ice wait'0' lucid atload'zicompinit'
-zinit light zsh-users/zsh-completions
-zinit snippet 'https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh'
+source ~/.zi/bin/zi.zsh
+zi snippet OMZL::completion.zsh
+zi ice wait'0' lucid
+zi light dominik-schwabe/vi-mode.zsh
+zi ice wait'!0' lucid
+zi light ~/.shell_plugins/asdf
+zi ice wait'0' lucid
+zi snippet OMZP::git
+zi ice wait'0' lucid
+zi snippet OMZP::pip
+zi ice wait'0' lucid
+zi light agkozak/zsh-z
+zi ice wait'0' lucid
+zi light t413/zsh-background-notify
+zi ice wait'0' lucid
+zi light zsh-users/zsh-history-substring-search
+zi ice wait'0' lucid
+zi light zsh-vi-more/vi-increment
+zi ice wait'0' lucid
+zi light zdharma-continuum/fast-syntax-highlighting
+zi ice wait'0' lucid
+zi light MichaelAquilina/zsh-you-should-use
+zi ice wait'0' lucid silent
+zi light kutsan/zsh-system-clipboard
+zi ice wait'0' lucid atload'zicompinit'
+zi light zsh-users/zsh-completions
+zi snippet 'https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh'
 
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -104,7 +104,7 @@ _get_asdf_versions_prompt() {
             return 0
         }
     fi
-    [[ -r $HOME/.tool-versions ]] || return 1
+    [[ -r ~/.tool-versions ]] || return 1
     while read LINE; do
         IFS=" " read _ASDF_PROG_NAME _ASDF_PROG_VERSION <<< $LINE;
         if [[ "$_ASDF_PROG_NAME" = $1 ]]; then

@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 ZSH_COMPLETIONS_DIR=$HOME/.zsh-completions
-if [ ! -r "$HOME/.zinit/bin/zinit.zsh" ]; then
-    echo "zinit not installed"
+if [ ! -r "$HOME/.zi/bin/zi.zsh" ]; then
+    echo "zi not installed"
     return 1
 fi
-. "$HOME/.zinit/bin/zinit.zsh"
+. "$HOME/.zi/bin/zi.zsh"
 [ -d $ZSH_COMPLETIONS_DIR ] || mkdir $ZSH_COMPLETIONS_DIR
 
 download_completion() {
@@ -46,4 +46,4 @@ command_completion rustup completions zsh
 command_completion pipenv --completion
 command_completion pdm completion
 
-zinit creinstall $ZSH_COMPLETIONS_DIR
+zi creinstall $ZSH_COMPLETIONS_DIR

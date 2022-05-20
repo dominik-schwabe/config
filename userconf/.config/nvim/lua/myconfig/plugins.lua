@@ -89,7 +89,7 @@ require("packer").startup(function(use)
       "p00f/nvim-ts-rainbow",
       "nvim-treesitter/nvim-treesitter-textobjects",
       "mfussenegger/nvim-ts-hint-textobject",
-      "romgrk/nvim-treesitter-context",
+      "nvim-treesitter/nvim-treesitter-context",
       "windwp/nvim-ts-autotag",
       "David-Kunz/treesitter-unit",
     },
@@ -173,7 +173,6 @@ require("packer").startup(function(use)
     config = function()
       require("myconfig.plugins.iron")
     end,
-    cmd = get_cmds("iron"),
   })
 
   -- git

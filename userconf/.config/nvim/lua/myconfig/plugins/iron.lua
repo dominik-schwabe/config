@@ -1,20 +1,9 @@
 local api = vim.api
 local fn = vim.fn
-local g = vim.g
 local bo = vim.bo
 
-g.iron_map_defaults = 0
-g.iron_map_extended = 0
-
-local iron = require("iron")
+local iron = require("iron.core")
 local get_visual_selection = require("myconfig.utils").get_visual_selection
-
-g.ripple_enable_mappings = 0
-g.ripple_term_name = "term:// ripple"
-g.ripple_repls = {
-  javascript = "node",
-  r = "radian",
-}
 
 local function replace_tab(str)
   return str:gsub("\t", string.rep(" ", bo.tabstop))
@@ -70,9 +59,9 @@ local function send_lines(lines)
   lines = fix_indent(lines)
   if #lines ~= 0 then
     if #lines == 1 and (bo.ft == "python" or bo.ft == "r") then
-      iron.core.send(bo.ft, { "\27[200~" .. lines[1] .. "\27[201~" })
+      iron.send(bo.ft, { "\27[200~" .. lines[1] .. "\27[201~" })
     else
-      iron.core.send(bo.ft, lines)
+      iron.send(bo.ft, lines)
     end
   end
 end
@@ -123,7 +112,7 @@ local function send_line()
 end
 
 local function repl_open()
-  iron.core.repl_for(bo.ft)
+  iron.repl_for(bo.ft)
 end
 
 local function repl_open_cmd(buff, _)
@@ -132,6 +121,7 @@ local function repl_open_cmd(buff, _)
 
   local winnr = fn.bufwinnr(buff)
   local winid = fn.win_getid(winnr)
+  api.nvim_buf_set_name(buff, "term://ironrepl")
   local timer = vim.loop.new_timer()
   timer:start(
     0,
@@ -159,28 +149,34 @@ local function format(open, close, cr)
   end
 end
 
-iron.core.add_repl_definitions({
-  r = {
-    R = {
-      command = { "R" },
-      format = format("\27[200~", "\27[201~\r", "\r"),
-    },
-    radian = {
-      command = { "radian" },
-      format = format("\27[200~", "\27[201~", "\r"),
-    },
-  },
-})
-
-iron.core.set_config({
-  preferred = require("myconfig.config").repls,
-  visibility = require("iron.visibility").toggle,
-  repl_open_cmd = repl_open_cmd,
-  memory_management = require("iron.scope").singleton,
-})
-
 vim.api.nvim_create_user_command("ReplSendLine", send_line, {})
 vim.api.nvim_create_user_command("ReplSendBuffer", send_buffer, {})
 vim.api.nvim_create_user_command("ReplSendSelection", send_selection, {})
 vim.api.nvim_create_user_command("ReplSendParagraph", send_paragraph, {})
 vim.api.nvim_create_user_command("ReplOpen", repl_open, {})
+
+iron.setup({
+  config = {
+    highlight_last = "",
+    preferred = require("myconfig.config").repls,
+    visibility = require("iron.visibility").toggle,
+    repl_open_cmd = repl_open_cmd,
+    close_window_on_exit = true,
+    scope = require("iron.scope").singleton,
+    should_map_plug = false,
+    scratch_repl = true,
+    buflisted = false,
+    repl_definition = {
+      r = {
+        R = {
+          command = { "R" },
+          format = format("\27[200~", "\27[201~\r", "\r"),
+        },
+        radian = {
+          command = { "radian" },
+          format = format("\27[200~", "\27[201~", "\r"),
+        },
+      },
+    },
+  },
+})

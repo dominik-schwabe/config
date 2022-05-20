@@ -135,6 +135,9 @@ M.null_ls = {
     "eslint_d",
     "isort",
     "prettierd",
+    latexindent = {
+      extra_args = { "-y", [[defaultIndent: "  "]] },
+    },
     shfmt = {
       extra_args = { "-i", "2", "-ci" },
     },

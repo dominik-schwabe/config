@@ -52,6 +52,11 @@ for _, server in pairs(lsp_installer.get_installed_servers()) do
       settings = { json = { schemas = { require("schemastore").json.schemas() } } },
     })
   end
+  if server_name == "clangd" then
+    local cap = vim.lsp.protocol.make_client_capabilities()
+    cap.offsetEncoding = { "utf-16" }
+    opts.capabilities = cap
+  end
   lspconfig[server_name].setup(opts)
 end
 
