@@ -1,12 +1,11 @@
 local fn = vim.fn
-local lsp = vim.lsp
 local lsp_buf = vim.lsp.buf
 
 local tbl_merge = require("myconfig.utils").tbl_merge
 
 local on_attach = function(client, bufnr)
-  client.resolved_capabilities.document_formatting = false
-  client.resolved_capabilities.document_range_formatting = false
+  client.server_capabilities.document_formatting = false
+  client.server_capabilities.document_range_formatting = false
 
   require("illuminate").on_attach(client)
   local map_opt = { buffer = bufnr, silent = true }

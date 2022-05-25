@@ -9,24 +9,28 @@ fi
 [ -d $ZSH_COMPLETIONS_DIR ] || mkdir $ZSH_COMPLETIONS_DIR
 
 download_completion() {
-    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$2
+    COMMAND=$1
+    URL=$2
+    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$COMMAND
     if [ ! -r $COMPLETION_PATH ] && command -v curl 2>&1 >/dev/null; then
-        echo "downloading $2"
-        curl --create-dirs -sfLo $COMPLETION_PATH $1 || return 1
-        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${2}/{p;q}")
+        echo "downloading $COMMAND"
+        curl --create-dirs -sfLo $COMPLETION_PATH $URL || return 1
+        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${COMMAND}/{p;q}")
         _INSTALLED_NEW_COMPLETION=true
         if [ -z "$NAME_IN_COMPDEF" ]; then
             sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
-            sed -i "1 i\\#compdef ${2}" $COMPLETION_PATH
+            sed -i "1 i\\#compdef ${COMMAND}" $COMPLETION_PATH
         fi
     fi
 }
 
 command_completion() {
-    [ ! -r $ZSH_COMPLETIONS_DIR/_$1 ] && command -v $1 2>&1 >/dev/null && {
+    COMMAND=$1
+    COMPLETION_FILE="$ZSH_COMPLETIONS_DIR/_$COMMAND"
+    shift
+    [ ! -r $COMPLETION_FILE ] && command -v $COMMAND 2>&1 >/dev/null && {
         echo "generating completion '$@'"
-        COMPLETION_FILE="$ZSH_COMPLETIONS_DIR/_$1"
-        $@ > "$COMPLETION_FILE" || {
+        eval "$@" > "$COMPLETION_FILE" || {
             rm "$COMPLETION_FILE"
             return 1
         }
@@ -34,16 +38,18 @@ command_completion() {
     }
 }
 
-download_completion https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip            pip
-download_completion https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z           7z
-download_completion https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl youtube-dl
-download_completion https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo              cargo
-download_completion https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust                  rustc
-download_completion https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf              asdf
-download_completion https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd           fd
-command_completion kubectl completion zsh
-command_completion rustup completions zsh
-command_completion pipenv --completion
-command_completion pdm completion
+download_completion 7z              https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
+download_completion asdf            https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf
+download_completion cargo           https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo
+download_completion docker-compose  https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose
+download_completion fd              https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
+download_completion pip             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
+download_completion rustc           https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust
+download_completion youtube-dl      https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl
+
+command_completion  kubectl         kubectl completion zsh
+command_completion  pdm             pdm completion
+command_completion  pipenv          _PIPENV_COMPLETE=zsh_source pipenv
+command_completion  rustup          rustup completions zsh
 
 zi creinstall $ZSH_COMPLETIONS_DIR

@@ -180,3 +180,7 @@ iron.setup({
     },
   },
 })
+
+vim.keymap.set("v", "<space>v", function ()
+  send_selection()
+end)
