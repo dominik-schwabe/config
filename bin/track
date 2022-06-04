@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+
+import argparse
+import json
+from datetime import datetime
+from pathlib import Path
+
+DATE_FMT = "%d.%m.%Y"
+
+
+class Task:
+    def __init__(self, hours, save_path, start_date, end_date, total_hours):
+        self.hours = hours
+        self.save_path = save_path
+        self.start_date = start_date
+        self.end_date = end_date
+        self.total_hours = total_hours
+
+    @classmethod
+    def load(cls, save_path, *args):
+        try:
+            return cls(json.loads(save_path.read_text()), save_path, *args)
+        except FileNotFoundError:
+            return cls([], save_path, *args)
+
+    def dump(self):
+        self.save_path.parent.mkdir(parents=True, exist_ok=True)
+        self.save_path.write_text(json.dumps(self.hours))
+
+    def should(self):
+        if self.end_date is None or self.start_date is None or self.total_hours is None:
+            return None
+        today = datetime.combine(datetime.today(), datetime.min.time())
+        total_days = (self.end_date - self.start_date).days
+        if today > self.end_date:
+            curr_days = total_days
+        else:
+            curr_days = (today - self.start_date).days
+        total = (curr_days / total_days) * self.total_hours
+        return total
+
+    def worked(self):
+        return sum((v for _, v in self.hours))
+
+    def add(self, add_hours):
+        self.hours.append([datetime.today().isoformat(), add_hours])
+
+    def pop(self):
+        if self.hours:
+            self.hours.pop()
+
+
+def parse_hours(arg):
+    if arg == "pop":
+        return arg
+    if ":" in arg:
+        mult = 1
+        if arg.startswith("-"):
+            mult = -1
+            _, arg = arg.split("-")
+        hours, minutes = [int(e) for e in arg.split(":")]
+        if minutes >= 60:
+            raise ValueError("invalid minutes")
+        t = hours + minutes / 60
+        hours = mult * t
+    else:
+        hours = float(arg)
+    return hours
+
+
+NAME_RE = r"^[a-z]+$"
+import re
+
+
+def validate_name(name):
+    if re.match(NAME_RE, name):
+        return name
+    raise ValueError(f"name has to match '{NAME_RE}'")
+
+
+def parse_date(date):
+    return datetime.strptime(date, DATE_FMT)
+
+
+parser = argparse.ArgumentParser(description="track the time of some task")
+parser.add_argument("task-name", help="name of the task", type=validate_name)
+parser.add_argument(
+    "time",
+    nargs="?",
+    help="time as float or in format 'hh:mm' or 'pop' to remove last time entry",
+    type=parse_hours,
+)
+parser.add_argument(
+    "--start-date", help=f"start of the tracked task '{DATE_FMT.replace('%', '%%')}'", type=parse_date
+)
+parser.add_argument(
+    "--end-date", help=f"end of the tracked task in '{DATE_FMT.replace('%', '%%')}'", type=parse_date
+)
+parser.add_argument(
+    "--hours", help="hours that should be invested until the task is finished", type=int
+)
+
+
+args = vars(parser.parse_args())
+
+time = args["time"]
+save_path = Path(f"~/.tracktasks/{args['task-name']}.json").expanduser()
+
+task = Task.load(save_path, args["start_date"], args["end_date"], args["hours"])
+
+if time is not None:
+    task.pop() if time == "pop" else task.add(time)
+    task.dump()
+
+worked = round(task.worked(), 1)
+print(f"worked: {worked}")
+
+should = task.should()
+if should is not None:
+    should = round(should, 1)
+    print(f"should: {should}")
+    delta = round(should - worked, 1)
+    print(f"delta:  {delta}")

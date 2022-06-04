@@ -87,6 +87,9 @@ alias v='vim ~/.config/nvim/init.lua'
 
 alias grhs='git reset --soft HEAD^'
 
+alias thesis='track --start-date 01.04.2022 --end-date 01.10.2022 --hours 900 thesis'
+alias work='track work'
+
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
 source ~/.kubectl.alias

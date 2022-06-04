@@ -461,7 +461,7 @@ local function delete_term(args)
 end
 
 local function enter_term()
-  if not b.term_was_normal_mode then
+  if vim.o.buftype == "terminal" and not b.term_was_normal_mode then
     cmd("startinsert")
   end
 end
@@ -470,7 +470,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
   command = "setlocal nospell nonumber norelativenumber signcolumn=no filetype=term",
 })
 vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "term://*",
   callback = enter_term,
 })
 vim.api.nvim_create_autocmd("TermClose", {

@@ -8,15 +8,13 @@
 
 echo -n "\e[6 q"
 
-COMPLETION_WAITING_DOTS="true"
-ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT="true"
-
 FZF_DEFAULT_COMMAND="fd --type file --color=always"
 FZF_ALT_C_COMMAND="fd --type directory --color=always"
 FZF_DEFAULT_OPTS="--ansi"
 
 # plugins
 source ~/.zi/bin/zi.zsh
+zi ice atinit'COMPLETION_WAITING_DOTS=true'
 zi snippet OMZL::completion.zsh
 zi ice wait'0' lucid
 zi light dominik-schwabe/vi-mode.zsh
@@ -38,7 +36,7 @@ zi ice wait'0' lucid
 zi light zdharma-continuum/fast-syntax-highlighting
 zi ice wait'0' lucid
 zi light MichaelAquilina/zsh-you-should-use
-zi ice wait'0' lucid silent
+zi ice wait'0' lucid silent atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true'
 zi light kutsan/zsh-system-clipboard
 zi ice wait'0' lucid atload'zicompinit'
 zi light zsh-users/zsh-completions
@@ -151,8 +149,6 @@ _yay_update() {
 zle -N _yay_update
 bindkey -M vicmd '^[[15~' _yay_update
 bindkey -M viins '^[[15~' _yay_update
-bindkey -M vicmd '^[[[E' _yay_update
-bindkey -M viins '^[[[E' _yay_update
 
 bindkey -r -M vicmd '\ec'
 bindkey -r -M viins '\ec'

@@ -1,7 +1,9 @@
-local def_opt = { silent = true }
-
 local config = require("myconfig.config")
 local null_ls = require("null-ls")
+local util = require("vim.lsp.util")
+
+local def_opt = { silent = true }
+
 local sources = {}
 for builtin, options in pairs(config.null_ls) do
   local target = null_ls.builtins[builtin]
@@ -19,7 +21,10 @@ vim.keymap.set("n", "<space>f", function()
 end, def_opt)
 
 local function nullls_on_attach(client, bufnr)
-  vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, {buffer = bufnr})
+  vim.keymap.set("n", "<space>f", function()
+    local params = util.make_formatting_params({})
+    client.request("textDocument/formatting", params, nil, bufnr)
+  end, { buffer = bufnr })
 end
 
 null_ls.setup({

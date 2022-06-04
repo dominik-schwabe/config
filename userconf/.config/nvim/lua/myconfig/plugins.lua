@@ -85,6 +85,7 @@ require("packer").startup(function(use)
   use({
     "nvim-treesitter/nvim-treesitter",
     requires = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
       "nvim-treesitter/playground",
       "p00f/nvim-ts-rainbow",
       "nvim-treesitter/nvim-treesitter-textobjects",
@@ -207,11 +208,10 @@ require("packer").startup(function(use)
 
   -- comment
   use({
-    "b3nj5m1n/kommentary",
+    "numToStr/Comment.nvim",
     config = function()
-      require("myconfig.plugins.kommentary")
+      require("myconfig.plugins.comment-nvim")
     end,
-    cmd = get_cmds("kommentary"),
   })
 
   -- quickfix
