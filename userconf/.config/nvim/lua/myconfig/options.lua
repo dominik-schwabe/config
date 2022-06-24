@@ -60,8 +60,9 @@ g.python3_host_prog = "/usr/bin/python3"
 
 local ASDF_DIR = os.getenv("ASDF_DIR")
 if ASDF_DIR then
-  local PYTHON_DIR = ASDF_DIR .. "/shims/python3"
-  if fn.empty(fn.glob(PYTHON_DIR)) == 0 then
-    g.python3_host_prog = PYTHON_DIR
+  ASDF_DIR = fn.glob(ASDF_DIR)
+  local PYTHON_INTERPRETER = ASDF_DIR .. "/shims/python3"
+  if fn.executable(PYTHON_INTERPRETER) then
+    g.python3_host_prog = PYTHON_INTERPRETER
   end
 end

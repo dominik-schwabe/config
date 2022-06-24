@@ -141,7 +141,7 @@ jmtpfs
 
 installyay() {
     YAYPATH=$(mktemp -d)
-    git clone https://aur.archlinux.org/yay.git $YAYPATH
+    git clone https://aur.archlinux.org/yay-bin.git $YAYPATH
     cd $YAYPATH
     makepkg -si
 }

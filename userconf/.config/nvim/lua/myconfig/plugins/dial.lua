@@ -27,7 +27,10 @@ require("dial.config").augends:register_group({
       word = false,
       cyclic = true,
     }),
-    augend.integer.alias.decimal,
+    augend.integer.new{
+      radix = 10,
+      natural = false,
+    },
     augend.integer.alias.hex,
     augend.integer.alias.binary,
     augend.date.alias["%Y/%m/%d"],

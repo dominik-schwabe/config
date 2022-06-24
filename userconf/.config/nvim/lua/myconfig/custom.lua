@@ -125,12 +125,10 @@ end, {})
 
 -- yank and substitude on selection
 local function substitude_selection()
-  api.nvim_feedkeys(":s/\\(" .. fn.escape(fn.getreg("+"), "\\") .. "\\)/\\1", "n", true)
+  api.nvim_feedkeys(":s/\\V\\(" .. fn.escape(fn.getreg("+"), "/\\") .. "\\)/\\1", "n", true)
 end
 
-vim.api.nvim_create_user_command("SubstitudeSelection", function()
-  substitude_selection()
-end, {})
+vim.api.nvim_create_user_command("SubstitudeSelection", substitude_selection, {})
 
 -- line percent
 function LinePercent()
@@ -149,9 +147,7 @@ local function lsp_settings()
   end
 end
 
-vim.api.nvim_create_user_command("LspSettings", function()
-  lsp_settings()
-end, {})
+vim.api.nvim_create_user_command("LspSettings", lsp_settings, {})
 
 -- show lsp root
 local function lsp_root()
@@ -160,19 +156,13 @@ local function lsp_root()
   end
 end
 
-vim.api.nvim_create_user_command("LspRoot", function()
-  lsp_root()
-end, {})
+vim.api.nvim_create_user_command("LspRoot", lsp_root, {})
 
 -- term mode fix
-local function term_go_direction(dir)
-  b.term_was_normal_mode = fn.winnr() == fn.winnr(dir)
-  cmd("wincmd " .. dir)
-end
-
-vim.api.nvim_create_user_command("TermGoDirection", function(arg)
-  term_go_direction(arg.fargs[1])
-end, { nargs = 1 })
+vim.api.nvim_create_user_command("TermLeave", function()
+  b.term_was_normal = true
+  api.nvim_feedkeys(api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "t", true)
+end, {})
 
 -- quickfix quit
 local function quickfix_mapping()
@@ -461,13 +451,18 @@ local function delete_term(args)
 end
 
 local function enter_term()
-  if vim.o.buftype == "terminal" and not b.term_was_normal_mode then
+  if vim.o.buftype == "terminal" and not b.term_was_normal then
     cmd("startinsert")
   end
 end
 
 vim.api.nvim_create_autocmd("TermOpen", {
   command = "setlocal nospell nonumber norelativenumber signcolumn=no filetype=term",
+})
+vim.api.nvim_create_autocmd("TermEnter", {
+  callback = function()
+    b.term_was_normal = false
+  end,
 })
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = enter_term,

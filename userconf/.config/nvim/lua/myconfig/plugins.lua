@@ -7,18 +7,16 @@ if fn.empty(fn.glob(install_path)) > 0 then
   cmd("packadd packer.nvim")
 end
 
-local get_cmds = require("myconfig.mappings").get_cmds
-
 require("packer").startup(function(use)
   -- packer
+  use("lewis6991/impatient.nvim")
+
   use({
     "wbthomason/packer.nvim",
     config = function()
       require("myconfig.plugins.packer")
     end,
   })
-
-  use("mizlan/iswap.nvim")
 
   -- stdlib
   use("nvim-lua/plenary.nvim")
@@ -73,14 +71,6 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- lint
-  use({
-    "mfussenegger/nvim-lint",
-    config = function()
-      require("myconfig.plugins.nvim-lint")
-    end,
-  })
-
   -- treesitter
   use({
     "nvim-treesitter/nvim-treesitter",
@@ -113,7 +103,6 @@ require("packer").startup(function(use)
     config = function()
       require("myconfig.plugins.telescope")
     end,
-    cmd = get_cmds("telescope"),
   })
 
   -- tree
@@ -134,14 +123,12 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- dap
+  -- ui
   use({
-    "mfussenegger/nvim-dap",
-    requires = { "Pocco81/DAPInstall.nvim", "rcarriga/nvim-dap-ui" },
+    "stevearc/dressing.nvim",
     config = function()
-      require("myconfig.plugins.dap")
+      require("myconfig.plugins.dressing")
     end,
-    cmd = get_cmds("dap"),
   })
 
   -- statusline
@@ -152,20 +139,24 @@ require("packer").startup(function(use)
       require("myconfig.plugins.lualine")
     end,
   })
-
-  -- copilot
   use({
-    "zbirenbaum/copilot.lua",
-    event = { "VimEnter" },
+    "AckslD/nvim-trevJ.lua",
     config = function()
-      vim.defer_fn(function()
-        require("copilot").setup()
-      end, 100)
+      require("trevj").setup()
     end,
   })
+
+  -- dap
   use({
-    "zbirenbaum/copilot-cmp",
-    after = { "copilot.lua", "nvim-cmp" },
+    "mfussenegger/nvim-dap",
+    requires = {
+      "rcarriga/nvim-dap-ui",
+      "mfussenegger/nvim-dap-python",
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    config = function()
+      require("myconfig.plugins.dap")
+    end,
   })
 
   -- repl
@@ -185,7 +176,7 @@ require("packer").startup(function(use)
   })
 
   -- symbols
-  use({ "simrat39/symbols-outline.nvim" })
+  use("simrat39/symbols-outline.nvim")
 
   -- tmux
   use({
@@ -221,6 +212,12 @@ require("packer").startup(function(use)
       require("myconfig.plugins.bqf")
     end,
   })
+  use({
+    "https://gitlab.com/yorickpeterse/nvim-pqf",
+    config = function()
+      require("pqf").setup()
+    end,
+  })
 
   -- trouble
   use({
@@ -229,16 +226,6 @@ require("packer").startup(function(use)
     config = function()
       require("myconfig.plugins.trouble")
     end,
-    cmd = get_cmds("trouble"),
-  })
-
-  -- runner
-  use({
-    "CRAG666/code_runner.nvim",
-    config = function()
-      require("myconfig.plugins.code_runner")
-    end,
-    cmd = get_cmds("code_runner"),
   })
 
   -- markdown
@@ -247,6 +234,14 @@ require("packer").startup(function(use)
     run = "cd app && npm install",
     config = function()
       require("myconfig.plugins.markdown-preview")
+    end,
+  })
+
+  -- icon picker
+  use({
+    "ziontee113/icon-picker.nvim",
+    config = function()
+      require("icon-picker")
     end,
   })
 
@@ -270,7 +265,6 @@ require("packer").startup(function(use)
   -- hop
   use({
     "phaazon/hop.nvim",
-    cmd = get_cmds("hop"),
     config = function()
       require("myconfig.plugins.hop")
     end,
@@ -293,8 +287,25 @@ require("packer").startup(function(use)
     end,
   })
 
+  -- zoom
+  use({
+    "nyngwang/NeoZoom.lua",
+    config = function()
+      require("myconfig.plugins.neo-zoom")
+    end,
+  })
+
+  -- repeat motion commands
+  -- use({
+  --   "jonatan-branting/nvim-better-n",
+  --   config = function()
+  --     require("myconfig.plugins.better-n")
+  --   end,
+  -- })
+
   -- use("pwntester/octo.nvim") -- github issues and pull request
   -- use("matbme/JABS.nvim")
+  -- use("NTBBloodbath/rest.nvim")
 
   -- legacy
   use({
@@ -303,13 +314,7 @@ require("packer").startup(function(use)
       require("myconfig.plugins.bufexplorer")
     end,
   })
-  use({
-    "troydm/zoomwintab.vim",
-    config = function()
-      require("myconfig.plugins.zoomwintab")
-    end,
-    cmd = get_cmds("zoomwintabtoggle"),
-  })
+
   use("haya14busa/vim-asterisk")
   use("wellle/targets.vim")
   use("michaeljsmith/vim-indent-object")
@@ -317,6 +322,37 @@ require("packer").startup(function(use)
   use("tpope/vim-repeat")
   use("tpope/vim-surround")
   use("tpope/vim-sleuth")
-  use({ "foosoft/vim-argwrap", cmd = get_cmds("argwrap") })
-  use({ "AndrewRadev/sideways.vim", cmd = get_cmds("sideways") })
+  use({ "foosoft/vim-argwrap" })
+  use({ "AndrewRadev/sideways.vim" })
+
+  -- runner
+  -- use({
+  --   "CRAG666/code_runner.nvim",
+  --   config = function()
+  --     require("myconfig.plugins.code_runner")
+  --   end,
+  -- })
+
+  -- copilot
+  -- use({
+  --   "zbirenbaum/copilot.lua",
+  --   event = { "VimEnter" },
+  --   config = function()
+  --     vim.defer_fn(function()
+  --       require("copilot").setup()
+  --     end, 100)
+  --   end,
+  -- })
+  -- use({
+  --   "zbirenbaum/copilot-cmp",
+  --   after = { "copilot.lua", "nvim-cmp" },
+  -- })
+
+  -- lint
+  -- use({
+  --   "mfussenegger/nvim-lint",
+  --   config = function()
+  --     require("myconfig.plugins.nvim-lint")
+  --   end,
+  -- })
 end)

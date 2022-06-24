@@ -1,7 +1,5 @@
 local no_opt = {}
 local def_opt = { silent = true }
-local nore_opt = {}
-local silent_opt = { silent = true }
 
 local map_info = {}
 
@@ -31,32 +29,33 @@ map_info.markdown_preview = {
   mappings = {
     ["<space>m"] = { { { "n" }, "<CMD>MarkdownPreviewToggle<CR>", def_opt } },
   },
-  commands = { "MarkdownPreviewToggle" },
 }
 
 map_info.code_runner = {
   mappings = {
     ["<leader>r"] = { { { "n" }, "<CMD>RunCode<CR>", def_opt } },
   },
-  commands = { "RunCode" },
 }
 
 map_info.symbols_outline = {
   mappings = {
     ["<F3>"] = { { { "n", "i" }, "<CMD>SymbolsOutline<CR>", def_opt } },
   },
-  commands = { "SymbolsOutline" },
 }
 
 map_info.dap = {
   mappings = {
-    ["<F5>"] = { { { "n", "x", "i" }, "<CMD>DapBreakpoint<CR>", def_opt } },
-    ["<F7>"] = { { { "n", "x", "i" }, "<CMD>DapStepOver<CR>", def_opt } },
-    ["<F8>"] = { { { "n", "x", "i" }, "<CMD>DapContinue<CR>", def_opt } },
-    ["<F19>"] = { { { "n", "x", "i" }, "<CMD>DapStepInto<CR>", def_opt } },
-    ["<F21>"] = { { { "n", "x", "i" }, "<CMD>DapUiToggle<CR>", nore_opt } },
+    ["<space>b"] = { { { "n" }, "<CMD>DapBreakpoint<CR>", def_opt } },
+    ["<space>B"] = { { { "n" }, "<CMD>DapConditionalBreakpoint<CR>", def_opt } },
+    ["<space>dpc"] = { { { "n" }, "<CMD>DapPythonClass<CR>", def_opt } },
+    ["<space>dpm"] = { { { "n" }, "<CMD>DapPythonMethod<CR>", def_opt } },
+    ["<space>dps"] = { { { "n", "x" }, "<CMD>DapPythonSelection<CR>", def_opt } },
+    ["<F5>"] = { { { "n" }, "<CMD>DapStepOver<CR>", def_opt } },
+    ["<F6>"] = { { { "n" }, "<CMD>DapStepInto<CR>", def_opt } },
+    ["<F18>"] = { { { "n" }, "<CMD>DapStepOut<CR>", def_opt } },
+    ["<F8>"] = { { { "n" }, "<CMD>DapContinue<CR>", def_opt } },
+    ["<F20>"] = { { { "n" }, "<CMD>DapTerminate<CR>", def_opt } },
   },
-  commands = { "DapBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapUiToggle" },
 }
 
 map_info.hop = {
@@ -64,7 +63,6 @@ map_info.hop = {
     ["m"] = { { { "n" }, "<CMD>HopChar1<CR>", def_opt } },
     ["M"] = { { { "n" }, "<CMD>HopWord<CR>", def_opt } },
   },
-  commands = { "HopChar1", "HopWord" },
 }
 
 map_info.comment_nvim = {
@@ -82,14 +80,14 @@ map_info.comment_nvim = {
 
 map_info.lspinstall = {
   mappings = {
-    ["<space>li"] = { { { "n" }, ":LspInstall ", nore_opt } },
-    ["<space>lu"] = { { { "n" }, "<CMD>LspUpdate<CR>", nore_opt } },
+    ["<space>li"] = { { { "n" }, ":LspInstall ", no_opt } },
+    ["<space>lu"] = { { { "n" }, "<CMD>LspUpdate<CR>", no_opt } },
   },
 }
 
 map_info.nvim_lint = {
   mappings = {
-    ["<F9>"] = { { { "n", "i" }, "<CMD>Lint<CR>", nore_opt } },
+    ["<space>z"] = { { { "n" }, "<CMD>Lint<CR>", no_opt } },
   },
 }
 
@@ -108,7 +106,6 @@ map_info.nvimtree = {
     },
     ["gt"] = { { { "n", "x" }, "<ESC>:NvimTreeFindFile<CR>", def_opt } },
   },
-  commands = { "NvimTreeToggle", "NvimTreeFindFile" },
 }
 
 map_info.iron = {
@@ -127,7 +124,6 @@ map_info.iron = {
       { { "i" }, "<cmd>ReplOpen<CR>", def_opt },
     },
   },
-  commands = { "ReplSendLine", "ReplSendParagraph", "ReplSendSelection", "ReplSendBuffer", "ReplOpen" },
 }
 
 map_info.telescope = {
@@ -145,35 +141,24 @@ map_info.telescope = {
     ["<space>,s"] = { { { "n", "x" }, "<CMD>Telescope document_symbols<CR>", def_opt } },
     ["<space>,b"] = { { { "n", "x" }, "<CMD>Telescope current_buffer_fuzzy_find<CR>", def_opt } },
   },
-  commands = { "Telescope" },
 }
 
 map_info.todo_comments = {
   mappings = {
     ["<space>-"] = { { { "n" }, ":TodoQuickFix<CR>", def_opt } },
   },
-  commands = { "TodoQuickFix" },
 }
 
 map_info.trouble = {
   mappings = {
     ["ä"] = { { { "n", "x" }, "<cmd>TroubleToggle document_diagnostics<cr>", def_opt } },
   },
-  commands = { "TroubleToggle" },
-}
-
-map_info.zoomwintabtoggle = {
-  mappings = {
-    ["<F12>"] = { { { "n", "x", "i", "t" }, "<cmd>ZoomWinTabToggle<cr>", def_opt } },
-  },
-  commands = { "ZoomWinTabToggle" },
 }
 
 map_info.argwrap = {
   mappings = {
     ["Y"] = { { { "n", "x" }, ":ArgWrap<cr>", def_opt } },
   },
-  commands = { "ArgWrap" },
 }
 
 -- sideways TODO: find treesitter alternative
@@ -182,7 +167,6 @@ map_info.sideways = {
     ["R"] = { { { "n" }, ":SidewaysLeft<cr>", def_opt } },
     ["U"] = { { { "n" }, ":SidewaysRight<CR>", def_opt } },
   },
-  commands = { "SidewaysLeft", "SidewaysRight" },
 }
 
 -- map_info.yoink = {
@@ -205,6 +189,18 @@ map_info.dial = {
   },
 }
 
+map_info.icon_picker = {
+  mappings = {
+    ["<space>e"] = { { { "n" }, "<cmd>PickIcons<cr>", def_opt } },
+  },
+}
+
+map_info.neo_zoom = {
+  mappings = {
+    ["<F12>"] = { { { "n", "x", "i", "t" }, "<cmd>NeoZoomToggle<cr>", def_opt } },
+  },
+}
+
 map_info.default = {
   mappings = {
     ["<space>v"] = { { { "n", "x" }, "<CMD>lua ReloadConfig()<CR>", def_opt } },
@@ -219,29 +215,18 @@ map_info.default = {
     ["<"] = { { { "x" }, "<gv", def_opt } },
     [">"] = { { { "x" }, ">gv", def_opt } },
     ["<C-w>"] = {
-      { { "n", "x", "i" }, "<CMD>mark ' | echo 'marked ' .. expand('%:p:t') .. ' ' .. line('.') <CR>", nore_opt },
+      { { "n", "x", "i" }, "<CMD>mark ' | echo 'marked ' .. expand('%:p:t') .. ' ' .. line('.') <CR>", no_opt },
     },
-    ["<C-h>"] = {
-      { { "n", "x", "i" }, "<CMD>wincmd h<CR>", nore_opt },
-      { { "t" }, "<C-\\><C-n>:TermGoDirection h<CR>", def_opt },
-    },
-    ["<C-j>"] = {
-      { { "n", "x", "i" }, "<CMD>wincmd j<CR>", nore_opt },
-      { { "t" }, "<C-\\><C-n>:TermGoDirection j<CR>", def_opt },
-    },
-    ["<C-k>"] = {
-      { { "n", "x", "i" }, "<CMD>wincmd k<CR>", nore_opt },
-      { { "t" }, "<C-\\><C-n>:TermGoDirection k<CR>", def_opt },
-    },
-    ["<C-l>"] = {
-      { { "n", "x", "i" }, "<CMD>wincmd l<CR>", nore_opt },
-      { { "t" }, "<C-\\><C-n>:TermGoDirection l<CR>", def_opt },
-    },
+    ["<C-e>"] = { { { "t" }, "<CMD>TermLeave<CR>", def_opt } },
+    ["<C-h>"] = { { { "n", "x", "i", "t" }, "<CMD>wincmd h<CR>", no_opt } },
+    ["<C-j>"] = { { { "n", "x", "i", "t" }, "<CMD>wincmd j<CR>", no_opt } },
+    ["<C-k>"] = { { { "n", "x", "i", "t" }, "<CMD>wincmd k<CR>", no_opt } },
+    ["<C-l>"] = { { { "n", "x", "i", "t" }, "<CMD>wincmd l<CR>", no_opt } },
     ["db"] = { { { "n" }, "dvb", def_opt } },
     ["dB"] = { { { "n" }, "dvB", def_opt } },
     ["cb"] = { { { "n" }, "cvb", def_opt } },
     ["cB"] = { { { "n" }, "cvB", def_opt } },
-    ["<C-g>"] = { { { "n" }, "2<C-g>", nore_opt } },
+    ["<C-g>"] = { { { "n" }, "2<C-g>", no_opt } },
     ["<leader>x"] = { { { "n", "x" }, "<CMD>ChmodSet<CR>", def_opt } },
     ["<leader>X"] = { { { "n", "x" }, "<CMD>ChmodRemove<CR>", def_opt } },
     ["Ä"] = { { { "n", "x" }, "<CMD>LoclistToggle<CR>", def_opt } },
@@ -297,10 +282,6 @@ function M.get_keys(plugin)
     keys[#keys + 1] = key
   end
   return keys
-end
-
-function M.get_cmds(plugin)
-  return map_info[plugin].commands or {}
 end
 
 return M

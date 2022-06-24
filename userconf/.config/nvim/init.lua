@@ -1,8 +1,9 @@
+pcall(require, "impatient")
 vim.cmd("colorscheme monokai")
 
+require("myconfig.options")
 require("myconfig.plugins")
 require("myconfig.mappings").setup()
-require("myconfig.options")
 require("myconfig.custom")
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
@@ -13,5 +14,23 @@ vim.api.nvim_create_autocmd("FileType", {
   command = "setlocal tabstop=4 shiftwidth=4 softtabstop=4",
 })
 -- cmd("au BufEnter * set fo-=c fo-=r fo-=o", false)
+function Test()
+  local topline = vim.fn.line("w0")
+  if
+    vim.api.nvim_open_win(0, true, {
+      relative = "editor",
+      row = 0,
+      col = 0,
+      height = 1000,
+      width = 1000,
+      focusable = true,
+      zindex = 5,
+      border = "none",
+    }) ~= 0
+  then
+    vim.fn.winrestview({ topline = topline })
+    vim.wo.winhighlight = "SignColumn:TabLineSel"
+  end
+end
 
 require("myconfig.plugins.colorizer")

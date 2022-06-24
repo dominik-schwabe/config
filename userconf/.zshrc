@@ -35,12 +35,14 @@ zi light zsh-vi-more/vi-increment
 zi ice wait'0' lucid
 zi light zdharma-continuum/fast-syntax-highlighting
 zi ice wait'0' lucid
+zi light lukechilds/zsh-better-npm-completion
+zi ice wait'0' lucid
 zi light MichaelAquilina/zsh-you-should-use
 zi ice wait'0' lucid silent atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true'
 zi light kutsan/zsh-system-clipboard
 zi ice wait'0' lucid atload'zicompinit'
 zi light zsh-users/zsh-completions
-zi snippet 'https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh'
+zi snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
 
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"

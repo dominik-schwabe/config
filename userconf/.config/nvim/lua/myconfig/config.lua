@@ -33,6 +33,7 @@ M.root_patterns = {
 }
 M.whitespace_blacklist = {
   "TelescopePrompt",
+  "TelescopeResults",
   "Trouble",
   "diff",
   "fugitive",
@@ -58,7 +59,7 @@ M.illuminate_blacklist = {
   "vista",
   "yaml",
 }
-M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls" }
+M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
 M.lsp_configs = {
   -- latex = {
   -- 	settings = {
