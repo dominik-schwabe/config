@@ -24,50 +24,6 @@ vim.api.nvim_create_user_command("SetSpell", function(arg)
   set_spell(arg.fargs[1])
 end, { nargs = "*" })
 
--- toggle terminal
-local term_buf = 0
-local term_win = 0
-local function open_term(height, bottom)
-  if bottom then
-    cmd("botright new")
-    api.nvim_win_set_height(0, height)
-  else
-    cmd("vertical botright new")
-  end
-  if term_buf ~= 0 and api.nvim_buf_is_loaded(term_buf) then
-    api.nvim_win_set_buf(0, term_buf)
-  else
-    fn.termopen(os.getenv("SHELL"), { detach = 0 })
-    term_buf = fn.bufnr("")
-    api.nvim_buf_set_name(term_buf, "term://toggleterm")
-    api.nvim_buf_set_option(term_buf, "buflisted", false)
-  end
-  cmd("startinsert")
-  term_win = fn.win_getid()
-end
-
-local function toggle_term(height, bottom)
-  if fn.win_gotoid(term_win) ~= 0 then
-    local this_window = fn.winnr()
-    local is_bottom = (this_window == fn.winnr("h"))
-      and (this_window == fn.winnr("l"))
-      and (this_window == fn.winnr("j"))
-    cmd("hide")
-    if is_bottom ~= bottom then
-      open_term(height, bottom)
-    end
-  else
-    open_term(height, bottom)
-  end
-end
-
-vim.api.nvim_create_user_command("ToggleTermBottom", function()
-  toggle_term(10, true)
-end, {})
-vim.api.nvim_create_user_command("ToggleTermRight", function()
-  toggle_term(10, false)
-end, {})
-
 -- smart resize
 local function resize_height(val)
   api.nvim_win_set_height(0, api.nvim_win_get_height(0) + val)
@@ -468,6 +424,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
   callback = enter_term,
 })
 vim.api.nvim_create_autocmd("TermClose", {
-  pattern = { "term://toggleterm", "term://ironrepl" },
+  pattern = { "term://toggleterm" },
   callback = delete_term,
 })

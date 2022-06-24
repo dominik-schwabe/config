@@ -188,8 +188,8 @@ M.linters = {
   lua = { "luacheck" },
 }
 M.repls = {
-  python = "ipython",
-  r = "radian",
+  python = { command = { "ipython" } },
+  r = { command = { "radian" } },
 }
 M.colorizer_disable_filetypes = {
   "r",

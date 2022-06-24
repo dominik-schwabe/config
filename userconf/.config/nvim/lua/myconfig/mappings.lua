@@ -238,8 +238,8 @@ map_info.default = {
     ["+"] = { { { "n", "x" }, "<cmd>SmartResizeExpand<cr>", def_opt } },
     ["-"] = { { { "n", "x" }, "<cmd>SmartResizeReduce<cr>", def_opt } },
     ["<F10>"] = {
-      { { "n", "x", "t" }, "<CMD>ToggleTermBottom<CR>", def_opt },
-      { { "i" }, "<ESC>:ToggleTermBottom<CR>", def_opt },
+      { { "n", "x", "t" }, "<CMD>ToggleTerm 1<CR>", def_opt },
+      { { "i" }, "<ESC>:ToggleTerm 1<CR>", def_opt },
     },
     ["<F22>"] = {
       { { "n", "x", "t" }, "<CMD>ToggleTermRight<CR>", def_opt },

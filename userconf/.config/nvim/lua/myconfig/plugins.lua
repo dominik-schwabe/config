@@ -159,11 +159,11 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- repl
+  -- toggle term
   use({
-    "hkupty/iron.nvim",
+    "akinsho/toggleterm.nvim",
     config = function()
-      require("myconfig.plugins.iron")
+      require("myconfig.plugins.toggleterm")
     end,
   })
 
