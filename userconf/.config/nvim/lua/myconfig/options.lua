@@ -58,11 +58,13 @@ g.loaded_perl_provider = 0
 
 g.python3_host_prog = "/usr/bin/python3"
 
+local PYTHON_VERSION = os.getenv("PYTHON_VERSION")
 local ASDF_DIR = os.getenv("ASDF_DIR")
-if ASDF_DIR then
+if PYTHON_VERSION and ASDF_DIR then
   ASDF_DIR = fn.glob(ASDF_DIR)
-  local PYTHON_INTERPRETER = ASDF_DIR .. "/shims/python3"
-  if fn.executable(PYTHON_INTERPRETER) then
-    g.python3_host_prog = PYTHON_INTERPRETER
+  local version = string.match(PYTHON_VERSION, "[^%s]+")
+  local python_interpreter = ASDF_DIR .. "/installs/python/" .. version .. "/bin/python"
+  if fn.executable(python_interpreter) ~= 0 then
+    g.python3_host_prog = python_interpreter
   end
 end
