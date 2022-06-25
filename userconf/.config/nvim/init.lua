@@ -33,4 +33,7 @@ function Test()
   end
 end
 
+-- vim.keymap.set("x", "<CR>", function() require("repl.send").visual() end)
+
 require("myconfig.plugins.colorizer")
+require("repl").setup()

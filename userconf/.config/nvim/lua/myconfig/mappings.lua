@@ -108,24 +108,6 @@ map_info.nvimtree = {
   },
 }
 
-map_info.iron = {
-  mappings = {
-    ["<CR>"] = {
-      { { "n" }, ":<c-u>ReplSendLine<CR>", def_opt },
-      { { "x" }, ":<c-u>ReplSendSelection<CR>", def_opt },
-    },
-    ["<C-space>"] = {
-      { { "n" }, ":<c-u>ReplSendParagraph<CR>", def_opt },
-      { { "x" }, ":<c-u>ReplSendSelection<CR>", def_opt },
-    },
-    ["<leader><space>"] = { { { "n" }, ":<c-u>ReplSendBuffer<CR>", def_opt } },
-    ["<F4>"] = {
-      { { "n" }, ":ReplOpen<CR><ESC>", def_opt },
-      { { "i" }, "<cmd>ReplOpen<CR>", def_opt },
-    },
-  },
-}
-
 map_info.telescope = {
   mappings = {
     ["<C-p>"] = { { { "n", "x", "i" }, "<CMD>Telescope find_files<CR>", def_opt } },

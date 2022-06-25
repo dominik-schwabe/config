@@ -92,8 +92,13 @@ function LinePercent()
 end
 
 -- debugging
-function D(obj)
-  print(vim.inspect(obj))
+function D(...)
+  local tbl = {...}
+  local new_tbl = {}
+  for _, e in ipairs(tbl) do
+    new_tbl[#new_tbl+1] = vim.inspect(e)
+  end
+  print(unpack(new_tbl))
 end
 
 -- show settings of lspserver
@@ -424,6 +429,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
   callback = enter_term,
 })
 vim.api.nvim_create_autocmd("TermClose", {
-  pattern = { "term://toggleterm" },
+  pattern = { "term://repl*" },
   callback = delete_term,
 })

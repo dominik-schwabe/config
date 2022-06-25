@@ -2,18 +2,18 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
-local M = {}
+M = {}
 
-function M.replace_termcodes(str)
+local function replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, false, true, true)
 end
 
-local ctrl_v = M.replace_termcodes("<c-v>")
+local esc = replace_termcodes("<Esc>")
+local ctrl_v = replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
-  D(fn.winsaveview().curswant)
   local to_end = fn.winsaveview().curswant == 2147483647
-  api.nvim_feedkeys(M.replace_termcodes("<Esc>"), "nx", false)
+  api.nvim_feedkeys(esc, "nx", false)
   local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))
   local line_end, column_end = unpack(api.nvim_buf_get_mark(buffer, ">"))
   local lines = api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
@@ -56,15 +56,24 @@ function M.get_motion(motion_type)
   return lines
 end
 
-function M.tbl_merge(t1, t2)
-  for k, v in pairs(t2) do
-    if (type(v) == "table") and (type(t1[k] or false) == "table") then
-      M.tbl_merge(t1[k], t2[k])
+M.last_motion = {}
+
+function M.persist_motion(motion_type)
+  M.last_motion[1] = M.get_motion(motion_type)
+end
+
+function M.extend(tbl)
+  local new_tbl = {}
+  for _, e in pairs(tbl) do
+    if type(e) == "table" then
+      for _, l in pairs(e) do
+        new_tbl[#new_tbl + 1] = l
+      end
     else
-      t1[k] = v
+      new_tbl[#new_tbl + 1] = e
     end
   end
-  return t1
+  return new_tbl
 end
 
 return M
