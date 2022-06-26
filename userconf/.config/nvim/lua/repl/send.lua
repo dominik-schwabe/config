@@ -6,17 +6,21 @@ local utils = require("repl.utils")
 
 local M = {}
 
+local function set_cursor(line, col)
+  api.nvim_win_set_cursor(0, { math.min(line, api.nvim_buf_line_count(0)), col })
+end
+
 function M.paragraph(ft)
   local i, c = unpack(api.nvim_win_get_cursor(0))
   local lines = get.paragraph()
   window.send(ft, lines)
-  pcall(api.nvim_win_set_cursor, 0, { i + #lines, c + 1 })
+  set_cursor(i + #lines, c)
 end
 
 function M.line(ft)
   local l, c = unpack(api.nvim_win_get_cursor(0))
   window.send(ft, { get.line(l) })
-  pcall(api.nvim_win_set_cursor, 0, { l + 1, c })
+  set_cursor(l + 1, c)
 end
 
 function M.visual(ft)

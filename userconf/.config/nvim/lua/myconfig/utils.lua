@@ -11,7 +11,6 @@ end
 local ctrl_v = M.replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
-  D(fn.winsaveview().curswant)
   local to_end = fn.winsaveview().curswant == 2147483647
   api.nvim_feedkeys(M.replace_termcodes("<Esc>"), "nx", false)
   local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))

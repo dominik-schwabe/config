@@ -14,8 +14,8 @@ M.default_callbacks = {
   create_window = function()
     window.create_window(10, false)
   end,
-  find_window_with_repl = function(bufnr)
-    window.find_window_with_repl(bufnr, true)
+  find_windows_with_repl = function(bufnr)
+    return window.find_windows_with_repl(bufnr, true)
   end,
 }
 

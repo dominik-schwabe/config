@@ -10,6 +10,12 @@ end
 require("packer").startup(function(use)
   -- packer
   use("lewis6991/impatient.nvim")
+  use({
+    "hkupty/iron.nvim",
+    config = function()
+      require("myconfig.plugins.iron")
+    end,
+  })
 
   use({
     "wbthomason/packer.nvim",
@@ -272,9 +278,9 @@ require("packer").startup(function(use)
 
   -- rooter
   use({
-    "jedi2610/nvim-rooter.lua",
+    "ahmedkhalf/project.nvim",
     config = function()
-      require("myconfig.plugins.nvim-rooter")
+      require("myconfig.plugins.project-nvim")
     end,
   })
 

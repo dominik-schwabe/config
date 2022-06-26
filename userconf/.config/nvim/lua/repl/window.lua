@@ -7,12 +7,13 @@ local F = require("repl.functional")
 local S = require("repl.store")
 local CB = S.callbacks
 local R = require("repl.repls")
+local U = require("repl.utils")
 
 M = {}
 
 M.running_repls = {}
 
-function M.find_window_with_repl(bufnr, tab)
+function M.find_windows_with_repl(bufnr, tab)
   local all_windows = api.nvim_list_wins()
   local windows_on_curr_tab = all_windows
   local curr_tab = api.nvim_tabpage_get_number(0)
@@ -48,20 +49,39 @@ local function create_term(ft)
   end
   local meta = R.repls[ft][repl_name]
 
+  local previous_window = vim.api.nvim_get_current_win()
   CB.create_window()
   local jobnr = fn.termopen(meta.command, { detach = 0 })
   local bufnr = api.nvim_win_get_buf(0)
   api.nvim_buf_set_name(bufnr, S.term_name .. "_" .. ft)
   api.nvim_buf_set_option(bufnr, "buflisted", S.listed)
-  M.running_repls[ft] = { jobnr = jobnr, bufnr = bufnr, meta = meta }
-  cmd("startinsert")
-  return M.running_repls[ft]
+  local timer = vim.loop.new_timer()
+  timer:start(
+    0,
+    0,
+    vim.schedule_wrap(function()
+      vim.api.nvim_set_current_win(previous_window)
+    end)
+  )
+  local repl = { ft = ft, jobnr = jobnr, bufnr = bufnr, meta = meta }
+  api.nvim_buf_set_var(bufnr, "repl", repl)
+  M.running_repls[ft] = repl
+  return repl
 end
 
 local function show_term(bufnr)
+  local previous_window = vim.api.nvim_get_current_win()
   CB.create_window()
-  api.nvim_win_set_buf(0, bufnr)
-  cmd("startinsert")
+  local term_window = vim.api.nvim_get_current_win()
+  api.nvim_win_set_buf(term_window, bufnr)
+  local timer = vim.loop.new_timer()
+  timer:start(
+    0,
+    0,
+    vim.schedule_wrap(function()
+      vim.api.nvim_set_current_win(previous_window)
+    end)
+  )
 end
 
 local function buf_exists(bufnr)
@@ -73,7 +93,7 @@ local function repl_exists(repl)
 end
 
 local function window_exists(repl)
-  local windows_with_repl = CB.find_window_with_repl(repl.bufnr)
+  local windows_with_repl = CB.find_windows_with_repl(repl.bufnr)
   return #windows_with_repl ~= 0
 end
 
@@ -98,16 +118,17 @@ function M.hide_term(ft)
   end
   local repl = M.running_repls[ft]
   if repl_exists(repl) then
-    local windows_with_repl = CB.find_window_with_repl(repl.bufnr)
+    local windows_with_repl = CB.find_windows_with_repl(repl.bufnr)
     F.foreach(windows_with_repl, function(winid)
-      api.nvim_win_close(winid)
+      api.nvim_win_close(winid, false)
     end)
   end
 end
 
 function M.toggle_repl(ft)
   if ft == nil then
-    ft = bo.ft
+    local success, repl = pcall(api.nvim_buf_get_var, 0, "repl")
+    ft = success and repl.ft or bo.ft
   end
   local repl = M.running_repls[ft]
   if repl_exists(repl) and window_exists(repl) then
@@ -132,6 +153,9 @@ function M.send(ft, lines)
       return nil
     end
   end
+  if S.ensure_win and not window_exists(repl) then
+    show_term(repl.bufnr)
+  end
 
   if repl.meta.preprocess ~= nil then
     lines = repl.meta.preprocess(lines)
@@ -146,9 +170,23 @@ function M.send(ft, lines)
     lines = CB.format(lines)
   end
 
-  -- TODO: check vim.api.nvim_chan_send
-  D(lines)
-  vim.fn.chansend(repl.jobnr, lines)
+  if S.debug then
+    U.debug(lines)
+  end
+
+  api.nvim_chan_send(repl.jobnr, table.concat(lines, "\n"))
+
+  local timer = vim.loop.new_timer()
+  timer:start(
+    0,
+    0,
+    vim.schedule_wrap(function()
+      local windows = CB.find_windows_with_repl(repl.bufnr)
+      F.foreach(windows, function(win)
+        vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(repl.bufnr), 0 })
+      end)
+    end)
+  )
 end
 
 return M

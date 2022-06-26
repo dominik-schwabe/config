@@ -76,4 +76,13 @@ function M.extend(tbl)
   return new_tbl
 end
 
+function M.debug(...)
+  local tbl = {...}
+  local new_tbl = {}
+  for _, e in ipairs(tbl) do
+    new_tbl[#new_tbl+1] = vim.inspect(e)
+  end
+  print(unpack(new_tbl))
+end
+
 return M

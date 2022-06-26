@@ -33,7 +33,13 @@ function Test()
   end
 end
 
--- vim.keymap.set("x", "<CR>", function() require("repl.send").visual() end)
-
 require("myconfig.plugins.colorizer")
-require("repl").setup()
+
+vim.keymap.set("n", "<F11>", "<CMD>ReplSendParagraph<CR>")
+
+require("repl").setup({
+  preferred = { python = { "ipython", "python", "python3" }, r = { "radian", "R" } },
+  listed = true,
+  debug = false,
+  ensure_win = true,
+})

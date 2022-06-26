@@ -13,30 +13,50 @@ M.cr = "\13"
 
 local extend = require("repl.utils").extend
 
-function M.list_format_builder(open_str, close_str)
-  return function(lines)
-    return extend({ open_str, lines, close_str })
-  end
-end
-
-function M.str_format_builder(open_str, close_str)
+function M.format_builder(spec)
   return function(lines)
     if #lines ~= 0 then
-      if open_str ~= nil then
-        lines[1] = open_str .. lines[1]
-      end
-      if close_str ~= nil then
-        lines[#lines] = lines[#lines] .. close_str
+      if #lines ~= 1 or spec.ignore_single == nil or not spec.ignore_single then
+        if spec.concat_start ~= nil then
+          lines[1] = spec.concat_start .. lines[1]
+        end
+        if spec.concat_end ~= nil then
+          lines[#lines] = lines[#lines] .. spec.concat_end
+        end
+        return extend({ spec.append_start, lines, spec.append_end })
       end
     end
     return lines
   end
 end
 
-M.normal_format = M.list_format_builder(M.normal_open, M.normal_close)
-M.breaketed_paste_format = M.str_format_builder(M.normal_open, M.normal_close)
-M.paste_format = M.list_format_builder(M.paste_open, M.paste_close)
-M.editor_format = M.list_format_builder(M.editor_open, M.paste_close)
+M.normal_format = M.format_builder({
+  append_start = M.normal_open,
+  append_end = M.normal_close,
+})
+M.python_format = M.format_builder({
+  append_end = "",
+  ignore_single = true,
+})
+M.breaketed_paste_format = M.format_builder({
+  concat_start = M.normal_open,
+  append_end = M.normal_close,
+  ignore_single = true,
+})
+M.alt_breaketed_paste_format = M.format_builder({
+  concat_start = M.normal_open,
+  concat_end = M.normal_close,
+  ignore_single = true,
+})
+M.paste_format = M.format_builder({
+  append_start = M.paste_open,
+  append_end = M.paste_close,
+})
+M.editor_n_format = M.format_builder({
+  -- append_start = M.editor_open .. "\n",
+  -- append_end = M.paste_close,
+  ignore_single = true,
+})
 
 M.repls = {
   clojure = {
@@ -58,7 +78,7 @@ M.repls = {
   },
   hy = { hy = { command = { "hy" } } },
   janet = { janet = { command = { "janet" } } },
-  javascript = { node = { command = { "node" }, format = M.editor_format } },
+  javascript = { node = { command = { "node" }, format = M.editor_n_format } },
   julia = { julia = { command = { "julia" } } },
   lisp = { sbcl = { command = { "sbcl" } }, clisp = { command = { "clisp" } } },
   lua = { lua = { command = { "lua" } } },
@@ -69,14 +89,15 @@ M.repls = {
   ps1 = { ps1 = { command = { "powershell", "-noexit", "-executionpolicy", "bypass" } } },
   pure = { pure = { command = { "pure" }, format = M.editor_format } },
   python = {
-    ptipython = { command = { "ptipython" }, format = M.breaketed_paste_format },
     ipython = { command = { "ipython", "--no-autoindent" }, format = M.breaketed_paste_format },
+    ptipython = { command = { "ptipython" }, format = M.breaketed_paste_format },
     ptpython = { command = { "ptpython" }, format = M.breaketed_paste_format },
-    python = { command = { "pyversion" }, format = M.breaketed_paste_format },
+    python = { command = { "python" }, format = M.python_format },
+    python3 = { command = { "python3" }, format = M.python_format },
   },
   r = {
     R = { command = { "R" }, format = M.breaketed_paste_format },
-    radian = { command = { "radian" }, format = M.breaketed_paste_format },
+    radian = { command = { "radian" }, format = M.alt_breaketed_paste_format },
   },
   racket = { racket = { command = { "racket" } } },
   ruby = { irb = { command = { "irb" } } },
@@ -89,7 +110,7 @@ M.repls = {
   sh = { zsh = { command = { "zsh" } }, bash = { command = { "bash" } }, sh = { command = { "sh" } } },
   stata = { stata = { command = { "stata", "-q" } } },
   tcl = { tclsh = { command = { "tclsh" } } },
-  typescript = { ts = { command = { "ts-node" }, format = M.editor_format } },
+  typescript = { ts = { command = { "ts-node" }, format = M.editor_n_format } },
   zsh = { zsh = { command = { "zsh" } } },
 }
 
@@ -129,10 +150,11 @@ function M.find(ft, preferred)
       unavailable_repls[#unavailable_repls + 1] = key
     else
       if repl_to_use == nil then
-        if not fn.executable(repl.command[1]) then
+        if fn.executable(repl.command[1]) == 1 then
+          repl_to_use = key
+        else
           uninstalled_repls[#uninstalled_repls + 1] = key
         end
-        repl_to_use = key
       end
     end
   end)

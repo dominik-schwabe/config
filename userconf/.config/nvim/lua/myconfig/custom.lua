@@ -411,7 +411,7 @@ local function delete_term(args)
   api.nvim_buf_delete(args.buf, { force = true })
 end
 
-local function enter_term()
+local function enter_term(a)
   if vim.o.buftype == "terminal" and not b.term_was_normal then
     cmd("startinsert")
   end
