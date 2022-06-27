@@ -10,12 +10,12 @@ end
 require("packer").startup(function(use)
   -- packer
   use("lewis6991/impatient.nvim")
-  use({
-    "hkupty/iron.nvim",
-    config = function()
-      require("myconfig.plugins.iron")
-    end,
-  })
+  -- use({
+  --   "hkupty/iron.nvim",
+  --   config = function()
+  --     require("myconfig.plugins.iron")
+  --   end,
+  -- })
 
   use({
     "wbthomason/packer.nvim",

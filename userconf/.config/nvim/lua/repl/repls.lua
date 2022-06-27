@@ -13,18 +13,23 @@ M.cr = "\13"
 
 local extend = require("repl.utils").extend
 
+local function format(lines, spec)
+  if spec.concat_start ~= nil then
+    lines[1] = spec.concat_start .. lines[1]
+  end
+  if spec.concat_end ~= nil then
+    lines[#lines] = lines[#lines] .. spec.concat_end
+  end
+  return extend({ spec.append_start, lines, spec.append_end })
+end
+
 function M.format_builder(spec)
   return function(lines)
     if #lines ~= 0 then
-      if #lines ~= 1 or spec.ignore_single == nil or not spec.ignore_single then
-        if spec.concat_start ~= nil then
-          lines[1] = spec.concat_start .. lines[1]
-        end
-        if spec.concat_end ~= nil then
-          lines[#lines] = lines[#lines] .. spec.concat_end
-        end
-        return extend({ spec.append_start, lines, spec.append_end })
+      if #lines == 1 and spec.single ~= nil then
+        spec = spec.single
       end
+      return format(lines, spec)
     end
     return lines
   end
@@ -41,7 +46,10 @@ M.python_format = M.format_builder({
 M.breaketed_paste_format = M.format_builder({
   concat_start = M.normal_open,
   append_end = M.normal_close,
-  ignore_single = true,
+  single = {
+    concat_start = M.normal_open,
+    concat_end = M.normal_close,
+  },
 })
 M.alt_breaketed_paste_format = M.format_builder({
   concat_start = M.normal_open,
@@ -91,6 +99,11 @@ M.repls = {
   python = {
     ipython = { command = { "ipython", "--no-autoindent" }, format = M.breaketed_paste_format },
     ptipython = { command = { "ptipython" }, format = M.breaketed_paste_format },
+    qtconsole = {
+      command = { "jupyter-qtconsole", "--JupyterWidget.include_other_output=True" },
+      extern = true,
+      format = M.breaketed_paste_format,
+    },
     ptpython = { command = { "ptpython" }, format = M.breaketed_paste_format },
     python = { command = { "python" }, format = M.python_format },
     python3 = { command = { "python3" }, format = M.python_format },

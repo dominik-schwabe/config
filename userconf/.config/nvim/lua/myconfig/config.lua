@@ -43,6 +43,7 @@ M.whitespace_blacklist = {
   "markdown",
   "qf",
   "unite",
+  "checkhealth",
 }
 M.illuminate_blacklist = {
   "",

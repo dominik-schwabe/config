@@ -36,19 +36,17 @@ function M.create_window(height, bottom)
   end
 end
 
-local function create_term(ft)
-  local repl_name, messages = R.find(ft, S.preferred)
-  if repl_name ~= nil then
-    messages[#messages + 1] = "opening '" .. repl_name .. "'"
-  end
-  if #messages ~= 0 then
-    print(table.concat(messages, " | "))
-  end
-  if repl_name == nil then
-    return nil
-  end
-  local meta = R.repls[ft][repl_name]
+local function is_extern(meta)
+  return meta.extern ~= nil and meta.extern
+end
 
+local function start_extern(ft, meta)
+  local jobnr = fn.jobstart(meta.command, { detach = 0 })
+  local repl = { ft = ft, jobnr = jobnr, meta = meta }
+  return repl
+end
+
+local function start_terminal(ft, meta)
   local previous_window = vim.api.nvim_get_current_win()
   CB.create_window()
   local jobnr = fn.termopen(meta.command, { detach = 0 })
@@ -65,6 +63,28 @@ local function create_term(ft)
   )
   local repl = { ft = ft, jobnr = jobnr, bufnr = bufnr, meta = meta }
   api.nvim_buf_set_var(bufnr, "repl", repl)
+  return repl
+end
+
+local function create_repl(ft)
+  local repl_name, messages = R.find(ft, S.preferred)
+  if repl_name ~= nil then
+    messages[#messages + 1] = "opening '" .. repl_name .. "'"
+  end
+  if #messages ~= 0 then
+    print(table.concat(messages, " | "))
+  end
+  if repl_name == nil then
+    return nil
+  end
+  local meta = R.repls[ft][repl_name]
+
+  local repl = nil
+  if is_extern(meta) then
+    repl = start_extern(ft, meta)
+  else
+    repl = start_terminal(ft, meta)
+  end
   M.running_repls[ft] = repl
   return repl
 end
@@ -84,12 +104,13 @@ local function show_term(bufnr)
   )
 end
 
-local function buf_exists(bufnr)
-  return bufnr ~= nil and api.nvim_buf_is_loaded(bufnr)
+local function job_exists(jobnr)
+  local success = pcall(fn.jobpid, jobnr)
+  return success
 end
 
 local function repl_exists(repl)
-  return repl ~= nil and buf_exists(repl.bufnr)
+  return repl ~= nil and job_exists(repl.jobnr)
 end
 
 local function window_exists(repl)
@@ -97,19 +118,21 @@ local function window_exists(repl)
   return #windows_with_repl ~= 0
 end
 
-function M.open_term(ft)
+function M.open_repl(ft, ensure)
   if ft == nil then
     ft = bo.ft
   end
   local repl = M.running_repls[ft]
   if repl_exists(repl) then
-    if window_exists(repl) then
-      return
+    if not is_extern(repl.meta) then
+      if ensure == nil or not window_exists(repl) then
+        show_term(repl.bufnr)
+      end
     end
-    show_term(repl.bufnr)
   else
-    create_term(ft)
+    return create_repl(ft)
   end
+  return repl
 end
 
 function M.hide_term(ft)
@@ -131,10 +154,10 @@ function M.toggle_repl(ft)
     ft = success and repl.ft or bo.ft
   end
   local repl = M.running_repls[ft]
-  if repl_exists(repl) and window_exists(repl) then
+  if repl_exists(repl) and not is_extern(repl.meta) and window_exists(repl) then
     M.hide_term(ft)
   else
-    M.open_term(ft)
+    M.open_repl(ft)
   end
 end
 
@@ -146,15 +169,9 @@ function M.send(ft, lines)
     lines = string.gmatch(lines, "[^\n]+")
   end
 
-  local repl = M.running_repls[ft]
-  if not repl_exists(repl) then
-    repl = create_term(ft)
-    if repl == nil then
-      return nil
-    end
-  end
-  if S.ensure_win and not window_exists(repl) then
-    show_term(repl.bufnr)
+  local repl = M.open_repl(ft, S.ensure_win)
+  if repl == nil then
+    return nil
   end
 
   if repl.meta.preprocess ~= nil then

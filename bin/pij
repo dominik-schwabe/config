@@ -11,5 +11,5 @@ read PROGRAM ROOT_PATH <<<$(python_project_root $1)
 if [[ $PROGRAM == "pdm" ]]; then
   pdm add $PACKAGES && pdm add --dev $DEV_PACKAGES
 elif [[ $PROGRAM == "pipenv" ]]; then
-	pipenv install --skip-lock $PACKAGES && pipenv install --skip-lock --dev $DEV_PACKAGES && pipenv lock
+  pipenv install --skip-lock $PACKAGES && pipenv install --skip-lock --dev $DEV_PACKAGES && pipenv lock
 fi

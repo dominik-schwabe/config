@@ -35,10 +35,8 @@ end
 
 require("myconfig.plugins.colorizer")
 
-vim.keymap.set("n", "<F11>", "<CMD>ReplSendParagraph<CR>")
-
 require("repl").setup({
-  preferred = { python = { "ipython", "python", "python3" }, r = { "radian", "R" } },
+  preferred = { python = { "ipython", "python", "python3", "qtconsole" }, r = { "radian", "R" } },
   listed = true,
   debug = false,
   ensure_win = true,
