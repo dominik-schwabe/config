@@ -2,7 +2,7 @@ local api = vim.api
 
 local window = require("repl.window")
 local get = require("repl.get")
-local utils = require("repl.utils")
+local motion = require("repl.motion")
 
 local M = {}
 
@@ -28,9 +28,12 @@ function M.visual(ft)
 end
 
 function M.motion(ft)
-  vim.opt.operatorfunc = "v:lua.require'repl.utils'.persist_motion"
+  local extra = "''"
+  if ft ~= nil then
+    extra = "'ft_" .. ft .. "'"
+  end
+  vim.opt.operatorfunc = "v:lua.require'repl.motion'.build_operatorfunc" .. extra
   vim.api.nvim_feedkeys("g@", "ni", false)
-  window.send(ft, utils.last_motion)
 end
 
 function M.buffer(ft)

@@ -185,7 +185,7 @@ map_info.neo_zoom = {
 
 map_info.default = {
   mappings = {
-    ["<space>v"] = { { { "n", "x" }, "<CMD>lua ReloadConfig()<CR>", def_opt } },
+    ["<space>v"] = { { { "n", "x" }, "<CMD>ReloadConfig<CR>", def_opt } },
     ["p"] = { { { "x" }, '"_dP', def_opt } },
     ["<space>P"] = { { { "x" }, "p", def_opt } },
     ["Q"] = { { { "n", "x" }, ":qa<CR>", def_opt } },
@@ -239,6 +239,8 @@ map_info.default = {
       { { "n" }, "<CMD>RgWord<CR>", def_opt },
       { { "x" }, "<ESC>:RgVisual<CR>", def_opt },
     },
+    [";"] = { { { "" }, "<Plug>Lightspeed_,_ft", def_opt } },
+    [","] = { { { "" }, "<Plug>Lightspeed_;_ft", def_opt } },
     -- ["_"] = { { { "n" }, "<CMD>RgInput<CR>", def_opt } },
   },
 }

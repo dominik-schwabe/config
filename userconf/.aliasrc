@@ -47,7 +47,7 @@ alias txn='tmuxinator new'
 alias txl='tmuxinator list'
 
 alias R='R --no-save'
-alias dst='sudo systemctl start docker.socket'
+alias dst='sudo systemctl start docker.service'
 alias dsp='sudo systemctl stop docker.socket'
 
 alias ssh='TERM=xterm-256color ssh -C'
@@ -90,10 +90,11 @@ alias grhs='git reset --soft HEAD^'
 alias thesis='track --start-date 01.04.2022 --end-date 01.10.2022 --hours 900 thesis'
 alias work='track work'
 
+alias public-ip='curl ifconfig.me'
+
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
 source ~/.kubectl.alias
 source ~/.docker.alias
-
 
 # vi: ft=sh

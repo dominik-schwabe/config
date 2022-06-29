@@ -261,14 +261,17 @@ require("packer").startup(function(use)
   })
 
   -- find highlight
-  use({
-    "kevinhwang91/nvim-fFHighlight",
-    config = function()
-      require("fFHighlight").setup()
-    end,
-  })
+  -- use({
+  --   "kevinhwang91/nvim-fFHighlight",
+  --   config = function()
+  --     require("fFHighlight").setup()
+  --   end,
+  -- })
 
   -- hop
+  use({
+    "ggandor/lightspeed.nvim",
+  })
   use({
     "phaazon/hop.nvim",
     config = function()

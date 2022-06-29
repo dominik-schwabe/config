@@ -99,7 +99,7 @@ local function show_term(bufnr)
     0,
     0,
     vim.schedule_wrap(function()
-      vim.api.nvim_set_current_win(previous_window)
+      pcall(vim.api.nvim_set_current_win, previous_window)
     end)
   )
 end

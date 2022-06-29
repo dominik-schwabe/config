@@ -15,8 +15,7 @@ download_completion() {
     if [ ! -r $COMPLETION_PATH ] && command -v curl 2>&1 >/dev/null; then
         echo "downloading $COMMAND"
         curl --create-dirs -sfLo $COMPLETION_PATH $URL || return 1
-        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/${COMMAND}/{p;q}")
-        _INSTALLED_NEW_COMPLETION=true
+        local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/^${COMMAND}$/{p;q}")
         if [ -z "$NAME_IN_COMPDEF" ]; then
             sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
             sed -i "1 i\\#compdef ${COMMAND}" $COMPLETION_PATH
@@ -34,8 +33,22 @@ command_completion() {
             rm "$COMPLETION_FILE"
             return 1
         }
-        _INSTALLED_NEW_COMPLETION=true
     }
+}
+
+set_alias() {
+    COMMAND=$1
+    ALIAS=$2
+    local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$COMMAND
+    if [[ -e $COMPLETION_PATH ]]; then
+        echo "settings alias $2 for $1"
+        local COMPDEF_LINE=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH)
+        local NAME_IN_COMPDEF=$(sed "s/\s/\n/g" <<< "${COMPDEF_LINE}" | sed -n "/^${ALIAS}$/{p;q}")
+        if [ -z "$NAME_IN_COMPDEF" ]; then
+            sed -i "/^\s*#\?compdef/d" $COMPLETION_PATH
+            sed -i "1 i\\${COMPDEF_LINE} ${ALIAS}" $COMPLETION_PATH
+        fi
+    fi
 }
 
 download_completion 7z              https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
@@ -46,6 +59,8 @@ download_completion fd              https://raw.githubusercontent.com/sharkdp/fd
 download_completion pip             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
 download_completion rustc           https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust
 download_completion youtube-dl      https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl
+download_completion cht.sh          https://cheat.sh/:zsh
+download_completion c               https://cheat.sh/:zsh
 
 command_completion  kubectl         kubectl completion zsh
 command_completion  pdm             pdm completion

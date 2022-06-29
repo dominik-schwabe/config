@@ -56,12 +56,6 @@ function M.get_motion(motion_type)
   return lines
 end
 
-M.last_motion = {}
-
-function M.persist_motion(motion_type)
-  M.last_motion[1] = M.get_motion(motion_type)
-end
-
 function M.extend(tbl)
   local new_tbl = {}
   for _, e in pairs(tbl) do
@@ -79,7 +73,7 @@ end
 function M.debug(...)
   local tbl = {...}
   local new_tbl = {}
-  for _, e in ipairs(tbl) do
+  for _, e in pairs(tbl) do
     new_tbl[#new_tbl+1] = vim.inspect(e)
   end
   print(unpack(new_tbl))

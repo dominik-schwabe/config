@@ -32,6 +32,9 @@ function M.setup(config)
   local function send_paragraph()
     send.paragraph()
   end
+  local function send_motion()
+    send.motion("python")
+  end
   local function toggle_repl()
     window.toggle_repl()
   end
@@ -40,6 +43,7 @@ function M.setup(config)
   vim.keymap.set("n", "<CR>", send_line)
   vim.keymap.set("x", "<CR>", send_visual)
   vim.keymap.set("n", "<leader><space>", send_buffer)
+  vim.keymap.set("n", "m", send_motion)
   vim.keymap.set({ "n", "i", "t" }, "<F4>", toggle_repl)
 end
 

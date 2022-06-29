@@ -14,7 +14,7 @@ FZF_DEFAULT_OPTS="--ansi"
 
 # plugins
 source ~/.zi/bin/zi.zsh
-zi ice atinit'COMPLETION_WAITING_DOTS=true'
+zi ice atinit'COMPLETION_WAITING_DOTS=true' atload'unsetopt complete_in_word'
 zi snippet OMZL::completion.zsh
 zi ice wait'0' lucid
 zi light dominik-schwabe/vi-mode.zsh

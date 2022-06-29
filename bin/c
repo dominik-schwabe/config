@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+OUTPUT=$(cht.sh "$@")
+case "$OUTPUT" in
+  Unknown?topic.*)
+    echo "$OUTPUT"
+    exit 1
+    ;;
+  *404*NOT*FOUND*Unknown*cheat*sheet.*)
+    echo "$OUTPUT"
+    exit 1
+    ;;
+  *)
+    nl -b a -s " │ " <<<"$OUTPUT" | less -r -x 2 -i
+    ;;
+esac

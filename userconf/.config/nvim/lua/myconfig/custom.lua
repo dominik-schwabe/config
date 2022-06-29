@@ -95,10 +95,14 @@ end
 function D(...)
   local tbl = {...}
   local new_tbl = {}
-  for _, e in ipairs(tbl) do
+  for _, e in pairs(tbl) do
     new_tbl[#new_tbl+1] = vim.inspect(e)
   end
-  print(unpack(new_tbl))
+  if #new_tbl ~= 0 then
+    print(unpack(new_tbl))
+  else
+    print("--- empty ---")
+  end
 end
 
 -- show settings of lspserver
@@ -310,6 +314,7 @@ local function reload_config()
   end
 
   dofile(vim.env.MYVIMRC)
+  vim.notify("config reloaded", "info")
 end
 
 vim.api.nvim_create_user_command("ReloadConfig", reload_config, {})
