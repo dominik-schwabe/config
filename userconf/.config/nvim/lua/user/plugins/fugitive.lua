@@ -32,3 +32,12 @@ end
 vim.keymap.set("n", "<space>gd", gitdiff_split_cmd, def_opt)
 vim.keymap.set("n", "<space>gg", gitdiff_split_custom)
 vim.keymap.set("n", "<space>gb", gitblame, def_opt)
+
+local function quit(opt)
+  vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = opt.buf })
+end
+
+api.nvim_create_autocmd("BufAdd", {
+  pattern = { "fugitive://*", "*.fugitiveblame" },
+  callback = quit,
+})
