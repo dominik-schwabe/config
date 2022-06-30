@@ -1,17 +1,17 @@
 vim.g.yoinkIncludeDeleteOperations = 1
 
-vim.g.clipboard = {
-  name = "xsel_override",
-  copy = {
-    ["+"] = "xsel --input --clipboard",
-    ["*"] = "xsel --input --primary",
-  },
-  paste = {
-    ["+"] = "xsel --output --clipboard",
-    ["*"] = "xsel --output --primary",
-  },
-  cache_enabled = 1,
-}
+-- vim.g.clipboard = {
+--   name = "xsel_override",
+--   copy = {
+--     ["+"] = "xsel --input --clipboard",
+--     ["*"] = "xsel --input --primary",
+--   },
+--   paste = {
+--     ["+"] = "xsel --output --clipboard",
+--     ["*"] = "xsel --output --primary",
+--   },
+--   cache_enabled = 1,
+-- }
 
 vim.keymap.set("n", "ü", "<plug>(YoinkRotateBack)")
 vim.keymap.set("n", "Ü", "<plug>(YoinkRotateForward)")
