@@ -35,21 +35,7 @@ opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
 
-g.yoinkIncludeDeleteOperations = 1
-g.kommentary_create_default_mappings = false
 g.Illuminate_ftblacklist = config.illuminate_blacklist
--- g.clipboard = {
---   name = "xsel_override",
---   copy = {
---     ["+"] = "xsel --input --clipboard",
---     ["*"] = "xsel --input --primary",
---   },
---   paste = {
---     ["+"] = "xsel --output --clipboard",
---     ["*"] = "xsel --output --primary",
---   },
---   cache_enabled = 1,
--- }
 
 g.PYTHONUNBUFFERED = 1
 

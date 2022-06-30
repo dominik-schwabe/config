@@ -18,6 +18,13 @@ require("packer").startup(function(use)
   -- })
 
   use({
+    "svermeulen/vim-yoink",
+    config = function()
+      require("user.plugins.yoink")
+    end,
+  })
+
+  use({
     "wbthomason/packer.nvim",
     config = function()
       require("user.plugins.packer")
@@ -274,7 +281,8 @@ require("packer").startup(function(use)
 
   -- rooter
   use({
-    "ahmedkhalf/project.nvim",
+    "dominik-schwabe/project.nvim",
+    -- "ahmedkhalf/project.nvim",
     config = function()
       require("user.plugins.project-nvim")
     end,
@@ -306,8 +314,10 @@ require("packer").startup(function(use)
   -- })
 
   -- use("pwntester/octo.nvim") -- github issues and pull request
-  -- use("matbme/JABS.nvim")
   -- use("NTBBloodbath/rest.nvim")
+  -- use({"matbme/JABS.nvim", config=function ()
+    -- require("user.plugins.jabs")
+  -- end})
 
   -- legacy
   use({

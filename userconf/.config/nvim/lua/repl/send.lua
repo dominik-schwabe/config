@@ -2,25 +2,27 @@ local api = vim.api
 
 local window = require("repl.window")
 local get = require("repl.get")
-local motion = require("repl.motion")
 
 local M = {}
 
-local function set_cursor(line, col)
-  api.nvim_win_set_cursor(0, { math.min(line, api.nvim_buf_line_count(0)), col })
+local function set_cursor(winnr, line, col)
+  api.nvim_win_set_cursor(winnr, { math.min(line, api.nvim_buf_line_count(api.nvim_win_get_buf(winnr))), col })
 end
 
 function M.paragraph(ft)
-  local i, c = unpack(api.nvim_win_get_cursor(0))
+  local winnr = vim.fn.win_getid(api.nvim_win_get_number(0))
+  local i, c = unpack(api.nvim_win_get_cursor(winnr))
   local lines = get.paragraph()
   window.send(ft, lines)
-  set_cursor(i + #lines, c)
+  print(i+#lines)
+  set_cursor(winnr, i + #lines, c)
 end
 
 function M.line(ft)
-  local l, c = unpack(api.nvim_win_get_cursor(0))
+  local winnr = vim.fn.win_getid(api.nvim_win_get_number(0))
+  local l, c = unpack(api.nvim_win_get_cursor(winnr))
   window.send(ft, { get.line(l) })
-  set_cursor(l + 1, c)
+  set_cursor(winnr, l + 1, c)
 end
 
 function M.visual(ft)

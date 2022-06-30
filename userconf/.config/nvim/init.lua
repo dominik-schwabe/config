@@ -47,7 +47,7 @@ require("repl").setup({
 local send = require("repl.send")
 local window = require("repl.window")
 
-vim.keymap.set("n", "<C-space>", F.f(send.buffer))
+vim.keymap.set("n", "<C-space>", F.f(send.paragraph))
 vim.keymap.set("n", "<CR>", F.f(send.line))
 vim.keymap.set("x", "<CR>", F.f(send.visual))
 vim.keymap.set("n", "<leader><space>", F.f(send.buffer))

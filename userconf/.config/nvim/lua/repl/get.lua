@@ -44,7 +44,7 @@ function M.paragraph()
 end
 
 function M.buffer()
-  api.nvim_buf_get_lines(0, 0, -1, false)
+  return api.nvim_buf_get_lines(0, 0, -1, false)
 end
 
 return M

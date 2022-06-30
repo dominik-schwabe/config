@@ -9,7 +9,7 @@ local F = require("user.functional")
 local function gitdiff_split(custom)
   if fn["fugitive#CanDiffoff"](fn.bufnr("%")) == 0 then
     if custom then
-      api.nvim_feedkeys(":Gvdiffsplit HEAD^", "n", true)
+      api.nvim_feedkeys(":Gvdiffsplit HEAD", "n", true)
     else
       cmd("Gvdiffsplit HEAD^")
     end
