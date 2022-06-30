@@ -1,5 +1,3 @@
-local send = require("repl.send")
-local window = require("repl.window")
 local S = require("repl.store")
 
 local M = {}
@@ -7,7 +5,7 @@ local M = {}
 local function set_default(param, default)
   return param ~= nil and param or default
 end
--- preferred = require("myconfig.config").repls,
+-- preferred = require("user.config").repls,
 -- close_window_on_exit = true,
 -- repl_definition
 function M.setup(config)
@@ -19,32 +17,6 @@ function M.setup(config)
   S.ensure_win = set_default(config.ensure_win, true)
 
   require("repl.store").set_callbacks(config.callbacks)
-
-  local function send_buffer()
-    send.buffer()
-  end
-  local function send_visual()
-    send.visual()
-  end
-  local function send_line()
-    send.line()
-  end
-  local function send_paragraph()
-    send.paragraph()
-  end
-  local function send_motion()
-    send.motion("python")
-  end
-  local function toggle_repl()
-    window.toggle_repl()
-  end
-
-  vim.keymap.set("n", "<C-space>", send_paragraph)
-  vim.keymap.set("n", "<CR>", send_line)
-  vim.keymap.set("x", "<CR>", send_visual)
-  vim.keymap.set("n", "<leader><space>", send_buffer)
-  vim.keymap.set("n", "m", send_motion)
-  vim.keymap.set({ "n", "i", "t" }, "<F4>", toggle_repl)
 end
 
 return M

@@ -161,6 +161,22 @@ function M.toggle_repl(ft)
   end
 end
 
+local function apply_preprocessing(repl, lines)
+  if repl.meta.preprocess ~= nil then
+    lines = repl.meta.preprocess(lines)
+  end
+  if CB.preprocess ~= nil then
+    lines = CB.preprocess(lines)
+  end
+  if repl.meta.format ~= nil then
+    lines = repl.meta.format(lines)
+  end
+  if CB.format ~= nil then
+    lines = CB.format(lines)
+  end
+  return lines
+end
+
 function M.send(ft, lines)
   if ft == nil then
     ft = bo.ft
@@ -174,18 +190,7 @@ function M.send(ft, lines)
     return nil
   end
 
-  if repl.meta.preprocess ~= nil then
-    lines = repl.meta.preprocess(lines)
-  end
-  if CB.preprocess ~= nil then
-    lines = CB.preprocess(lines)
-  end
-  if repl.meta.format ~= nil then
-    lines = repl.meta.format(lines)
-  end
-  if CB.format ~= nil then
-    lines = CB.format(lines)
-  end
+  lines = lines ~= nil and apply_preprocessing(repl, lines) or {"\r"}
 
   if S.debug then
     U.debug(lines)

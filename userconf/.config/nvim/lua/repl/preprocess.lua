@@ -43,7 +43,9 @@ end
 function M.preprocess(lines)
   lines = M.replace_tabs(lines)
   lines = M.remove_empty_lines(lines)
-  lines = M.fix_indent(lines)
+  if #lines > 1 then
+    lines = M.fix_indent(lines)
+  end
   if M.is_windows then
     lines = M.add_windows_linefeed(lines)
   end

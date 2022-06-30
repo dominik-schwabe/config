@@ -2,20 +2,17 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
-local F = require("repl.functional")
+local M = {}
 
-M = {}
-
-local function replace_termcodes(str)
+function M.replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, false, true, true)
 end
 
-local esc = replace_termcodes("<Esc>")
-local ctrl_v = replace_termcodes("<c-v>")
+local ctrl_v = M.replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
   local to_end = fn.winsaveview().curswant == 2147483647
-  api.nvim_feedkeys(esc, "nx", false)
+  api.nvim_feedkeys(M.replace_termcodes("<Esc>"), "nx", false)
   local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))
   local line_end, column_end = unpack(api.nvim_buf_get_mark(buffer, ">"))
   local lines = api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
@@ -27,12 +24,10 @@ function M.get_visual_selection(buffer)
     if column_start > column_end then
       column_start, column_end = column_end, column_start
     end
+
+    local end_pos = to_end and column_end or nil
     for i = 1, #lines do
-      if to_end then
-        lines[i] = lines[i]:sub(column_start)
-      else
-        lines[i] = lines[i]:sub(column_start, column_end)
-      end
+      lines[i] = lines[i]:sub(column_start, end_pos)
     end
   else
     if column_end > #lines[#lines] then
@@ -58,31 +53,15 @@ function M.get_motion(motion_type)
   return lines
 end
 
-function M.extend(tbl)
-  local new_tbl = {}
-  for _, e in pairs(tbl) do
-    if type(e) == "table" then
-      for _, l in pairs(e) do
-        new_tbl[#new_tbl + 1] = l
-      end
+function M.tbl_merge(t1, t2)
+  for k, v in pairs(t2) do
+    if (type(v) == "table") and (type(t1[k] or false) == "table") then
+      M.tbl_merge(t1[k], t2[k])
     else
-      new_tbl[#new_tbl + 1] = e
+      t1[k] = v
     end
   end
-  return new_tbl
-end
-
-function M.debug(...)
-  local tbl = { ... }
-  local new_tbl = {}
-  for _, e in pairs(tbl) do
-    new_tbl[#new_tbl + 1] = vim.inspect(e)
-  end
-  if #new_tbl ~= 0 then
-    print(unpack(new_tbl))
-  else
-    print("--- empty ---")
-  end
+  return t1
 end
 
 return M

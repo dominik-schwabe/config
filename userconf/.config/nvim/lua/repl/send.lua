@@ -36,6 +36,10 @@ function M.motion(ft)
   vim.api.nvim_feedkeys("g@", "ni", false)
 end
 
+function M.newline(ft)
+  window.send(ft, nil)
+end
+
 function M.buffer(ft)
   window.send(ft, get.buffer())
 end

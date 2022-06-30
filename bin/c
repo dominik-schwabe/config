@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+if ! command -v cht.sh &>/dev/null; then
+  echo "cht.sh not installed or found"
+  exit 1
+fi
 OUTPUT=$(cht.sh "$@")
 case "$OUTPUT" in
   Unknown?topic.*)

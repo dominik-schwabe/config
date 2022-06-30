@@ -1,1 +1,1 @@
-require("myconfig.color").setup()
+require("user.color").setup()

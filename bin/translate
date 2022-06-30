@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+LANG="$1"
+TEXT="${@:2}"
+
+if ! command -v trans &>/dev/null; then
+  echo "trans not installed"
+  exit 1
+fi
+if [[ -z $1 ]]; then
+  echo "language missing"
+  exit 1
+fi
+if [[ -z $TEXT ]]; then
+  echo "text to translate is missing"
+  exit 1
+fi
+
+trans -brief "$LANG" "$TEXT"

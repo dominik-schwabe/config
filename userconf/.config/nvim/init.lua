@@ -1,10 +1,12 @@
 pcall(require, "impatient")
 vim.cmd("colorscheme monokai")
 
-require("myconfig.options")
-require("myconfig.plugins")
-require("myconfig.mappings").setup()
-require("myconfig.custom")
+require("user.options")
+require("user.plugins")
+require("user.mappings")
+require("user.custom")
+
+local F = require("user.functional")
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   command = "quit",
@@ -33,7 +35,7 @@ function Test()
   end
 end
 
-require("myconfig.plugins.colorizer")
+require("user.plugins.colorizer")
 
 require("repl").setup({
   preferred = { python = { "ipython", "python", "python3", "qtconsole" }, r = { "radian", "R" } },
@@ -41,3 +43,14 @@ require("repl").setup({
   debug = false,
   ensure_win = true,
 })
+
+local send = require("repl.send")
+local window = require("repl.window")
+
+vim.keymap.set("n", "<C-space>", F.f(send.buffer))
+vim.keymap.set("n", "<CR>", F.f(send.line))
+vim.keymap.set("x", "<CR>", F.f(send.visual))
+vim.keymap.set("n", "<leader><space>", F.f(send.buffer))
+vim.keymap.set("n", "m", F.f(send.motion))
+vim.keymap.set("n", "M", F.f(send.newline))
+vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl))

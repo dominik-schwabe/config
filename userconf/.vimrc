@@ -19,6 +19,7 @@ call InstallPluginManager()
 
 "define plugins using vim-plug
 call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-fugitive'
 "jump fast to location
 Plug 'easymotion/vim-easymotion', { 'on': ['<Plug>(easymotion-overwin-f)', '<Plug>(easymotion-overwin-f2)'] }
 "improve search
@@ -58,7 +59,7 @@ call plug#end()
 
 "rooter
 let g:rooter_change_directory_for_non_project_files = 'current'
-let g:rooter_patterns = ['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages', 'package.json', 'package-lock.json']
+let g:rooter_patterns = ['>nvim', '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages', 'package.json', 'package-lock.json']
 
 "monokai
 let g:monokai_gui_italic = 1
@@ -195,6 +196,7 @@ set hidden
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
+set diffopt+=vertical
 
 set backspace=indent,eol,start
 set relativenumber

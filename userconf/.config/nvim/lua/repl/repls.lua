@@ -41,7 +41,7 @@ M.normal_format = M.format_builder({
 })
 M.python_format = M.format_builder({
   append_end = "",
-  ignore_single = true,
+  single = {}
 })
 M.breaketed_paste_format = M.format_builder({
   concat_start = M.normal_open,
@@ -106,6 +106,7 @@ M.repls = {
     },
     ptpython = { command = { "ptpython" }, format = M.breaketed_paste_format },
     python = { command = { "python" }, format = M.python_format },
+    python2 = { command = { "python2" }, format = M.python_format },
     python3 = { command = { "python3" }, format = M.python_format },
   },
   r = {
