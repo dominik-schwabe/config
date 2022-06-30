@@ -11,7 +11,7 @@ local function gitdiff_split(custom)
     if custom then
       api.nvim_feedkeys(":Gvdiffsplit HEAD", "n", true)
     else
-      cmd("Gvdiffsplit HEAD^")
+      cmd("Gvdiffsplit HEAD")
     end
   else
     cmd("q")

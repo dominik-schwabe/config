@@ -1,4 +1,9 @@
-vim.g.yoinkIncludeDeleteOperations = 1
+vim.g.yoinkMaxItems = 100
+vim.g.yoinIncludeDeleteOperations = 1
+vim.g.yoinkSyncSystemClipboardOnFocus = 1
+vim.g.yoinkSwapClampAtEnds = 1
+vim.g.yoinkAutoFormatPaste = 1
+vim.g.yoinkSavePersistently = 0
 
 -- vim.g.clipboard = {
 --   name = "xsel_override",

@@ -9,27 +9,15 @@ end
 
 require("packer").startup(function(use)
   -- packer
-  use("lewis6991/impatient.nvim")
-  -- use({
-  --   "hkupty/iron.nvim",
-  --   config = function()
-  --     require("user.plugins.iron")
-  --   end,
-  -- })
-
-  use({
-    "svermeulen/vim-yoink",
-    config = function()
-      require("user.plugins.yoink")
-    end,
-  })
-
   use({
     "wbthomason/packer.nvim",
     config = function()
       require("user.plugins.packer")
     end,
   })
+
+  -- fast startup
+  use("lewis6991/impatient.nvim")
 
   -- stdlib
   use("nvim-lua/plenary.nvim")
@@ -57,10 +45,14 @@ require("packer").startup(function(use)
   use({
     "neovim/nvim-lspconfig",
     requires = {
-      "RRethy/vim-illuminate",
+      {
+        "RRethy/vim-illuminate",
+        config = function()
+          require("user.plugins.illuminate")
+        end,
+      },
       "onsails/lspkind.nvim",
       "williamboman/nvim-lsp-installer",
-      -- "ray-x/lsp_signature.nvim",
       "kosayoda/nvim-lightbulb",
       {
         "j-hui/fidget.nvim",
@@ -316,7 +308,7 @@ require("packer").startup(function(use)
   -- use("pwntester/octo.nvim") -- github issues and pull request
   -- use("NTBBloodbath/rest.nvim")
   -- use({"matbme/JABS.nvim", config=function ()
-    -- require("user.plugins.jabs")
+  -- require("user.plugins.jabs")
   -- end})
 
   -- legacy
@@ -326,7 +318,12 @@ require("packer").startup(function(use)
       require("user.plugins.bufexplorer")
     end,
   })
-
+  use({
+    "svermeulen/vim-yoink",
+    config = function()
+      require("user.plugins.yoink")
+    end,
+  })
   use({
     "haya14busa/vim-asterisk",
     config = function()
@@ -351,6 +348,13 @@ require("packer").startup(function(use)
       require("user.plugins.sideways")
     end,
   })
+
+  -- use({
+  --   "hkupty/iron.nvim",
+  --   config = function()
+  --     require("user.plugins.iron")
+  --   end,
+  -- })
 
   -- runner
   -- use({

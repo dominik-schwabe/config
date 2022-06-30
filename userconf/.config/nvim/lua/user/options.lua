@@ -1,7 +1,6 @@
 local opt = vim.opt
 local g = vim.g
 local fn = vim.fn
-local config = require("user.config")
 
 opt.foldenable = false
 opt.tabstop = 2
@@ -22,7 +21,7 @@ opt.splitbelow = true
 opt.splitright = true
 opt.cmdheight = 2
 opt.ignorecase = true
-opt.clipboard = { "unnamedplus" }
+opt.clipboard:append("unnamedplus")
 opt.encoding = "utf-8"
 opt.scrolloff = 8
 opt.hidden = true
@@ -34,8 +33,6 @@ opt.backup = false
 opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
-
-g.Illuminate_ftblacklist = config.illuminate_blacklist
 
 g.PYTHONUNBUFFERED = 1
 
