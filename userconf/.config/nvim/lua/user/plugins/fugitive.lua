@@ -1,13 +1,12 @@
 local api = vim.api
 local bo = vim.bo
 local cmd = vim.cmd
-local fn = vim.fn
 local def_opt = { silent = true }
 
 local F = require("user.functional")
 
 local function gitdiff_split(custom)
-  if fn["fugitive#CanDiffoff"](fn.bufnr("%")) == 0 then
+  if vim.w.fugitive_diff_restore ~= 1 then
     if custom then
       api.nvim_feedkeys(":Gvdiffsplit HEAD", "n", true)
     else

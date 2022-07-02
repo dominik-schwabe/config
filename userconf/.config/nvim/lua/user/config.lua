@@ -192,6 +192,7 @@ M.repls = {
   python = { command = { "ipython" } },
   r = { command = { "radian" } },
 }
+M.closable_terminals = { "term://repl*" }
 M.colorizer_disable_filetypes = {
   "r",
   "term",

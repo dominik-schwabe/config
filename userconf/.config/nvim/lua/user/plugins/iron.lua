@@ -181,6 +181,5 @@ iron.setup({
   },
 })
 
-vim.keymap.set("v", "<space>v", function ()
-  send_selection()
-end)
+vim.keymap.set("", "<F11>", send_paragraph)
+vim.keymap.set("v", "<space>v", send_selection)

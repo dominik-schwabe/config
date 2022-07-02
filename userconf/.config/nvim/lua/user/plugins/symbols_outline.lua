@@ -1,1 +1,1 @@
-vim.keymap.set({ "n", "i" }, "<F3>", "<ESC>SymbolsOutline<CR>")
+vim.keymap.set("n", "<space>h", "<ESC>:SymbolsOutline<CR>")

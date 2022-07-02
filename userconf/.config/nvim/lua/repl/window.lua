@@ -196,7 +196,8 @@ function M.send(ft, lines)
     U.debug(lines)
   end
 
-  api.nvim_chan_send(repl.jobnr, table.concat(lines, "\n"))
+  fn.chansend(repl.jobnr, lines)
+  -- api.nvim_chan_send(repl.jobnr, table.concat(lines, "\n"))
 
   local timer = vim.loop.new_timer()
   timer:start(

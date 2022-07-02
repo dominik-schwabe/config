@@ -2,8 +2,6 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
-local F = require("repl.functional")
-
 M = {}
 
 local function replace_termcodes(str)

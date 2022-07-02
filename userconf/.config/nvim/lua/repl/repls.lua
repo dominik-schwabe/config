@@ -26,10 +26,8 @@ end
 function M.format_builder(spec)
   return function(lines)
     if #lines ~= 0 then
-      if #lines == 1 and spec.single ~= nil then
-        spec = spec.single
-      end
-      return format(lines, spec)
+      local used_spec = (#lines == 1 and spec.single ~= nil) and spec.single or spec
+      return format(lines, used_spec)
     end
     return lines
   end
@@ -41,7 +39,7 @@ M.normal_format = M.format_builder({
 })
 M.python_format = M.format_builder({
   append_end = "",
-  single = {}
+  single = {},
 })
 M.breaketed_paste_format = M.format_builder({
   concat_start = M.normal_open,
@@ -97,7 +95,7 @@ M.repls = {
   ps1 = { ps1 = { command = { "powershell", "-noexit", "-executionpolicy", "bypass" } } },
   pure = { pure = { command = { "pure" }, format = M.editor_format } },
   python = {
-    ipython = { command = { "ipython", "--no-autoindent" }, format = M.breaketed_paste_format },
+    ipython = { command = { "ipython" }, format = M.breaketed_paste_format },
     ptipython = { command = { "ptipython" }, format = M.breaketed_paste_format },
     qtconsole = {
       command = { "jupyter-qtconsole", "--JupyterWidget.include_other_output=True" },

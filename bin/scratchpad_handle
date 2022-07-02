@@ -42,14 +42,14 @@ local function parse_num_val(str, pos)
   return val, pos + #num_str
 end
 
-null = {}
+local null = {}
 
-function parse(str, pos, end_delim)
+local function parse(str, pos, end_delim)
   pos = pos or 1
   if pos > #str then
     error("Reached unexpected end of input.")
   end
-  local pos = pos + #str:match("^%s*", pos) -- Skip whitespace.
+  pos = pos + #str:match("^%s*", pos) -- Skip whitespace.
   local first = str:sub(pos, pos)
   if first == "{" then
     local obj, key, delim_found = {}, true, true

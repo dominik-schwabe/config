@@ -14,7 +14,6 @@ function M.paragraph(ft)
   local i, c = unpack(api.nvim_win_get_cursor(winnr))
   local lines = get.paragraph()
   window.send(ft, lines)
-  print(i+#lines)
   set_cursor(winnr, i + #lines, c)
 end
 

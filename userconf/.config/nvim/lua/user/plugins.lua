@@ -16,6 +16,29 @@ require("packer").startup(function(use)
     end,
   })
 
+  -- use({
+  --   "kylechui/nvim-surround",
+  --   config = function()
+  --     require("nvim-surround").setup({
+  --       -- Configuration here, or leave empty to use defaults
+  --     })
+  --   end
+  -- })
+
+  -- use({
+  --   "VonHeikemen/fine-cmdline.nvim",
+  --   requires = {
+  --     { "MunifTanjim/nui.nvim" },
+  --   },
+  -- })
+
+  -- use({
+  --   "VonHeikemen/searchbox.nvim",
+  --   requires = {
+  --     { "MunifTanjim/nui.nvim" },
+  --   },
+  -- })
+
   -- fast startup
   use("lewis6991/impatient.nvim")
 
@@ -312,6 +335,8 @@ require("packer").startup(function(use)
   -- end})
 
   -- legacy
+  use("sheerun/vim-polyglot")
+  -- use("tpope/vim-sleuth")
   use({
     "jlanzarotta/bufexplorer",
     config = function()
@@ -332,10 +357,14 @@ require("packer").startup(function(use)
   })
   use("wellle/targets.vim")
   use("michaeljsmith/vim-indent-object")
-  use("mg979/vim-visual-multi")
+  use({
+    "mg979/vim-visual-multi",
+    config = function()
+      require("user.plugins.visual-multi")
+    end,
+  })
   use("tpope/vim-repeat")
   use("tpope/vim-surround")
-  use("tpope/vim-sleuth")
   use({
     "foosoft/vim-argwrap",
     config = function()
@@ -349,12 +378,14 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- use({
-  --   "hkupty/iron.nvim",
-  --   config = function()
-  --     require("user.plugins.iron")
-  --   end,
-  -- })
+  use({
+    "hkupty/iron.nvim",
+    config = function()
+      require("user.plugins.iron")
+    end,
+  })
+
+  use("mbbill/undotree")
 
   -- runner
   -- use({

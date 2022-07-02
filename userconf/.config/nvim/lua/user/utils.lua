@@ -64,4 +64,15 @@ function M.tbl_merge(t1, t2)
   return t1
 end
 
+function M.load_neighbor_modules(this_file, module_path)
+  local this_folder = vim.fn.fnamemodify(this_file, ":h")
+  local this_file_end = vim.fn.fnamemodify(this_file, ":t")
+  local files = vim.fn.readdir(this_folder)
+  for _, file in ipairs(files) do
+    if file ~= this_file_end then
+      require(module_path .. "." .. vim.fn.fnamemodify(file, ":r"))
+    end
+  end
+end
+
 return M
