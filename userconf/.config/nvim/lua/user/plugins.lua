@@ -335,6 +335,7 @@ require("packer").startup(function(use)
   -- end})
 
   -- legacy
+  use("lark-parser/vim-lark-syntax")
   use("sheerun/vim-polyglot")
   -- use("tpope/vim-sleuth")
   use({

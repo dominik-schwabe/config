@@ -13,8 +13,16 @@ local ch_brackets = 2
 local ch_braces = 3
 local ch_parentheses_option = 4
 local ch_parentheses = 5
-local mark_left = replace_termcodes([[<Esc>]]) .. fn.strftime("%X") .. ":" .. fn.strftime("%d") .. replace_termcodes([[<C-f>]])
-local mark_right = replace_termcodes([[<C-l>]]) .. fn.strftime("%X") .. ":" .. fn.strftime("%d") .. replace_termcodes([[<Esc>]])
+local mark_left = replace_termcodes([[<Esc>]])
+  .. fn.strftime("%X")
+  .. ":"
+  .. fn.strftime("%d")
+  .. replace_termcodes([[<C-f>]])
+local mark_right = replace_termcodes([[<C-l>]])
+  .. fn.strftime("%X")
+  .. ":"
+  .. fn.strftime("%d")
+  .. replace_termcodes([[<Esc>]])
 local re_unescaped = [[\%(\\\)\@<!\%(\\\\\)*\zs]]
 local re_escaped = [[\%(\\\)\@<!\%(\\\\\)*\zs\\]]
 local mark_complements = mark_left .. "cOmPLemEnTs" .. mark_right
@@ -45,14 +53,14 @@ local function match_case(str, pattern)
 end
 
 local function match_ignorecase(str, pattern)
-  local match = fn.match(str, [[\C]] .. pattern)
+  local match = fn.match(str, [[\c]] .. pattern)
   if match < 0 then
     match = nil
   end
   return match
 end
 
-function ExchangeReplaceSpecials(replacement, sort)
+local function ExchangeReplaceSpecials(replacement, sort)
   if not match_case(replacement, [=[[&~]\|\\[rnx]]=]) or match_case(replacement, [[^\\=]]) then
     return replacement
   end
@@ -71,7 +79,23 @@ function ExchangeReplaceSpecials(replacement, sort)
   return replacement
 end
 
-function ReplaceAsStr(str, search, replacement, ...)
+local function ReplaceRemainFactorWithVimRegexFactor(halfway)
+  halfway = halfway
+  halfway = fn.substitute(halfway, "+?", [[\\{-1,}]], "g")
+  halfway = fn.substitute(halfway, [[\*?]], [[\\{-}]], "g")
+  halfway = fn.substitute(halfway, "??", [[\\{-,1}]], "g")
+  halfway = fn.substitute(halfway, "+", [[\\+]], "g")
+  halfway = fn.substitute(halfway, "?", [[\\=]], "g")
+  halfway = fn.substitute(halfway, "|", [[\\|]], "g")
+  halfway = fn.substitute(halfway, [[\~]], [[\\&]], "g")
+  if extended_dots == 1 then
+    halfway = fn.substitute(halfway, [[\.]], [[\\_.]], "g")
+  end
+
+  return halfway
+end
+
+local function ReplaceAsStr(str, search, replacement, ...)
   local args = { ... }
   local gsub = #args
   if gsub > 0 then
@@ -95,7 +119,7 @@ function ReplaceAsStr(str, search, replacement, ...)
   return newstr
 end
 
-function SetModifiers(mods)
+local function SetModifiers(mods)
   if ignorecase == 0 then
     if mods:match("i") then
       ignorecase = 1
@@ -127,7 +151,7 @@ function SetModifiers(mods)
   end
 end
 
-function ExpandAtomsInBrackets(bracket)
+local function ExpandAtomsInBrackets(bracket)
   local re_mark = mark_left .. [[\d\+]] .. mark_right
   local re_snum = mark_left .. [[\(\d\+\)]] .. mark_right
   local has_newline = 0
@@ -141,7 +165,7 @@ function ExpandAtomsInBrackets(bracket)
     local fct = stack[snum + 1]
     -- exclude, \e=0x1b, \b=0x08, \r=0x0d, \t=0x09
     if match_case(fct, [[^\\[adfhlosuwx]$]]) then
-      local chr = fct:sub(2,2)
+      local chr = fct:sub(2, 2)
       if chr == "a" then
         fct = "A-Za-z"
       elseif chr == "d" then
@@ -198,7 +222,7 @@ function ExpandAtomsInBrackets(bracket)
   return bracket
 end
 
-function Push(fct, kind)
+local function Push(fct, kind)
   if (kind == ch_with_backslash) and (match_case(fct, [[^\\x\x\{1,2}$]])) then -- \x41
     local code = tonumber("0x" .. fn.matchstr(fct, [[\x\{1,2}$]]))
     if code ~= 0x0a and code ~= 0 and code ~= 0x08 then
@@ -208,7 +232,7 @@ function Push(fct, kind)
       end
     end
   elseif kind == ch_with_backslash then -- \.  \_x
-    local chr = fct:sub(2,2)
+    local chr = fct:sub(2, 2)
     if match_case(chr, "[+?{}|()=]") then
       fct = chr
     else
@@ -268,22 +292,24 @@ function Push(fct, kind)
       fct = ":BUG:"
     end
   end
-  stack[stack_size+1] = fct
+  stack[stack_size + 1] = fct
   stack_size = stack_size + 1
 end
 
-function Pop()
-if stack_size <= 0 then return "" end
+local function Pop()
+  if stack_size <= 0 then
+    return ""
+  end
   stack_size = stack_size - 1
-  return stack[stack_size+1]
+  return stack[stack_size + 1]
 end
 
-function UnletStack()
+local function UnletStack()
   stack = {}
   stack_size = 0
 end
 
-function ReplaceExtendedRegexFactorWithNumberFactor(extendedregex)
+local function ReplaceExtendedRegexFactorWithNumberFactor(extendedregex)
   local halfway = extendedregex
   stack_size = 0
   local id_num = 0
@@ -304,23 +330,7 @@ function ReplaceExtendedRegexFactorWithNumberFactor(extendedregex)
   return halfway
 end
 
-function ReplaceRemainFactorWithVimRegexFactor(halfway)
-  halfway = halfway
-  halfway = fn.substitute(halfway, "+?", [[\\{-1,}]], "g")
-  halfway = fn.substitute(halfway, [[\*?]], [[\\{-}]], "g")
-  halfway = fn.substitute(halfway, "??", [[\\{-,1}]], "g")
-  halfway = fn.substitute(halfway, "+", [[\\+]], "g")
-  halfway = fn.substitute(halfway, "?", [[\\=]], "g")
-  halfway = fn.substitute(halfway, "|", [[\\|]], "g")
-  halfway = fn.substitute(halfway, [[\~]], [[\\&]], "g")
-  if extended_dots == 1 then
-    halfway = fn.substitute(halfway, [[\.]], [[\\_.]], "g")
-  end
-
-  return halfway
-end
-
-function ReplaceNumberFactorWithVimRegexFactor(halfway)
+local function ReplaceNumberFactorWithVimRegexFactor(halfway)
   local vimregex = halfway
 
   local i = stack_size

@@ -21,10 +21,6 @@ local function enter_term()
   end
 end
 
-vim.api.nvim_create_autocmd("TermLeave", {
-  callback = D,
-})
-
 vim.api.nvim_create_autocmd("TermOpen", {
   command = "setlocal nospell nonumber norelativenumber signcolumn=no filetype=term",
 })

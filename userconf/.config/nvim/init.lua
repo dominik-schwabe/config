@@ -41,7 +41,11 @@ end
 require("user.plugins.colorizer")
 
 require("repl").setup({
-  preferred = { python = { "ipython", "python", "python3", "qtconsole" }, r = { "radian", "R" } },
+  preferred = {
+    python = { "ipython", "python", "python3", "qtconsole" },
+    r = { "radian", "R" },
+    lua = { "lua5.1", "luajit" },
+  },
   listed = true,
   debug = false,
   ensure_win = true,
@@ -60,40 +64,50 @@ vim.keymap.set("n", "m", F.f(send.motion))
 vim.keymap.set("n", "M", F.f(send.newline))
 vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl))
 
-local regmod = require("regex")
-local mod = "" -- "iISCDMm"
-function ThisRegex()
-  local regex = [[[^\.\,\)\(\s]$]]
-  local n = regmod.E2v(regex, mod)
-  -- print("----------------------------------------------------------")
-  local v = vim.fn["E2v"](regex, mod)
-
-  print(n == v, regex, "--------", n, "--------", v)
+local new_regex = require("regex.new-regex")
+R = function(regex)
+  D(new_regex.E2v(regex))
 end
-
-local tests = {
-  [[(?<=abc),\d+,(?=xzy)]],
-  [[\(\d\{1,3}\)\%(\(\d\d\d\)\+\($\|\D\)\)\@=]],
-}
-
-function TestRegexes()
-  print(mod)
-  local regexes = vim.fn.readfile(vim.fn.glob("~/.regexlist.txt"))
-  for i, regex in ipairs(regexes) do
-    if i % 1000 == 0 then
-      print(i)
-    end
-    local n = regmod.E2v(regex, mod)
-    local v = vim.fn.E2v(regex, mod)
-    if n ~= v then
-      print(i, regex, "--------", n, "--------", v)
-      return
-    end
-  end
-  print("success")
+S = function(str, regex)
+  D(vim.fn.substitute(str, regex, "[-]", ""))
 end
+-- local legacy_regex = require("regex.legacy-regex")
+-- local mod = "iISCDMm"
+-- function ThisRegex()
+--   local regex = [[[^\.\,\)\(\s]$]]
+--   local n = legacy_regex.E2v(regex, mod)
+--   local v = new_regex.E2v(regex, mod)
 
-vim.keymap.set("n", "<space>n", ThisRegex)
-vim.keymap.set("n", "<space>N", TestRegexes)
+--   print(n == v, regex, "--------", n, "--------", v)
+-- end
 
-require("regex")
+-- local tests = {
+--   [[(?<=abc),\d+,(?=xzy)]],
+--   [[\(\d\{1,3}\)\%(\(\d\d\d\)\+\($\|\D\)\)\@=]],
+-- }
+
+-- function TestRegexes()
+--   print(mod)
+--   local regexes = vim.fn.readfile(vim.fn.glob("~/.regexlist.txt"))
+--   for _, value in ipairs(tests) do
+--     regexes[#regexes + 1] = value
+--   end
+--   for i, regex in ipairs(regexes) do
+--     if i % 1000 == 0 then
+--       print(i)
+--     end
+--     if i > 100 then
+--       break
+--     end
+--     local n = legacy_regex.E2v(regex)
+--     local v = new_regex.E2v(regex)
+--     if n ~= v then
+--       print(i, regex, "--------", n, "--------", v)
+--       return
+--     end
+--   end
+--   print("success")
+-- end
+
+-- vim.keymap.set("n", "<space>n", ThisRegex)
+-- vim.keymap.set("n", "<space>N", TestRegexes)

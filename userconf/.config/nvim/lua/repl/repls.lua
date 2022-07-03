@@ -87,7 +87,7 @@ M.repls = {
   javascript = { node = { command = { "node" }, format = M.editor_n_format } },
   julia = { julia = { command = { "julia" } } },
   lisp = { sbcl = { command = { "sbcl" } }, clisp = { command = { "clisp" } } },
-  lua = { lua = { command = { "lua" } } },
+  lua = { ["lua5.1"] = { command = { "lua5.1" } }, luajit = { command = { "luajit" } }, lua = { command = { "lua" } } },
   mma = { math = { command = { "math" } } },
   ocaml = { utop = { command = { "utop" } }, ocamltop = { command = { "ocamltop" } } },
   php = { psysh = { command = { "psysh" } }, php = { command = { "php", "-a" } } },
