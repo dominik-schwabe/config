@@ -6,6 +6,8 @@
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
 
+export HISTFILE=~/.zsh_history
+
 echo -n "\e[6 q"
 
 FZF_DEFAULT_COMMAND="fd --type file --color=always"
@@ -120,7 +122,14 @@ get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
 RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
 # theme end
 
-setopt hist_ignore_dups hist_ignore_space interactivecomments noextendedhistory nosharehistory auto_cd multios prompt_subst histignorealldups
+setopt hist_ignore_dups
+setopt histignorealldups
+setopt hist_ignore_space
+setopt interactivecomments
+setopt sharehistory
+setopt auto_cd
+setopt multios
+setopt prompt_subst
 
 exit_zsh() { exit }
 zle -N exit_zsh

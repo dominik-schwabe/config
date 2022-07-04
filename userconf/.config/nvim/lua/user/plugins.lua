@@ -166,12 +166,13 @@ require("packer").startup(function(use)
       require("user.plugins.lualine")
     end,
   })
-  use({
-    "AckslD/nvim-trevJ.lua",
-    config = function()
-      require("trevj").setup()
-    end,
-  })
+  -- TODO: setup
+  -- use({
+  --   "AckslD/nvim-trevJ.lua",
+  --   config = function()
+  --     require("trevj").setup()
+  --   end,
+  -- })
 
   -- dap
   use({
@@ -394,21 +395,6 @@ require("packer").startup(function(use)
   --   config = function()
   --     require("user.plugins.code_runner")
   --   end,
-  -- })
-
-  -- copilot
-  -- use({
-  --   "zbirenbaum/copilot.lua",
-  --   event = { "VimEnter" },
-  --   config = function()
-  --     vim.defer_fn(function()
-  --       require("copilot").setup()
-  --     end, 100)
-  --   end,
-  -- })
-  -- use({
-  --   "zbirenbaum/copilot-cmp",
-  --   after = { "copilot.lua", "nvim-cmp" },
   -- })
 
   -- lint

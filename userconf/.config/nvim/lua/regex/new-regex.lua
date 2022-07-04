@@ -9,7 +9,8 @@ local ch_with_backslash = 0
 local ch_posix_charclass = 1
 local ch_brackets = 2
 local ch_braces = 3
-local ch_parentheses_option = 4 local ch_parentheses = 5
+local ch_parentheses_option = 4
+local ch_parentheses = 5
 local divider = "::"
 local mark_left = replace_termcodes([[<Esc>]]) .. divider .. replace_termcodes([[<C-f>]])
 local mark_right = replace_termcodes([[<C-l>]]) .. divider .. replace_termcodes([[<Esc>]])

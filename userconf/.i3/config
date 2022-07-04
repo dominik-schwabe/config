@@ -207,7 +207,7 @@ bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -time 0 -5
 bindsym XF86ScreenSaver exec --no-startup-id "playerctl -a pause ; exec i3lock -c 000000"
 bindsym XF86AudioNext exec --no-startup-id "$playerctl next"
 bindsym XF86AudioPrev exec --no-startup-id "$playerctl previous"
-bindsym XF86AudioPlay exec --no-startup-id "$playerctl  play-pause"
+bindsym XF86AudioPlay exec --no-startup-id "$playerctl play-pause"
 bindsym XF86AudioStop exec --no-startup-id "$playerctl pause"
 
 bindsym $mod+less exec --no-startup-id "$playerctl previous"

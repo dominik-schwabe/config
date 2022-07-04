@@ -5,9 +5,9 @@ export BROWSER=brave
 export TERMINAL="alacritty -e"
 
 export HISTFILE=~/.sh_history
-export HISTSIZE=10000
-export SAVEHIST=10000
-export HISTFILESIZE=10000
+export HISTSIZE=1500
+export SAVEHIST=1500
+export HISTFILESIZE=1500
 export HISTCONTROL=ignoreboth
 
 export NODE_PATH="$HOME/.local/lib/node_modules"
