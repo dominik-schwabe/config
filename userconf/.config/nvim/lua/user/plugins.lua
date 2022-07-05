@@ -161,7 +161,7 @@ require("packer").startup(function(use)
   -- statusline
   use({
     "nvim-lualine/lualine.nvim",
-    requires = { "kyazdani42/nvim-web-devicons", { "SmiteshP/nvim-gps" } },
+    requires = { "kyazdani42/nvim-web-devicons", { "SmiteshP/nvim-navic" } },
     config = function()
       require("user.plugins.lualine")
     end,

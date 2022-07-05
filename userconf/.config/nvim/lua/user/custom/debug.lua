@@ -1,7 +1,11 @@
 local F = require("user.functional")
 
+function Draw(...)
+  return F.map({ ... }, vim.inspect)
+end
+
 function D(...)
-  local tbl = F.map({ ... }, vim.inspect)
+  local tbl = Draw(...)
   print(#tbl ~= 0 and unpack(tbl) or "--- empty ---")
 end
 
