@@ -56,6 +56,10 @@ function M.get_motion(motion_type)
   return lines
 end
 
+function M.path_exists(path)
+  return vim.fn.empty(vim.fn.glob(path)) == 0
+end
+
 function M.extend(tbl)
   local new_tbl = {}
   for _, e in pairs(tbl) do

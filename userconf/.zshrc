@@ -122,6 +122,7 @@ get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
 RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
 # theme end
 
+setopt extendedhistory
 setopt hist_ignore_dups
 setopt histignorealldups
 setopt hist_ignore_space
