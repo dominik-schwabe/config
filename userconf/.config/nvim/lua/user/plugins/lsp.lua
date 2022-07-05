@@ -12,7 +12,9 @@ local on_attach = function(client, bufnr)
   client.server_capabilities.document_range_formatting = false
 
   illuminate.on_attach(client)
-  navic.attach(client, bufnr)
+  if client.server_capabilities.documentSymbolProvider then
+    navic.attach(client, bufnr)
+  end
 
   local map_opt = { buffer = bufnr, silent = true }
   vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
