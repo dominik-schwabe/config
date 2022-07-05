@@ -4,11 +4,16 @@ local lsp_buf = vim.lsp.buf
 local F = require("user.functional")
 local tbl_merge = require("user.utils").tbl_merge
 
+local navic = require("nvim-navic")
+local illuminate = require("illuminate")
+
 local on_attach = function(client, bufnr)
   client.server_capabilities.document_formatting = false
   client.server_capabilities.document_range_formatting = false
 
-  require("illuminate").on_attach(client)
+  illuminate.on_attach(client)
+  navic.attach(client, bufnr)
+
   local map_opt = { buffer = bufnr, silent = true }
   vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
   vim.keymap.set("n", "gd", lsp_buf.definition, map_opt)
