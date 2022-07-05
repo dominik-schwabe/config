@@ -51,6 +51,38 @@ local palette = {
 
 local hl = {}
 
+hl.navic = {
+  NavicIconsFile = {fg = palette.cool_blue1, bg = palette.base3},
+  NavicIconsModule = {fg = palette.pink, bg = palette.base3},
+  NavicIconsNamespace = {fg = palette.purple, bg = palette.base3},
+  NavicIconsPackage = {fg=palette.yellow, bg = palette.base3},
+  NavicIconsClass = {fg = palette.aqua, bg = palette.base3},
+  NavicIconsMethod = {fg = palette.pink, bg = palette.base3},
+  NavicIconsProperty = {fg = palette.white, bg = palette.base3},
+  NavicIconsField = {fg = palette.white, bg = palette.base3},
+  NavicIconsConstructor = {fg = palette.aqua, bg = palette.base3},
+  NavicIconsEnum = {fg = palette.orange, bg = palette.base3},
+  NavicIconsInterface = {fg = palette.aqua, bg = palette.base3},
+  NavicIconsFunction = {fg = palette.pink, bg = palette.base3},
+  NavicIconsVariable = {fg = palette.white, bg = palette.base3},
+  NavicIconsConstant = {fg = palette.purple, bg = palette.base3},
+  NavicIconsString = {fg = palette.yellow, bg = palette.base3},
+  NavicIconsNumber = {fg = palette.purple, bg = palette.base3},
+  NavicIconsBoolean = {fg = palette.purple, bg = palette.base3},
+  NavicIconsArray = {fg = palette.purple, bg = palette.base3},
+  NavicIconsObject = {fg = palette.purple, bg = palette.base3},
+  NavicIconsKey = {fg = palette.purple, bg = palette.base3},
+  NavicIconsNull = {fg = palette.purple, bg = palette.base3},
+  NavicIconsEnumMember = {fg = palette.orange, bg = palette.base3},
+  NavicIconsStruct = {fg = palette.aqua, bg = palette.base3},
+  NavicIconsEvent = {fg = palette.orange, bg = palette.base3},
+  NavicIconsOperator = {fg = palette.pink, bg = palette.base3},
+  NavicIconsTypeParameter = {fg = palette.orange, bg = palette.base3},
+  -- NavicText = {fg = palette.base8, bg = palette.base3},
+  -- NavicSeparator = {fg = palette.base8, bg = palette.base3},
+}
+
+
 hl.syntax = {
   Boolean = { fg = palette.purple },
   Character = { fg = palette.yellow },
