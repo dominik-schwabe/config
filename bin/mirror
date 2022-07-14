@@ -75,13 +75,13 @@ if [[ -z "$RESET" ]]; then
     fi
   else
     if [[ $TYPE == "top" ]]; then
-        DIRECTION="--above"
+      DIRECTION="--above"
     elif [[ $TYPE == "bottom" ]]; then
-        DIRECTION="--below"
+      DIRECTION="--below"
     elif [[ $TYPE == "left" ]]; then
-        DIRECTION="--left-of"
+      DIRECTION="--left-of"
     elif [[ $TYPE == "right" ]]; then
-        DIRECTION="--right-of"
+      DIRECTION="--right-of"
     else
       exit 1
     fi

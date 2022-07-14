@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+while getopts "ws" o &>/dev/null; do
+  case $o in
+    "w") MODE="window" ;;
+    "s") MODE="screen" ;;
+  esac
+done
+
+command -v scrot &>/dev/null || {
+  notify-send -t 600 "scrot not found"
+  exit 1
+}
+
+[[ -z $MODE ]] && {
+  notify-send -t 600 "unknown MODE '$MODE'"
+  exit 1
+}
+
+mkdir -p ~/Pictures
+
+case $MODE in
+  "screen") scrot 's%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot of SCREEN has been taken' ;;
+  "window") scrot 'w%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot of WINDOW has been taken' ;;
+esac

@@ -54,7 +54,6 @@ set_alias() {
 download_completion 7z              https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
 download_completion asdf            https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf
 download_completion cargo           https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo
-download_completion docker-compose  https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/docker-compose/_docker-compose
 download_completion fd              https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
 download_completion pip             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
 download_completion rustc           https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust

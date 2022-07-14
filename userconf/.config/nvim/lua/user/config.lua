@@ -153,6 +153,7 @@ M.null_ls = {
     -- "pylint"
   },
   formatting = {
+    -- "beautysh",
     "black",
     "clang_format",
     "eslint_d",

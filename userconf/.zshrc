@@ -20,6 +20,8 @@ zi ice atinit'COMPLETION_WAITING_DOTS=true' atload'unsetopt complete_in_word'
 zi snippet OMZL::completion.zsh
 zi ice wait'0' lucid
 zi light dominik-schwabe/vi-mode.zsh
+zi ice wait'0' lucid
+zi light greymd/docker-zsh-completion
 zi ice wait'!0' lucid
 zi light ~/.shell_plugins/asdf
 zi ice wait'0' lucid

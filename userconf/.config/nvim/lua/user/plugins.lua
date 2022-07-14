@@ -16,14 +16,14 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- use({
-  --   "kylechui/nvim-surround",
-  --   config = function()
-  --     require("nvim-surround").setup({
-  --       -- Configuration here, or leave empty to use defaults
-  --     })
-  --   end
-  -- })
+  use({
+    "kylechui/nvim-surround",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  })
 
   -- use({
   --   "VonHeikemen/fine-cmdline.nvim",
@@ -366,7 +366,7 @@ require("packer").startup(function(use)
     end,
   })
   use("tpope/vim-repeat")
-  use("tpope/vim-surround")
+  -- use("tpope/vim-surround")
   use({
     "foosoft/vim-argwrap",
     config = function()

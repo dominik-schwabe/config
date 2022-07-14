@@ -34,6 +34,7 @@ vim.keymap.set("n", "<space>gb", gitblame, def_opt)
 
 local function quit(opt)
   vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = opt.buf })
+  vim.api.nvim_set_hl(0, "illuminatedWord", { link = "NoHighlight" })
 end
 
 api.nvim_create_autocmd("BufAdd", {

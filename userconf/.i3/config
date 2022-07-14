@@ -221,8 +221,8 @@ bindsym $mod+Shift+period resize set width 360 px height 240 px; move container 
 bindsym $mod+comma resize set width 800 px height 600 px; move container position center;
 bindsym $mod+Shift comma sticky toggle
 bindsym $mod+Shift+Return exec $guifilebrowser
-bindsym Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot 's%s.png' -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot of SCREEN has been taken'
-bindsym Shift+Print exec --no-startup-id mkdir -p ~/Pictures; exec --no-startup-id scrot 'w%s.png' -u -e 'mv $f ~/Pictures/$f' && notify-send -t 600 'screenshot of WINDOW has been taken'
+bindsym Print exec --no-startup-id screenshot -s
+bindsym Shift+Print exec --no-startup-id screenshot -w
 bindsym $mod+Return exec --no-startup-id $term
 bindsym $mod+t exec --no-startup-id $term
 bindsym $mod+Home exec --no-startup-id xbacklight -time 0 +1

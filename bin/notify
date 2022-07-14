@@ -42,7 +42,10 @@ if ! telegram-send; then
     echo "telegram-send is not configured"
     exit 1
 fi
-eval "$@"
+
+# execute command
+$1 "${@:2}"
+
 RET=$?
 SECONDSEND=$(date +"%s")
 ENDTIME=$(date +"%d.%m.%Y %H:%M")
