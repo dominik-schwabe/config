@@ -34,6 +34,8 @@ opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
 
+g.polyglot_disabled = { "autoindent", "sensible" }
+
 g.PYTHONUNBUFFERED = 1
 
 g.loaded_python_provider = 0

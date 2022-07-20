@@ -39,6 +39,9 @@ require("packer").startup(function(use)
   --   },
   -- })
 
+  -- indent
+  use("tpope/vim-sleuth")
+
   -- fast startup
   use("lewis6991/impatient.nvim")
 
@@ -339,7 +342,6 @@ require("packer").startup(function(use)
   -- legacy
   use("lark-parser/vim-lark-syntax")
   use("sheerun/vim-polyglot")
-  -- use("tpope/vim-sleuth")
   use({
     "jlanzarotta/bufexplorer",
     config = function()

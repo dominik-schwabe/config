@@ -12,13 +12,13 @@ local F = require("user.functional")
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   command = "quit",
 })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "python",
-  command = "setlocal tabstop=4 shiftwidth=4 softtabstop=4",
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "python",
+--   command = "setlocal tabstop=4 shiftwidth=4 softtabstop=4",
+-- })
 
--- vim.cmd("au BufEnter * set fo-=c fo-=r fo-=o", false)
-vim.cmd("au BufEnter * set fo-=o", false)
+vim.cmd("au BufEnter * set fo-=c fo-=r fo-=o", false)
+-- vim.cmd("au BufEnter * set fo-=o", false)
 
 function Test()
   local topline = vim.fn.line("w0")
