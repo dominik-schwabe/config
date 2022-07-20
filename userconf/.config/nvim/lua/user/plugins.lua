@@ -22,7 +22,7 @@ require("packer").startup(function(use)
       require("nvim-surround").setup({
         -- Configuration here, or leave empty to use defaults
       })
-    end
+    end,
   })
 
   -- use({
@@ -288,10 +288,11 @@ require("packer").startup(function(use)
   })
 
   -- jump
+  use("jinh0/eyeliner.nvim")
   use({
-    "ggandor/lightspeed.nvim",
+    "ggandor/leap.nvim",
     config = function()
-      require("user.plugins.lightspeed")
+      require("leap").set_default_keymaps()
     end,
   })
 
@@ -343,12 +344,6 @@ require("packer").startup(function(use)
     "jlanzarotta/bufexplorer",
     config = function()
       require("user.plugins.bufexplorer")
-    end,
-  })
-  use({
-    "svermeulen/vim-yoink",
-    config = function()
-      require("user.plugins.yoink")
     end,
   })
   use({

@@ -1,10 +1,11 @@
 pcall(require, "impatient")
-vim.cmd("colorscheme monokai")
 
 require("user.options")
 require("user.plugins")
 require("user.mappings")
 require("user.custom")
+
+vim.cmd("colorscheme monokai")
 
 local F = require("user.functional")
 

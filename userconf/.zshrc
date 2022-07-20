@@ -14,6 +14,8 @@ FZF_DEFAULT_COMMAND="fd --type file --color=always"
 FZF_ALT_C_COMMAND="fd --type directory --color=always"
 FZF_DEFAULT_OPTS="--ansi"
 
+[[ -z $DISPLAY ]] && export ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=1
+
 # plugins
 source ~/.zi/bin/zi.zsh
 zi ice atinit'COMPLETION_WAITING_DOTS=true' atload'unsetopt complete_in_word'
