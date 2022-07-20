@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+SAVE_PATH=$HOME/bin/kubectl
+VERSION=$1
+[[ -z VERSION ]] && VERSION=$(curl -Ls https://dl.k8s.io/release/stable.txt)
+curl -LsSfo $HOME/bin/kubectl "https://dl.k8s.io/release/$VERSION/bin/linux/amd64/kubectl" && chmod 755 $SAVE_PATH
