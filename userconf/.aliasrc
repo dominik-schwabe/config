@@ -52,7 +52,7 @@ alias dsp='sudo systemctl stop docker.socket'
 
 alias ssh='TERM=xterm-256color ssh -C'
 alias xssh='ssh -YC'
-alias lssh='ssh -L 3000:localhost:3000 -L 5000:localhost:5000'
+alias lssh='ssh -q -L 3000:localhost:3000 -L 5000:localhost:5000'
 
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
@@ -74,6 +74,8 @@ alias rs='asdf reshim'
 alias e='extract'
 alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 alias ytdl='yt-dlp --extract-audio --audio-format m4a --format best'
+
+alias assh='eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa'
 
 alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'

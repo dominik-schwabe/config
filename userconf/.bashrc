@@ -2,7 +2,6 @@ shopt -s histappend
 shopt -s checkwinsize
 shopt -s cmdhist
 shopt -u autocd
-set -o vi
 
 [[ -r ~/.profile ]] && . ~/.profile
 [[ -r ~/.customrc ]] && . ~/.customrc
@@ -10,7 +9,7 @@ set -o vi
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
-. "$HOME/.shell_plugins/asdf/plugin.sh"
+[[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
 
 RESET="\[\017\]"
 RED="\[\033[31;1m\]"
