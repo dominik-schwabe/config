@@ -51,6 +51,7 @@ add_path "$HOME/.local/bin"
 add_path "$HOME/.bin"
 add_path "$HOME/bin"
 
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
 
 # vi: ft=sh
-. "$HOME/.cargo/env"
