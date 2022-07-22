@@ -159,6 +159,7 @@ M.null_ls = {
     "eslint_d",
     "isort",
     "prettierd",
+    "rustfmt",
     latexindent = {
       extra_args = { "-y", [[defaultIndent: "  "]] },
     },

@@ -102,6 +102,17 @@ require("packer").startup(function(use)
     end,
   })
 
+  -- rust
+  use("simrat39/rust-tools.nvim")
+  use({
+    "saecki/crates.nvim",
+    event = { "BufRead Cargo.toml" },
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("crates").setup()
+    end,
+  })
+
   -- treesitter
   use({
     "nvim-treesitter/nvim-treesitter",
@@ -291,7 +302,7 @@ require("packer").startup(function(use)
   })
 
   -- jump
-  use("jinh0/eyeliner.nvim")
+  use("rhysd/clever-f.vim")
   use({
     "ggandor/leap.nvim",
     config = function()

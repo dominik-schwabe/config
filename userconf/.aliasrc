@@ -67,6 +67,7 @@ alias install_treesitter='cargo install --git https://github.com/tree-sitter/tre
 alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'
 alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh  && chmod 755 ~/bin/cht.sh'
 alias install_tldr='npm install -g tldr'
+alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh"
 alias te='translate de:en'
 alias td='translate en:de'
 alias rs='asdf reshim'

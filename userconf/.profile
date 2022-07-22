@@ -53,3 +53,4 @@ add_path "$HOME/bin"
 
 
 # vi: ft=sh
+. "$HOME/.cargo/env"

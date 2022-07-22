@@ -64,7 +64,12 @@ for _, server in pairs(lsp_installer.get_installed_servers()) do
     cap.offsetEncoding = { "utf-16" }
     opts.capabilities = cap
   end
-  lspconfig[server_name].setup(opts)
+  if server.name == "rust_analyzer" then
+    opts.cmd = { server.root_dir .. "/rust-analyzer" }
+    require("rust-tools").setup({ server = opts })
+  else
+    lspconfig[server_name].setup(opts)
+  end
 end
 
 for type, icon in pairs(config.lsp_signs) do

@@ -58,6 +58,7 @@ cmp.setup({
     { name = "luasnip" },
     { name = "nvim_lua" },
     { name = "path" },
+    { name = "crates" },
     { name = "tmux" },
     {
       name = "buffer",
