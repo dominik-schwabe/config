@@ -62,12 +62,12 @@ alias pys='[ "$ASDF_TURBO" != "true" ] && [ "$ASDF_PYTHON_VERSION" != "system" ]
 alias pythonserver='python -m http.server 8000'
 alias ppjson='python -m json.tool'
 
-alias install_zsh='sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)"'
+alias install_zsh='curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh'
 alias install_treesitter='cargo install --git https://github.com/tree-sitter/tree-sitter.git'
 alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'
 alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh  && chmod 755 ~/bin/cht.sh'
 alias install_tldr='npm install -g tldr'
-alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh"
+alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path"
 alias te='translate de:en'
 alias td='translate en:de'
 alias rs='asdf reshim'

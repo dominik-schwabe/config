@@ -61,9 +61,10 @@ download_completion youtube-dl      https://raw.githubusercontent.com/dominik-sc
 download_completion cht.sh          https://cheat.sh/:zsh
 download_completion c               https://cheat.sh/:zsh
 
-command_completion  kubectl         kubectl completion zsh
-command_completion  pdm             pdm completion
-command_completion  pipenv          _PIPENV_COMPLETE=zsh_source pipenv
-command_completion  rustup          rustup completions zsh
+command_completion kubectl         kubectl completion zsh
+command_completion pdm             pdm completion
+command_completion pipenv          _PIPENV_COMPLETE=zsh_source pipenv
+command_completion rustup          rustup completions zsh rustup
+command_completion cargo           rustup completions zsh cargo
 
 zi creinstall $ZSH_COMPLETIONS_DIR
