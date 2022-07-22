@@ -12,7 +12,7 @@ download_completion() {
     COMMAND=$1
     URL=$2
     local COMPLETION_PATH=$ZSH_COMPLETIONS_DIR/_$COMMAND
-    if [ ! -r $COMPLETION_PATH ] && command -v curl 2>&1 >/dev/null; then
+    if [ ! -r $COMPLETION_PATH ] && command -v curl &>/dev/null; then
         echo "downloading $COMMAND"
         curl --create-dirs -sfLo $COMPLETION_PATH $URL || return 1
         local NAME_IN_COMPDEF=$(sed -n "/^\s*#\?compdef/{p;q}" $COMPLETION_PATH | sed "s/\s/\n/g" | sed -n "/^${COMMAND}$/{p;q}")
@@ -27,7 +27,7 @@ command_completion() {
     COMMAND=$1
     COMPLETION_FILE="$ZSH_COMPLETIONS_DIR/_$COMMAND"
     shift
-    [ ! -r $COMPLETION_FILE ] && command -v $COMMAND 2>&1 >/dev/null && {
+    [ ! -r $COMPLETION_FILE ] && command -v $COMMAND &>/dev/null && {
         echo "generating completion '$@'"
         eval "$@" > "$COMPLETION_FILE" || {
             rm "$COMPLETION_FILE"
@@ -53,7 +53,6 @@ set_alias() {
 
 download_completion 7z              https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
 download_completion asdf            https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf
-download_completion cargo           https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo
 download_completion fd              https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
 download_completion pip             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
 download_completion rustc           https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust
@@ -61,10 +60,11 @@ download_completion youtube-dl      https://raw.githubusercontent.com/dominik-sc
 download_completion cht.sh          https://cheat.sh/:zsh
 download_completion c               https://cheat.sh/:zsh
 
-command_completion kubectl         kubectl completion zsh
-command_completion pdm             pdm completion
-command_completion pipenv          _PIPENV_COMPLETE=zsh_source pipenv
-command_completion rustup          rustup completions zsh rustup
-command_completion cargo           rustup completions zsh cargo
+command_completion kubectl          kubectl completion zsh
+command_completion pdm              pdm completion
+command_completion pipenv           _PIPENV_COMPLETE=zsh_source pipenv
+command_completion rustup           rustup completions zsh rustup
+command_completion cargo            cat '"$(rustc --print sysroot)"/share/zsh/site-functions/_cargo'
 
 zi creinstall $ZSH_COMPLETIONS_DIR
+zi cclear
