@@ -36,12 +36,13 @@ local on_attach = function(client, bufnr)
 end
 
 local config = require("user.config")
-local lsp_installer = require("nvim-lsp-installer")
+local mason_lspconfig = require("mason-lspconfig")
+local mason_registry = require("mason-registry")
 local lspconfig = require("lspconfig")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
 
-lsp_installer.setup({
+mason_lspconfig.setup({
   ensure_installed = config.lsp_ensure_installed,
   log_level = vim.log.levels.ERROR,
 })
@@ -49,8 +50,7 @@ lsp_installer.setup({
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
-for _, server in pairs(lsp_installer.get_installed_servers()) do
-  local server_name = server.name
+for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
   local opts = lsp_configs[server_name] or {}
   opts.on_attach = on_attach
   opts.capabilities = capabilities
@@ -64,8 +64,8 @@ for _, server in pairs(lsp_installer.get_installed_servers()) do
     cap.offsetEncoding = { "utf-16" }
     opts.capabilities = cap
   end
-  if server.name == "rust_analyzer" then
-    opts.cmd = { server.root_dir .. "/rust-analyzer" }
+  if server_name == "rust_analyzer" then
+    opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
     require("rust-tools").setup({ server = opts })
   else
     lspconfig[server_name].setup(opts)
@@ -84,8 +84,8 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>")
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>")
 
-vim.keymap.set("n", "<space>li", ":LspInstall ")
-vim.keymap.set("n", "<space>lu", "<CMD>LspInstallInfo<CR>")
+vim.keymap.set("n", "<space>li", "<CMD>LspInstall<CR>")
+vim.keymap.set("n", "<space>;", "<CMD>Mason<CR>")
 
 -- show settings of lspserver
 local function lsp_settings()

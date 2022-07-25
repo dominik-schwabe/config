@@ -78,7 +78,13 @@ require("packer").startup(function(use)
         end,
       },
       "onsails/lspkind.nvim",
-      "williamboman/nvim-lsp-installer",
+      {
+        "williamboman/mason.nvim",
+        config = function()
+          require("mason").setup()
+        end,
+      },
+      "williamboman/mason-lspconfig.nvim",
       "kosayoda/nvim-lightbulb",
       {
         "j-hui/fidget.nvim",
