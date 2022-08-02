@@ -80,4 +80,3 @@ nvim_tree.setup({
 })
 
 vim.keymap.set({ "n", "x", "i", "t" }, "<F1>", nvim_tree.toggle)
-vim.keymap.set({ "n", "x" }, "gt", nvim_tree.find_file)

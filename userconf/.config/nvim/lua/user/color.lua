@@ -47,6 +47,10 @@ local palette = {
   diff_change = "#23324d",
   diff_text = "#00ddad",
   visual = "#555555",
+  light_red = "#441111",
+  light_aqua = "#114444",
+  light_yellow = "#444411",
+  light_white = "#444444",
 }
 
 local hl = {}
@@ -229,10 +233,10 @@ hl.diagnostics = {
   DiagnosticSignHint = { fg = palette.aqua },
   DiagnosticSignInfo = { fg = palette.white },
   DiagnosticSignWarn = { fg = palette.yellow },
-  DiagnosticUnderlineError = { undercurl = true, sp = palette.red },
-  DiagnosticUnderlineHint = { undercurl = true, sp = palette.aqua },
-  DiagnosticUnderlineInfo = { undercurl = true, sp = palette.white },
-  DiagnosticUnderlineWarn = { undercurl = true, sp = palette.yellow },
+  DiagnosticUnderlineError = { bg = palette.light_red },
+  DiagnosticUnderlineHint = { bg = palette.light_aqua },
+  DiagnosticUnderlineInfo = { bg = palette.light_white },
+  DiagnosticUnderlineWarn = { bg = palette.light_yellow },
   DiagnosticVirtualTextError = { fg = palette.red },
   DiagnosticVirtualTextHint = { fg = palette.aqua },
   DiagnosticVirtualTextInfo = { fg = palette.white },

@@ -159,7 +159,7 @@ M.null_ls = {
     "eslint_d",
     "isort",
     "prettierd",
-    "rustfmt",
+    "taplo",
     latexindent = {
       extra_args = { "-y", [[defaultIndent: "  "]] },
     },
@@ -215,6 +215,13 @@ M.repls = {
   python = { command = { "ipython" } },
   r = { command = { "radian" } },
 }
+M.brackets = {
+  { "(", ")" },
+  { "[", "]" },
+  { "{", "}" },
+  { "<", ">" },
+}
+M.quotes = { '"', "'", "`" }
 M.closable_terminals = { "term://repl*" }
 M.colorizer_disable_filetypes = {
   "r",

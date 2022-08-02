@@ -17,6 +17,7 @@ for builtin, options in pairs(config.null_ls) do
 end
 
 vim.keymap.set("n", "<space>f", function()
+  vim.lsp.buf.formatting()
   print("formatter is not loaded")
 end, def_opt)
 

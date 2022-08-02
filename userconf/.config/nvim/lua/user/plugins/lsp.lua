@@ -1,5 +1,9 @@
 local fn = vim.fn
-local lsp_buf = vim.lsp.buf
+local lsp = vim.lsp
+local lsp_buf = lsp.buf
+local diagnostic = vim.diagnostic
+
+local util = require("vim.lsp.util")
 
 local F = require("user.functional")
 local tbl_merge = require("user.utils").tbl_merge
@@ -8,7 +12,14 @@ local navic = require("nvim-navic")
 local illuminate = require("illuminate")
 
 local on_attach = function(client, bufnr)
-  client.server_capabilities.document_formatting = false
+  if client.name == "rust_analyzer" then
+    vim.keymap.set("n", "<space>f", function()
+      local params = util.make_formatting_params({})
+      client.request("textDocument/formatting", params, nil, bufnr)
+    end, { buffer = bufnr })
+  else
+    client.server_capabilities.document_formatting = false
+  end
   client.server_capabilities.document_range_formatting = false
 
   illuminate.on_attach(client)
@@ -19,20 +30,24 @@ local on_attach = function(client, bufnr)
   local map_opt = { buffer = bufnr, silent = true }
   vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
   vim.keymap.set("n", "gd", lsp_buf.definition, map_opt)
-  vim.keymap.set("n", "<C-y>", lsp_buf.hover, map_opt)
-  vim.keymap.set("i", "<C-y>", lsp_buf.hover, map_opt)
+  vim.keymap.set("n", "gt", lsp_buf.type_definition, map_opt)
+  vim.keymap.set("n", "gr", lsp_buf.references, map_opt)
   vim.keymap.set("n", "gi", lsp_buf.implementation, map_opt)
-  vim.keymap.set("n", "<C-e>", lsp_buf.signature_help, map_opt)
-  vim.keymap.set("i", "<C-e>", lsp_buf.signature_help, map_opt)
+  vim.keymap.set("n", "gs", lsp_buf.signature_help, map_opt)
+  vim.keymap.set("n", "gh", lsp_buf.hover, map_opt)
+  vim.keymap.set("n", "gm", diagnostic.open_float, map_opt)
+  vim.keymap.set("n", "gn", diagnostic.goto_next, map_opt)
+  vim.keymap.set("n", "gll", lsp.codelens.refresh, map_opt)
+  vim.keymap.set("n", "glr", lsp.codelens.run, map_opt)
+  vim.keymap.set("n", "<space>yi", lsp_buf.incoming_calls, map_opt)
+  vim.keymap.set("n", "<space>yo", lsp_buf.outgoing_calls, map_opt)
   vim.keymap.set("n", "<space>wa", lsp_buf.add_workspace_folder, map_opt)
   vim.keymap.set("n", "<space>wr", lsp_buf.remove_workspace_folder, map_opt)
   vim.keymap.set("n", "<space>wl", function()
     D(lsp_buf.list_workspace_folders())
   end, map_opt)
-  vim.keymap.set("n", "<space>D", lsp_buf.type_definition, map_opt)
   vim.keymap.set("n", "<space>rn", lsp_buf.rename, map_opt)
   vim.keymap.set("n", "<space>ca", lsp_buf.code_action, map_opt)
-  vim.keymap.set("n", "gr", lsp_buf.references, map_opt)
 end
 
 local config = require("user.config")
@@ -65,7 +80,14 @@ for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
     opts.capabilities = cap
   end
   if server_name == "rust_analyzer" then
-    opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
+    opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer"}
+    opts.settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy"
+          }
+        }
+    }
     require("rust-tools").setup({ server = opts })
   else
     lspconfig[server_name].setup(opts)

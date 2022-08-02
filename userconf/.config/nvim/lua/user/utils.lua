@@ -53,6 +53,17 @@ function M.get_motion(motion_type)
   return lines
 end
 
+function M.get_shifts(num)
+  local text
+  if vim.bo.expandtab then
+    text = string.rep(" ", vim.bo.tabstop)
+  else
+    text = "\t"
+  end
+  text = string.rep(text, math.floor(num * vim.bo.shiftwidth / vim.bo.tabstop))
+  return text
+end
+
 function M.tbl_merge(t1, t2)
   for k, v in pairs(t2) do
     if (type(v) == "table") and (type(t1[k] or false) == "table") then

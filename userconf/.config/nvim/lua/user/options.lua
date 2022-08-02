@@ -33,6 +33,7 @@ opt.backup = false
 opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
+opt.timeout = false
 
 g.polyglot_disabled = { "autoindent", "sensible" }
 

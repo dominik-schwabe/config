@@ -14,4 +14,3 @@ local function latex_substitude()
 end
 
 vim.keymap.set("x", "<space>sl", latex_substitude)
-vim.keymap.set("n", "gl", latex_substitude)
