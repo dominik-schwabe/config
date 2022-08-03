@@ -6,7 +6,14 @@ local F = require("user.functional")
 
 local curr_rg_job = nil
 local Job = require("plenary.job")
-local function rg(string, raw, boundry, maximum, here)
+local function rg(string, opt)
+  opt = opt or {}
+
+  local raw = opt.raw
+  local boundry = opt.boundry
+  local maximum = opt.maximum
+  local here = opt.here
+
   if string == "" then
     return
   end
@@ -33,7 +40,13 @@ local function rg(string, raw, boundry, maximum, here)
     string = "\\b" .. string .. "\\b"
   end
   args[#args + 1] = string
-  local root = here and fn.expand("%:p:h") or fn.getcwd()
+  local root
+  if here then
+    root = fn.expand("%:p:h")
+    vim.cmd("cd " .. root)
+  else
+    root = fn.getcwd()
+  end
   curr_rg_job = Job:new({
     command = "rg",
     args = args,
@@ -68,8 +81,8 @@ local function rg(string, raw, boundry, maximum, here)
   curr_rg_job:start()
 end
 
-local function rg_word()
-  rg(vim.fn.expand("<cword>"), true, true)
+local function _rg_word(here)
+  rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, here = here })
 end
 
 local function rg_input()
@@ -77,24 +90,33 @@ local function rg_input()
   local query = fn.input("Search in files: ")
   fn.inputrestore()
   if not (query == "") then
-    return rg(query, false)
+    return rg(query)
   end
 end
 
-local function rg_visual()
+local function _rg_visual(here)
   local selection = utils.get_visual_selection(0)
   if #selection == 0 then
     print("empty selection")
     return
   end
-  rg(table.concat(selection, ""), true)
+  rg(table.concat(selection, ""), { raw = true, here = here })
 end
 
+local rg_word = F.f(_rg_word, false)
+local rg_word_here = F.f(_rg_word, true)
+local rg_visual = F.f(_rg_visual, false)
+local rg_visual_here = F.f(_rg_visual, true)
+
 vim.api.nvim_create_user_command("RgWord", rg_word, {})
+vim.api.nvim_create_user_command("RgWordHere", rg_word_here, {})
 vim.api.nvim_create_user_command("RgInput", rg_input, {})
 vim.api.nvim_create_user_command("RgVisual", rg_visual, {})
+vim.api.nvim_create_user_command("RgVisualHere", rg_visual_here, {})
 
-vim.keymap.set("n", "<c-_>", rg_word)
-vim.keymap.set("x", "<c-_>", rg_visual)
+vim.keymap.set("n", "<space>-", rg_word)
+vim.keymap.set("x", "<space>-", rg_visual)
+vim.keymap.set("n", "<space>_", rg_word_here)
+vim.keymap.set("x", "<space>_", rg_visual_here)
 vim.keymap.set({ "n", "x" }, "<space>x", F.f(rg, "local", true, true, 10))
 vim.keymap.set("n", "_", rg_input)

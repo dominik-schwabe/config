@@ -40,8 +40,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "gp", diagnostic.goto_prev, map_opt)
   vim.keymap.set("n", "gll", lsp.codelens.refresh, map_opt)
   vim.keymap.set("n", "glr", lsp.codelens.run, map_opt)
-  vim.keymap.set("n", "<space>yi", lsp_buf.incoming_calls, map_opt)
-  vim.keymap.set("n", "<space>yo", lsp_buf.outgoing_calls, map_opt)
+  vim.keymap.set("n", "gli", lsp_buf.incoming_calls, map_opt)
+  vim.keymap.set("n", "glo", lsp_buf.outgoing_calls, map_opt)
   vim.keymap.set("n", "<space>wa", lsp_buf.add_workspace_folder, map_opt)
   vim.keymap.set("n", "<space>wr", lsp_buf.remove_workspace_folder, map_opt)
   vim.keymap.set("n", "<space>wl", function()
@@ -107,8 +107,7 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>")
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>")
 
-vim.keymap.set("n", "<space>li", "<CMD>LspInstall<CR>")
-vim.keymap.set("n", "<space>;", "<CMD>Mason<CR>")
+vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>")
 
 -- show settings of lspserver
 local function lsp_settings()

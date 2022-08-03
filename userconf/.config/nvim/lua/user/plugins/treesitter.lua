@@ -98,11 +98,6 @@ require("nvim-treesitter.configs").setup({
   additional_vim_regex_highlighting = false,
 })
 
-vim.keymap.set("n", "<space>tt", "<CMD>TSModuleInfo<CR>")
-vim.keymap.set("n", "<space>tc", "<CMD>TSConfigInfo<CR>")
-vim.keymap.set("n", "<space>ti", ":TSInstall ")
-vim.keymap.set("n", "<space>tu", "<CMD>TSUpdate<CR>")
-
 vim.keymap.set({ "x", "o" }, "iu", function()
   treesitter_unit.select(true)
 end)

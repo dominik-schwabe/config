@@ -14,4 +14,4 @@ require("todo-comments").setup({
   },
 })
 
-vim.keymap.set({ "n" }, "<space>-", "<CMD>TodoQuickFix<CR>")
+vim.keymap.set({ "n" }, "<space>qt", "<CMD>TodoQuickFix<CR>")
