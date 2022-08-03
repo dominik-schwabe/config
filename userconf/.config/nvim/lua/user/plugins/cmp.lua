@@ -29,10 +29,29 @@ local cmp_formats = {
   copilot = "[cp]",
 }
 
+local function jump_next()
+  if luasnip.in_snippet() and luasnip.jumpable(1) then
+    luasnip.jump(1)
+  else
+    feedkey("<Tab>", "n")
+  end
+end
+
+local function jump_prev()
+  if luasnip.in_snippet() and luasnip.jumpable(-1) then
+    luasnip.jump(-1)
+  else
+    feedkey("<Tab>", "n")
+  end
+end
+
+vim.keymap.set("v", "<Tab>", jump_next)
+vim.keymap.set("v", "<S-Tab>", jump_prev)
+
 cmp.setup({
   snippet = {
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   formatting = {
@@ -46,11 +65,29 @@ cmp.setup({
     }),
   },
   mapping = cmp.mapping.preset.insert({
-    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-n>"] = cmp.mapping.complete(),
-    ["<Tab>"] = cmp.mapping.select_next_item(),
-    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+    ["<C-w>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-e>"] = cmp.mapping.scroll_docs(4),
+    ["<C-n>"] = function()
+      if cmp.visible() then
+        cmp.close()
+      else
+        cmp.complete()
+      end
+    end,
+    ["<Tab>"] = function()
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        jump_next()
+      end
+    end,
+    ["<S-Tab>"] = function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        jump_prev()
+      end
+    end,
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
   }),
   sources = cmp.config.sources({
@@ -70,24 +107,3 @@ cmp.setup({
     },
   }),
 })
-
-local function jump_prev()
-  if luasnip and luasnip.jumpable(-1) then
-    luasnip.jump(-1)
-  else
-    feedkey("<C-y>", "n")
-  end
-end
-
-local function jump_next()
-  if luasnip and luasnip.jumpable(1) then
-    luasnip.jump(1)
-  else
-    feedkey("<C-x>", "n")
-  end
-end
-
-vim.keymap.set("", "<C-y>", jump_prev)
-vim.keymap.set("i", "<C-y>", jump_prev)
-vim.keymap.set("", "<C-x>", jump_next)
-vim.keymap.set("i", "<C-x>", jump_next)

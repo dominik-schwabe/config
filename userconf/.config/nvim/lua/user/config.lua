@@ -51,6 +51,7 @@ M.root_patterns = {
   "Pipfile",
   "Pipfile.lock",
   "requirements.txt",
+  "Cargo.toml"
 }
 M.whitespace_blacklist = {
   "TelescopePrompt",
