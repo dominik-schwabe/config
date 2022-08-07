@@ -3,6 +3,7 @@ local api = vim.api
 local lspkind = require("lspkind")
 local luasnip = require("luasnip")
 local cmp = require("cmp")
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 
 -- lspkind.setup({
 --   mode = "symbol",
@@ -107,3 +108,5 @@ cmp.setup({
     },
   }),
 })
+
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())

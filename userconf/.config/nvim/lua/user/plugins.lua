@@ -17,6 +17,13 @@ require("packer").startup(function(use)
   })
 
   use({
+    "windwp/nvim-autopairs",
+    config = function()
+      require("user.plugins.nvim-autopairs")
+    end,
+  })
+
+  use({
     "kylechui/nvim-surround",
     config = function()
       require("nvim-surround").setup({
