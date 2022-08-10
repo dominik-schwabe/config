@@ -56,7 +56,7 @@ require("packer").startup(function(use)
   use("nvim-lua/plenary.nvim")
 
   -- color
-  use("norcalli/nvim-colorizer.lua")
+  use("NvChad/nvim-colorizer.lua")
 
   -- complete
   use({
