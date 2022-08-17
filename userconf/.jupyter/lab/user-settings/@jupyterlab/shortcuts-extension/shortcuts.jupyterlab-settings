@@ -30,7 +30,7 @@
             "Ctrl Q"
          ],
          "selector":".jp-Notebook.jp-mod-editMode"
-      }, 
+      },
         {
             "command": "kernelmenu:interrupt",
             "keys": [

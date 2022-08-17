@@ -1,5 +1,5 @@
 # clone pluginmanager if not exist
-[[ -d ~/.zi/bin ]] || git clone https://github.com/z-shell/zi.git ~/.zi/bin
+[[ -d ~/.zi/bin ]] || git clone https://github.com/z-shell/zi ~/.zi/bin
 
 [[ -r ~/.profile ]] && . ~/.profile
 [[ -r ~/.customrc ]] && . ~/.customrc
