@@ -129,7 +129,7 @@ M.lsp_configs = {
       python = {
         analysis = {
           diagnosticMode = "openFilesOnly",
-          useLibraryCodeForTypes = false,
+          useLibraryCodeForTypes = true,
           typeCheckingMode = "off",
         },
       },
