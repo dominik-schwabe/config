@@ -9,7 +9,6 @@ local F = require("user.functional")
 local tbl_merge = require("user.utils").tbl_merge
 
 local navic = require("nvim-navic")
-local illuminate = require("illuminate")
 
 local on_attach = function(client, bufnr)
   if client.name == "rust_analyzer" then
@@ -22,7 +21,6 @@ local on_attach = function(client, bufnr)
   end
   client.server_capabilities.document_range_formatting = false
 
-  illuminate.on_attach(client)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
   end

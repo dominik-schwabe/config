@@ -81,6 +81,7 @@ M.illuminate_blacklist = {
   "term",
   "vista",
   "yaml",
+  "TelescopePrompt"
 }
 M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
 M.lsp_configs = {

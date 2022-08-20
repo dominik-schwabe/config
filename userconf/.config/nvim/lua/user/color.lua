@@ -344,6 +344,9 @@ hl.other = {
   NoHighlight = { bg = "none", fg = "none" },
   EyelinerPrimary = { bg = palette.base5, fg = "none" },
   EyelinerSecondary = { bg = "none", fg = "none" },
+  IlluminatedWordText = { link = "CursorLine" },
+  IlluminatedWordRead = { link = "CursorLine" },
+  IlluminatedWordWrite = { link = "CursorLine" },
 }
 
 function M.setup()
