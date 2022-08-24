@@ -22,6 +22,7 @@ alias ll='ls -lAh'
 
 alias d='mkdir -p ~/.lucid && vim ~/.lucid/$(date -I).md'
 alias vim='nvim'
+alias novim='nvim -u NONE --cmd "au VimEnter * windo set nowrap number norelativenumber signcolumn=no | noremap Q :qa<cr>"'
 alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'
 alias oldvim='TERM=xterm-256color /usr/bin/env vim'
 alias benchmark-nvim='rm -f /tmp/nvim-startuptime && nvim --startuptime /tmp/nvim-startuptime -c ":e /tmp/nvim-startuptime"'
