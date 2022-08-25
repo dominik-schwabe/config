@@ -3,7 +3,7 @@ local config = require("user.config")
 require('illuminate').configure({
     providers = {
         'lsp',
-        'treesitter',
+        -- 'treesitter',
     },
     delay = 100,
     filetypes_denylist = config.illuminate_blacklist,

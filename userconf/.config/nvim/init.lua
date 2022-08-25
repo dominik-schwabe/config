@@ -39,7 +39,7 @@ function Test()
   end
 end
 
-require("user.plugins.colorizer")
+pcall(require, "user.plugins.colorizer")
 
 require("repl").setup({
   preferred = {

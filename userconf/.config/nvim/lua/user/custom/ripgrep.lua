@@ -5,7 +5,7 @@ local utils = require("user.utils")
 local F = require("user.functional")
 
 local curr_rg_job = nil
-local Job = require("plenary.job")
+
 local function rg(string, opt)
   opt = opt or {}
 
@@ -47,7 +47,7 @@ local function rg(string, opt)
   else
     root = fn.getcwd()
   end
-  curr_rg_job = Job:new({
+  curr_rg_job = require("plenary.job"):new({
     command = "rg",
     args = args,
     interactive = false,
