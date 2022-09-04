@@ -317,11 +317,11 @@ for_window [title="___linked_todo___"] move position center;
 for_window [title="___linked_todo___"] sticky enable
 bindsym $mod+0 exec --no-startup-id "scratchpad_handle -t ___linked_todo___ -s 80 -p todo"
 
-for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] floating enabled
-for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
-for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] border pixel 5
-for_window [instance="Mail" class="Thunderbird" title=".*Mozilla Thunderbird"] sticky enable
-bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -s 90 -n -t \\".*Mozilla Thunderbird\\" -i Mail -c Thunderbird"
+for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] floating enabled
+for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] move scratchpad
+for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] border pixel 5
+for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] sticky enable
+bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -s 90 -n -t \\".*Mozilla Thunderbird\\" -i Mail -c thunderbird"
 
 exec_always --no-startup-id feh --bg-fill "$HOME/.bg3.jpg"
 exec --no-startup-id flameshot

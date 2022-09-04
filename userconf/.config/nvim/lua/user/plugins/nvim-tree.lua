@@ -1,4 +1,6 @@
 local nvim_tree = require("nvim-tree")
+local utils = require("user.utils")
+
 local mappings = {
   { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
   { key = "<C-e>", action = "edit_in_place" },
@@ -79,4 +81,4 @@ nvim_tree.setup({
   },
 })
 
-vim.keymap.set({ "n", "x", "i", "t" }, "<F1>", nvim_tree.toggle)
+vim.keymap.set({ "n", "x", "i", "t" }, "<F1>", utils.esc_wrap(nvim_tree.toggle))

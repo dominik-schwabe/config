@@ -8,6 +8,7 @@ function M.replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, false, true, true)
 end
 
+local esc = M.replace_termcodes("<Esc>")
 local ctrl_v = M.replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
@@ -83,6 +84,15 @@ function M.load_neighbor_modules(this_file, module_path)
     if file ~= this_file_end then
       require(module_path .. "." .. vim.fn.fnamemodify(file, ":r"))
     end
+  end
+end
+
+function M.esc_wrap(func)
+  return function()
+    -- vim.cmd("stopinsert")
+    -- api.nvim_feedkeys(esc, "nx", false)
+    api.nvim_feedkeys(esc, "", false)
+    func()
   end
 end
 
