@@ -70,4 +70,13 @@ function M.f(func, ...)
   end
 end
 
+function M.chain(...)
+  local funcs = { ... }
+  return function()
+    for _, func in ipairs(funcs) do
+      func()
+    end
+  end
+end
+
 return M

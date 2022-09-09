@@ -57,7 +57,11 @@ vim.keymap.set("n", "<F3>", "<CMD>UndotreeToggle<CR>")
 local send = require("repl.send")
 local window = require("repl.window")
 
-vim.keymap.set("n", "<C-space>", F.f(send.paragraph))
+local function mark_jump()
+  vim.cmd("mark '")
+end
+
+vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph))
 vim.keymap.set("n", "<CR>", F.f(send.line_next))
 vim.keymap.set("x", "<CR>", F.f(send.visual))
 vim.keymap.set("n", "=", F.f(send.line))
