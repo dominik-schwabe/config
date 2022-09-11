@@ -1,9 +1,48 @@
 #!/usr/bin/env bash
-[ -z "$1" ] && {
-    echo "no tag given"
-    exit 0
+REPOSITORY=$1
+PAGES=${2-1}
+PAGE_SIZE=${3-20}
+PAGE_START=${4-1}
+
+MAX_PAGE_SIZE=100
+
+PAGE_SIZE=$(($PAGE_SIZE > $MAX_PAGE_SIZE ? $MAX_PAGE_SIZE : $PAGE_SIZE))
+
+[[ $PAGES == "all" ]] && {
+  ALL="true"
+  PAGE_SIZE=$MAX_PAGE_SIZE
 }
-( curl -sL --get "https://registry.hub.docker.com/v1/repositories/$1/tags" | jq -r '.[].name' 2>/dev/null ) || {
-    echo "no repositorie found"
-    exit 1
+
+[[ -z "$1" ]] && {
+  echo "no tag given" >&2
+  exit 1
 }
+
+PAGE_COUNT=0
+while [[ $ALL || $PAGE_COUNT -lt $PAGES ]]; do
+  PAGE=$(($PAGE_COUNT + $PAGE_START))
+  [[ $REPOSITORY != */* ]] && {
+    LIBRARY="library/"
+  }
+  URL="https://registry.hub.docker.com/v2/repositories/$LIBRARY$REPOSITORY/tags/?page_size=$PAGE_SIZE&page=$PAGE"
+  TAGS=$(curl -sfL --get "$URL" 2>/dev/null)
+  STATUS=$?
+  case "$STATUS" in
+    0) ;;
+    22)
+      [[ $PAGE_COUNT == 0 || ! $ALL ]] && {
+        echo "repository \"$REPOSITORY\" not found or list exhausted" >&2
+        exit 2
+      }
+      exit 0
+      ;;
+    *)
+      echo "unkown status code \"$STATUS\"" >&2
+      exit 3
+      ;;
+  esac
+  TAGS=$(jq -r '."results"[]["name"]' <<<"$TAGS")
+  echo "$TAGS"
+  [[ $(wc -l <<< "$TAGS") -lt $PAGE_SIZE ]] && exit 0
+  ((PAGE_COUNT += 1))
+done
