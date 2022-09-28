@@ -129,5 +129,5 @@ end
 
 vim.api.nvim_create_user_command("LspRoot", lsp_root, {})
 
-vim.keymap.set("n", "<space>lds", "<CMD>LspSettings<CR>")
-vim.keymap.set("n", "<space>ldr", "<CMD>LspRoot<CR>")
+vim.keymap.set("n", "<space>lds", lsp_settings)
+vim.keymap.set("n", "<space>ldr", lsp_root)

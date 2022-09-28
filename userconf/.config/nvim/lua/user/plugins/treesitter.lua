@@ -33,6 +33,22 @@ require("nvim-treesitter.configs").setup({
       node_decremental = "(",
     },
   },
+  markid = {
+    enable = false,
+    colors = {
+      "#ffffff",
+      "#eeeeee",
+      "#dddddd",
+      "#cccccc",
+      "#bbbbbb",
+      "#aaaaaa",
+      "#999999",
+      "#888888",
+      "#777777",
+      "#666666",
+      "#555555",
+    },
+  },
   matchup = {
     enable = false,
   },

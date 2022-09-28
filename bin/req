@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+
+import requests
+
+try:
+    data = sys.argv[1]
+except:
+    print("data method route port host")
+    exit()
+
+try:
+    method = sys.argv[2].upper()
+except IndexError:
+    method = "POST"
+
+if method != "GET":
+    data = json.loads(data)
+
+try:
+    route = sys.argv[3]
+except IndexError:
+    route = "/"
+
+try:
+    port = sys.argv[4]
+except IndexError:
+    port = 5000
+
+try:
+    host = sys.argv[5]
+except IndexError:
+    host = "localhost"
+
+url = f"http://{host}:{port}{route}"
+
+kwargs = {}
+if method != "GET":
+    kwargs["json"] = data
+
+r = requests.request(method, url, **kwargs)
+result = r.text
+result = r.json()
+print(result)

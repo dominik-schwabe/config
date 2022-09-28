@@ -1,14 +1,28 @@
 local fn = vim.fn
 local cmd = vim.cmd
 
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
+local packer_bootstrap
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  packer_bootstrap =
+    fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
   cmd("packadd packer.nvim")
 end
 
 require("packer").startup(function(use)
+  use({
+    "AckslD/swenv.nvim",
+    config = function()
+      require("swenv").setup({
+        get_venvs = function(venvs_path)
+          return require("swenv.api").get_venvs(venvs_path)
+        end,
+        venvs_path = vim.fn.expand("~/.local/share/virtualenvs"),
+        post_set_venv = nil,
+      })
+    end,
+  })
   -- packer
   use({
     "wbthomason/packer.nvim",
@@ -23,6 +37,15 @@ require("packer").startup(function(use)
       require("user.plugins.nvim-autopairs")
     end,
   })
+
+  -- use({
+  --   "smjonas/inc-rename.nvim",
+  --   config = function()
+  --     require("inc_rename").setup({
+  --       input_buffer_type = "dressing",
+  --     })
+  --   end,
+  -- })
 
   use({
     "kylechui/nvim-surround",
@@ -138,6 +161,7 @@ require("packer").startup(function(use)
       "nvim-treesitter/nvim-treesitter-context",
       "windwp/nvim-ts-autotag",
       "David-Kunz/treesitter-unit",
+      -- "David-Kunz/markid",
     },
     run = ":TSUpdate",
     config = function()
@@ -428,6 +452,6 @@ require("packer").startup(function(use)
   -- })
 
   if packer_bootstrap then
-    require('packer').sync()
+    require("packer").sync()
   end
 end)
