@@ -42,5 +42,8 @@ if method != "GET":
 
 r = requests.request(method, url, **kwargs)
 result = r.text
-result = r.json()
-print(result)
+try:
+    result = json.dumps(r.json())
+except:
+    result = r.text
+print(r.status_code, result)

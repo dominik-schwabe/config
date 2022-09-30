@@ -27,10 +27,10 @@ font:
 #      - -u # force UTF-8 in tmux
 tabspaces: 2
 
-windows:
+window:
   decorations: none
   padding:
-    x: 2
+    x: 4
     y: 2
 
 mouse:
