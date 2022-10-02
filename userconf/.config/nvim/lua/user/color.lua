@@ -30,9 +30,12 @@ local palette = {
   grey = "#8F908A",
   black = "#000000",
   pink = "#f92672",
+  alt_green = "#aadb00",
   green = "#87ff00",
   aqua = "#66d9ef",
+  dark_yellow = "#cccc00",
   yellow = "#e6db74",
+  dark_orange = "#dd7700",
   orange = "#fd971f",
   purple = "#ae81ff",
   match_paren = "#dd5888",
@@ -87,6 +90,7 @@ hl.navic = {
 }
 
 hl.syntax = {
+  CurSearch = { fg = palette.base2, bg = palette.orange },
   Boolean = { fg = palette.purple },
   Character = { fg = palette.yellow },
   ColorColumn = { bg = palette.base3 },
@@ -141,7 +145,7 @@ hl.syntax = {
   Question = { fg = palette.yellow },
   QuickFixLine = { fg = palette.purple, bold = true },
   Repeat = { fg = palette.pink },
-  Search = { fg = palette.base2, bg = palette.yellow },
+  Search = { fg = palette.base2, bg = palette.dark_yellow },
   SignColumn = { bg = "none" },
   Special = { fg = palette.white },
   SpecialChar = { fg = palette.pink },

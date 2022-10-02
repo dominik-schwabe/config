@@ -3,7 +3,7 @@ local lsp = vim.lsp
 local lsp_buf = lsp.buf
 local diagnostic = vim.diagnostic
 
-local util = require("vim.lsp.util")
+local def_opt = { silent = true }
 
 local F = require("user.functional")
 local tbl_merge = require("user.utils").tbl_merge
@@ -11,16 +11,6 @@ local tbl_merge = require("user.utils").tbl_merge
 local navic = require("nvim-navic")
 
 local on_attach = function(client, bufnr)
-  if client.name == "rust_analyzer" then
-    vim.keymap.set("n", "<space>f", function()
-      local params = util.make_formatting_params({})
-      client.request("textDocument/formatting", params, nil, bufnr)
-    end, { buffer = bufnr })
-  else
-    client.server_capabilities.document_formatting = false
-  end
-  client.server_capabilities.document_range_formatting = false
-
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
   end
@@ -79,13 +69,13 @@ for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
     opts.capabilities = cap
   end
   if server_name == "rust_analyzer" then
-    opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer"}
+    opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
     opts.settings = {
-        ["rust-analyzer"] = {
-          checkOnSave = {
-            command = "clippy"
-          }
-        }
+      ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy",
+        },
+      },
     }
     require("rust-tools").setup({ server = opts })
   else
@@ -126,6 +116,17 @@ local function lsp_root()
   end))
   D(root_dirs)
 end
+
+vim.keymap.set("n", "<space>f", function()
+  vim.lsp.buf.format({
+    async = true,
+    filter = function(a)
+      return F.any(config.format_clients, function(client)
+        return client == a["name"]
+      end)
+    end,
+  })
+end, def_opt)
 
 vim.api.nvim_create_user_command("LspRoot", lsp_root, {})
 

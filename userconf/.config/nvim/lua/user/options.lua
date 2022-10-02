@@ -15,11 +15,12 @@ opt.relativenumber = true
 opt.wrap = false
 opt.cursorline = true
 opt.signcolumn = "yes"
+opt.mouse = nil
 
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.splitbelow = true
 opt.splitright = true
-opt.cmdheight = 2
+opt.cmdheight = 1
 opt.ignorecase = true
 opt.clipboard:append("unnamedplus")
 opt.encoding = "utf-8"

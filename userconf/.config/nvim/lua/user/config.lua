@@ -34,24 +34,35 @@ M.navic_icons = {
   Operator = " ",
   TypeParameter = " ",
 }
-M.root_patterns = {
-  "=nvim",
-  "=node_modules",
-  "node_modules",
-  "package.json",
-  "package-lock.json",
-  ".git",
-  "_darcs",
-  ".hg",
-  ".bzr",
-  ".svn",
-  ".latexmkrc",
-  "Makefile",
-  "package.json",
-  "Pipfile",
-  "Pipfile.lock",
-  "requirements.txt",
-  "Cargo.toml"
+M.rooter = {
+  ends_with = {
+    "/nvim",
+    "/node_modules",
+  },
+  has = {
+    "node_modules",
+    "package.json",
+    "package-lock.json",
+    ".git",
+    "_darcs",
+    ".hg",
+    ".bzr",
+    ".svn",
+    ".latexmkrc",
+    "Makefile",
+    "package.json",
+    "Pipfile",
+    "Pipfile.lock",
+    "requirements.txt",
+    "Cargo.toml",
+  },
+  parent_ends_with = {
+    "/site-packages",
+  },
+  patterns = {
+    { 1, "/lib/python3.[0-9]*$" },
+    { 0, "/lib/python3.[0-9]*$" },
+  },
 }
 M.whitespace_blacklist = {
   "TelescopePrompt",
@@ -81,7 +92,7 @@ M.illuminate_blacklist = {
   "term",
   "vista",
   "yaml",
-  "TelescopePrompt"
+  "TelescopePrompt",
 }
 M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
 M.lsp_configs = {
@@ -203,6 +214,10 @@ local treesitter_min = {
 M.treesitter = {
   ensure_installed = treesitter_min,
   highlight_disable = {},
+}
+M.format_clients = {
+  "null-ls",
+  "rust_analyzer",
 }
 M.linters = {
   text = { "languagetool" },

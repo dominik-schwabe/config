@@ -38,15 +38,6 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- use({
-  --   "smjonas/inc-rename.nvim",
-  --   config = function()
-  --     require("inc_rename").setup({
-  --       input_buffer_type = "dressing",
-  --     })
-  --   end,
-  -- })
-
   use({
     "kylechui/nvim-surround",
     config = function()
@@ -348,15 +339,6 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- rooter
-  use({
-    "dominik-schwabe/project.nvim",
-    -- "ahmedkhalf/project.nvim",
-    config = function()
-      require("user.plugins.project-nvim")
-    end,
-  })
-
   -- todo
   use({
     "folke/todo-comments.nvim",
@@ -374,19 +356,14 @@ require("packer").startup(function(use)
     end,
   })
 
-  -- repeat motion commands
-  -- use({
-  --   "jonatan-branting/nvim-better-n",
-  --   config = function()
-  --     require("user.plugins.better-n")
-  --   end,
-  -- })
-
   -- use("pwntester/octo.nvim") -- github issues and pull request
   -- use("NTBBloodbath/rest.nvim")
-  -- use({"matbme/JABS.nvim", config=function ()
-  -- require("user.plugins.jabs")
-  -- end})
+  -- use({
+  --   "matbme/JABS.nvim",
+  --   config = function()
+  --     require("user.plugins.jabs")
+  --   end,
+  -- })
 
   -- legacy
   use("lark-parser/vim-lark-syntax")
@@ -395,12 +372,6 @@ require("packer").startup(function(use)
     "jlanzarotta/bufexplorer",
     config = function()
       require("user.plugins.bufexplorer")
-    end,
-  })
-  use({
-    "haya14busa/vim-asterisk",
-    config = function()
-      require("user.plugins.asterisk")
     end,
   })
   use("wellle/targets.vim")
@@ -412,7 +383,6 @@ require("packer").startup(function(use)
     end,
   })
   use("tpope/vim-repeat")
-  -- use("tpope/vim-surround")
   use({
     "foosoft/vim-argwrap",
     config = function()

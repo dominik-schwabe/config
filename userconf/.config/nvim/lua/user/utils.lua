@@ -96,4 +96,18 @@ function M.esc_wrap(func)
   end
 end
 
+function M.exists(path)
+  return vim.fn.empty(vim.fn.glob(path)) == 0
+end
+
+function M.concat(...)
+  local new_table = {}
+  for _, t in ipairs({ ... }) do
+    for _, v in ipairs(t) do
+      new_table[#new_table + 1] = v
+    end
+  end
+  return new_table
+end
+
 return M
