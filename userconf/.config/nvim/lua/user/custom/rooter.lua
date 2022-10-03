@@ -41,9 +41,6 @@ local function parent_ends_with(dir, suffixes)
 end
 
 local function find_root(base_path)
-  if not utils.exists(base_path) then
-    return
-  end
   local dirs = list_parents(base_path .. "/")
   for i, dir in ipairs(dirs) do
     if
@@ -69,6 +66,9 @@ local function chdir()
     return
   end
   local base_path = vim.fn.expand("%:p:h", true)
+  if not utils.exists(base_path) then
+    return
+  end
   local root = find_root(base_path) or base_path
   if root ~= vim.fn.getcwd() then
     vim.api.nvim_set_current_dir(root)
