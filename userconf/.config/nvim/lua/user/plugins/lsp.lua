@@ -51,8 +51,7 @@ mason_lspconfig.setup({
   log_level = vim.log.levels.ERROR,
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+local capabilities = cmp_nvim_lsp.default_capabilities()
 
 for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
   local opts = lsp_configs[server_name] or {}
