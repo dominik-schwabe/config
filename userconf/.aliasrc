@@ -75,6 +75,7 @@ alias rs='asdf reshim'
 alias e='extract'
 alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 alias ytdl='yt-dlp --extract-audio --audio-format m4a --format best'
+alias my='mpv --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]" &>/dev/null'
 
 alias assh='eval $(ssh-agent -s) && ssh-add ~/.ssh/id_rsa'
 

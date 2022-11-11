@@ -98,7 +98,6 @@ git_prompt_info() {
         [[ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ]] && echo " %F{14}no branch%f"
     fi
 }
-PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
 
 declare -u _GET_ASDF_VERSION_VARIABLE_NAME
 _get_asdf_versions_prompt() {
@@ -123,7 +122,14 @@ _get_asdf_versions_prompt() {
 
 get_python_version() { _get_asdf_versions_prompt python || echo system }
 get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
-RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
+
+if [[ -z "$MINIMAL_CONFIG" ]]; then
+    PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
+    RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
+else
+    PROMPT='%B%F{blue}%2~%f%b >>> '
+    RPS1=''
+fi
 # theme end
 
 setopt extendedhistory
