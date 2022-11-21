@@ -15,7 +15,7 @@ local on_attach = function(client, bufnr)
     navic.attach(client, bufnr)
   end
 
-  local map_opt = { buffer = bufnr, silent = true }
+  local map_opt = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
   vim.keymap.set("n", "gd", lsp_buf.definition, map_opt)
   vim.keymap.set("n", "gt", lsp_buf.type_definition, map_opt)
@@ -67,6 +67,9 @@ for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
     cap.offsetEncoding = { "utf-16" }
     opts.capabilities = cap
   end
+  opts.lsp_flags = {
+    debounce_text_changes = 250,
+  }
   if server_name == "rust_analyzer" then
     opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
     opts.settings = {

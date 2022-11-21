@@ -1,7 +1,7 @@
 # clone pluginmanager if not exist
 [[ -d ~/.zi/bin ]] || git clone https://github.com/z-shell/zi ~/.zi/bin
 
-[[ -r ~/.profile ]] && . ~/.profile
+[[ -r ~/.envrc ]] && . ~/.envrc
 [[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc

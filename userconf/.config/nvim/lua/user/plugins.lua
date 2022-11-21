@@ -209,13 +209,6 @@ require("packer").startup(function(use)
       require("user.plugins.lualine")
     end,
   })
-  -- TODO: setup
-  -- use({
-  --   "AckslD/nvim-trevJ.lua",
-  --   config = function()
-  --     require("trevj").setup()
-  --   end,
-  -- })
 
   -- dap
   use({
@@ -356,6 +349,21 @@ require("packer").startup(function(use)
     end,
   })
 
+  use({
+    "Wansmer/treesj",
+    config = function()
+      require("user.plugins.treesj")
+    end,
+  })
+
+  -- use({
+  --   "Wansmer/sibling-swap.nvim",
+  --   requires = { "nvim-treesitter" },
+  --   config = function()
+  --     require("sibling-swap").setup({})
+  --   end,
+  -- })
+
   -- use("pwntester/octo.nvim") -- github issues and pull request
   -- use("NTBBloodbath/rest.nvim")
   -- use({
@@ -383,12 +391,6 @@ require("packer").startup(function(use)
     end,
   })
   use("tpope/vim-repeat")
-  use({
-    "foosoft/vim-argwrap",
-    config = function()
-      require("user.plugins.argwrap")
-    end,
-  })
   use({
     "AndrewRadev/sideways.vim",
     config = function()

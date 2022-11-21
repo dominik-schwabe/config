@@ -3,7 +3,7 @@ shopt -s checkwinsize
 shopt -s cmdhist
 shopt -u autocd
 
-[[ -r ~/.profile ]] && . ~/.profile
+[[ -r ~/.envrc ]] && . ~/.envrc
 [[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
