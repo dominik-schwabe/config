@@ -11,6 +11,7 @@ local langs = {
     }),
     argument_list = tsj_utils.set_preset_for_args(),
     parameters = tsj_utils.set_preset_for_args(),
+    tuple = tsj_utils.set_preset_for_args(),
     list_comprehension = tsj_utils.set_preset_for_list({
       join = { space_in_brackets = false },
     }),
@@ -18,6 +19,12 @@ local langs = {
       join = { space_in_brackets = false },
     }),
   },
+  rust = {
+    parameters = tsj_utils.set_preset_for_args(),
+    type_arguments = tsj_utils.set_preset_for_args(),
+    arguments = tsj_utils.set_preset_for_args(),
+    tuple_expression = tsj_utils.set_preset_for_args(),
+  }
 }
 
 treesj.setup({
