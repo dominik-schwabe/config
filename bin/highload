@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+PERCENTAGE=${1-100}
+PROCESSORS=$(nproc --all)
+if ! [ $PERCENTAGE -eq $PERCENTAGE ] 2>/dev/null; then
+  echo "argument is no number"
+  exit 1
+fi
+if (($PERCENTAGE < 0 || $PERCENTAGE > 100)); then
+  echo "invalid percentage"
+  exit 1
+fi
+USED_PROCESSORS=$(python -c "print(int(max(round($PERCENTAGE / 100 * $PROCESSORS), 1)))")
+if [[ $? != 0 ]]; then
+  echo "python not installed"
+  exit 1
+fi
+
+FRACTION=$(python -c "print(int($USED_PROCESSORS / $PROCESSORS * 100))")
+
+trap 'kill $(jobs -p)' INT
+
+echo "using $USED_PROCESSORS of $PROCESSORS processors ($FRACTION%)"
+for ((i = 0; i < $USED_PROCESSORS; i++)); do
+  python -c "while True: pass" &
+done
+
+wait

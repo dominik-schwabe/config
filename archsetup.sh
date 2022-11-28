@@ -31,7 +31,6 @@ dosfstools
 efibootmgr
 gcc-fortran
 git
-gnome-keyring
 grub
 gutenprint
 gvfs
@@ -39,6 +38,7 @@ gvfs-mtp
 gvim
 inetutils
 jq
+keychain
 linux-firmware
 linux-zen
 lua
