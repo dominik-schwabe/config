@@ -42,11 +42,6 @@ alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
 
-alias txs='tmuxinator start'
-alias txo='tmuxinator open'
-alias txn='tmuxinator new'
-alias txl='tmuxinator list'
-
 alias R='R --no-save'
 alias dst='sudo systemctl start docker.service'
 alias dsp='sudo systemctl stop docker.socket'
@@ -66,7 +61,7 @@ alias ppjson='python -m json.tool'
 alias install_zsh='curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh'
 alias install_treesitter='cargo install --git https://github.com/tree-sitter/tree-sitter.git'
 alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'
-alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh  && chmod 755 ~/bin/cht.sh'
+alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh && chmod 755 ~/bin/cht.sh'
 alias install_tldr='npm install -g tldr'
 alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path"
 alias te='translate de:en'
@@ -89,6 +84,7 @@ alias curl='curl -fsSL'
 alias top='bpytop'
 alias oldtop='/usr/bin/env top'
 
+alias a='vim ~/.config/awesome/rc.lua'
 alias v='vim ~/.config/nvim/init.lua'
 
 alias grhs='git reset --soft HEAD^'
@@ -98,6 +94,11 @@ alias work='track work'
 
 alias whatismyip='curl ifconfig.me'
 alias whereami='curl https://ipinfo.io/loc'
+
+alias sst='(sinfo -S "%n" -O nodehost:12,memory:8,freemem:10,allocmem:11,cpusstate:15,socketcorethread:10 \
+&& echo && sinfo -S "%n" -O nodehost:12,statecompact:7,gres:30,gresused:30,reason:60 \
+&& echo && squeue -S i -o "%5i %12u %20j %5C %10m %8T %5D %11l %11L %R")'
+alias sqc='squeue -S i -o "%5i %10u %5C %10m %o"'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

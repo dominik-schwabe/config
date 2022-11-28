@@ -1,3 +1,5 @@
+local unpack = table.unpack
+
 local M = {}
 
 function M.foreach(list, cb)

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+_PYTHON_VERSION=$(grep python ~/.tool-versions | cut -d" " -f 2)
+if [[ -n $_PYTHON_VERSION ]]; then
+  $HOME/.asdf/installs/python/$_PYTHON_VERSION/bin/ipython
+else
+  echo "no python version configured"
+  sleep infinity
+fi

@@ -206,12 +206,13 @@ set ttyfast
 
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-noremap Q :qa<CR>
+noremap gw <CMD>write<CR>
+noremap Q <CMD>qa<CR>
 noremap <left> <C-W>H
 noremap <right> <C-W>L
 noremap <up> <C-W>K
 noremap <down> <C-W>J
-nnoremap <silent> ö :noh<CR>
+nnoremap <silent> ö <CMD>noh<CR>
 noremap <c-g> 2<c-g>
 
 vmap < <gv

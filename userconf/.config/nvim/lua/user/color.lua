@@ -258,7 +258,7 @@ hl.treesitter = {
   ["@todo"] = { fg = palette.aqua },
   ["@type"] = { fg = palette.aqua },
   ["@type.builtin"] = { fg = palette.neon_purple },
-  ["@type.qualifier"] = { fg = palette.neon_purple },
+  ["@type.qualifier"] = { fg = palette.red },
   ["@type.definition"] = { fg = palette.neon_purple },
   ["@variable"] = { fg = palette.white },
   ["@variable.builtin"] = { fg = palette.orange },
