@@ -29,6 +29,22 @@ local function j(func, ...)
   end
 end
 
+local function build_resizer(x, y, width, height)
+  return function(c)
+    c.x = c.x + x
+    c.y = c.y + y
+    c.width = c.width + width
+    c.height = c.height + height
+  end
+end
+
+local offset = 10
+local function move(c, rel_x, rel_y)
+  local geom = c.screen.geometry
+  c.x = math.min(math.max(c.x + rel_x, -c.width + offset), geom.width - offset)
+  c.y = math.min(math.max(c.y + rel_y, -c.height + offset), geom.height - offset)
+end
+
 local function screen_ratio()
   local geometry = awful.screen.focused().workarea
   return geometry.height / geometry.width
@@ -305,6 +321,46 @@ M.swap_right = function()
     awful.client.swap.bydirection("right")
   end
 end
+M.move_left = function(c)
+  move(c, -50, 0)
+end
+M.move_top = function(c)
+  move(c, 0, -50)
+end
+M.move_right = function(c)
+  move(c, 50, 0)
+end
+M.move_bottom = function(c)
+  move(c, 0, 50)
+end
+M.swap_resize_left = function (c)
+  if c.floating then
+    M.move_left(c)
+  else
+    M.swap_left()
+  end
+end
+M.swap_resize_top = function (c)
+  if c.floating then
+    M.move_top(c)
+  else
+    M.swap_top()
+  end
+end
+M.swap_resize_right = function (c)
+  if c.floating then
+    M.move_right(c)
+  else
+    M.swap_right()
+  end
+end
+M.swap_resize_bottom = function (c)
+  if c.floating then
+    M.move_bottom(c)
+  else
+    M.swap_bottom()
+  end
+end
 M.focus_top = j(awful.client.focus.bydirection, "up")
 M.focus_bottom = j(awful.client.focus.bydirection, "down")
 M.focus_left = function()
@@ -357,14 +413,14 @@ M.inc_number_of_masters = j(awful.tag.incnmaster, 1, nil, true)
 M.dec_number_of_masters = j(awful.tag.incnmaster, -1, nil, true)
 M.inc_number_of_columns = j(awful.tag.incncol, 1, nil, true)
 M.dec_number_of_columns = j(awful.tag.incncol, -1, nil, true)
-M.grow_bottom = j(awful.client.moveresize, 0, 0, 0, 20)
-M.shrink_bottom = j(awful.client.moveresize, 0, 0, 0, -20)
-M.grow_left = j(awful.client.moveresize, -20, 0, 20, 0)
-M.shrink_left = j(awful.client.moveresize, 0, 0, -20, 0)
-M.grow_top = j(awful.client.moveresize, 0, -20, 0, 20)
-M.shrink_top = j(awful.client.moveresize, 0, 20, 0, -20)
-M.grow_right = j(awful.client.moveresize, 0, 0, 20, 0)
-M.shrink_right = j(awful.client.moveresize, 20, 0, -20, 0)
+M.grow_bottom = build_resizer(0, 0, 0, 20)
+M.shrink_bottom = build_resizer(0, 0, 0, -20)
+M.grow_left = build_resizer(-20, 0, 20, 0)
+M.shrink_left = build_resizer(0, 0, -20, 0)
+M.grow_top = build_resizer(0, -20, 0, 20)
+M.shrink_top = build_resizer(0, 20, 0, -20)
+M.grow_right = build_resizer(0, 0, 20, 0)
+M.shrink_right = build_resizer(20, 0, -20, 0)
 M.prev_tag = awful.tag.viewprev
 M.next_tag = awful.tag.viewnext
 M.jump_to_urgent = awful.client.urgent.jumpto

@@ -81,10 +81,6 @@ local globalkeys = gears.table.join(
   bindkey("client", mod, "j", f.focus_bottom, "focus the bottom client"),
   bindkey("client", mod, "h", f.focus_left, "focus the left client"),
   bindkey("client", mod, "l", f.focus_right, "focus the right client"),
-  bindkey("client", mod_shift, "h", f.swap_left, "focus the left client"),
-  bindkey("client", mod_shift, "j", f.swap_bottom, "focus the bottom client"),
-  bindkey("client", mod_shift, "k", f.swap_top, "focus the top client"),
-  bindkey("client", mod_shift, "l", f.swap_right, "focus the right client"),
   bindkey("layout", mod, "e", f.layout_tile, "tile layout"),
   bindkey("layout", mod, "w", f.layout_max, "max layout"),
   bindkey("layout", mod, "q", f.layout_bottom, "bottom layout"),
@@ -113,16 +109,6 @@ local globalkeys = gears.table.join(
   -- bindkey("layout", mod_ctrl, "l", f.dec_number_of_columns, "decrease the number of columns"),
 
   bindkey("client", mod, "n", f.restore_minimized, "restore minimized"),
-
-  -- Resize
-  bindkey("client", mod, "Down", f.grow_bottom, "shrink the bottom of the window"),
-  bindkey("client", mod, "Up", f.grow_top, "grow the bottom of the window"),
-  bindkey("client", mod, "Left", f.grow_left, "shrink the left of the window"),
-  bindkey("client", mod, "Right", f.grow_right, "grow the left of the window"),
-  bindkey("client", mod_shift, "Down", f.shrink_top, "shrink the top of the window"),
-  bindkey("client", mod_shift, "Up", f.shrink_bottom, "grow the top of the window"),
-  bindkey("client", mod_shift, "Left", f.shrink_left, "shrink the right of the window"),
-  bindkey("client", mod_shift, "Right", f.shrink_right, "grow the right of the window"),
 
   -- Prompt
   bindkey("launcher", mod, "d", f.rofi, "run prompt"),
