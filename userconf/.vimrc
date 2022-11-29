@@ -184,6 +184,8 @@ set softtabstop=2
 set autoindent
 set smartindent
 set expandtab
+set hlsearch
+set incsearch
 
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus

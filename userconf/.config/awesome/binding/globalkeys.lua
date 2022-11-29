@@ -12,24 +12,13 @@ local mod_ctrl = { vars.modkey, "Control" }
 local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
-local dropdown_terminal_1_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___dropdownterminal_1___ -o font.size=10",
-  name = "___dropdownterminal_1___",
+local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
+  cmd = "alacritty -t ___dropdownterminal___ -o font.size=10 -e bash -c 'export IS_DROPDOWN=true; tmux attach -t dropdown &>/dev/null || tmux new-session -t dropdown'",
+  name = "___dropdownterminal___",
   border_width = 3,
   overlap = false,
   width = 0.85,
   height = 0.85,
-  border_color = "#77aa00",
-  group = "1",
-})
-
-local dropdown_ipython_2_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___dropdownterminal_2___ -o font.size=10",
-  name = "___dropdownterminal_2___",
-  border_width = 3,
-  overlap = false,
-  width = 0.6,
-  height = 0.6,
   border_color = "#77aa00",
   group = "1",
 })
@@ -83,6 +72,18 @@ local blanket_toggle = dropdown.build_toggle_dropdown({
   group = "1",
 })
 
+local sxiv_toggle = dropdown.build_toggle_dropdown({
+  cmd = "find $HOME/Pictures -maxdepth 1 -type f | xargs ls -t1 | xargs sxiv -N ___dropdown_images___",
+  instance = "___dropdown_images___",
+  class = "Sxiv",
+  border_width = 3,
+  overlap = false,
+  width = 900,
+  height = 523,
+  border_color = "#02b4ef",
+  group = "1",
+})
+
 local globalkeys = gears.table.join(
   bindkey("awesome", mod, "s", f.show_help, "show help"),
 
@@ -99,12 +100,12 @@ local globalkeys = gears.table.join(
   bindkey("layout", mod, "q", f.layout_bottom, "bottom layout"),
   bindkey("layout", mod, "a", f.layout_fair, "fair layout"),
 
-  bindkey("dropdown", mod, "asciicircum", dropdown_terminal_1_toggle, "toggle the dropdown terminal"),
-  bindkey("dropdown", mod, "F1", dropdown_ipython_2_toggle, "toggle a ipython interpreter"),
-  bindkey("dropdown", mod, "F12", todo_toggle, "open a todo scratchpad"),
-  bindkey("dropdown", mod, "adiaeresis", thunderbird_toggle, "pull thunderbird to the front"),
+  bindkey("dropdown", mod, "asciicircum", dropdown_terminal_toggle, "toggle the dropdown terminal"),
+  bindkey("dropdown", mod, "F1", sxiv_toggle, "toggle picture viewer"),
+  bindkey("dropdown", mod, "F12", todo_toggle, "toggle the todo scratchpad"),
+  bindkey("dropdown", mod, "adiaeresis", thunderbird_toggle, "toggle thunderbird"),
   bindkey("dropdown", mod_shift, "x", blanket_toggle, "toggle blanket"),
-  bindkey("dropdown", mod_shift, "y", cmus_toggle, "show the cmus music player"),
+  bindkey("dropdown", mod_shift, "y", cmus_toggle, "toggle cmus"),
 
   -- Layout manipulation
   -- bindkey("screen", mod_ctrl, "j", f.focus_next_screen, "focus the next screen"),
@@ -149,7 +150,7 @@ local globalkeys = gears.table.join(
   bindkey("audio", mod, "less", f.audio_prev, "play the previous track"),
   bindkey("audio", mod, "y", f.toggle_audio_program, "start/stop the audio"),
   bindkey("audio", mod, "x", f.audio_next, "play the next track"),
-  bindkey("misc", {}, "XF86Launch1", f.toggle_lidswitch, "toggle the suspense trigger of closing the lid"),
+  bindkey("misc", {}, "XF86Launch1", f.toggle_lidswitch, "toggle preventing supending"),
   bindkey("tag", mod, "odiaeresis", f.to_webbrowser_screen, "focus the webbrowser screen"),
   bindkey("launcher", mod_shift, "Return", f.open_filebrowser, "open the graphical file browser"),
   bindkey("screenshot", {}, "Print", f.screen_screenshot, "take a screenshot of the entire screen"),
@@ -159,7 +160,7 @@ local globalkeys = gears.table.join(
   bindkey("launcher", mod_shift, "c", f.toggle_auto_clicker, "toggle an auto clicker"),
   bindkey("launcher", mod, "c", f.toggle_color_picker, "toggle the color picker"),
 
-  bindkey("launcher", mod, "Delete", f.toggle_window_terminator, "toggle the window terminator")
+  bindkey("launcher", mod, "Delete", f.toggle_window_terminator, "toggle xkill")
 )
 
 -- Bind all key numbers to tags.

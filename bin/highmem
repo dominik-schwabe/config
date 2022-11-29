@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+from sys import argv
+from time import sleep
+
+
+def meminfo():
+    with open("/proc/meminfo", "r") as mem:
+        ret = {}
+        tmp = 0
+        for i in mem:
+            sline = i.split()
+            if str(sline[0]) == "MemTotal:":
+                ret["total"] = int(sline[1])
+            elif str(sline[0]) in ("MemFree:", "Buffers:", "Cached:"):
+                tmp += int(sline[1])
+        ret["free"] = tmp
+        ret["used"] = int(ret["total"]) - int(ret["free"])
+    return ret
+
+
+try:
+    percentage = int(argv[1])
+except IndexError:
+    percentage = 98
+except ValueError:
+    print("integer is required")
+    exit(1)
+
+if percentage <= 0 or percentage > 100:
+    print(f"the percentage has to be in the interval (0,100]")  # )
+
+try:
+    memory = meminfo()
+
+    wanted = memory["total"] * percentage / 100
+    to_allocate = int(wanted - memory["used"]) * 1000
+
+    if to_allocate <= 0:
+        print("nothing to allocate")
+    else:
+        print(f"allocating {int(to_allocate / 1_000_000)}MB")
+        data = b"\0" * to_allocate
+
+    while True:
+        sleep(1000)
+except KeyboardInterrupt:
+    pass

@@ -1,37 +1,9 @@
 local awful = require("awful")
 local F = require("util.functional")
+local f = require("functions")
 local beautiful = require("beautiful")
 
 local client = client
-
-local function focused_tag()
-  return awful.screen.focused().selected_tag
-end
-
-local function to_first(c)
-  local tag = awful.tag.find_by_name(awful.screen[1], "1")
-  c:move_to_tag(tag)
-end
-
-local function compute_size(config)
-  config = config or {}
-  local overlap = config.overlap
-  local width = config.width
-  local height = config.height
-  local border_width = config.border_width
-
-  local sel = overlap and "geometry" or "workarea"
-  local geom = awful.screen.focused()[sel]
-  if width <= 1 then
-    width = math.floor(geom.width * width) - 2 * border_width
-  end
-  if height <= 1 then
-    height = math.floor(geom.height * height)
-  end
-  local x = geom.x + (geom.width - width) / 2
-  local y = geom.y + (geom.height - height) / 2
-  return { x = x, y = y, width = width, height = height }
-end
 
 local groups = {}
 local managed_clients = {}
@@ -62,7 +34,7 @@ local function other_has_focus(c)
 end
 
 local function should_show(c)
-  local current_tag = focused_tag()
+  local current_tag = f.focused_tag()
   local was_different_tag = not c.hidden and not c.sticky and current_tag and not client_is_on_tag(c, current_tag)
   return c.hidden or was_different_tag
 end
@@ -72,19 +44,15 @@ local function option_applier(config)
     if show == nil then
       show = should_show(c) or (client.focus and client.focus.fullscreen) or other_has_focus(c)
     end
-    local geom = compute_size(config)
     c.hidden = not show
     c.floating = show
     c.sticky = show
     c.above = show
     c.border_width = c._border_width or beautiful.border_width
     c.border_color = c._border_color or beautiful.border_focus_float
-    to_first(c)
+    f.to_first(c)
     if show then
-      c.x = geom.x
-      c.y = geom.y
-      c.width = geom.width
-      c.height = geom.height
+      f.set_geometry(c, config)
       client.focus = c
       hide_group(c)
     end
@@ -120,7 +88,7 @@ local function build_toggle_dropdown(config)
 
     if not dropdown_client then
       if cmd then
-        awful.spawn(cmd)
+        awful.spawn.with_shell(cmd)
       end
       return
     end

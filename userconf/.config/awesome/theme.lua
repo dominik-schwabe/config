@@ -1,9 +1,4 @@
-local theme_assets = require("beautiful.theme_assets")
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
 local colors = require("colors")
-
-local theme_path = require("awful.util").getdir("config") .. "/themes/default/"
 
 local M = {}
 
@@ -46,10 +41,6 @@ M.taglist_fg_urgent = colors["black"]
 M.taglist_bg_occupied = colors["black"]
 M.taglist_fg_occupied = colors["grey300"]
 
--- local taglist_square_size = dpi(4)
--- M.taglist_squares_sel = theme_assets.taglist_squares_sel(taglist_square_size, colors["black"])
--- M.taglist_squares_unsel = theme_assets.taglist_squares_unsel(taglist_square_size, colors["white"])
-
 M.tasklist_bg_normal = colors["black"]
 M.tasklist_fg_normal = colors["grey300"]
 M.tasklist_bg_focus = "#222222"
@@ -73,6 +64,17 @@ M.menu_fg_focus = colors["black"]
 
 M.menu_border_color = colors["blue500"] .. "cc"
 M.menu_border_width = 1
+
+M.notification_bg = '#222222'
+M.notification_fg = '#cccccc'
+M.notification_margin = 40
+M.hotkeys_bg = '#222222' .. "ee"
+M.hotkeys_fg = '#ffffff'
+M.hotkeys_border_width = 1
+M.hotkeys_border_color = "#77aa00"
+M.hotkeys_modifiers_fg = colors["green400"]
+M.hotkeys_label_fg = "#000000"
+M.hotkeys_group_margin = 15
 
 M.systray_icon_spacing = 1
 

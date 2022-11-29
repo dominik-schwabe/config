@@ -65,77 +65,95 @@ local function resize_float(c, x, y)
   c:relative_move(-x, -y, 2 * x, 2 * y)
 end
 
-local function float_resize(c, width, height)
-  c.floating = true
-  c.width = width
-  c.height = height
+M.set_geometry = function (c, config)
+  config = config or {}
+  local overlap = config.overlap or false
+  local width = config.width
+  local height = config.height
+  local border_width = config.border_width or c.border_width
+  local alignment = config.alignment or "center"
+
+  local sel = overlap and "geometry" or "workarea"
+  local geom = awful.screen.focused()[sel]
+  local new_width = width
+  local new_height = height
+  if width <= 1 then
+    new_width = math.floor(geom.width * width) - 2 * border_width
+  end
+  if height <= 1 then
+    new_height = math.floor(geom.height * height) - 2 * border_width
+  end
+  c.width = new_width
+  c.height = new_height
+  M.align(c, alignment)
 end
 
-M.align = function(c, position)
-  local geometry = c.screen.workarea
-  local max_width = geometry.width
-  local max_height = geometry.height
-  local right = max_width - c.width
-  local bottom = max_height - c.height
+M.align = function(c, alignment)
+  local border_width = c._border_width or beautiful.border_width
+  local geo = c.screen.workarea
+  local right = geo.width - 2* border_width - c.width
+  local bottom = geo.height - 2* border_width - c.height
   local center_x = right * 0.5
   local center_y = bottom * 0.5
-  local border_width = c._border_width or beautiful.border_width
-  right = right - 2 * border_width
-  bottom = bottom - 2 * border_width
-  if position == "center" then
+  if alignment == "center" then
     c.x = center_x
     c.y = center_y
   end
-  if position == "topleft" then
+  if alignment == "topleft" then
     c.x = 0
     c.y = 0
   end
-  if position == "topright" then
+  if alignment == "topright" then
     c.x = right
     c.y = 0
   end
-  if position == "bottomleft" then
+  if alignment == "bottomleft" then
     c.x = 0
     c.y = bottom
   end
-  if position == "bottomright" then
+  if alignment == "bottomright" then
     c.x = right
     c.y = bottom
   end
-  if position == "top" then
+  if alignment == "top" then
     c.x = center_x
     c.y = 0
   end
-  if position == "right" then
+  if alignment == "right" then
     c.x = right
     c.y = center_y
   end
-  if position == "bottom" then
+  if alignment == "bottom" then
     c.x = center_x
     c.y = bottom
   end
-  if position == "left" then
+  if alignment == "left" then
     c.x = 0
     c.y = center_y
   end
+end
+
+M.focused_tag = function ()
+  return awful.screen.focused().selected_tag
+end
+
+M.to_first = function (c)
+  local tag = awful.tag.find_by_name(awful.screen[1], "1")
+  c:move_to_tag(tag)
 end
 
 M.client_fix = function(pos, width, height, sticky)
   return function(c)
-    float_resize(c, width, height)
-    M.align(c, pos)
+    c.floating = true
     c.sticky = sticky
+    M.set_geometry(c, {width = width, height=height , alignment = pos})
   end
 end
 
 M.right = function(c)
-  local geometry = c.screen.workarea
-  local border_width = c._border_width or beautiful.border_width
-  local max_width = geometry.width - 2 * border_width
-  local max_height = geometry.height - 2 * border_width
-  float_resize(c, max_width / 2, max_height)
-  M.align(c, "topright")
+  c.floating = true
   c.sticky = true
+  M.set_geometry(c, {width = 0.5, height=1 , alignment = "topright"})
 end
 
 M.right_sticky = function(c)
@@ -242,25 +260,6 @@ M.ontop = function (c)
   c.ontop = not c.ontop
 end
 
-M.minimize = function (c)
-  c.minimized = true
-end
-
-M.maximize = function (c)
-  c.maximized = not c.maximized
-  c:raise()
-end
-
-M.maximize_vertical = function (c)
-  c.maximized_vertical = not c.maximized_vertical
-  c:raise()
-end
-
-M.maximized_horizontal= function (c)
-  c.maximized_horizontal = not c.maximized_horizontal
-  c:raise()
-end
-
 M.show_menu = function ()
   require("main.menu"):show()
 end
@@ -306,7 +305,7 @@ M.focus_prev_screen = j(awful.screen.focus_relative, -1)
 M.swap_top = j(awful.client.swap.bydirection, "up")
 M.swap_bottom = j(awful.client.swap.bydirection, "down")
 M.swap_left = function()
-  local tag = awful.screen.focused().selected_tag
+  local tag = M.focused_tag()
   if tag.layout.name == "max" then
     M.swap_prev()
   else
@@ -314,7 +313,7 @@ M.swap_left = function()
   end
 end
 M.swap_right = function()
-  local tag = awful.screen.focused().selected_tag
+  local tag = M.focused_tag()
   if tag.layout.name == "max" then
     M.swap_next()
   else
