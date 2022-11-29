@@ -2,6 +2,8 @@ local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
 
+local client = client
+
 client.connect_signal("request::titlebars", function(c)
   -- buttons for the titlebar
   local buttons = gears.table.join(

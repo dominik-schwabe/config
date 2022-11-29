@@ -1,5 +1,9 @@
 local awful = require("awful")
 
+local client = client
+local awesome = awesome
+local screen = screen
+
 -- Theme handling library
 local beautiful = require("beautiful")
 client.connect_signal("manage", function(c)
@@ -54,6 +58,19 @@ local function update_properties(c)
   c.above = above
 end
 
+local offset = 10
+client.connect_signal("property::x", function(c)
+  local geom = c.screen.geometry
+  if c.floating then
+    c.x = math.min(math.max(c.x, -c.width + offset), geom.width - offset)
+  end
+end)
+client.connect_signal("property::y", function(c)
+  local geom = c.screen.geometry
+  if c.floating then
+    c.y = math.min(math.max(c.y, -c.height + offset), geom.height - offset)
+  end
+end)
 client.connect_signal("focus", update_properties)
 client.connect_signal("unfocus", update_properties)
 client.connect_signal("property::floating", update_properties)

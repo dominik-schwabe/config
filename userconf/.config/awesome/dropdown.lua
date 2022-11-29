@@ -2,6 +2,8 @@ local awful = require("awful")
 local F = require("util.functional")
 local beautiful = require("beautiful")
 
+local client = client
+
 local function focused_tag()
   return awful.screen.focused().selected_tag
 end
@@ -68,7 +70,7 @@ end
 local function option_applier(config)
   return function(c, show)
     if show == nil then
-      show = should_show(c) or other_has_focus(c)
+      show = should_show(c) or (client.focus and client.focus.fullscreen) or other_has_focus(c)
     end
     local geom = compute_size(config)
     c.hidden = not show
@@ -144,7 +146,7 @@ local function build_toggle_dropdown(config)
       c._dropdown_show = function(show)
         dropdown_show(c, show)
       end
-      c._dropdown_show(true)
+      c._dropdown_show(config.cmd ~= nil)
       if not config.cmd then
         c.hidden = true
       end

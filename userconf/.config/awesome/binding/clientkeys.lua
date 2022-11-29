@@ -1,4 +1,3 @@
-local awful = require("awful")
 local gears = require("gears")
 local vars = require("main.vars")
 local bindkey = require("util.bindkey")

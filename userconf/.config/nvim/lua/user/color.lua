@@ -44,6 +44,7 @@ local palette = {
   neon_purple = "#ff5fff",
   bright_purple = "#ef0fbf",
   cool_green = "#00ffaf",
+  cool_green2 = "#4ffb87",
   cool_blue1 = "#02b4ef",
   cool_blue2 = "#5fafff",
   red = "#e95678",

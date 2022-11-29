@@ -38,11 +38,11 @@ local function build_resizer(x, y, width, height)
   end
 end
 
-local offset = 10
 local function move(c, rel_x, rel_y)
-  local geom = c.screen.geometry
-  c.x = math.min(math.max(c.x + rel_x, -c.width + offset), geom.width - offset)
-  c.y = math.min(math.max(c.y + rel_y, -c.height + offset), geom.height - offset)
+  if not c.fullscreen then
+    c.x = c.x + rel_x
+    c.y = c.y + rel_y
+  end
 end
 
 local function screen_ratio()
@@ -282,7 +282,7 @@ end
 
 M.execute_lua = function ()
   awful.prompt.run({
-    prompt = "Run Lua code: ",
+    prompt = " Run Lua code: ",
     textbox = awful.screen.focused().promptbox.widget,
     exe_callback = awful.util.eval,
     history_path = awful.util.get_cache_dir() .. "/history_eval",

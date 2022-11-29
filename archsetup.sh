@@ -138,6 +138,7 @@ AURPKG="
 birdtray
 brave-bin
 jmtpfs
+lain-git
 "
 
 installyay() {

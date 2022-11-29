@@ -10,8 +10,13 @@ awful.rules.rules = {
     properties = {
       border_width = beautiful.border_width,
       border_color = beautiful.border_normal,
-      focus = awful.client.focus.filter,
-      raise = true,
+      focus = function(_client)
+        local should_focus = awful.client.focus.filter(_client)
+        return should_focus
+          and _client.class ~= "TelegramDesktop"
+          and _client.class ~= "thunderbird"
+          and (_client.class or _client.instance or _client.name) -- Spotify
+      end,
       keys = clientkeys,
       buttons = clientbuttons,
       screen = awful.screen.preferred,

@@ -1,5 +1,11 @@
 package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua/5.4/?.lua"
+package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua/5.3/?.lua"
+package.path = package.path .. ";" .. "/usr/share/lua/5.3/?.lua"
+package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
+
 pcall(require, "luarocks.loader")
+
+local root = root
 
 local F = require("util.functional")
 
