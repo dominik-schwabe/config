@@ -19,6 +19,20 @@ client.connect_signal("manage", function(c)
   end
 end)
 
+client.connect_signal("property::maximized", function(c)
+  if c.maximized then
+    c.maximized = false
+    client.focus = c
+  end
+end)
+
+client.connect_signal("property::minimized", function(c)
+  if c.minimized then
+    c.minimized = false
+    client.focus = c
+  end
+end)
+
 client.connect_signal("property::class", function(c)
   if c.class == "Spotify" then
     local tag = awful.tag.find_by_name(awful.screen[1], "7")

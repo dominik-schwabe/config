@@ -12,9 +12,9 @@ local mod_ctrl = { vars.modkey, "Control" }
 local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
-local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___dropdownterminal___ -o font.size=10",
-  name = "___dropdownterminal___",
+local dropdown_terminal_1_toggle = dropdown.build_toggle_dropdown({
+  cmd = "alacritty -t ___dropdownterminal_1___ -o font.size=10",
+  name = "___dropdownterminal_1___",
   border_width = 3,
   overlap = false,
   width = 0.85,
@@ -23,14 +23,14 @@ local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
   group = "1",
 })
 
-local dropdown_ipython_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___ipython_interpreter___ -o font.size=10 -e launch_ipython",
-  name = "___ipython_interpreter___",
+local dropdown_ipython_2_toggle = dropdown.build_toggle_dropdown({
+  cmd = "alacritty -t ___dropdownterminal_2___ -o font.size=10",
+  name = "___dropdownterminal_2___",
   border_width = 3,
   overlap = false,
-  width = 0.85,
-  height = 0.85,
-  border_color = "#02b4ef",
+  width = 0.6,
+  height = 0.6,
+  border_color = "#77aa00",
   group = "1",
 })
 
@@ -70,6 +70,19 @@ local thunderbird_toggle = dropdown.build_toggle_dropdown({
   group = "1",
 })
 
+local blanket_toggle = dropdown.build_toggle_dropdown({
+  cmd = "blanket",
+  name = "Blanket",
+  instance = "python3",
+  class = "python3",
+  border_width = 3,
+  overlap = false,
+  width = 0.4,
+  height = 0.9,
+  border_color = "#02b4ef",
+  group = "1",
+})
+
 local globalkeys = gears.table.join(
   bindkey("awesome", mod, "s", f.show_help, "show help"),
 
@@ -86,10 +99,11 @@ local globalkeys = gears.table.join(
   bindkey("layout", mod, "q", f.layout_bottom, "bottom layout"),
   bindkey("layout", mod, "a", f.layout_fair, "fair layout"),
 
-  bindkey("dropdown", mod, "asciicircum", dropdown_terminal_toggle, "toggle the dropdown terminal"),
-  bindkey("dropdown", mod, "F1", dropdown_ipython_toggle, "toggle a ipython interpreter"),
+  bindkey("dropdown", mod, "asciicircum", dropdown_terminal_1_toggle, "toggle the dropdown terminal"),
+  bindkey("dropdown", mod, "F1", dropdown_ipython_2_toggle, "toggle a ipython interpreter"),
   bindkey("dropdown", mod, "F12", todo_toggle, "open a todo scratchpad"),
   bindkey("dropdown", mod, "adiaeresis", thunderbird_toggle, "pull thunderbird to the front"),
+  bindkey("dropdown", mod_shift, "x", blanket_toggle, "toggle blanket"),
   bindkey("dropdown", mod_shift, "y", cmus_toggle, "show the cmus music player"),
 
   -- Layout manipulation
