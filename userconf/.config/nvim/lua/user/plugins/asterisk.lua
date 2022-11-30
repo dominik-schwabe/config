@@ -1,7 +1,0 @@
-vim.keymap.set({ "n", "x" }, "*", "<Plug>(asterisk-*)")
-vim.keymap.set({ "n", "x" }, "#", "<Plug>(asterisk-#)")
-vim.keymap.set({ "n", "x" }, "g#", "<Plug>(asterisk-g#)")
-vim.keymap.set({ "n", "x" }, "z*", "<Plug>(asterisk-z*)")
-vim.keymap.set({ "n", "x" }, "gz*", "<Plug>(asterisk-gz*)")
-vim.keymap.set({ "n", "x" }, "z#*", "<Plug>(asterisk-z#)")
-vim.keymap.set({ "n", "x" }, "gz*", "<Plug>(asterisk-gz#)")

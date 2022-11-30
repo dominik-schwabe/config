@@ -13,6 +13,6 @@ RUN ./config/setup.sh
 COPY setup_nvim.py .
 RUN zsh -i -c "install_completion"
 RUN ./setup_nvim.py
-RUN pip install transformers[torch] numpy pandas ipython ipdb pynvim
+RUN pip install transformers[torch] numpy pandas ipython ipdb pynvim sentencepiece protobuf==3.20
 
 CMD zsh

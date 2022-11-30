@@ -5,7 +5,7 @@ BLUE="\e[34m"
 RED="\e[31m"
 RESET="\e[0m"
 
-SYMLINK="-s"
+SYMLINK="-sr"
 
 while [ $# != "0" ]; do
     while getopts "fh" o

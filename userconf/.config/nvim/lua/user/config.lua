@@ -1,5 +1,6 @@
 local M = {}
 
+M.minimal = os.getenv("MINIMAL_CONFIG")
 M.lsp_signs = {
   Error = " ",
   Warning = " ",
@@ -187,34 +188,33 @@ M.null_ls = {
     },
   },
 }
-local treesitter_min = {
-  "bash",
-  "bibtex",
-  "c",
-  "comment",
-  "cpp",
-  "css",
-  "dockerfile",
-  "html",
-  "http",
-  "java",
-  "javascript",
-  "json",
-  "latex",
-  "lua",
-  "make",
-  "markdown",
-  "python",
-  "r",
-  "rust",
-  "toml",
-  "tsx",
-  "typescript",
-  "vim",
-  "yaml",
-}
 M.treesitter = {
-  ensure_installed = treesitter_min,
+  ensure_installed = {
+    "bash",
+    "bibtex",
+    "c",
+    "comment",
+    "cpp",
+    "css",
+    "dockerfile",
+    "html",
+    "http",
+    "java",
+    "javascript",
+    "json",
+    "latex",
+    "lua",
+    "make",
+    "markdown",
+    "python",
+    "r",
+    "rust",
+    "toml",
+    "tsx",
+    "typescript",
+    "vim",
+    "yaml",
+  },
   highlight_disable = {},
 }
 M.format_clients = {

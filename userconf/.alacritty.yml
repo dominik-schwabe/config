@@ -3,19 +3,14 @@ font:
   normal:
     family: FuraMono Nerd Font Mono
     style: Regular
-    # family: SauceCodePro Nerd Font Mono
-    # style: Medium
   bold:
     family: FuraMono Nerd Font Mono
-    # family: SauceCodePro Nerd Font Mono
     style: Bold
   italic:
     family: FuraMono Nerd Font Mono
-    # family: SauceCodePro Nerd Font Mono
     style: Bold Italic
   bold_italic:
     family: FuraMono Nerd Font Mono
-    # family: SauceCodePro Nerd Font Mono
     style: Bold Italic
   offset:
     x: 0

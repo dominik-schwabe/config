@@ -7,7 +7,7 @@ local M = {}
 local glyphs = { "", "", "", "", "", "", "", "", "", "", "" }
 
 function M.create()
-  local last_was_highlighted = true
+  local last_was_highlighted = false
   return lain.widget.bat({
     timeout = 1,
     full_notify = "off",

@@ -1,4 +1,4 @@
-require("Comment").setup({
+local args = {
   padding = true,
   sticky = true,
   ignore = "^%s*$",
@@ -7,6 +7,11 @@ require("Comment").setup({
     basic = true,
     extra = true,
   },
+}
 
-  pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-})
+local ttscc_loaded, ttscc = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
+if ttscc_loaded then
+  args.pre_hook = ttscc.create_pre_hook()
+end
+
+require("Comment").setup(args)

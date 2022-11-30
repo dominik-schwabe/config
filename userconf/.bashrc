@@ -1,8 +1,3 @@
-shopt -s histappend
-shopt -s checkwinsize
-shopt -s cmdhist
-shopt -u autocd
-
 [[ -r ~/.envrc ]] && . ~/.envrc
 [[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
@@ -10,6 +5,11 @@ shopt -u autocd
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
 [[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
+
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s cmdhist
+shopt -u autocd
 
 RESET="\[\017\]"
 RED="\[\033[31;1m\]"

@@ -1,6 +1,8 @@
-local treesitter_config = require("user.config").treesitter
+local config = require("user.config")
+local treesitter_config = config.treesitter
 local rainbow = require("user.color").rainbow
-local treesitter_unit = require("treesitter-unit")
+
+local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
 require("nvim-treesitter.configs").setup({
   playground = {
@@ -105,7 +107,7 @@ require("nvim-treesitter.configs").setup({
   autotag = {
     enable = true,
   },
-  ensure_installed = treesitter_config.ensure_installed,
+  ensure_installed = ensure_installed,
   ignore_install = treesitter_config.ignore_install,
   context_commentstring = {
     enable = true,
@@ -114,9 +116,12 @@ require("nvim-treesitter.configs").setup({
   additional_vim_regex_highlighting = false,
 })
 
-vim.keymap.set({ "x", "o" }, "iu", function()
-  treesitter_unit.select(true)
-end)
-vim.keymap.set({ "x", "o" }, "au", function()
-  treesitter_unit.select()
-end)
+local tu_loaded, treesitter_unit = pcall(require, "treesitter-unit")
+if tu_loaded then
+  vim.keymap.set({ "x", "o" }, "iu", function()
+    treesitter_unit.select(true)
+  end)
+  vim.keymap.set({ "x", "o" }, "au", function()
+    treesitter_unit.select()
+  end)
+end

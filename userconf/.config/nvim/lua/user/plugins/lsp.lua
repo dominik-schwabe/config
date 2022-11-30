@@ -8,10 +8,10 @@ local def_opt = { silent = true }
 local F = require("user.functional")
 local tbl_merge = require("user.utils").tbl_merge
 
-local navic = require("nvim-navic")
+local navic = F.load("nvim-navic")
 
 local on_attach = function(client, bufnr)
-  if client.server_capabilities.documentSymbolProvider then
+  if navic and client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
   end
 
@@ -43,20 +43,27 @@ local config = require("user.config")
 local mason_lspconfig = require("mason-lspconfig")
 local mason_registry = require("mason-registry")
 local lspconfig = require("lspconfig")
+local mti = F.load("mason-tool-installer")
 local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
 
+local ensure_installed = {}
+if not config.minimal then
+  ensure_installed = config.lsp_ensure_installed
+end
 mason_lspconfig.setup({
-  ensure_installed = config.lsp_ensure_installed,
+  ensure_installed = ensure_installed,
   log_level = vim.log.levels.ERROR,
 })
 
-require("mason-tool-installer").setup({
-  ensure_installed = config.mason_ensure_installed,
-  auto_update = false,
-  run_on_start = true,
-  start_delay = 3000,
-})
+if mti then
+  mti.setup({
+    ensure_installed = config.mason_ensure_installed,
+    auto_update = false,
+    run_on_start = true,
+    start_delay = 3000,
+  })
+end
 
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
@@ -66,7 +73,7 @@ for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
   opts.capabilities = capabilities
   if server_name == "jsonls" then
     opts = tbl_merge(opts, {
-      settings = { json = { schemas = { require("schemastore").json.schemas() } } },
+      settings = { json = { schemas = { F.load("schemastore") } } },
     })
   end
   if server_name == "clangd" then
@@ -86,7 +93,10 @@ for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
         },
       },
     }
-    require("rust-tools").setup({ server = opts })
+    local rust_tools = F.load("rust-tools")
+    if rust_tools then
+      rust_tools.setup({ server = opts })
+    end
   else
     lspconfig[server_name].setup(opts)
   end
@@ -97,9 +107,12 @@ for type, icon in pairs(config.lsp_signs) do
   fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-  callback = require("nvim-lightbulb").update_lightbulb,
-})
+local lightbulb = F.load("nvim-lightbulb")
+if lightbulb then
+  vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+    callback = lightbulb.update_lightbulb,
+  })
+end
 
 vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>")
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>")

@@ -100,4 +100,12 @@ function M.next(iter)
   return nil
 end
 
+function M.load(src)
+  local success, pkg = pcall(require, src)
+  if success then
+    return pkg
+  end
+  return nil
+end
+
 return M

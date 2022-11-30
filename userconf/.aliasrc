@@ -25,7 +25,6 @@ alias vim='nvim'
 alias novim='nvim -u NONE --cmd "au VimEnter * windo set nowrap number norelativenumber signcolumn=no | noremap Q :qa<cr> | noremap gw <CMD>write<CR>"'
 alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'
 alias oldvim='/bin/vim'
-alias mvim='vim -u ~/.vimrc.minimal'
 alias benchmark-nvim='rm -f /tmp/nvim-startuptime && nvim --startuptime /tmp/nvim-startuptime -c ":e /tmp/nvim-startuptime"'
 
 alias p='ipython'
@@ -103,7 +102,9 @@ alias sqc='squeue -S i -o "%5i %10u %5C %10m %o"'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
-source ~/.kubectl.alias
-source ~/.docker.alias
+[[ -f ~/.kubectl.alias ]] && source ~/.kubectl.alias
+[[ -f ~/.docker.alias ]] && source ~/.docker.alias
+[[ -f ~/.git.alias ]] && source ~/.git.alias
+
 
 # vi: ft=sh

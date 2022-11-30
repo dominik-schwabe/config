@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
+RED="\e[31m"
 GREEN="\e[32m"
 BLUE="\e[34m"
 MAGENTA="\e[35m"
-RED="\e[31m"
 RESET="\e[0m"
 
 CURRPATH="$(pwd)/$(dirname $0)"
