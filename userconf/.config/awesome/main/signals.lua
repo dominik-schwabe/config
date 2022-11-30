@@ -107,11 +107,17 @@ end)
 
 client.connect_signal("property::sticky", function(c)
   if not c.sticky then
-    c:move_to_tag(awful.screen.focused().selected_tag)
+    local tag = awful.screen.focused().selected_tag
+    if tag then
+      c:move_to_tag(tag)
+    end
   end
 end)
 
 screen.connect_signal("arrange", function(s)
+  if not s.selected_tag then
+    return
+  end
   local layout_name = s.selected_tag.layout.name
   local max = layout_name == "max"
   local only_one = #s.tiled_clients == 1

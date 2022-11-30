@@ -50,17 +50,11 @@ local taglist_buttons = gears.table.join(
       client.focus:move_to_tag(t)
     end
   end),
-  awful.button({}, 3, awful.tag.viewtoggle),
-  awful.button(mod, 3, function(t)
+  awful.button({}, 2, awful.tag.viewtoggle),
+  awful.button(mod, 2, function(t)
     if client.focus then
       client.focus:toggle_tag(t)
     end
-  end),
-  awful.button({}, 4, function(t)
-    awful.tag.viewnext(t.screen)
-  end),
-  awful.button({}, 5, function(t)
-    awful.tag.viewprev(t.screen)
   end)
 )
 

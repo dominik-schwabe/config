@@ -305,7 +305,6 @@ require("packer").startup(function(use)
 
     use("lark-parser/vim-lark-syntax")
     use("sheerun/vim-polyglot")
-    use("michaeljsmith/vim-indent-object")
   end
 
   -- runner

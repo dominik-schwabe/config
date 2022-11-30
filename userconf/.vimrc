@@ -1,3 +1,4 @@
+set t_Co=256
 if has("termguicolors") | set termguicolors | endif
 syntax on
 
@@ -21,39 +22,25 @@ if $MINIMAL_CONFIG == ""
 
     call InstallPluginManager()
 
-    "define plugins using vim-plug
     call plug#begin('~/.vim/plugged')
-    Plug 'tpope/vim-fugitive'
-    "jump fast to location
-    Plug 'easymotion/vim-easymotion', { 'on': ['<Plug>(easymotion-overwin-f)', '<Plug>(easymotion-overwin-f2)'] }
     "improve search
     Plug 'haya14busa/vim-asterisk'
     "toggle comment
     Plug 'preservim/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
     "buffer explorer
     Plug 'jlanzarotta/bufexplorer'
-    "change root to git project
+    "change root based on path patterns
     Plug 'airblade/vim-rooter'
-    "substitute brackets with others (cs"')
+    "substitute brackets with others
     Plug 'tpope/vim-surround'
-    "extension of .-command
-    Plug 'tpope/vim-repeat'
-    "beautiful statusbar
-    Plug 'itchyny/lightline.vim'
-    "colorscheme
-    Plug 'Reewr/vim-monokai-phoenix'
     "better language behavior
     Plug 'sheerun/vim-polyglot'
     "explore directory
     Plug 'preservim/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
     "wrap function arguments
     Plug 'foosoft/vim-argwrap', { 'on': 'ArgWrap' }
-    "swap objects like function arguments
-    Plug 'AndrewRadev/sideways.vim', { 'on': ['SidewaysLeft', 'SidewaysRight'] }
     "textobj extension
     Plug 'wellle/targets.vim'
-    "textobj for indents
-    Plug 'michaeljsmith/vim-indent-object'
     call plug#end()
 
 
@@ -64,18 +51,6 @@ if $MINIMAL_CONFIG == ""
     "rooter
     let g:rooter_change_directory_for_non_project_files = 'current'
     let g:rooter_patterns = ['>nvim', '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages', 'package.json', 'package-lock.json']
-
-    "monokai
-    let g:monokai_gui_italic = 1
-    let g:monokai_term_italic = 1
-
-    "easymotion
-    let g:EasyMotion_do_mapping = 0
-    let g:EasyMotion_smartcase = 1
-    nmap m <Plug>(easymotion-overwin-f)
-    nmap M <Plug>(easymotion-overwin-f2)
-    vmap m <Plug>(easymotion-overwin-f)
-    vmap M <Plug>(easymotion-overwin-f2)
 
     "vim-asterisk
     map *   <Plug>(asterisk-*)
@@ -121,36 +96,26 @@ if $MINIMAL_CONFIG == ""
     nmap <silent> <F2> :ToggleBufExplorer<CR>
     imap <silent> <F2> <ESC>:ToggleBufExplorer<CR>
 
-    "lightline
-    set laststatus=2
-
     "polyglot
     let g:python_highlight_space_errors = 0
 
     "argwrap
     nnoremap Y :ArgWrap<CR>
 
-    "sideways
-    nnoremap <silent> R :SidewaysLeft<CR>
-    nnoremap <silent> U :SidewaysRight<CR>
-
     " --------------------------------
     " --- End Plugin Configuration ---
     " --------------------------------
 
-    colorscheme monokai-phoenix
-    set background=dark
-    hi clear Conceal
-    hi CursorLineNr term=none cterm=none gui=none
 
     au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 indentexpr=""
-
-else
-    colorscheme industry
 endif
+
+colorscheme industry
+hi CursorLine cterm=NONE ctermbg=333 guibg=#303030
 
 set splitbelow
 set splitright
+set cursorline
 
 set number
 set ignorecase
