@@ -96,6 +96,7 @@ M.illuminate_blacklist = {
   "TelescopePrompt",
 }
 M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
+M.mason_ensure_installed = { "black", "isort", "prettierd" }
 M.lsp_configs = {
   -- latex = {
   -- 	settings = {

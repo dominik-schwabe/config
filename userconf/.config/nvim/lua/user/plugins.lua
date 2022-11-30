@@ -107,6 +107,7 @@ require("packer").startup(function(use)
         end,
       },
       "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
       "kosayoda/nvim-lightbulb",
       {
         "j-hui/fidget.nvim",

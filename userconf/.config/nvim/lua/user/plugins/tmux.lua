@@ -6,5 +6,5 @@ require("tmux").setup({
     sync_deletes = true,
     sync_unnamed = true,
   },
-  navigation = { enable_default_keybindings = true },
+  navigation = { enable_default_keybindings = false },
 })

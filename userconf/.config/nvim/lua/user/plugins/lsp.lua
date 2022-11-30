@@ -51,6 +51,13 @@ mason_lspconfig.setup({
   log_level = vim.log.levels.ERROR,
 })
 
+require("mason-tool-installer").setup({
+  ensure_installed = config.mason_ensure_installed,
+  auto_update = false,
+  run_on_start = true,
+  start_delay = 3000,
+})
+
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
 for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
