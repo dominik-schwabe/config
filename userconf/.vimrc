@@ -1,4 +1,6 @@
 set t_Co=256
+let &t_SI="\e[6 q"
+let &t_EI="\e[2 q"
 if has("termguicolors") | set termguicolors | endif
 syntax on
 
@@ -112,6 +114,8 @@ endif
 
 colorscheme industry
 hi CursorLine cterm=NONE ctermbg=333 guibg=#303030
+hi Visual cterm=NONE ctermbg=444 guibg=#444444 guifg=NONE
+hi CursorLineNr term=none cterm=none gui=none
 
 set splitbelow
 set splitright
