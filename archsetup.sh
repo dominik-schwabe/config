@@ -56,6 +56,7 @@ pulseaudio-alsa
 pulseaudio-bluetooth
 pulsemixer
 python
+python-pynvim
 python-pip
 rsync
 sshfs

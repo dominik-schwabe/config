@@ -67,7 +67,7 @@ M.menu_border_width = 1
 
 M.notification_bg = '#222222'
 M.notification_fg = '#cccccc'
-M.notification_margin = 40
+M.notification_margin = 20
 M.hotkeys_bg = '#222222' .. "ee"
 M.hotkeys_fg = '#ffffff'
 M.hotkeys_border_width = 1

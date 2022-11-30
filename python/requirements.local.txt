@@ -1,16 +1,12 @@
-black
 bpytop
 ipdb
 ipython
 ipython_autoimport
-isort
-jedi
 matplotlib
 neovim-remote
 numpy
 pandas
 pipenv
-pylint
 pynvim
 setuptools
 telegram-send
