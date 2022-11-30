@@ -10,7 +10,7 @@ CURRPATH="$(pwd)/$(dirname $0)"
 cd $CURRPATH
 
 while getopts "f" o; do
-    [ $o == "f" ] && FORCE="-f"
+  [ $o == "f" ] && FORCE="-f"
 done
 
 [ -e $HOME/bin ] || mkdir $HOME/bin
@@ -34,9 +34,9 @@ echo
 echo -n "redshift config "
 
 if command -v redshift &>/dev/null; then
-    if LOCATION=$(curl -sL https://ipinfo.io/loc); then
-        LAT=$(echo $LOCATION | cut -f1 -d,)
-        LON=$(echo $LOCATION | cut -f2 -d,)
+  if LOCATION=$(curl -sL https://ipinfo.io/loc); then
+    LAT=$(echo $LOCATION | cut -f1 -d,)
+    LON=$(echo $LOCATION | cut -f2 -d,)
     echo "[redshift]
     temp-day=6500
     temp-night=2700
@@ -45,17 +45,19 @@ if command -v redshift &>/dev/null; then
 
     [manual]
     lat=$LAT
-    lon=$LON" > "$HOME/.config/redshift.conf"
-        echo -e "${GREEN}success${RESET}"
-    else
-        echo -e "${RED}failure${RESET}"
-    fi
+    lon=$LON" >"$HOME/.config/redshift.conf"
+    echo -e "${GREEN}success${RESET}"
+  else
+    echo -e "${RED}failure${RESET}"
+  fi
 else
-    echo -e "${BLUE}skipping${RESET}"
+  echo -e "${BLUE}skipping${RESET}"
 fi
 echo
-echo "tool setup"
-$CURRPATH/tools/install_tools.sh
+if [[ -z "$CONTAINERIZED" ]]; then
+  echo "tool setup"
+  $CURRPATH/tools/install_tools.sh
+fi
 echo
 echo "folder links"
 ./create_symlink.sh $CURRPATH/shell_plugins $FORCE $HOME/.shell_plugins
@@ -82,29 +84,29 @@ CAPABILITY 30;41
 STICKY_OTHER_WRITABLE 30;42
 OTHER_WRITABLE 34;42
 STICKY 37;44
-EXEC 01;32" > $TEMP_FILE
-curl -sL https://raw.githubusercontent.com/trapd00r/LS_COLORS/master/LS_COLORS | sed '/^\(FILE\|NORMAL\|RESET\|DIR\|LINK\|MULTIHARDLINK\|FIFO\|SOCK\|DOOR\|BLK\|CHR\|ORPHAN\|MISSING\|SETUID\|SETGID\|CAPABILITY\|STICKY_OTHER_WRITABLE\|OTHER_WRITABLE\|STICKY\|EXEC\)\(\s.*\)\?$/d' >> $TEMP_FILE
+EXEC 01;32" >$TEMP_FILE
+curl -sL https://raw.githubusercontent.com/trapd00r/LS_COLORS/master/LS_COLORS | sed '/^\(FILE\|NORMAL\|RESET\|DIR\|LINK\|MULTIHARDLINK\|FIFO\|SOCK\|DOOR\|BLK\|CHR\|ORPHAN\|MISSING\|SETUID\|SETGID\|CAPABILITY\|STICKY_OTHER_WRITABLE\|OTHER_WRITABLE\|STICKY\|EXEC\)\(\s.*\)\?$/d' >>$TEMP_FILE
 sed -i "s/\b38;5;074;1\b/38;5;127/g" $TEMP_FILE # js
-sed -i "s/\b38;5;40\b/01;31/g" $TEMP_FILE # archive
-sed -i "s/\b38;5;81\b/38;5;40/g" $TEMP_FILE # c
-sed -i "s/\b38;5;110\b/38;5;208/g" $TEMP_FILE # h
-sed -i "s/\b38;5;184\b/38;5;30/g" $TEMP_FILE # tex
-dircolors -b $TEMP_FILE > $GENERATED_PATH
+sed -i "s/\b38;5;40\b/01;31/g" $TEMP_FILE       # archive
+sed -i "s/\b38;5;81\b/38;5;40/g" $TEMP_FILE     # c
+sed -i "s/\b38;5;110\b/38;5;208/g" $TEMP_FILE   # h
+sed -i "s/\b38;5;184\b/38;5;30/g" $TEMP_FILE    # tex
+dircolors -b $TEMP_FILE >$GENERATED_PATH
 rm $TEMP_FILE
 echo -e "${GREEN}success${RESET}"
 echo
 echo -n "custom config "
 CUSTOM_PATH="$HOME/.customrc"
 if [ -e "$CUSTOM_PATH" ]; then
-    if ! [ -d "$CUSTOM_PATH" ]; then
-        echo -e "${BLUE}exists${RESET}"
-    else
-        echo -e "${RED}failure${RESET}"
-    fi
+  if ! [ -d "$CUSTOM_PATH" ]; then
+    echo -e "${BLUE}exists${RESET}"
+  else
+    echo -e "${RED}failure${RESET}"
+  fi
 fi
 if ! [ -e "$CUSTOM_PATH" ]; then
-    cp ./customrc "$CUSTOM_PATH"
-    echo -e "${GREEN}success${RESET}"
+  cp ./customrc "$CUSTOM_PATH"
+  echo -e "${GREEN}success${RESET}"
 fi
 echo
 echo "installing nerdfonts"
