@@ -2,6 +2,7 @@
 # export LC_ALL=de_DE.UTF-8
 # export LANG=en_US.UTF-8
 # export LC_ALL=en_US.UTF-8
+# export MINIMAL_CONFIG=true
 # export ASDF_ENABLED="true"
 # export PYTHON_VERSION="3.10.0"
 # export NODEJS_VERSION="16.11.1"
