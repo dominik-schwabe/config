@@ -49,6 +49,10 @@ if [[ "$1" == "-r" ]]; then
   rm -rf ~/.local/bin/nvim
   rm -rf ~/.local/lib/nvim
   rm -rf ~/.local/share/runtime
+  rm -rf ~/.local/share/locale
+  rm -rf ~/.local/share/man
+  rm -rf ~/.local/share/icons
+  rm -rf ~/.local/share/applications
   echo -e " ${GREEN}success${RESET}"
 else
   mkdir -p $BIN && {

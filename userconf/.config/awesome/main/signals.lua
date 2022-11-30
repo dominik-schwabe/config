@@ -1,4 +1,5 @@
 local awful = require("awful")
+local F = require("util.functional")
 
 local client = client
 local awesome = awesome
@@ -7,6 +8,11 @@ local screen = screen
 -- Theme handling library
 local beautiful = require("beautiful")
 client.connect_signal("manage", function(c)
+  if not c.floating and F.any(c.screen.clients, function(e)
+    return e.fullscreen
+  end) then
+    awful.client.focus.history.previous()
+  end
   -- Set the windows at the slave,
   -- i.e. put it at the end of others instead of setting it master.
   if not awesome.startup then
@@ -88,7 +94,16 @@ end)
 client.connect_signal("focus", update_properties)
 client.connect_signal("unfocus", update_properties)
 client.connect_signal("property::floating", update_properties)
-client.connect_signal("property::fullscreen", update_properties)
+client.connect_signal("property::fullscreen", function(c)
+  if c.fullscreen then
+    F.foreach(c.screen.clients, function(e)
+      if c ~= e and e.fullscreen then
+        e.fullscreen = false
+      end
+    end)
+  end
+  update_properties(c)
+end)
 
 client.connect_signal("property::sticky", function(c)
   if not c.sticky then

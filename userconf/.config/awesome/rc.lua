@@ -5,6 +5,9 @@ package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
 
 pcall(require, "luarocks.loader")
 
+require("main.errors")
+require("main.signals")
+
 local root = root
 
 local F = require("util.functional")
@@ -29,7 +32,6 @@ beautiful.init(gears.filesystem.get_configuration_dir() .. "theme.lua")
 
 require("awful.autofocus")
 
-require("main.errors")
 require("main.rules")
 
 beautiful.wallpaper = vars.wallpaper
@@ -40,7 +42,5 @@ root.keys(require("binding.globalkeys"))
 require("menubar").utils.terminal = vars.terminal -- Set the terminal for applications that require it
 
 require("deco.statusbar")
-
-require("main.signals")
 
 require("main.autostart")
