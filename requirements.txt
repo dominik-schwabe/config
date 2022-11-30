@@ -2,12 +2,7 @@ bpytop
 ipdb
 ipython
 ipython_autoimport
-matplotlib
 neovim-remote
-numpy
-pandas
 pipenv
 pynvim
-setuptools
 telegram-send
-wheel
