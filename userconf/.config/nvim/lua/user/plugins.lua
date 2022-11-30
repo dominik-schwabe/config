@@ -254,7 +254,7 @@ require("packer").startup(function(use)
     })
 
     use({
-      "folke/trouble.nvim", -- TODO: replace with buildin
+      "folke/trouble.nvim",
       config = function()
         require("user.plugins.trouble")
       end,

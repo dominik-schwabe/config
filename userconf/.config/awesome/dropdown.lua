@@ -6,7 +6,6 @@ local beautiful = require("beautiful")
 local client = client
 
 local groups = {}
-local managed_clients = {}
 
 local function hide_group(c)
   if c._group then
@@ -27,12 +26,6 @@ local function client_is_on_tag(c, tag)
   return false
 end
 
-local function other_has_focus(c)
-  return F.any(managed_clients, function(e)
-    return c ~= e and client.focus == e
-  end)
-end
-
 local function should_show(c)
   local current_tag = f.focused_tag()
   local was_different_tag = not c.hidden and not c.sticky and current_tag and not client_is_on_tag(c, current_tag)
@@ -42,7 +35,8 @@ end
 local function option_applier(config)
   return function(c, show)
     if show == nil then
-      show = should_show(c) or (client.focus and client.focus.fullscreen) or other_has_focus(c)
+      local cf = client.focus
+      show = should_show(c) or (cf and c ~= cf and (cf.fullscreen or cf.floating))
     end
     c.hidden = not show
     c.floating = show
@@ -110,7 +104,6 @@ local function build_toggle_dropdown(config)
         clients[#clients + 1] = c
         groups[group] = clients
       end
-      managed_clients[#managed_clients + 1] = c
       c._dropdown_show = function(show)
         dropdown_show(c, show)
       end
@@ -128,7 +121,6 @@ client.connect_signal("unmanage", function(c)
     if c._group then
       groups[c._group] = F.remove(groups[c._group], c)
     end
-    managed_clients = F.remove(managed_clients, c)
   end
 end)
 

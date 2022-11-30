@@ -6,7 +6,7 @@ local M = {}
 
 local glyphs = { "", "", "", "", "", "", "", "", "", "", "" }
 
-function M.create()
+function M.create() -- TODO: replace with dbus alternative
   local last_was_highlighted = false
   return lain.widget.bat({
     timeout = 1,
