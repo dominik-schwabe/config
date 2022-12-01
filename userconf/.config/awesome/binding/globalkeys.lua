@@ -128,7 +128,7 @@ local globalkeys = gears.table.join(
   -- Prompt
   bindkey("launcher", mod, "d", f.rofi, "run prompt"),
   -- Lua code
-  bindkey("awesome", mod, "F9", f.execute_lua, "execute lua code"),
+  bindkey("awesome", mod_shift, "a", f.execute_lua, "execute lua code"),
   -- Menubar
   -- bindkey("launcher", mod, "p", f.show_menubar, "show the menubar"),
 

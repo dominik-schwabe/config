@@ -133,6 +133,52 @@ M.align = function(c, alignment)
   end
 end
 
+M.dc = function (c)
+  if not c then
+    c = client.focus
+  end
+  return {
+    name = c.name,
+    skip_taskbar = c.skip_taskbar,
+    type = c.type,
+    class = c.class,
+    instance = c.instance,
+    pid = c.pid,
+    role = c.role,
+    hidden = c.hidden,
+    minimized = c.minimized,
+    size_hints_honor = c.size_hints_honor,
+    border_width = c.border_width,
+    border_color = c.border_color,
+    urgent = c.urgent,
+    ontop = c.ontop,
+    above = c.above,
+    below = c.below,
+    fullscreen = c.fullscreen,
+    maximized = c.maximized,
+    maximized_horizontal = c.maximized_horizontal,
+    maximized_vertical = c.maximized_vertical,
+    transient_for = c.transient_for,
+    group_window = c.group_window,
+    leader_window = c.leader_window,
+    sticky = c.sticky,
+    modal = c.modal,
+    focusable = c.focusable,
+    startup_id = c.startup_id,
+    valid = c.valid,
+    marked = c.marked,
+    is_fixed = c.is_fixed,
+    immobilized = c.immobilized,
+    floating = c.floating,
+    x = c.x,
+    y = c.y,
+    width = c.width,
+    height = c.height,
+    dockable = c.dockable,
+    requests_no_titlebar = c.requests_no_titlebar,
+  }
+end
+
 M.focused_tag = function ()
   return awful.screen.focused().selected_tag
 end
@@ -244,6 +290,13 @@ M.toggle_float = function (c)
     end
     if c.y < 0 then
       c.y = 0
+    end
+  end
+
+  if not c.floating and not c.sticky then
+    local tag = awful.screen.focused().selected_tag
+    if tag then
+      c:move_to_tag(tag)
     end
   end
 end

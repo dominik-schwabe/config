@@ -91,6 +91,7 @@ client.connect_signal("property::y", function(c)
     c.y = math.min(math.max(c.y, -c.height + offset), geom.height - offset)
   end
 end)
+-- TODO: don't update properties on all events
 client.connect_signal("focus", update_properties)
 client.connect_signal("unfocus", update_properties)
 client.connect_signal("property::floating", update_properties)
@@ -105,15 +106,7 @@ client.connect_signal("property::fullscreen", function(c)
   update_properties(c)
 end)
 
-client.connect_signal("property::sticky", function(c)
-  if not c.sticky then
-    local tag = awful.screen.focused().selected_tag
-    if tag then
-      c:move_to_tag(tag)
-    end
-  end
-end)
-
+local a = 0
 screen.connect_signal("arrange", function(s)
   if not s.selected_tag then
     return
@@ -134,6 +127,7 @@ screen.connect_signal("arrange", function(s)
       end
     end
   end
+  a = a + 1
 end)
 
 require("deco.titlebar")

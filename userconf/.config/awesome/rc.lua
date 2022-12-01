@@ -11,13 +11,18 @@ require("main.signals")
 local root = root
 
 local F = require("util.functional")
+f = require("functions")
 
 function DK(list)
   D(list ~= nil and F.keys(list) or nil)
 end
 
-function D(arg)
-  require("naughty").notify({ text = require("inspect")(arg) })
+function D(arg, timeout)
+  require("naughty").notify({ text = require("inspect")(arg), timeout = timeout })
+end
+
+function D0(arg)
+  D(arg, 0)
 end
 
 local vars = require("main.vars")
