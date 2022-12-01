@@ -100,6 +100,7 @@ alias sst='(sinfo -S "%n" -O nodehost:12,memory:8,freemem:10,allocmem:11,cpussta
 && echo && squeue -S i -o "%5i %12u %20j %5C %10m %8T %5D %11l %11L %R")'
 alias sqc='squeue -S i -o "%5i %10u %5C %10m %o"'
 alias sk='scancel --user dschwabe'
+alias sdel='srun --pty --mem=8G enroot remove'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

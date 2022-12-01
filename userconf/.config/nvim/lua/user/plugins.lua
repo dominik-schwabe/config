@@ -67,34 +67,12 @@ require("packer").startup(function(use)
   })
 
   use({
-    "kyazdani42/nvim-tree.lua",
-    config = function()
-      require("user.plugins.nvim-tree")
-    end,
-  })
-  use("kyazdani42/nvim-web-devicons")
-
-  use({
     "L3MON4D3/LuaSnip",
     config = function()
       require("user.plugins.luasnip")
     end,
   })
   use("rafamadriz/friendly-snippets")
-
-  use({
-    "stevearc/dressing.nvim",
-    config = function()
-      require("user.plugins.dressing")
-    end,
-  })
-
-  use({
-    "nvim-lualine/lualine.nvim",
-    config = function()
-      require("user.plugins.lualine")
-    end,
-  })
 
   use({
     "numToStr/Comment.nvim",
@@ -125,7 +103,35 @@ require("packer").startup(function(use)
     end,
   })
 
+  use({
+    "akinsho/toggleterm.nvim",
+    config = function()
+      require("user.plugins.toggleterm")
+    end,
+  })
+  use({
+    "kyazdani42/nvim-tree.lua",
+    config = function()
+      require("user.plugins.nvim-tree")
+    end,
+  })
+  use("kyazdani42/nvim-web-devicons")
+
   if not config.minimal then
+    use({
+      "stevearc/dressing.nvim",
+      config = function()
+        require("user.plugins.dressing")
+      end,
+    })
+
+    use({
+      "nvim-lualine/lualine.nvim",
+      config = function()
+        require("user.plugins.lualine")
+      end,
+    })
+
     use({
       "monaqa/dial.nvim",
       config = function()
@@ -207,13 +213,6 @@ require("packer").startup(function(use)
     use("rcarriga/nvim-dap-ui")
     use("mfussenegger/nvim-dap-python")
     use("theHamsta/nvim-dap-virtual-text")
-
-    use({
-      "akinsho/toggleterm.nvim",
-      config = function()
-        require("user.plugins.toggleterm")
-      end,
-    })
 
     use({
       "tpope/vim-fugitive",
