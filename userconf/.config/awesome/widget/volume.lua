@@ -1,9 +1,10 @@
 local lain = require("lain")
+local lain_pulse = require("widget._lain_pulse")
 
 local M = {}
 
 function M.create() -- TODO: replace with dbus alternative
-  return lain.widget.pulse({
+  return lain_pulse({
     timeout = 1,
     settings = function()
       local volume_now = volume_now

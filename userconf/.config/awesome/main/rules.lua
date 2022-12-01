@@ -138,6 +138,7 @@ awful.rules.rules = {
     properties = {
       screen = 1,
       tag = "1",
+      callback = awful.client.focus.history.add,
     },
   },
   {
@@ -148,20 +149,23 @@ awful.rules.rules = {
     properties = {
       screen = 1,
       tag = "3",
+      callback = awful.client.focus.history.add,
     },
   },
   {
-    rule_any = { class = "steam_app*" },
+    rule = { class = "steam_app*" },
     properties = {
       screen = 1,
       tag = "4",
+      callback = awful.client.focus.history.add,
     },
   },
   {
-    rule_any = { class = { "discord" } },
+    rule = { class =  "discord"  },
     properties = {
       screen = 1,
       tag = "7",
+      callback = awful.client.focus.history.add,
     },
   },
 }

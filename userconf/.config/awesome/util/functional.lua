@@ -102,4 +102,8 @@ function M.next(iter)
   return nil
 end
 
+function M.call(cb)
+  cb()
+end
+
 return M

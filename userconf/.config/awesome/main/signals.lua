@@ -41,8 +41,7 @@ end)
 
 client.connect_signal("property::class", function(c)
   if c.class == "Spotify" then
-    local tag = awful.tag.find_by_name(awful.screen[1], "7")
-    c:move_to_tag(tag)
+    f.move_to_tag_name(c, "7")
   end
 end)
 
@@ -50,7 +49,15 @@ client.connect_signal("mouse::enter", function(c)
   c:emit_signal("request::activate", "mouse_enter")
 end)
 
-local function update_properties(c)
+local function unfullscreen_all_other_clients_on_screen(c)
+  F.foreach(c.screen.clients, function(e)
+    if c ~= e and e.fullscreen then
+      e.fullscreen = false
+    end
+  end)
+end
+
+local function update_border(c)
   if client.focus ~= c then
     c.border_color = beautiful.border_normal
   else
@@ -61,21 +68,27 @@ local function update_properties(c)
     else
       c.border_color = beautiful.border_focus
     end
-    if c.floating then
-      c:raise()
-    end
   end
   if c.floating then
     c.border_width = c._border_width or beautiful.border_width
-    if c._sticky then
-      c.sticky = true
-    end
-  else
-    c.sticky = false
   end
-  local above = c.floating and not c.fullscreen
-  c.below = not c.fullscreen and not above
-  c.above = above
+end
+
+local function raise_focused_floating(c)
+  if client.focus == c and c.floating then
+    c:raise()
+  end
+end
+
+local function update_z_order(c)
+  c.above = not c.fullscreen and c.floating
+  c.below = not c.fullscreen and not c.floating
+end
+
+local function update_properties(c)
+  update_border(c)
+  raise_focused_floating(c)
+  update_z_order(c)
 end
 
 local offset = 10
@@ -91,17 +104,13 @@ client.connect_signal("property::y", function(c)
     c.y = math.min(math.max(c.y, -c.height + offset), geom.height - offset)
   end
 end)
--- TODO: don't update properties on all events
+
 client.connect_signal("focus", update_properties)
 client.connect_signal("unfocus", update_properties)
 client.connect_signal("property::floating", update_properties)
 client.connect_signal("property::fullscreen", function(c)
   if c.fullscreen then
-    F.foreach(c.screen.clients, function(e)
-      if c ~= e and e.fullscreen then
-        e.fullscreen = false
-      end
-    end)
+    unfullscreen_all_other_clients_on_screen(c)
   end
   update_properties(c)
 end)

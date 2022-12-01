@@ -110,7 +110,7 @@ awful.screen.connect_for_each_screen(function(s)
     screen = s,
     filter = function(_client, _screen)
       local should_list = awful.widget.tasklist.filter.currenttags(_client, _screen)
-      return should_list and not _client._is_dropdown and not _client.sticky
+      return should_list and not _client.sticky
     end,
     buttons = tasklist_buttons,
   })

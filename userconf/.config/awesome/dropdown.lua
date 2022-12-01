@@ -7,9 +7,9 @@ local client = client
 
 local groups = {}
 
-local function hide_group(c)
-  if c._group then
-    F.foreach(groups[c._group], function(e)
+local function hide_group(c, group)
+  if group then
+    F.foreach(groups[group], function(e)
       if c ~= e then
         e._dropdown_show(false)
       end
@@ -32,8 +32,8 @@ local function should_show(c)
   return c.hidden or was_different_tag
 end
 
-local function option_applier(config)
-  return function(c, show)
+local function option_applier(c, config)
+  return function(show)
     if show == nil then
       local cf = client.focus
       show = should_show(c) or (cf and c ~= cf and (cf.fullscreen or cf.floating))
@@ -44,11 +44,11 @@ local function option_applier(config)
     c.above = show
     c.border_width = c._border_width or beautiful.border_width
     c.border_color = c._border_color or beautiful.border_focus_float
-    f.to_first(c)
+    f.move_to_tag_name(c, "1")
     if show then
       f.set_geometry(c, config)
       client.focus = c
-      hide_group(c)
+      hide_group(c, config.group)
     end
   end
 end
@@ -69,9 +69,9 @@ local function client_matcher(config)
     return true
   end
 end
+
 local function build_toggle_dropdown(config)
   local matcher = client_matcher(config)
-  local dropdown_show = option_applier(config)
   local border_color = config.border_color
   local border_width = config.border_width
   local group = config.group
@@ -93,20 +93,22 @@ local function build_toggle_dropdown(config)
       if border_color then
         c._border_color = border_color
       end
+      c.skip_taskbar = true
       if border_width then
         c._border_width = border_width
       end
-      c._is_dropdown = true
-      c._sticky = true
+      c:connect_signal("property::floating", function()
+        c.sticky = c.floating
+      end)
       if group then
-        c._group = group
         local clients = groups[group] or {}
         clients[#clients + 1] = c
         groups[group] = clients
+        c:connect_signal("unmanage", function()
+          groups[group] = F.remove(groups[group], c)
+        end)
       end
-      c._dropdown_show = function(show)
-        dropdown_show(c, show)
-      end
+      c._dropdown_show = option_applier(c, config)
       c._dropdown_show(config.cmd ~= nil)
       if not config.cmd then
         c.hidden = true
@@ -115,14 +117,6 @@ local function build_toggle_dropdown(config)
   end)
   return toggle
 end
-
-client.connect_signal("unmanage", function(c)
-  if c._is_dropdown then
-    if c._group then
-      groups[c._group] = F.remove(groups[c._group], c)
-    end
-  end
-end)
 
 return {
   build_toggle_dropdown = build_toggle_dropdown,

@@ -1,7 +1,10 @@
+local F = require("util.functional")
+
 local awful = require("awful")
 local menubar = require("menubar")
 local vars = require("main.vars")
 local beautiful = require("beautiful")
+local events = require("events")
 
 local client = client
 local awesome = awesome
@@ -27,6 +30,12 @@ local function j(func, ...)
   return function()
     func(unpack(args))
   end
+end
+
+local function _volume_notify ()
+  awful.spawn.easy_async("sleep 0.05", function(_, _, _, _)
+    events.call("volume")
+  end)
 end
 
 local function build_resizer(x, y, width, height)
@@ -134,6 +143,14 @@ M.align = function(c, alignment)
 end
 
 M.dc = function (c)
+  if type(c) == "string" then
+    c = F.filter(client.get(), function (e)
+      return e.instance == c
+    end)[1]
+    if not c then
+      return "no client found"
+    end
+  end
   if not c then
     c = client.focus
   end
@@ -183,8 +200,8 @@ M.focused_tag = function ()
   return awful.screen.focused().selected_tag
 end
 
-M.to_first = function (c)
-  local tag = awful.tag.find_by_name(awful.screen[1], "1")
+M.move_to_tag_name = function(c, tagname)
+  local tag = awful.tag.find_by_name(awful.screen[1], tagname)
   c:move_to_tag(tag)
 end
 
@@ -495,10 +512,10 @@ M.dec_brightness_5 = cmd("xbacklight -time 0 -5")
 M.rofi = cmd("rofi -show drun")
 M.lock = cmd("playerctl -a pause ; exec i3lock -c 000000")
 M.reboot = cmd("reboot")
-M.toggle_audio = cmd("pamixer --toggle-mute")
-M.toggle_mic = cmd("pamixer --source 1 --toggle-mute")
-M.inc_volume = cmd("pamixer -i 5")
-M.dec_volume = cmd("pamixer -d 5")
+M.toggle_audio = F.chain(cmd("pamixer --toggle-mute"), _volume_notify)
+M.toggle_mic = F.chain(cmd("pamixer --source 1 --toggle-mute"), _volume_notify)
+M.inc_volume = F.chain(cmd("pamixer -i 5"), _volume_notify)
+M.dec_volume = F.chain(cmd("pamixer -d 5"), _volume_notify)
 M.audio_next = cmd(playerctl .. " next")
 M.audio_prev = cmd(playerctl .. " previous")
 M.toggle_audio_program = cmd(playerctl .. " play-pause")
