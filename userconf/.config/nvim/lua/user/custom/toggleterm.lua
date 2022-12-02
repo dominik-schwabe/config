@@ -2,8 +2,8 @@ local cmd = vim.cmd
 local api = vim.api
 local fn = vim.fn
 
-local term_buf = 0
-local term_win = 0
+local term_buf
+local term_win
 local function open_term(height, bottom)
   if bottom then
     cmd("botright new")
@@ -11,16 +11,20 @@ local function open_term(height, bottom)
   else
     cmd("vertical botright new")
   end
-  if term_buf ~= 0 and api.nvim_buf_is_loaded(term_buf) then
-    api.nvim_win_set_buf(0, term_buf)
+  term_win = api.nvim_get_current_win()
+  if term_buf ~= nil and api.nvim_buf_is_loaded(term_buf) then
+    api.nvim_win_set_buf(term_win, term_buf)
   else
     fn.termopen(os.getenv("SHELL"), { detach = 0 })
     term_buf = fn.bufnr("")
-    api.nvim_buf_set_name(term_buf, "term://toggleterm")
-    api.nvim_buf_set_option(term_buf, "buflisted", false)
+    cmd("startinsert")
   end
-  cmd("startinsert")
-  term_win = fn.win_getid()
+  api.nvim_buf_set_name(term_buf, "term://toggleterm")
+  api.nvim_buf_set_option(term_buf, "buflisted", false)
+  api.nvim_win_set_option(term_win, "spell", false)
+  api.nvim_win_set_option(term_win, "number", false)
+  api.nvim_win_set_option(term_win, "relativenumber", false)
+  api.nvim_win_set_option(term_win, "signcolumn", "no")
 end
 
 local function toggle_term(height, bottom)

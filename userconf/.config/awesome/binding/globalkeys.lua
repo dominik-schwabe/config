@@ -73,7 +73,7 @@ local blanket_toggle = dropdown.build_toggle_dropdown({
 })
 
 local sxiv_toggle = dropdown.build_toggle_dropdown({
-  cmd = "find $HOME/Pictures -maxdepth 1 -type f | xargs ls -t1 | xargs sxiv -N ___dropdown_images___",
+  cmd = "find $HOME/Pictures -maxdepth 1 -type f -printf '%T@ %p\n' | sort -nr | cut -d ' ' -f 2- | xargs -d '\n' sxiv -N ___dropdown_images___",
   instance = "___dropdown_images___",
   class = "Sxiv",
   border_width = 3,
