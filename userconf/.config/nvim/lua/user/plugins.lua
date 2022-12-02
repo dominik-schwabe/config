@@ -104,12 +104,6 @@ require("packer").startup(function(use)
   })
 
   use({
-    "akinsho/toggleterm.nvim",
-    config = function()
-      require("user.plugins.toggleterm")
-    end,
-  })
-  use({
     "kyazdani42/nvim-tree.lua",
     config = function()
       require("user.plugins.nvim-tree")
@@ -295,13 +289,6 @@ require("packer").startup(function(use)
       end,
     })
 
-    use({
-      "nyngwang/NeoZoom.lua",
-      config = function()
-        require("user.plugins.neo-zoom")
-      end,
-    })
-
     use("lark-parser/vim-lark-syntax")
     use("sheerun/vim-polyglot")
   end
@@ -368,6 +355,13 @@ require("packer").startup(function(use)
   -- use("David-Kunz/markid")
 
   -- use("tpope/vim-repeat")
+
+  -- use({
+  --   "akinsho/toggleterm.nvim",
+  --   config = function()
+  --     require("user.plugins.toggleterm")
+  --   end,
+  -- })
 
   if packer_bootstrap then
     require("packer").sync()

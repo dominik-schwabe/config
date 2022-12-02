@@ -25,27 +25,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-function Test()
-  local topline = vim.fn.line("w0")
-  if
-    vim.api.nvim_open_win(0, true, {
-      relative = "editor",
-      row = 0,
-      col = 0,
-      height = 1000,
-      width = 1000,
-      focusable = true,
-      zindex = 5,
-      border = "none",
-    }) ~= 0
-  then
-    vim.fn.winrestview({ topline = topline })
-    vim.wo.winhighlight = "SignColumn:TabLineSel"
-  end
-end
-
-vim.keymap.set("n", "<F11>", Test)
-
 pcall(require, "user.plugins.colorizer")
 
 require("repl").setup({
@@ -58,6 +37,12 @@ require("repl").setup({
   debug = false,
   ensure_win = true,
 })
+
+local function test()
+  vim.api.nvim_win_set_cursor(0, { 3, 10 })
+end
+
+vim.keymap.set("n", "<F11>", test)
 
 vim.keymap.set("n", "<F3>", "<CMD>UndotreeToggle<CR>")
 
