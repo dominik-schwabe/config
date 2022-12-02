@@ -1,3 +1,5 @@
+local F = require("user.functional")
+
 local args = {
   padding = true,
   sticky = true,
@@ -9,8 +11,8 @@ local args = {
   },
 }
 
-local ttscc_loaded, ttscc = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
-if ttscc_loaded then
+local ttscc = F.load("ts_context_commentstring.integrations.comment_nvim")
+if ttscc then
   args.pre_hook = ttscc.create_pre_hook()
 end
 

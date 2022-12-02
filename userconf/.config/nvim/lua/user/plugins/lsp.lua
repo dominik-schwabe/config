@@ -72,8 +72,10 @@ for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
   opts.on_attach = on_attach
   opts.capabilities = capabilities
   if server_name == "jsonls" then
+    local schemastore = F.load("schemastore")
+    local schemas = schemastore and schemastore.json.schemas()
     opts = tbl_merge(opts, {
-      settings = { json = { schemas = { F.load("schemastore") } } },
+      settings = { json = { schemas = { schemas } } },
     })
   end
   if server_name == "clangd" then

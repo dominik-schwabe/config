@@ -8,6 +8,9 @@ RED="\e[31m"
 RESET="\e[0m"
 
 declare -A FONT_URLS=(
+  ["Fira Code Regular Nerd Font Complete.ttf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf
+  ["Fira Code Medium Nerd Font Complete.ttf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Medium/complete/Fira%20Code%20Medium%20Nerd%20Font%20Complete.ttf
+  ["Fira Code Bold Nerd Font Complete.ttf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Bold/complete/Fira%20Code%20Bold%20Nerd%20Font%20Complete.ttf
   ["Fura Mono Regular Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Regular/complete/Fura%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
   ["Fura Mono Medium Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Medium/complete/Fura%20Mono%20Medium%20Nerd%20Font%20Complete%20Mono.otf
   ["Fura Mono Bold Nerd Font Complete Mono.otf"]=https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraMono/Bold/complete/Fura%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.otf

@@ -1,7 +1,9 @@
-local navic_loaded, navic = pcall(require, "nvim-navic")
+local F = require("user.functional")
+
+local navic = F.load("nvim-navic")
 
 local navic_section = nil
-if navic_loaded then
+if navic then
   navic.setup({
     icons = require("user.config").navic_icons,
     highlight = true,
@@ -15,7 +17,9 @@ end
 local config = {
   extensions = { "quickfix" },
   options = {
+    section_separators = "",
     component_separators = { left = "|", right = "|" },
+    -- component_separators = "",
   },
   sections = {
     lualine_a = { "mode" },

@@ -5,24 +5,32 @@ package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
 
 pcall(require, "luarocks.loader")
 
+local F = require("util.functional")
+local theme = require("theme")
+
+f = require("functions")
+
+local naughty = require("naughty")
+
 require("main.errors")
 require("main.signals")
 
 local root = root
-
-local F = require("util.functional")
-f = require("functions")
 
 function DK(list)
   D(list ~= nil and F.keys(list) or nil)
 end
 
 function D(arg, timeout)
-  require("naughty").notify({ text = require("inspect")(arg), timeout = timeout })
+  naughty.notify({ text = require("inspect")(arg), timeout = timeout })
 end
 
 function D0(arg)
   D(arg, 0)
+end
+
+function DC(instance)
+  D0(f.dc(instance))
 end
 
 local vars = require("main.vars")
@@ -49,3 +57,6 @@ require("menubar").utils.terminal = vars.terminal -- Set the terminal for applic
 require("deco.statusbar")
 
 require("main.autostart")
+
+naughty.config.defaults.margin = theme.notification_margin
+naughty.config.defaults.border_width = theme.notification_border_width

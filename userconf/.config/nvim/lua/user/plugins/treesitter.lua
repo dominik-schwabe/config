@@ -2,6 +2,8 @@ local config = require("user.config")
 local treesitter_config = config.treesitter
 local rainbow = require("user.color").rainbow
 
+local F = require("user.functional")
+
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
 require("nvim-treesitter.configs").setup({
@@ -116,8 +118,8 @@ require("nvim-treesitter.configs").setup({
   additional_vim_regex_highlighting = false,
 })
 
-local tu_loaded, treesitter_unit = pcall(require, "treesitter-unit")
-if tu_loaded then
+local treesitter_unit = F.load("treesitter-unit")
+if treesitter_unit then
   vim.keymap.set({ "x", "o" }, "iu", function()
     treesitter_unit.select(true)
   end)

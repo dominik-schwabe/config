@@ -2,8 +2,8 @@ local api = vim.api
 
 local F = require("user.functional")
 
-local luasnip_loaded, luasnip = pcall(require, "luasnip")
-local lspkind_loaded, lspkind = pcall(require, "lspkind")
+local luasnip = F.load("luasnip")
+local lspkind = F.load("lspkind")
 local cmp = require("cmp")
 local cmp_autopairs = F.load("nvim-autopairs.completion.cmp")
 
@@ -38,7 +38,7 @@ local mappings = {
 local jump_next = nil
 local jump_prev = nil
 local snippet = nil
-if luasnip_loaded then
+if luasnip then
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
@@ -85,7 +85,7 @@ mappings["<S-Tab>"] = function()
 end
 
 local formatting = nil
-if lspkind_loaded then
+if lspkind then
   lspkind.init({
     mode = "symbol",
     presets = "mdi",

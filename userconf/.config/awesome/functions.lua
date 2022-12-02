@@ -32,7 +32,7 @@ local function j(func, ...)
   end
 end
 
-local function _volume_notify ()
+local function _volume_notify()
   awful.spawn.easy_async("sleep 0.05", function(_, _, _, _)
     events.call("volume")
   end)
@@ -74,7 +74,7 @@ local function resize_float(c, x, y)
   c:relative_move(-x, -y, 2 * x, 2 * y)
 end
 
-M.set_geometry = function (c, config)
+M.set_geometry = function(c, config)
   config = config or {}
   local overlap = config.overlap or false
   local width = config.width
@@ -94,30 +94,33 @@ M.set_geometry = function (c, config)
   end
   c.width = new_width
   c.height = new_height
-  M.align(c, alignment)
+  M.align(c, { alignment = alignment, overlap = overlap })
 end
 
-M.align = function(c, alignment)
+M.align = function(c, config)
   local border_width = c._border_width or beautiful.border_width
-  local geo = c.screen.workarea
-  local right = geo.width - 2* border_width - c.width
-  local bottom = geo.height - 2* border_width - c.height
+  local alignment = config.alignment or "center"
+  local overlap = config.overlap or false
+  local sel = overlap and "geometry" or "workarea"
+  local geo = c.screen[sel]
+  local right = geo.width - 2 * border_width - c.width
+  local bottom = geo.height - 2 * border_width - c.height
   local center_x = right * 0.5
   local center_y = bottom * 0.5
   if alignment == "center" then
-    c.x = center_x
-    c.y = center_y
+    c.x = geo.x + center_x
+    c.y = geo.y + center_y
   end
   if alignment == "topleft" then
-    c.x = 0
-    c.y = 0
+    c.x = geo.x
+    c.y = geo.y
   end
   if alignment == "topright" then
     c.x = right
-    c.y = 0
+    c.y = geo.y
   end
   if alignment == "bottomleft" then
-    c.x = 0
+    c.x = geo.x
     c.y = bottom
   end
   if alignment == "bottomright" then
@@ -125,26 +128,26 @@ M.align = function(c, alignment)
     c.y = bottom
   end
   if alignment == "top" then
-    c.x = center_x
-    c.y = 0
+    c.x = geo.x + center_x
+    c.y = geo.y
   end
   if alignment == "right" then
     c.x = right
-    c.y = center_y
+    c.y = geo.y + center_y
   end
   if alignment == "bottom" then
-    c.x = center_x
+    c.x = geo.x + center_x
     c.y = bottom
   end
   if alignment == "left" then
-    c.x = 0
-    c.y = center_y
+    c.x = geo.x
+    c.y = geo.y + center_y
   end
 end
 
-M.dc = function (c)
+M.dc = function(c)
   if type(c) == "string" then
-    c = F.filter(client.get(), function (e)
+    c = F.filter(client.get(), function(e)
       return e.instance == c
     end)[1]
     if not c then
@@ -193,10 +196,11 @@ M.dc = function (c)
     height = c.height,
     dockable = c.dockable,
     requests_no_titlebar = c.requests_no_titlebar,
+    window = c.window,
   }
 end
 
-M.focused_tag = function ()
+M.focused_tag = function()
   return awful.screen.focused().selected_tag
 end
 
@@ -209,14 +213,14 @@ M.client_fix = function(pos, width, height, sticky)
   return function(c)
     c.floating = true
     c.sticky = sticky
-    M.set_geometry(c, {width = width, height=height , alignment = pos})
+    M.set_geometry(c, { width = width, height = height, alignment = pos })
   end
 end
 
 M.right = function(c)
   c.floating = true
   c.sticky = true
-  M.set_geometry(c, {width = 0.5, height=1 , alignment = "topright"})
+  M.set_geometry(c, { width = 0.5, height = 1, alignment = "topright" })
 end
 
 M.right_sticky = function(c)
@@ -232,7 +236,7 @@ M.toggle_sticky = function(c)
   end
 end
 
-M.tag_viewer = function (i)
+M.tag_viewer = function(i)
   return function()
     local screen = awful.screen.focused()
     local tag = screen.tags[i]
@@ -242,7 +246,7 @@ M.tag_viewer = function (i)
   end
 end
 
-M.tag_toggler = function (i);
+M.tag_toggler = function(i)
   return function()
     local screen = awful.screen.focused()
     local tag = screen.tags[i]
@@ -252,7 +256,7 @@ M.tag_toggler = function (i);
   end
 end
 
-M.tag_mover = function (i)
+M.tag_mover = function(i)
   return function()
     if client.focus then
       local tag = client.focus.screen.tags[i]
@@ -263,7 +267,7 @@ M.tag_mover = function (i)
   end
 end
 
-M.focus_toggler = function (i)
+M.focus_toggler = function(i)
   return function()
     if client.focus then
       local tag = client.focus.screen.tags[i]
@@ -274,16 +278,16 @@ M.focus_toggler = function (i)
   end
 end
 
-M.fullscreen = function (c)
+M.fullscreen = function(c)
   c.fullscreen = not c.fullscreen
   c:raise()
 end
 
-M.kill = function (c)
+M.kill = function(c)
   c:kill()
 end
 
-M.toggle_float = function (c)
+M.toggle_float = function(c)
   c.floating = not c.floating
   local geometry = c.screen.geometry
   local border_width = c._border_width or beautiful.border_width
@@ -310,7 +314,8 @@ M.toggle_float = function (c)
     end
   end
 
-  if not c.floating and not c.sticky then
+  if not c.floating then
+    c.sticky = false
     local tag = awful.screen.focused().selected_tag
     if tag then
       c:move_to_tag(tag)
@@ -318,30 +323,30 @@ M.toggle_float = function (c)
   end
 end
 
-M.getmaster = function (c)
+M.getmaster = function(c)
   c:swap(awful.client.getmaster())
 end
 
-M.move_to_screen = function (c)
+M.move_to_screen = function(c)
   c:move_to_screen()
 end
 
-M.ontop = function (c)
+M.ontop = function(c)
   c.ontop = not c.ontop
 end
 
-M.show_menu = function ()
+M.show_menu = function()
   require("main.menu"):show()
 end
 
-M.go_back = function ()
+M.go_back = function()
   awful.client.focus.history.previous()
   if client.focus then
     client.focus:raise()
   end
 end
 
-M.restore_minimized = function ()
+M.restore_minimized = function()
   local c = awful.client.restore()
   -- Focus restored client
   if c then
@@ -349,7 +354,7 @@ M.restore_minimized = function ()
   end
 end
 
-M.execute_lua = function ()
+M.execute_lua = function()
   awful.prompt.run({
     prompt = " Run Lua code: ",
     textbox = awful.screen.focused().promptbox.widget,
@@ -402,28 +407,28 @@ end
 M.move_bottom = function(c)
   move(c, 0, 50)
 end
-M.swap_resize_left = function (c)
+M.swap_resize_left = function(c)
   if c.floating then
     M.move_left(c)
   else
     M.swap_left()
   end
 end
-M.swap_resize_top = function (c)
+M.swap_resize_top = function(c)
   if c.floating then
     M.move_top(c)
   else
     M.swap_top()
   end
 end
-M.swap_resize_right = function (c)
+M.swap_resize_right = function(c)
   if c.floating then
     M.move_right(c)
   else
     M.swap_right()
   end
 end
-M.swap_resize_bottom = function (c)
+M.swap_resize_bottom = function(c)
   if c.floating then
     M.move_bottom(c)
   else
@@ -541,12 +546,12 @@ end
 
 M.click = focus
 
-M.click_move = function (c)
+M.click_move = function(c)
   focus(c)
   awful.mouse.client.move(c)
 end
 
-M.click_resize = function (c)
+M.click_resize = function(c)
   focus(c)
   awful.mouse.client.resize(c)
 end

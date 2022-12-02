@@ -7,7 +7,7 @@ require("user.custom")
 
 vim.cmd("colorscheme monokai")
 
-local F = require("user.functional")
+F = require("user.functional")
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   command = "quit",
@@ -43,6 +43,8 @@ function Test()
     vim.wo.winhighlight = "SignColumn:TabLineSel"
   end
 end
+
+vim.keymap.set("n", "<F11>", Test)
 
 pcall(require, "user.plugins.colorizer")
 

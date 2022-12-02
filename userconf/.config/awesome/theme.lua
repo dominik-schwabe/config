@@ -2,8 +2,13 @@ local colors = require("colors")
 
 local M = {}
 
-M.font = "DejaVu Sans Mono 9"
-M.taglist_font = "DejaVu Sans Mono 9"
+M.font = "Fira Code Nerd Font 9"
+M.prompt_font = "Fira Code Nerd Font 10"
+M.taglist_font = "Fira Code Nerd Font 9"
+M.hotkeys_font = "Fira Code Nerd Font 11"
+M.hotkeys_description_font = "Fira Code Nerd Font 9"
+M.notification_font = "Fira Code Nerd Font 11"
+
 M.useless_gap = 0
 
 M.border_width = 1
@@ -65,16 +70,22 @@ M.menu_fg_focus = colors["black"]
 M.menu_border_color = colors["blue500"] .. "cc"
 M.menu_border_width = 1
 
-M.notification_bg = '#222222'
-M.notification_fg = '#cccccc'
-M.notification_margin = 20
-M.hotkeys_bg = '#222222' .. "ee"
-M.hotkeys_fg = '#ffffff'
+M.notification_bg = "#060606"
+M.notification_fg = "#eeeeee"
+M.notification_margin = 12
+M.notification_max_width = 500
+M.notification_border_color = colors["orange300"]
+M.notification_border_width = 2
+M.hotkeys_bg = "#222222" .. "ee"
+M.hotkeys_fg = "#ffffff"
 M.hotkeys_border_width = 1
 M.hotkeys_border_color = "#77aa00"
 M.hotkeys_modifiers_fg = colors["green400"]
 M.hotkeys_label_fg = "#000000"
 M.hotkeys_group_margin = 15
+
+M.prompt_fg = "#ff9900"
+M.prompt_bg = "#000000"
 
 M.systray_icon_spacing = 1
 

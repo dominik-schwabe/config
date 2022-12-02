@@ -136,7 +136,7 @@ local globalkeys = gears.table.join(
   bindkey("backlight", mod, "End", f.dec_brightness_1, "decrease the screen brightness by 1%"),
   bindkey("backlight", {}, "XF86MonBrightnessUp", f.inc_brightness_5, "increase the screen brightness by 5%"),
   bindkey("backlight", {}, "XF86MonBrightnessDown", f.dec_brightness_5, "decrease the screen brightness by 5%"),
-  bindkey("awesome", {}, "XF86ScreenSaver ", f.lock, "lock the screen"),
+  bindkey("awesome", {}, "XF86ScreenSaver", f.lock, "lock the screen"),
   bindkey("audio", {}, "XF86AudioMute", f.toggle_audio, "toggle the audio output"),
   bindkey("audio", {}, "XF86AudioMicMute", f.toggle_mic, "toggle the microphone"),
   bindkey("audio", {}, "XF86AudioRaiseVolume", f.inc_volume, "increase the volume by 5%"),

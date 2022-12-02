@@ -115,10 +115,15 @@ if $MINIMAL_CONFIG == ""
     au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 indentexpr=""
 endif
 
-colorscheme industry
-hi CursorLine cterm=NONE ctermbg=333 guibg=#303030
+colorscheme murphy "quiet habamax delek
+hi clear Conceal
+hi EndOfBuffer ctermbg=NONE guibg=NONE
+hi Normal ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+hi LineNr ctermbg=NONE guibg=NONE
+hi CursorLine ctermbg=333 guibg=#303030
 hi Visual cterm=NONE ctermbg=444 guibg=#444444 guifg=NONE
-hi CursorLineNr term=none cterm=none gui=none
+hi CursorLineNr term=NONE cterm=NONE gui=NONE
 
 set splitbelow
 set splitright

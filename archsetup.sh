@@ -111,7 +111,7 @@ ttf-arphic-ukai
 ttf-arphic-uming
 ttf-baekmuk
 ttf-dejavu
-ttf-fira-mono
+ttf-firacode-nerd
 ttf-sazanami
 tumbler
 udiskie
