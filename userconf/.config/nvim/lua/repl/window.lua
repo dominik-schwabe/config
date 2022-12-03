@@ -58,7 +58,9 @@ local function start_terminal(ft, meta)
     0,
     0,
     vim.schedule_wrap(function()
-      vim.api.nvim_set_current_win(previous_window)
+      if vim.api.nvim_win_is_valid(previous_window) then
+        api.nvim_set_current_win(previous_window)
+      end
     end)
   )
   local repl = { ft = ft, jobnr = jobnr, bufnr = bufnr, meta = meta }
@@ -190,7 +192,7 @@ function M.send(ft, lines)
     return nil
   end
 
-  lines = lines ~= nil and apply_preprocessing(repl, lines) or {"\r"}
+  lines = lines ~= nil and apply_preprocessing(repl, lines) or { "\r" }
 
   if S.debug then
     U.debug(lines)

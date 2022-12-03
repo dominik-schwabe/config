@@ -117,12 +117,12 @@ endif
 
 colorscheme murphy "quiet habamax delek
 hi clear Conceal
-hi EndOfBuffer ctermbg=NONE guibg=NONE
-hi Normal ctermbg=NONE guibg=NONE
-hi SignColumn ctermbg=NONE guibg=NONE
-hi LineNr ctermbg=NONE guibg=NONE
-hi CursorLine ctermbg=333 guibg=#303030
-hi Visual cterm=NONE ctermbg=444 guibg=#444444 guifg=NONE
+hi EndOfBuffer  ctermbg=NONE guibg=NONE               cterm=NONE term=NONE
+hi Normal       ctermbg=NONE guibg=NONE               cterm=NONE term=NONE
+hi SignColumn   ctermbg=NONE guibg=NONE               cterm=NONE term=NONE
+hi LineNr       ctermbg=NONE guibg=NONE               cterm=NONE term=NONE
+hi CursorLine   ctermbg=333  guibg=#303030            cterm=NONE term=NONE
+hi Visual       ctermbg=444  guibg=#444444 guifg=NONE cterm=NONE term=NONE
 hi CursorLineNr term=NONE cterm=NONE gui=NONE
 
 set splitbelow

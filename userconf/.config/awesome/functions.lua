@@ -187,7 +187,6 @@ M.dc = function(c)
     startup_id = c.startup_id,
     valid = c.valid,
     marked = c.marked,
-    is_fixed = c.is_fixed,
     immobilized = c.immobilized,
     floating = c.floating,
     x = c.x,

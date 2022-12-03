@@ -27,13 +27,39 @@ local function open_term(height, bottom)
   api.nvim_win_set_option(term_win, "signcolumn", "no")
 end
 
+local function has_neighbour(winid, direction)
+  local current_position = vim.api.nvim_win_get_position(winid)
+  local y, x = unpack(current_position)
+
+  if direction == "top" then
+    return y ~= 0
+  elseif direction == "left" then
+    return x ~= 0
+  end
+
+  local winnr = fn.winnr("$")
+
+  while winnr > 0 do
+    local id = fn.win_getid(winnr)
+    local this_y, this_x = unpack(api.nvim_win_get_position(id))
+    winnr = winnr - 1
+    if api.nvim_win_get_config(id) == "" then
+      if direction == "right" and (x + api.nvim_win_get_width(id)) < this_x then
+        return true
+      elseif direction == "bottom" and (y + api.nvim_win_get_height(id)) < this_y then
+        return true
+      end
+    end
+  end
+  return false
+end
+
 local function toggle_term(height, bottom)
-  if fn.win_gotoid(term_win) ~= 0 then
-    local this_window = fn.winnr()
-    local is_bottom = (this_window == fn.winnr("h"))
-      and (this_window == fn.winnr("l"))
-      and (this_window == fn.winnr("j"))
-    cmd("hide")
+  if term_win ~= nil and api.nvim_win_is_valid(term_win) then
+    local is_bottom = F.all({ "left", "bottom", "right" }, function(direction)
+      return not has_neighbour(term_win, direction)
+    end)
+    api.nvim_win_close(term_win, true)
     if is_bottom ~= bottom then
       open_term(height, bottom)
     end
