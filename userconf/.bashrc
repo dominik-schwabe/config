@@ -23,4 +23,4 @@ PROMPT_COLOR=$GREEN
 [[ "$UID" == "0" ]] && PROMPT_COLOR=$RED
 [[ "$SSH_TTY" ]] && PROMPT_COLOR=$YELLOW
 
-export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${RED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>> ${RESET}"
+export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${YELLOW}$(date +'%H:%M') ${RED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>> ${RESET}"

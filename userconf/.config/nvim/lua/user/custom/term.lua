@@ -12,7 +12,9 @@ end
 vim.keymap.set("t", "<C-e>", leave_term)
 
 local function delete_term(args)
-  api.nvim_buf_delete(args.buf, { force = true })
+  if api.nvim_buf_is_loaded(args.buf) then
+    api.nvim_buf_delete(args.buf, { force = true })
+  end
 end
 
 local function enter_term()

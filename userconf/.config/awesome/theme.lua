@@ -5,7 +5,7 @@ local M = {}
 M.font = "Fira Code Nerd Font 9"
 M.prompt_font = "Fira Code Nerd Font 10"
 M.taglist_font = "Fira Code Nerd Font 9"
-M.hotkeys_font = "Fira Code Nerd Font 11"
+M.hotkeys_font = "Fira Code Nerd Font Bold 11"
 M.hotkeys_description_font = "Fira Code Nerd Font 9"
 M.notification_font = "Fira Code Nerd Font 11"
 

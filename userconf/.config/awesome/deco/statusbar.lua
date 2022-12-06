@@ -120,21 +120,20 @@ awful.screen.connect_for_each_screen(function(s)
     position = "bottom",
     screen = s,
     border_width = 0,
-    height = 20,
+    height = 18,
     bg = "#000000",
     fg = "#ffffff",
   })
 
-  -- Add widgets to the wibox
   s.wibox_bottom:setup({
     layout = wibox.layout.align.horizontal,
-    { -- Left widgets
+    {
       layout = wibox.layout.fixed.horizontal,
       s.taglist,
       s.promptbox,
     },
-    s.tasklist, -- Middle widget
-    { -- Right widgets
+    s.tasklist,
+    {
       layout = wibox.layout.fixed.horizontal,
       sep_left,
       net.widget,
