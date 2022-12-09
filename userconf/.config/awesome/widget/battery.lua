@@ -51,13 +51,13 @@ function M.create() -- TODO: replace with dbus alternative
             fg = interpolate.color(0xFF0000, 0xDEED12, stage)
           end
         end
-        text = lain.util.markup.fg(fg, text)
-        if bat_now.status ~= "N/A" then
-          text = text .. "%"
-        end
-        text = lain.util.markup.color("#ffffff", bg, text)
-        widget:set_markup(text)
       end
+      text = lain.util.markup.fg(fg, text)
+      if bat_now.status ~= "N/A" then
+        text = text .. "%"
+      end
+      text = lain.util.markup.color("#ffffff", bg, text)
+      widget:set_markup(text)
     end,
   })
 end

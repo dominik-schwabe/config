@@ -1,9 +1,9 @@
+pcall(require, "luarocks.loader")
+
 package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua/5.4/?.lua"
 package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua/5.3/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.3/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
-
-pcall(require, "luarocks.loader")
 
 local F = require("util.functional")
 local theme = require("theme")
@@ -32,7 +32,7 @@ end
 function DC(instance)
   D0(f.dc(instance))
 end
-
+require("inspect")
 local vars = require("main.vars")
 
 local awful = require("awful")
