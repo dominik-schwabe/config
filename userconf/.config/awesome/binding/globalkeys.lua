@@ -13,7 +13,7 @@ local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
 local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___dropdownterminal___ -o font.size=10 -e bash -c 'export IS_DROPDOWN=true; tmux attach -t dropdown &>/dev/null || tmux new-session -t dropdown'",
+  cmd = "alacritty -t ___dropdownterminal___ -o font.size=9.5 -e bash -c 'export IS_DROPDOWN=true; tmux attach -t dropdown &>/dev/null || tmux new-session -t dropdown'",
   name = "___dropdownterminal___",
   border_width = 3,
   overlap = false,

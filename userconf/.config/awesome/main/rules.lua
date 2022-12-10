@@ -78,7 +78,17 @@ awful.rules.rules = {
   {
     rule = {
       class = "Steam",
-      name = ".*Steam Guard.*",
+      name = ".*Steam Guard.*"
+    },
+    properties = {
+      floating = true,
+      callback = f.client_fix("center", 800, 500, false),
+    },
+  },
+  {
+    rule = {
+      class = "Steam",
+      name = "Steam - .*"
     },
     properties = {
       floating = true,
