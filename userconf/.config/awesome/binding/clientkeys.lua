@@ -1,6 +1,7 @@
 local gears = require("gears")
 local vars = require("main.vars")
 local bindkey = require("util.bindkey")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local f = require("functions")
 
@@ -18,11 +19,11 @@ return gears.table.join(
   bindkey("layout", mod_shift, "+", f.resize_grow_x, "increase the size of the client or float-y"),
   bindkey("layout", mod, "-", f.resize_shrink, "decrease the size of the master or float-x"),
   bindkey("layout", mod_shift, "-", f.resize_shrink_x, "decrease the size of the client or float-y"),
-  bindkey("layout", mod, "9", f.client_fix("topleft", 400, 225, true), "topleft 400px * 225px"),
-  bindkey("layout", mod, "0", f.client_fix("topright", 400, 225, true), "topright 400px * 225px"),
+  bindkey("layout", mod, "9", f.client_fix("topleft", dpi(400), dpi(225), true), "topleft 400px * 225px"),
+  bindkey("layout", mod, "0", f.client_fix("topright", dpi(400), dpi(225), true), "topright 400px * 225px"),
+  bindkey("layout", mod, ".", f.client_fix("center", dpi(800), dpi(500), false), "center 800 * 500"),
+  bindkey("layout", mod_shift, ".", f.client_fix("center", dpi(1200), dpi(675), false), "center 1200px * 675px"),
   bindkey("layout", mod_shift, "comma", f.right_sticky, "align right side"),
-  bindkey("layout", mod, ".", f.client_fix("center", 800, 500, false), "center 800 * 500"),
-  bindkey("layout", mod_shift, ".", f.client_fix("center", 1200, 675, false), "center 1200px * 675px"),
   bindkey("client", mod, "comma", f.toggle_sticky, "toggle sticky"),
   bindkey("client", mod_shift, "h", f.swap_resize_left, "focus the left client"),
   bindkey("client", mod_shift, "j", f.swap_resize_bottom, "focus the bottom client"),

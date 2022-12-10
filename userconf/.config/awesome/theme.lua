@@ -1,4 +1,5 @@
 local colors = require("colors")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local M = {}
 
@@ -9,9 +10,9 @@ M.hotkeys_font = "Fira Code Nerd Font Bold 11"
 M.hotkeys_description_font = "Fira Code Nerd Font 9"
 M.notification_font = "Fira Code Nerd Font 11"
 
-M.useless_gap = 0
+M.useless_gap = dpi(0)
 
-M.border_width = 1
+M.border_width = dpi(1)
 M.border_single_client = false
 
 -- "#dd5ddd"
@@ -59,8 +60,8 @@ M.titlebar_bg_focus = colors["white"] .. "cc"
 M.titlebar_fg_focus = colors["black"] .. "cc"
 M.bg_systray = colors["black"]
 
-M.menu_height = 20
-M.menu_width = 180
+M.menu_height = dpi(20)
+M.menu_width = dpi(180)
 -- M.menu_context_height = 20
 
 M.menu_bg_normal = colors["white"] .. "cc"
@@ -68,26 +69,26 @@ M.menu_bg_focus = colors["red300"] .. "cc"
 M.menu_fg_focus = colors["black"]
 
 M.menu_border_color = colors["blue500"] .. "cc"
-M.menu_border_width = 1
+M.menu_border_width = dpi(1)
 
 M.notification_bg = "#060606"
 M.notification_fg = "#eeeeee"
-M.notification_margin = 12
-M.notification_max_width = 700
+M.notification_margin = dpi(12)
+M.notification_max_width = dpi(700)
 M.notification_border_color = colors["orange300"]
-M.notification_border_width = 2
-M.notification_icon_size = 80
+M.notification_border_width = dpi(2)
+M.notification_icon_size = dpi(80)
 M.hotkeys_bg = "#222222" .. "ee"
 M.hotkeys_fg = "#ffffff"
-M.hotkeys_border_width = 1
+M.hotkeys_border_width = dpi(1)
 M.hotkeys_border_color = "#77aa00"
 M.hotkeys_modifiers_fg = colors["green400"]
 M.hotkeys_label_fg = "#000000"
-M.hotkeys_group_margin = 15
+M.hotkeys_group_margin = dpi(15)
 
 M.prompt_fg = "#ff9900"
 M.prompt_bg = "#000000"
 
-M.systray_icon_spacing = 1
+M.systray_icon_spacing = dpi(1)
 
 return M

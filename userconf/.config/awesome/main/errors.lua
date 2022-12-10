@@ -22,7 +22,7 @@ do
 
     naughty.notify({
       preset = naughty.config.presets.critical,
-      title = "Oops, an error happened!",
+      title = "Oops, an error happened! (error)",
       text = tostring(err),
     })
     in_error = false
@@ -40,7 +40,7 @@ do
 
     naughty.notify({
       preset = naughty.config.presets.critical,
-      title = "Oops, an error happened!",
+      title = "Oops, an error happened! (deprecation)",
       text = tostring(err),
     })
     in_error = false
@@ -58,7 +58,7 @@ do
 
     naughty.notify({
       preset = naughty.config.presets.critical,
-      title = "Oops, an error happened!",
+      title = "Oops, an error happened! (index::miss)",
       text = tostring(err),
     })
     in_error = false
@@ -76,7 +76,7 @@ do
 
     naughty.notify({
       preset = naughty.config.presets.critical,
-      title = "Oops, an error happened!",
+      title = "Oops, an error happened! (newindex::miss)",
       text = tostring(err),
     })
     in_error = false

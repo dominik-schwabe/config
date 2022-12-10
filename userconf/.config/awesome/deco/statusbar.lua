@@ -4,6 +4,7 @@ local gears = require("gears")
 local layouts = require("main.layouts")
 local wibox = require("wibox")
 local vars = require("main.vars")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local screen = screen
 local client = client
@@ -120,7 +121,7 @@ awful.screen.connect_for_each_screen(function(s)
     position = "bottom",
     screen = s,
     border_width = 0,
-    height = 18,
+    height = dpi(18),
     bg = "#000000",
     fg = "#ffffff",
   })

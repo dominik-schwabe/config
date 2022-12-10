@@ -5,6 +5,7 @@ local menubar = require("menubar")
 local vars = require("main.vars")
 local beautiful = require("beautiful")
 local events = require("events")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local client = client
 local awesome = awesome
@@ -63,7 +64,7 @@ local function resize_float(c, x, y)
   local ratio = screen_ratio()
   x = x or 0
   y = y or 0
-  local min_width = 400
+  local min_width = dpi(400)
   local min_height = min_width * ratio
   if c.width < min_width then
     x = math.max(x, 0)
@@ -394,17 +395,18 @@ M.swap_right = function()
     awful.client.swap.bydirection("right")
   end
 end
+local pixels_per_move = dpi(50)
 M.move_left = function(c)
-  move(c, -50, 0)
+  move(c, -pixels_per_move, 0)
 end
 M.move_top = function(c)
-  move(c, 0, -50)
+  move(c, 0, -pixels_per_move)
 end
 M.move_right = function(c)
-  move(c, 50, 0)
+  move(c, pixels_per_move, 0)
 end
 M.move_bottom = function(c)
-  move(c, 0, 50)
+  move(c, 0, pixels_per_move)
 end
 M.swap_resize_left = function(c)
   if c.floating then
@@ -452,10 +454,12 @@ M.focus_right = function()
     awful.client.focus.bydirection("right")
   end
 end
+local shrink_pixels = dpi(20)
+local grow_pixels = dpi(10)
 M.resize_grow = function(c)
   if c.floating then
     local ratio = screen_ratio()
-    local x = 20
+    local x = shrink_pixels
     local y = x * ratio - 0.5
     resize_float(c, x, y)
   else
@@ -465,7 +469,7 @@ end
 M.resize_shrink = function(c)
   if c.floating then
     local ratio = screen_ratio()
-    local x = -20
+    local x = -shrink_pixels
     local y = x * ratio - 0.5
     resize_float(c, x, y)
   else
@@ -474,26 +478,26 @@ M.resize_shrink = function(c)
 end
 M.resize_grow_x = function(c)
   if c.floating then
-    resize_float(c, 10, 0)
+    resize_float(c, grow_pixels, 0)
   end
 end
 M.resize_shrink_x = function(c)
   if c.floating then
-    resize_float(c, -10, 0)
+    resize_float(c, -grow_pixels, 0)
   end
 end
 M.inc_number_of_masters = j(awful.tag.incnmaster, 1, nil, true)
 M.dec_number_of_masters = j(awful.tag.incnmaster, -1, nil, true)
 M.inc_number_of_columns = j(awful.tag.incncol, 1, nil, true)
 M.dec_number_of_columns = j(awful.tag.incncol, -1, nil, true)
-M.grow_bottom = build_resizer(0, 0, 0, 20)
-M.shrink_bottom = build_resizer(0, 0, 0, -20)
-M.grow_left = build_resizer(-20, 0, 20, 0)
-M.shrink_left = build_resizer(0, 0, -20, 0)
-M.grow_top = build_resizer(0, -20, 0, 20)
-M.shrink_top = build_resizer(0, 20, 0, -20)
-M.grow_right = build_resizer(0, 0, 20, 0)
-M.shrink_right = build_resizer(20, 0, -20, 0)
+M.grow_bottom = build_resizer(0, 0, 0, shrink_pixels)
+M.shrink_bottom = build_resizer(0, 0, 0, -shrink_pixels)
+M.grow_left = build_resizer(-shrink_pixels, 0, shrink_pixels, 0)
+M.shrink_left = build_resizer(0, 0, -shrink_pixels, 0)
+M.grow_top = build_resizer(0, -shrink_pixels, 0, shrink_pixels)
+M.shrink_top = build_resizer(0, shrink_pixels, 0, -shrink_pixels)
+M.grow_right = build_resizer(0, 0, shrink_pixels, 0)
+M.shrink_right = build_resizer(shrink_pixels, 0, -shrink_pixels, 0)
 M.prev_tag = awful.tag.viewprev
 M.next_tag = awful.tag.viewnext
 M.jump_to_urgent = awful.client.urgent.jumpto

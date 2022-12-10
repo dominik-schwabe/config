@@ -1,4 +1,5 @@
 local awful = require("awful")
+local dpi = require("beautiful.xresources").apply_dpi
 local F = require("util.functional")
 
 local client = client
@@ -91,7 +92,7 @@ local function update_properties(c)
   update_z_order(c)
 end
 
-local offset = 10
+local offset = dpi(20)
 client.connect_signal("property::x", function(c)
   local geom = c.screen.geometry
   if c.floating then
@@ -115,7 +116,6 @@ client.connect_signal("property::fullscreen", function(c)
   update_properties(c)
 end)
 
-local a = 0
 screen.connect_signal("arrange", function(s)
   if not s.selected_tag then
     return
@@ -136,7 +136,6 @@ screen.connect_signal("arrange", function(s)
       end
     end
   end
-  a = a + 1
 end)
 
 require("deco.titlebar")

@@ -2,6 +2,7 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local clientkeys = require("binding.clientkeys")
 local clientbuttons = require("binding.clientbuttons")
+local dpi = require("beautiful.xresources").apply_dpi
 local f = require("functions")
 
 awful.rules.rules = {
@@ -47,6 +48,7 @@ awful.rules.rules = {
         "xtightvncviewer",
         "Nm-connection-editor",
         "helvum",
+        "Nvidia-settings"
       },
 
       -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -62,7 +64,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
 
@@ -82,7 +84,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
   {
@@ -92,7 +94,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
   {
@@ -102,7 +104,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
   {
@@ -112,7 +114,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
   {
@@ -122,14 +124,14 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
   {
     rule = { name = "Figure *", class = " " },
     properties = {
       floating = true,
-      callback = f.client_fix("center", 800, 500, false),
+      callback = f.client_fix("center", dpi(800), dpi(500), false),
     },
   },
 

@@ -1,4 +1,5 @@
 local awful = require("awful")
+local dpi = require("beautiful.xresources").apply_dpi
 local F = require("util.functional")
 local f = require("functions")
 local beautiful = require("beautiful")
@@ -95,7 +96,7 @@ local function build_toggle_dropdown(config)
       end
       c.skip_taskbar = true
       if border_width then
-        c._border_width = border_width
+        c._border_width = dpi(border_width)
       end
       c:connect_signal("property::floating", function()
         c.sticky = c.floating

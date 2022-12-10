@@ -325,7 +325,7 @@ for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] b
 for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] sticky enable
 bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -s 90 -n -t \\".*Mozilla Thunderbird\\" -i Mail -c thunderbird"
 
-exec_always --no-startup-id feh --bg-fill "$HOME/.bg.jpg"
+exec_always --no-startup-id feh --bg-fill "$HOME/.bg.png"
 exec --no-startup-id flameshot
 exec --no-startup-id telegram-desktop -startintray
 exec --no-startup-id "sleep 10; launch_discord"

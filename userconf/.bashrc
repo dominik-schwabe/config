@@ -1,5 +1,4 @@
 [[ -r ~/.envrc ]] && . ~/.envrc
-[[ -r ~/.customrc ]] && . ~/.customrc
 [[ -r ~/.genrc ]] && . ~/.genrc
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion

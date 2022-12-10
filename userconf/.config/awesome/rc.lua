@@ -5,33 +5,39 @@ package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua
 package.path = package.path .. ";" .. "/usr/share/lua/5.3/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
 
-local F = require("util.functional")
-local theme = require("theme")
-
-f = require("functions")
-
 local naughty = require("naughty")
 
-require("main.errors")
-require("main.signals")
+function D(arg, timeout)
+  local inspect_loaded, inspect = pcall(require, "inspect")
+  if inspect_loaded then
+    naughty.notify({ text = inspect(arg), timeout = timeout })
+  else
+    naughty.notify({ text = "unable to load inspect, please install it", timeout = 5 })
+  end
+end
 
-local root = root
+local F = require("util.functional")
 
 function DK(list)
   D(list ~= nil and F.keys(list) or nil)
-end
-
-function D(arg, timeout)
-  naughty.notify({ text = require("inspect")(arg), timeout = timeout })
 end
 
 function D0(arg)
   D(arg, 0)
 end
 
+f = require("functions")
+
 function DC(instance)
   D0(f.dc(instance))
 end
+
+local root = root
+
+local theme = require("theme")
+
+require("main.errors")
+require("main.signals")
 
 local vars = require("main.vars")
 
