@@ -32,7 +32,7 @@ end
 function DC(instance)
   D0(f.dc(instance))
 end
-require("inspect")
+
 local vars = require("main.vars")
 
 local awful = require("awful")

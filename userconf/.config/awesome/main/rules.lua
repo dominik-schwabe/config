@@ -78,7 +78,7 @@ awful.rules.rules = {
   {
     rule = {
       class = "Steam",
-      name = ".*Steam Guard.*"
+      name = ".*Steam Guard.*",
     },
     properties = {
       floating = true,
@@ -88,7 +88,7 @@ awful.rules.rules = {
   {
     rule = {
       class = "Steam",
-      name = "Steam - .*"
+      name = "Steam - .*",
     },
     properties = {
       floating = true,
@@ -153,7 +153,7 @@ awful.rules.rules = {
   },
   {
     rule_any = {
-      name = { "Steam" },
+      name = { "^Steam$" },
       class = { "Steam" },
     },
     properties = {
@@ -163,7 +163,7 @@ awful.rules.rules = {
     },
   },
   {
-    rule = { class = "steam_app*" },
+    rule = { class = "steam_app" },
     properties = {
       screen = 1,
       tag = "4",
@@ -171,11 +171,18 @@ awful.rules.rules = {
     },
   },
   {
-    rule = { class =  "discord"  },
+    rule = { class = "discord" },
     properties = {
       screen = 1,
       tag = "7",
       callback = awful.client.focus.history.add,
+    },
+  },
+  {
+    rule_any = { class = { "Slay the Spire" } },
+    properties = {
+      size_hints_honor = false,
+      fullscreen = true,
     },
   },
 }
