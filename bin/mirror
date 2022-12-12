@@ -11,7 +11,7 @@ HELP='mirror your primary monitor with an external monitor
   -d make only your primary screen active (e.g. reset mirroring)
   -p take maximal resolution from primary instead of external monitor'
 TYPE="mirror"
-while getopts "r:o:adhvip" o &>/dev/null; do
+while getopts "s:o:adptblr" o &>/dev/null; do
   case $o in
     "a") AUTO=true ;;
     "o") EXTERN_OUTPUT=$OPTARG ;;

@@ -10,9 +10,17 @@ local naughty = require("naughty")
 function D(arg, timeout)
   local inspect_loaded, inspect = pcall(require, "inspect")
   if inspect_loaded then
-    naughty.notify({ text = inspect(arg), timeout = timeout })
+    naughty.notify({
+      text = inspect(arg),
+      timeout = timeout,
+      screen = 1,
+    })
   else
-    naughty.notify({ text = "unable to load inspect, please install it", timeout = 5 })
+    naughty.notify({
+      text = "unable to load inspect, please install it",
+      timeout = 5,
+      screen = 1,
+    })
   end
 end
 
