@@ -13,4 +13,4 @@ local function latex_substitude()
   cmd([[%s/\v +/ /ge]])
 end
 
-vim.keymap.set("x", "<space>sl", latex_substitude)
+vim.keymap.set("", "<space>sl", latex_substitude)

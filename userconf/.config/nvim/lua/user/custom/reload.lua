@@ -1,7 +1,7 @@
 local F = require("user.functional")
 
 local function reload_config()
-  F.forkey(package.loaded, function(name)
+  F.foreach(F.keys(package.loaded), function(name)
     if name:match("^user") then
       package.loaded[name] = nil
     end

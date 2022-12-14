@@ -57,7 +57,7 @@ local beautiful = require("beautiful")
 
 beautiful.init(gears.filesystem.get_configuration_dir() .. "theme.lua")
 
-require("awful.autofocus")
+require("autofocus")
 
 require("main.rules")
 

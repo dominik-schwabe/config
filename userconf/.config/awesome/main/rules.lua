@@ -48,7 +48,7 @@ awful.rules.rules = {
         "xtightvncviewer",
         "Nm-connection-editor",
         "helvum",
-        "Nvidia-settings"
+        "Nvidia-settings",
       },
 
       -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -64,7 +64,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("centered", dpi(800), dpi(500), false),
     },
   },
 
@@ -185,6 +185,12 @@ awful.rules.rules = {
     properties = {
       size_hints_honor = false,
       fullscreen = true,
+    },
+  },
+  {
+    rule_any = { class = { "mpv" } },
+    properties = {
+      size_hints_honor = false,
     },
   },
 }

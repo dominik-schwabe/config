@@ -75,16 +75,28 @@ local function resize_float(c, x, y)
   c:relative_move(-x, -y, 2 * x, 2 * y)
 end
 
+M.honor_margins = function(s)
+  local g = s.geometry
+  local w = s.workarea
+  return {
+    left = g.x - w.x,
+    top = g.y - w.y,
+    bottom = (w.y + w.height) - (g.y + g.height),
+    right = (w.x + w.width) - (g.x + g.width),
+  }
+end
+
 M.set_geometry = function(c, config)
   config = config or {}
   local overlap = config.overlap or false
   local width = config.width
   local height = config.height
   local border_width = config.border_width or c.border_width
-  local alignment = config.alignment or "center"
+  local position = config.alignment or "centered"
 
   local sel = overlap and "geometry" or "workarea"
-  local geom = awful.screen.focused()[sel]
+  local focused_screen = screen[1]
+  local geom = focused_screen[sel]
   local new_width = width
   local new_height = height
   if width <= 1 then
@@ -95,55 +107,7 @@ M.set_geometry = function(c, config)
   end
   c.width = new_width
   c.height = new_height
-  M.align(c, { alignment = alignment, overlap = overlap })
-end
-
-M.align = function(c, config)
-  local border_width = c._border_width or beautiful.border_width
-  local alignment = config.alignment or "center"
-  local overlap = config.overlap or false
-  local sel = overlap and "geometry" or "workarea"
-  local geo = c.screen[sel]
-  local right = geo.width - 2 * border_width - c.width
-  local bottom = geo.height - 2 * border_width - c.height
-  local center_x = right * 0.5
-  local center_y = bottom * 0.5
-  if alignment == "center" then
-    c.x = geo.x + center_x
-    c.y = geo.y + center_y
-  end
-  if alignment == "topleft" then
-    c.x = geo.x
-    c.y = geo.y
-  end
-  if alignment == "topright" then
-    c.x = right
-    c.y = geo.y
-  end
-  if alignment == "bottomleft" then
-    c.x = geo.x
-    c.y = bottom
-  end
-  if alignment == "bottomright" then
-    c.x = right
-    c.y = bottom
-  end
-  if alignment == "top" then
-    c.x = geo.x + center_x
-    c.y = geo.y
-  end
-  if alignment == "right" then
-    c.x = right
-    c.y = geo.y + center_y
-  end
-  if alignment == "bottom" then
-    c.x = geo.x + center_x
-    c.y = bottom
-  end
-  if alignment == "left" then
-    c.x = geo.x
-    c.y = geo.y + center_y
-  end
+  awful.placement.align(c, { honor_workarea = not overlap, position = position })
 end
 
 M.dc = function(c)
@@ -159,44 +123,44 @@ M.dc = function(c)
     c = client.focus
   end
   return {
-    name = c.name,
-    skip_taskbar = c.skip_taskbar,
-    type = c.type,
-    class = c.class,
-    instance = c.instance,
-    pid = c.pid,
-    role = c.role,
-    hidden = c.hidden,
-    minimized = c.minimized,
-    size_hints_honor = c.size_hints_honor,
-    border_width = c.border_width,
-    border_color = c.border_color,
-    urgent = c.urgent,
-    ontop = c.ontop,
     above = c.above,
     below = c.below,
+    border_color = c.border_color,
+    border_width = c.border_width,
+    class = c.class,
+    dockable = c.dockable,
+    floating = c.floating,
+    focusable = c.focusable,
     fullscreen = c.fullscreen,
+    group_window = c.group_window,
+    height = c.height,
+    hidden = c.hidden,
+    immobilized = c.immobilized,
+    instance = c.instance,
+    leader_window = c.leader_window,
+    marked = c.marked,
     maximized = c.maximized,
     maximized_horizontal = c.maximized_horizontal,
     maximized_vertical = c.maximized_vertical,
-    transient_for = c.transient_for,
-    group_window = c.group_window,
-    leader_window = c.leader_window,
-    sticky = c.sticky,
+    minimized = c.minimized,
     modal = c.modal,
-    focusable = c.focusable,
+    name = c.name,
+    ontop = c.ontop,
+    pid = c.pid,
+    requests_no_titlebar = c.requests_no_titlebar,
+    role = c.role,
+    size_hints_honor = c.size_hints_honor,
+    skip_taskbar = c.skip_taskbar,
     startup_id = c.startup_id,
+    sticky = c.sticky,
+    transient_for = c.transient_for,
+    type = c.type,
+    urgent = c.urgent,
     valid = c.valid,
-    marked = c.marked,
-    immobilized = c.immobilized,
-    floating = c.floating,
+    width = c.width,
+    window = c.window,
     x = c.x,
     y = c.y,
-    width = c.width,
-    height = c.height,
-    dockable = c.dockable,
-    requests_no_titlebar = c.requests_no_titlebar,
-    window = c.window,
   }
 end
 
@@ -220,7 +184,7 @@ end
 M.right = function(c)
   c.floating = true
   c.sticky = true
-  M.set_geometry(c, { width = 0.5, height = 1, alignment = "topright" })
+  M.set_geometry(c, { width = 0.5, height = 1, alignment = "bottom_right" })
 end
 
 M.right_sticky = function(c)
@@ -287,44 +251,40 @@ M.kill = function(c)
   c:kill()
 end
 
+M.no_offscreen = function(c, args)
+  args = args or {}
+  local margins = args.honor_workarea and nil or M.honor_margins(c.screen)
+  local other_margins = args.margins
+  if other_margins then
+    margins.top = margins.top +  other_margins.top
+    margins.bottom = margins.bottom +  other_margins.bottom
+    margins.left = margins.left +  other_margins.left
+    margins.right = margins.right +  other_margins.right
+  end
+  awful.placement.no_offscreen(c, { margins = margins })
+end
+
 M.toggle_float = function(c)
-  c.floating = not c.floating
+  if c.fullscreen then
+    c.fullscreen = false
+  else
+    c.floating = not c.floating
+  end
   local geometry = c.screen.geometry
   local border_width = c._border_width or beautiful.border_width
   local max_width = geometry.width - 2 * border_width
   local max_height = geometry.height - 2 * border_width
   if c.floating then
-    if c.width > max_width then
-      c.width = max_width
-    end
-    if c.height > max_height then
-      c.height = max_height
-    end
-    if c.x + c.width > max_width then
-      c.x = max_width - c.width
-    end
-    if c.y + c.height > max_height then
-      c.y = max_height - c.height
-    end
-    if c.x < 0 then
-      c.x = 0
-    end
-    if c.y < 0 then
-      c.y = 0
-    end
-  end
-
-  if not c.floating then
-    c.sticky = false
-    local tag = awful.screen.focused().selected_tag
-    if tag then
-      c:move_to_tag(tag)
-    end
+    M.no_offscreen(c)
   end
 end
 
 M.getmaster = function(c)
   c:swap(awful.client.getmaster())
+end
+
+M.focus_next_screen = function()
+  screen.focus_relative(1)
 end
 
 M.move_to_screen = function(c)

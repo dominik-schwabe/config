@@ -1,6 +1,7 @@
 local awful = require("awful")
 local dpi = require("beautiful.xresources").apply_dpi
 local F = require("util.functional")
+local f = require("functions")
 
 local client = client
 local awesome = awesome
@@ -92,17 +93,19 @@ local function update_properties(c)
   update_z_order(c)
 end
 
-local offset = dpi(20)
-client.connect_signal("property::x", function(c)
-  local geom = c.screen.geometry
+local offset = dpi(30)
+client.connect_signal("property::geometry", function(c)
   if c.floating then
-    c.x = math.min(math.max(c.x, -c.width + offset), geom.width - offset)
-  end
-end)
-client.connect_signal("property::y", function(c)
-  local geom = c.screen.geometry
-  if c.floating then
-    c.y = math.min(math.max(c.y, -c.height + offset), geom.height - offset)
+    local y_margin = offset - c.height
+    local x_margin = offset - c.width
+    f.no_offscreen(c, {
+      margins = {
+        top = y_margin,
+        bottom = y_margin,
+        left = x_margin,
+        right = x_margin,
+      },
+    })
   end
 end)
 
@@ -114,6 +117,16 @@ client.connect_signal("property::fullscreen", function(c)
     unfullscreen_all_other_clients_on_screen(c)
   end
   update_properties(c)
+end)
+tag.connect_signal("property::selected", function(t)
+  if t.selected then
+    local tag = awful.screen.focused().selected_tag
+    F.foreach(client.get(), function(c)
+      if c.sticky then
+        c:move_to_tag(tag)
+      end
+    end)
+  end
 end)
 
 screen.connect_signal("arrange", function(s)

@@ -155,7 +155,6 @@ local globalkeys = gears.table.join(
   bindkey("launcher", mod_shift, "Return", f.open_filebrowser, "open the graphical file browser"),
   bindkey("screenshot", {}, "Print", f.screen_screenshot, "take a screenshot of the entire screen"),
   bindkey("screenshot", shift, "Print", f.window_screenshot, "take a screenshot of the focused window"),
-  -- bindsym $mod+udiaeresis move workspace to output next -- TODO: move output
   bindkey("launcher", mod, "F8", f.toggle_compositor, "toggle the compositor"),
   bindkey("launcher", mod_shift, "c", f.toggle_auto_clicker, "toggle an auto clicker"),
   bindkey("launcher", mod, "c", f.toggle_color_picker, "toggle the color picker"),

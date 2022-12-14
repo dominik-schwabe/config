@@ -12,17 +12,19 @@ function M.create()
   local state = "reset"
   local timer = gears.timer({ timeout = 1 })
   local function stopwatch_update()
+    local bg = "#000000"
     local fg = "#FFFFFF"
     if state == "running" then
       fg = "#00FF00"
     elseif state == "stopped" then
-      fg = "#FF0000"
+      fg = "#000000"
+      bg = "#FF0000"
     end
     local minutes = math.floor(total_seconds / 60)
     local hours = math.floor(minutes / 60)
     minutes = minutes - hours * 60
     local text = string.format("%d:%02d", hours, minutes)
-    text = lain.util.markup.color(fg, "#000000", text)
+    text = lain.util.markup.color(fg, bg, text)
     stopwatch:set_markup(text)
   end
   timer:connect_signal("start", function()

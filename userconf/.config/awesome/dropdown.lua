@@ -45,11 +45,16 @@ local function option_applier(c, config)
     c.above = show
     c.border_width = c._border_width or beautiful.border_width
     c.border_color = c._border_color or beautiful.border_focus_float
-    f.move_to_tag_name(c, "1")
     if show then
+      local tag = awful.screen.focused().selected_tag
+      if tag ~= nil then
+        c:move_to_tag(tag)
+      end
       f.set_geometry(c, config)
       client.focus = c
       hide_group(c, config.group)
+    else
+      f.move_to_tag_name(c, "1")
     end
   end
 end

@@ -53,7 +53,12 @@ PRIMARY_RESOLUTION=$(awk '{if (IS_PRIMARY) { print $1; exit } }; /primary/ {IS_P
 
 if [[ -n "$AUTO" ]]; then
   [[ -z "$EXTERN_OUTPUT" ]] && EXTERN_OUTPUT=$(awk '{print $1; exit}' <<<"$OUTPUTS")
-  [[ -z "$EXTERN_RESOLUTION" ]] && EXTERN_RESOLUTION=$(awk '{print $2; exit}' <<<"$OUTPUTS")
+  OUTPUTLINE=$(grep "^$EXTERN_OUTPUT " <<< "$OUTPUTS")
+  if [[ -z $OUTPUTLINE ]]; then
+    echo "unknown output '$EXTERN_OUTPUT'"
+    exit 1
+  fi
+  [[ -z "$EXTERN_RESOLUTION" ]] && EXTERN_RESOLUTION=$(awk '{print $2; exit}' <<<"$OUTPUTLINE")
 fi
 
 if [[ -z "$RESET" ]]; then

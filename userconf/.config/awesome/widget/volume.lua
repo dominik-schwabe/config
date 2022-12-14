@@ -3,7 +3,7 @@ local lain_pulse = require("widget._lain_pulse")
 
 local M = {}
 
-function M.create() -- TODO: replace with dbus alternative
+function M.create()
   return lain_pulse({
     timeout = 1,
     settings = function()
