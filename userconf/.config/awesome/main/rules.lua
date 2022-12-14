@@ -146,7 +146,7 @@ awful.rules.rules = {
   },
 
   {
-    rule_any = { class = "Brave-browser", "firefox" },
+    rule_any = { class = { "Brave-browser", "firefox" } },
     properties = {
       screen = 1,
       tag = "1",
