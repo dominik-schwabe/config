@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+OUTPUT=$(pamixer --list-sources | grep '\.pci-' | grep -v monitor)
+if [[ "$OUTPUT" != "" ]]; then
+  SOURCE=$(echo "$OUTPUT" | head -1 | cut -d" " -f1)
+  echo $OUTPUT
+  echo $SOURCE
+  pamixer --source "$SOURCE" --toggle-mute
+fi

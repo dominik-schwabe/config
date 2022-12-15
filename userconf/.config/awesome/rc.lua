@@ -40,6 +40,15 @@ function DC(instance)
   D0(f.dc(instance))
 end
 
+function LC()
+  D0(F.dict(F.map(client.get(), function(c)
+    return {
+      c.pid,
+      c.name,
+    }
+  end)))
+end
+
 local root = root
 
 local theme = require("theme")
@@ -62,6 +71,7 @@ require("autofocus")
 require("main.rules")
 
 beautiful.wallpaper = vars.wallpaper
+awful.mouse.snap.edge_enabled = false
 
 root.buttons(require("binding.globalbuttons"))
 root.keys(require("binding.globalkeys"))

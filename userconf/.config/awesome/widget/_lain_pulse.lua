@@ -1,9 +1,9 @@
+local F = require("util.functional")
 local awful = require("awful")
-local shell = require("awful.util").shell
+-- local shell = require("awful.util").shell
 local gears = require("gears")
 local wibox = require("wibox")
 local string = string
-local type = type
 local events = require("events")
 
 -- PulseAudio volume
@@ -16,38 +16,23 @@ local function factory(args)
   local timeout = args.timeout or 5
   local settings = args.settings or function() end
 
-  pulse.devicetype = args.devicetype or "sink"
-  pulse.cmd = args.cmd
-    or "pacmd list-"
-      .. pulse.devicetype
-      .. "s | sed -n -e '/*/,$!d' -e '/index/p' -e '/base volume/d' -e '/volume:/p' -e '/muted:/p' -e '/device\\.string/p'"
+  pulse.cmd = "pamixer --get-volume --get-mute"
 
   function pulse.update()
-    awful.spawn.easy_async(
-      { shell, "-c", type(pulse.cmd) == "string" and pulse.cmd or pulse.cmd() },
-      function(s, _, _, _)
-        volume_now = {
-          index = string.match(s, "index: (%S+)") or "N/A",
-          device = string.match(s, 'device.string = "(%S+)"') or "N/A",
-          muted = string.match(s, "muted: (%S+)") or "N/A",
-        }
-
-        pulse.device = volume_now.index
-
-        local ch = 1
-        volume_now.channel = {}
-        for v in string.gmatch(s, ":.-(%d+)%%") do
-          volume_now.channel[ch] = v
-          ch = ch + 1
-        end
-
-        volume_now.left = volume_now.channel[1] or "N/A"
-        volume_now.right = volume_now.channel[2] or "N/A"
-
-        widget = pulse.widget
-        settings()
+    awful.spawn.easy_async_with_shell(pulse.cmd, function(out, _, _, exit_code)
+      local muted = "N/A"
+      local volume = "N/A"
+      if exit_code == 0 then
+        muted, volume = table.unpack(F.consume(string.gmatch(out, "%S+")))
       end
-    )
+      volume_now = {
+        volume = volume,
+        muted = muted == "true",
+      }
+
+      widget = pulse.widget
+      settings()
+    end)
   end
 
   local timer = gears.timer({ timeout = timeout })

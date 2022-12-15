@@ -26,6 +26,23 @@ function M.filter(list, cb)
   return filtered
 end
 
+function M.dict(list)
+  local data = {}
+  M.foreach(list, function(e)
+    local key, value = unpack(e)
+    data[key] = value
+  end)
+  return data
+end
+
+function M.consume(obj)
+  data = {}
+  for e in obj do
+    data[#data + 1] = e
+  end
+  return data
+end
+
 function M.any(list, cb)
   for _, el in ipairs(list) do
     if cb(el) then

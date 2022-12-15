@@ -70,35 +70,39 @@ awful.layout.layouts = layouts
 awful.screen.connect_for_each_screen(function(s)
   -- s.padding = -1
   -- Wallpaper
-  set_wallpaper(s)
 
-  -- Each screen has its own tag table.
   awful.tag({ "1", "2", "3", "4", "5", "6" }, s, layouts[1])
-  awful.tag.add("7", {
-    screen = s,
-    layout = layouts[2],
-    selected = false,
-  })
+  if s.index == 1 then
+    set_wallpaper(s)
+    awful.tag.add("7", {
+      screen = s,
+      layout = layouts[2],
+      selected = false,
+    })
+  else
+    gears.wallpaper.set("#000000")
+  end
 
   -- Create a promptbox for each screen
   s.promptbox = awful.widget.prompt()
   -- Create an imagebox widget which will contain an icon indicating which layout we're using.
   -- We need one layoutbox per screen.
-  s.layoutbox = awful.widget.layoutbox(s)
-  s.layoutbox:buttons(gears.table.join(
-    awful.button({}, 1, function()
-      awful.layout.inc(1)
-    end),
-    awful.button({}, 3, function()
-      awful.layout.inc(-1)
-    end),
-    awful.button({}, 4, function()
-      awful.layout.inc(1)
-    end),
-    awful.button({}, 5, function()
-      awful.layout.inc(-1)
-    end)
-  ))
+  -- s.layoutbox = awful.widget.layoutbox(s)
+  -- s.layoutbox:buttons(gears.table.join(
+  --   awful.button({}, 1, function()
+  --     awful.layout.inc(1)
+  --   end),
+  --   awful.button({}, 3, function()
+  --     awful.layout.inc(-1)
+  --   end),
+  --   awful.button({}, 4, function()
+  --     awful.layout.inc(1)
+  --   end),
+  --   awful.button({}, 5, function()
+  --     awful.layout.inc(-1)
+  --   end)
+  -- ))
+
   -- Create a taglist widget
   s.taglist = awful.widget.taglist({
     screen = s,
@@ -126,7 +130,7 @@ awful.screen.connect_for_each_screen(function(s)
     fg = "#ffffff",
   })
 
-  s.wibox_bottom:setup({
+  local wibox_args = {
     layout = wibox.layout.align.horizontal,
     {
       layout = wibox.layout.fixed.horizontal,
@@ -134,7 +138,9 @@ awful.screen.connect_for_each_screen(function(s)
       s.promptbox,
     },
     s.tasklist,
-    {
+  }
+  if s.index == 1 then
+    wibox_args[#wibox_args + 1] = {
       layout = wibox.layout.fixed.horizontal,
       sep_left,
       net.widget,
@@ -154,6 +160,7 @@ awful.screen.connect_for_each_screen(function(s)
       timebox,
       sep_right,
       systray,
-    },
-  })
+    }
+  end
+  s.wibox_bottom:setup(wibox_args)
 end)

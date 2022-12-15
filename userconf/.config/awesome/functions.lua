@@ -64,12 +64,13 @@ local function resize_float(c, x, y)
   local ratio = screen_ratio()
   x = x or 0
   y = y or 0
-  local min_width = dpi(400)
-  local min_height = min_width * ratio
-  if c.width < min_width then
+  local size_hints = c.size_hints
+  local min_width = math.max(size_hints.min_width or 0, dpi(400))
+  local min_height = math.max(size_hints.min_height or 0, min_width * ratio)
+  if c.width <= min_width then
     x = math.max(x, 0)
   end
-  if c.height < min_height then
+  if c.height <= min_height then
     y = math.max(y, 0)
   end
   c:relative_move(-x, -y, 2 * x, 2 * y)
@@ -158,6 +159,7 @@ M.dc = function(c)
     pid = c.pid,
     requests_no_titlebar = c.requests_no_titlebar,
     role = c.role,
+    size_hints = c.size_hints,
     size_hints_honor = c.size_hints_honor,
     skip_taskbar = c.skip_taskbar,
     startup_id = c.startup_id,
@@ -499,7 +501,7 @@ M.rofi = cmd("rofi -show drun")
 M.lock = cmd("playerctl -a pause ; exec i3lock -c 000000")
 M.reboot = cmd("reboot")
 M.toggle_audio = F.chain(cmd("pamixer --toggle-mute"), _volume_notify)
-M.toggle_mic = F.chain(cmd("pamixer --source 1 --toggle-mute"), _volume_notify)
+M.toggle_mic = F.chain(cmd("toggle_microphone_mute"), _volume_notify)
 M.inc_volume = F.chain(cmd("pamixer -i 5"), _volume_notify)
 M.dec_volume = F.chain(cmd("pamixer -d 5"), _volume_notify)
 M.audio_next = cmd(playerctl .. " next")
