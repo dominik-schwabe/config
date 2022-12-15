@@ -9,6 +9,16 @@ local mod = { vars.modkey }
 local mod_shift = { vars.modkey, "Shift" }
 local mod_ctrl = { vars.modkey, "Control" }
 
+local bottom_fixer = f.client_fix("bottom", { width = 1, height = 0.5 })
+local top_fixer = f.client_fix("top", { width = 1, height = 0.5 })
+local left_fixer = f.client_fix("left", { width = 0.5, height = 1 })
+local right_fixer = f.client_fix("right", { width = 0.5, height = 1 })
+local center_fixer =
+  f.client_fix("centered", { width = 0.85, height = 0.85, max_width = dpi(1200), max_height = dpi(675) })
+
+local top_right_sticky = f.client_fix("top_right", { width = dpi(400), height = dpi(225), sticky = true })
+local top_left_sticky = f.client_fix("top_left", { width = dpi(400), height = dpi(225), sticky = true })
+
 return gears.table.join(
   bindkey("client", mod, "f", f.fullscreen, "toggle fullscreen"),
   bindkey("client", mod, "udiaeresis", f.focus_next_screen, "focus next screen"),
@@ -20,11 +30,9 @@ return gears.table.join(
   bindkey("layout", mod_shift, "+", f.resize_grow_x, "increase the size of the client or float-y"),
   bindkey("layout", mod, "-", f.resize_shrink, "decrease the size of the master or float-x"),
   bindkey("layout", mod_shift, "-", f.resize_shrink_x, "decrease the size of the client or float-y"),
-  bindkey("layout", mod, "9", f.client_fix("top_left", dpi(400), dpi(225), true), "topleft 400px * 225px"),
-  bindkey("layout", mod, "0", f.client_fix("top_right", dpi(400), dpi(225), true), "topright 400px * 225px"),
-  bindkey("layout", mod, ".", f.client_fix("centered", dpi(800), dpi(500), false), "center 800 * 500"),
-  bindkey("layout", mod_shift, ".", f.client_fix("centered", dpi(1200), dpi(675), false), "center 1200px * 675px"),
-  bindkey("layout", mod_shift, "comma", f.right_sticky, "align right side"),
+  bindkey("layout", mod, "9", top_right_sticky, "topleft 400px * 225px"),
+  bindkey("layout", mod, "0", top_left_sticky, "topright 400px * 225px"),
+  bindkey("layout", mod, ".", center_fixer, "center 1200px * 675px"),
   bindkey("client", mod, "comma", f.toggle_sticky, "toggle sticky"),
   bindkey("client", mod_shift, "h", f.swap_resize_left, "focus the left client"),
   bindkey("client", mod_shift, "j", f.swap_resize_bottom, "focus the bottom client"),
@@ -32,12 +40,16 @@ return gears.table.join(
   bindkey("client", mod_shift, "l", f.swap_resize_right, "focus the right client"),
 
   -- Resize
-  bindkey("client", mod_shift, "Down", f.shrink_top, "shrink the top of the window"),
-  bindkey("client", mod_shift, "Up", f.shrink_bottom, "grow the top of the window"),
-  bindkey("client", mod_shift, "Left", f.shrink_left, "shrink the right of the window"),
-  bindkey("client", mod_shift, "Right", f.shrink_right, "grow the right of the window"),
-  bindkey("client", mod, "Down", f.grow_bottom, "shrink the bottom of the window"),
-  bindkey("client", mod, "Up", f.grow_top, "grow the bottom of the window"),
-  bindkey("client", mod, "Left", f.grow_left, "shrink the left of the window"),
-  bindkey("client", mod, "Right", f.grow_right, "grow the left of the window")
+  bindkey("client", mod, "Down", bottom_fixer, "align the window to the bottom"),
+  bindkey("client", mod, "Up", top_fixer, "align the window to the top"),
+  bindkey("client", mod, "Left", left_fixer, "align the window to the left"),
+  bindkey("client", mod, "Right", right_fixer, "align the window to the right"),
+  bindkey("client", mod_shift, "Down", f.grow_bottom, "shrink the bottom of the window"),
+  bindkey("client", mod_shift, "Up", f.grow_top, "grow the bottom of the window"),
+  bindkey("client", mod_shift, "Left", f.grow_left, "shrink the left of the window"),
+  bindkey("client", mod_shift, "Right", f.grow_right, "grow the left of the window"),
+  bindkey("client", mod_ctrl, "Down", f.shrink_top, "shrink the top of the window"),
+  bindkey("client", mod_ctrl, "Up", f.shrink_bottom, "grow the top of the window"),
+  bindkey("client", mod_ctrl, "Left", f.shrink_left, "shrink the right of the window"),
+  bindkey("client", mod_ctrl, "Right", f.shrink_right, "grow the right of the window")
 )

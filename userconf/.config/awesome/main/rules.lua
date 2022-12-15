@@ -64,7 +64,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("centered", dpi(800), dpi(500), false),
+      callback = f.client_fix("centered", { width = dpi(800), height = dpi(500) }),
     },
   },
 
@@ -84,7 +84,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
     },
   },
   {
@@ -94,7 +94,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
     },
   },
   {
@@ -104,7 +104,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
     },
   },
   {
@@ -114,7 +114,7 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
     },
   },
   {
@@ -124,14 +124,14 @@ awful.rules.rules = {
     },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
     },
   },
   {
     rule = { name = "Figure *", class = " " },
     properties = {
       floating = true,
-      callback = f.client_fix("center", dpi(800), dpi(500), false),
+      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
     },
   },
 

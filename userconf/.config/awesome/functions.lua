@@ -182,11 +182,14 @@ M.move_to_tag_name = function(c, tagname)
   c:move_to_tag(tag)
 end
 
-M.client_fix = function(pos, width, height, sticky)
+M.client_fix = function(pos, config)
+  config.alignment = pos
   return function(c)
     c.floating = true
-    c.sticky = sticky
-    M.set_geometry(c, { width = width, height = height, alignment = pos })
+    if config.sticky then
+      c.sticky = true
+    end
+    M.set_geometry(c, config)
   end
 end
 

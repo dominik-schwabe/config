@@ -66,7 +66,11 @@ local function update_border(c)
     if c._border_color then
       c.border_color = c._border_color
     elseif c.floating then
-      c.border_color = beautiful.border_focus_float
+      if c.sticky then
+        c.border_color = "#ffffff"
+      else
+        c.border_color = beautiful.border_focus_float
+      end
     else
       c.border_color = beautiful.border_focus
     end
@@ -112,6 +116,7 @@ end)
 client.connect_signal("focus", update_properties)
 client.connect_signal("unfocus", update_properties)
 client.connect_signal("property::floating", update_properties)
+client.connect_signal("property::sticky", update_properties)
 client.connect_signal("property::fullscreen", function(c)
   if c.fullscreen then
     unfullscreen_all_other_clients_on_screen(c)
