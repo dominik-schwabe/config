@@ -93,9 +93,12 @@ M.set_geometry = function(c, config)
   local height = config.height
   local border_width = config.border_width or c.border_width
   local position = config.alignment or "centered"
+  local max_width = config.max_width
+  local max_height = config.max_height
 
   local sel = overlap and "geometry" or "workarea"
-  local focused_screen = screen[1]
+  -- local focused_screen = screen[1]
+  local focused_screen = awful.screen.focused()
   local geom = focused_screen[sel]
   local new_width = width
   local new_height = height
@@ -104,6 +107,12 @@ M.set_geometry = function(c, config)
   end
   if height <= 1 then
     new_height = math.floor(geom.height * height) - 2 * border_width
+  end
+  if max_width ~= nil and new_width > max_width then
+    new_width = max_width
+  end
+  if max_height ~= nil and new_height > max_height then
+    new_height = max_height
   end
   c.width = new_width
   c.height = new_height
@@ -256,10 +265,10 @@ M.no_offscreen = function(c, args)
   local margins = args.honor_workarea and nil or M.honor_margins(c.screen)
   local other_margins = args.margins
   if other_margins then
-    margins.top = margins.top +  other_margins.top
-    margins.bottom = margins.bottom +  other_margins.bottom
-    margins.left = margins.left +  other_margins.left
-    margins.right = margins.right +  other_margins.right
+    margins.top = margins.top + other_margins.top
+    margins.bottom = margins.bottom + other_margins.bottom
+    margins.left = margins.left + other_margins.left
+    margins.right = margins.right + other_margins.right
   end
   awful.placement.no_offscreen(c, { margins = margins })
 end
@@ -276,6 +285,12 @@ M.toggle_float = function(c)
   local max_height = geometry.height - 2 * border_width
   if c.floating then
     M.no_offscreen(c)
+    if c.width > max_width then
+      c.width = max_width
+    end
+    if c.height > max_height then
+      c.height = max_height
+    end
   end
 end
 
@@ -284,7 +299,7 @@ M.getmaster = function(c)
 end
 
 M.focus_next_screen = function()
-  screen.focus_relative(1)
+  awful.screen.focus_relative(1)
 end
 
 M.move_to_screen = function(c)

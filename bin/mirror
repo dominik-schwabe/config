@@ -9,9 +9,10 @@ HELP='mirror your primary monitor with an external monitor
   -l external display left of primary
   -r external display right of primary
   -d make only your primary screen active (e.g. reset mirroring)
-  -p take maximal resolution from primary instead of external monitor'
+  -p take maximal resolution from primary instead of external monitor
+  -k disable primary screen'
 TYPE="mirror"
-while getopts "s:o:adptblr" o &>/dev/null; do
+while getopts "s:o:adptblrk" o &>/dev/null; do
   case $o in
     "a") AUTO=true ;;
     "o") EXTERN_OUTPUT=$OPTARG ;;
@@ -22,6 +23,7 @@ while getopts "s:o:adptblr" o &>/dev/null; do
     "r") TYPE="right" ;;
     "d") RESET=true ;;
     "p") PRIMARY=true ;;
+    "k") DISABLE_PRIMARY=true ;;
   esac
 done
 
@@ -53,7 +55,7 @@ PRIMARY_RESOLUTION=$(awk '{if (IS_PRIMARY) { print $1; exit } }; /primary/ {IS_P
 
 if [[ -n "$AUTO" ]]; then
   [[ -z "$EXTERN_OUTPUT" ]] && EXTERN_OUTPUT=$(awk '{print $1; exit}' <<<"$OUTPUTS")
-  OUTPUTLINE=$(grep "^$EXTERN_OUTPUT " <<< "$OUTPUTS")
+  OUTPUTLINE=$(grep "^$EXTERN_OUTPUT " <<<"$OUTPUTS")
   if [[ -z $OUTPUTLINE ]]; then
     echo "unknown output '$EXTERN_OUTPUT'"
     exit 1
@@ -76,7 +78,11 @@ if [[ -z "$RESET" ]]; then
     if [[ $PRIMARY == "true" ]]; then
       xrandr --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$PRIMARY_RESOLUTION" --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --scale-from "$PRIMARY_RESOLUTION" --same-as "$PRIMARY_OUTPUT"
     else
-      xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --scale-from "$EXTERN_RESOLUTION" --same-as "$PRIMARY_OUTPUT" --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$EXTERN_RESOLUTION"
+      if [[ "$DISABLE_PRIMARY" == "true" ]]; then
+        xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --output "$PRIMARY_OUTPUT" --off
+      else
+        xrandr --output "$EXTERN_OUTPUT" --mode "$EXTERN_RESOLUTION" --scale-from "$EXTERN_RESOLUTION" --same-as "$PRIMARY_OUTPUT" --output "$PRIMARY_OUTPUT" --mode "$PRIMARY_RESOLUTION" --scale-from "$EXTERN_RESOLUTION"
+      fi
     fi
   else
     if [[ $TYPE == "top" ]]; then

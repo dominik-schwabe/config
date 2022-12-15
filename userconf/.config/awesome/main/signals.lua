@@ -122,7 +122,7 @@ tag.connect_signal("property::selected", function(t)
   if t.selected then
     local tag = awful.screen.focused().selected_tag
     F.foreach(client.get(), function(c)
-      if c.sticky then
+      if c.sticky and tag.screen == c.screen then
         c:move_to_tag(tag)
       end
     end)

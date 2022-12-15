@@ -3,6 +3,7 @@ local dpi = require("beautiful.xresources").apply_dpi
 local F = require("util.functional")
 local f = require("functions")
 local beautiful = require("beautiful")
+local timer = require("gears.timer")
 
 local client = client
 
@@ -51,6 +52,9 @@ local function option_applier(c, config)
         c:move_to_tag(tag)
       end
       f.set_geometry(c, config)
+      timer.start_new(0.1, function()
+        f.set_geometry(c, config)
+      end)
       client.focus = c
       hide_group(c, config.group)
     else

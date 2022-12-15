@@ -115,7 +115,7 @@ if $MINIMAL_CONFIG == ""
     au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 indentexpr=""
 endif
 
-colorscheme murphy "quiet habamax delek
+colorscheme industry " murphy habamax quiet delek
 hi clear Conceal
 hi EndOfBuffer  ctermbg=NONE guibg=NONE               cterm=NONE term=NONE
 hi Normal       ctermbg=NONE guibg=NONE               cterm=NONE term=NONE

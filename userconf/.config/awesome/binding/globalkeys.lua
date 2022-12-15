@@ -13,12 +13,14 @@ local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
 local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___dropdownterminal___ -o font.size=9.5 -e bash -c 'export IS_DROPDOWN=true; tmux attach -t dropdown &>/dev/null || tmux new-session -t dropdown'",
+  cmd = "alacritty -q -t ___dropdownterminal___ -o font.size=9.5 -e bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
   name = "___dropdownterminal___",
   border_width = 3,
   overlap = false,
   width = 0.85,
   height = 0.85,
+  max_width = 1440,
+  max_height = 900,
   border_color = "#77aa00",
   group = "1",
 })
@@ -32,6 +34,8 @@ local todo_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.85,
   height = 0.85,
+  max_width = 1440,
+  max_height = 900,
   border_color = "#77aa00",
   group = "1",
 })
@@ -43,6 +47,8 @@ local cmus_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.9,
   height = 0.9,
+  max_width = 1440,
+  max_height = 900,
   border_color = "#77aa00",
   group = "1",
 })
@@ -55,6 +61,8 @@ local thunderbird_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.9,
   height = 0.9,
+  max_width = 1440,
+  max_height = 900,
   border_color = "#02b4ef",
   group = "1",
 })
@@ -68,6 +76,8 @@ local blanket_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.4,
   height = 0.9,
+  max_width = 500,
+  max_height = 900,
   border_color = "#02b4ef",
   group = "1",
 })
@@ -156,7 +166,7 @@ local globalkeys = gears.table.join(
   bindkey("screenshot", {}, "Print", f.screen_screenshot, "take a screenshot of the entire screen"),
   bindkey("screenshot", shift, "Print", f.window_screenshot, "take a screenshot of the focused window"),
   bindkey("launcher", mod, "F8", f.toggle_compositor, "toggle the compositor"),
-  bindkey("launcher", mod_shift, "c", f.toggle_auto_clicker, "toggle an auto clicker"),
+  bindkey("launcher", mod_shift, "Prior", f.toggle_auto_clicker, "toggle an auto clicker"),
   bindkey("launcher", mod, "c", f.toggle_color_picker, "toggle the color picker"),
 
   bindkey("launcher", mod, "Delete", f.toggle_window_terminator, "toggle xkill")

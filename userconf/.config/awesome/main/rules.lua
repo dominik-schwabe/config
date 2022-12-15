@@ -193,4 +193,15 @@ awful.rules.rules = {
       size_hints_honor = false,
     },
   },
+  {
+    rule = {},
+    callback = function(c)
+      if c.height < 100 then
+        awful.placement.align(c, {
+          position = "bottom",
+          margins = -30,
+        })
+      end
+    end,
+  },
 }
