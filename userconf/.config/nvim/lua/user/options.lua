@@ -21,6 +21,7 @@ opt.completeopt = { "menu", "menuone", "noselect" }
 opt.splitbelow = true
 opt.splitright = true
 opt.cmdheight = 1
+opt.laststatus = 3
 opt.ignorecase = true
 opt.clipboard:append("unnamedplus")
 opt.encoding = "utf-8"
