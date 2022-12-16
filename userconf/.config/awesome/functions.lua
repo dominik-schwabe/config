@@ -232,7 +232,6 @@ M.dc = function(c)
   }
 end
 
-
 M.focused_tag = function()
   return awful.screen.focused().selected_tag
 end
@@ -265,11 +264,7 @@ M.right_sticky = function(c)
 end
 
 M.toggle_sticky = function(c)
-  if not c.floating then
-    c.sticky = false
-  else
-    c.sticky = not c.sticky
-  end
+  c.sticky = not c.sticky
 end
 
 M.tag_viewer = function(i)

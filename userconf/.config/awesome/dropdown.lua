@@ -110,6 +110,11 @@ local function build_toggle_dropdown(config)
       c:connect_signal("property::floating", function()
         c.sticky = c.floating
       end)
+      c:connect_signal("property::sticky", function()
+        if not c.sticky and c.floating then
+          c.sticky = true
+        end
+      end)
       if group then
         local clients = groups[group] or {}
         clients[#clients + 1] = c

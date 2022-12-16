@@ -59,24 +59,38 @@ local function unfullscreen_all_other_clients_on_screen(c)
   end)
 end
 
-local function update_border(c)
-  if client.focus ~= c then
-    c.border_color = beautiful.border_normal
-  else
-    if c._border_color then
-      c.border_color = c._border_color
-    elseif c.floating then
-      if c.sticky then
-        c.border_color = "#ffffff"
-      else
-        c.border_color = beautiful.border_focus_float
-      end
+local function update_border(c, s)
+  if s and not c.fullscreen and not c.floating then
+    local max = s.selected_tag.layout.name == "max"
+    local only_one = #s.tiled_clients == 1
+    local pos = awful.client.idx(c)
+    local is_first = pos and pos.col == 0
+    if not c.sticky and (is_first or max or only_one) then
+      c.border_width = 0
+      return
     else
-      c.border_color = beautiful.border_focus
+      c.border_width = c._border_width or beautiful.border_width
     end
   end
   if c.floating then
     c.border_width = c._border_width or beautiful.border_width
+  end
+  if client.focus ~= c then
+    if c.sticky and not c._border_color then
+      c.border_color = "#ffffff"
+    else
+      c.border_color = beautiful.border_normal
+    end
+  else
+    if c._border_color then
+      c.border_color = c._border_color
+    elseif c.sticky then
+      c.border_color = "#ffffff"
+    elseif c.floating then
+      c.border_color = beautiful.border_focus_float
+    else
+      c.border_color = beautiful.border_focus
+    end
   end
 end
 
@@ -115,8 +129,13 @@ end)
 
 client.connect_signal("focus", update_properties)
 client.connect_signal("unfocus", update_properties)
-client.connect_signal("property::floating", update_properties)
-client.connect_signal("property::sticky", update_properties)
+client.connect_signal("property::floating", function(c)
+  c.sticky = false
+  update_properties(c)
+end)
+client.connect_signal("property::sticky", function(c)
+  update_border(c, c.screen)
+end)
 client.connect_signal("property::fullscreen", function(c)
   if c.fullscreen then
     unfullscreen_all_other_clients_on_screen(c)
@@ -138,21 +157,8 @@ screen.connect_signal("arrange", function(s)
   if not s.selected_tag then
     return
   end
-  local layout_name = s.selected_tag.layout.name
-  local max = layout_name == "max"
-  local only_one = #s.tiled_clients == 1
   for _, c in pairs(s.clients) do
-    if not c.fullscreen then
-      local pos = awful.client.idx(c)
-      local is_first = pos and pos.col == 0
-      if not c.floating then
-        if is_first or max or only_one or c.maximized then
-          c.border_width = 0
-        else
-          c.border_width = c._border_width or beautiful.border_width
-        end
-      end
-    end
+    update_border(c, s)
   end
 end)
 
