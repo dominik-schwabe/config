@@ -93,7 +93,7 @@ M.set_geometry = function(c, config)
   local width = config.width
   local height = config.height
   local border_width = config.border_width or c.border_width
-  local position = config.alignment or "centered"
+  local position = config.alignment
   local max_width = config.max_width
   local max_height = config.max_height
 
@@ -117,7 +117,9 @@ M.set_geometry = function(c, config)
   end
   c.width = new_width
   c.height = new_height
-  awful.placement.align(c, { honor_workarea = not overlap, position = position })
+  if position then
+    awful.placement.align(c, { honor_workarea = not overlap, position = position })
+  end
 end
 
 M.dcb = function(c)
@@ -408,8 +410,6 @@ M.focus_next = j(awful.client.focus.byidx, 1)
 M.focus_prev = j(awful.client.focus.byidx, -1)
 M.swap_next = j(awful.client.swap.byidx, 1)
 M.swap_prev = j(awful.client.swap.byidx, -1)
-M.focus_next_screen = j(awful.screen.focus_relative, 1)
-M.focus_prev_screen = j(awful.screen.focus_relative, -1)
 M.swap_top = j(awful.client.swap.bydirection, "up")
 M.swap_bottom = j(awful.client.swap.bydirection, "down")
 M.swap_left = function()
@@ -554,7 +554,8 @@ M.rofi = cmd("rofi -show drun")
 M.lock = cmd("playerctl -a pause ; exec i3lock -c 000000")
 M.reboot = cmd("reboot")
 M.toggle_audio = F.chain(cmd("pamixer --toggle-mute"), _volume_notify)
-M.toggle_mic = F.chain(cmd("toggle_microphone_mute"), _volume_notify)
+M.toggle_mic_pci = F.chain(cmd("toggle_microphone_mute pci"), _volume_notify)
+M.toggle_mic_usb = F.chain(cmd("toggle_microphone_mute usb"), _volume_notify)
 M.inc_volume = F.chain(cmd("pamixer -i 5"), _volume_notify)
 M.dec_volume = F.chain(cmd("pamixer -d 5"), _volume_notify)
 M.audio_next = cmd(playerctl .. " next")

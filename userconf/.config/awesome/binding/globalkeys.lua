@@ -1,5 +1,6 @@
 local gears = require("gears")
 local bindkey = require("util.bindkey")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local f = require("functions")
 
@@ -19,8 +20,8 @@ local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.85,
   height = 0.85,
-  max_width = 1440,
-  max_height = 900,
+  max_width = dpi(1440),
+  max_height = dpi(900),
   border_color = "#77aa00",
   group = "1",
 })
@@ -34,8 +35,8 @@ local todo_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.85,
   height = 0.85,
-  max_width = 1440,
-  max_height = 900,
+  max_width = dpi(1440),
+  max_height = dpi(900),
   border_color = "#77aa00",
   group = "1",
 })
@@ -47,8 +48,8 @@ local cmus_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.9,
   height = 0.9,
-  max_width = 1440,
-  max_height = 900,
+  max_width = dpi(1440),
+  max_height = dpi(900),
   border_color = "#77aa00",
   group = "1",
 })
@@ -61,8 +62,8 @@ local thunderbird_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.9,
   height = 0.9,
-  max_width = 1440,
-  max_height = 900,
+  max_width = dpi(1440),
+  max_height = dpi(900),
   border_color = "#02b4ef",
   group = "1",
 })
@@ -76,8 +77,8 @@ local blanket_toggle = dropdown.build_toggle_dropdown({
   overlap = false,
   width = 0.4,
   height = 0.9,
-  max_width = 500,
-  max_height = 900,
+  max_width = dpi(500),
+  max_height = dpi(900),
   border_color = "#02b4ef",
   group = "1",
 })
@@ -88,8 +89,8 @@ local sxiv_toggle = dropdown.build_toggle_dropdown({
   class = "Sxiv",
   border_width = 3,
   overlap = false,
-  width = 900,
-  height = 523,
+  width = dpi(900),
+  height = dpi(523),
   border_color = "#02b4ef",
   group = "1",
 })
@@ -97,9 +98,9 @@ local sxiv_toggle = dropdown.build_toggle_dropdown({
 local globalkeys = gears.table.join(
   bindkey("awesome", mod, "#", f.show_help, "show help"),
 
+  bindkey("client", mod, "udiaeresis", f.focus_next_screen, "focus next screen"),
+
   -- Tag browsing
-  -- bindkey("tag", mod, "h", f.prev_tag, "view previous"),
-  -- bindkey("tag", mod, "l", f.next_tag, "view next"),
   bindkey("tag", mod, "Tab", f.restore_tag, "go back"),
   bindkey("client", mod, "k", f.focus_top, "focus the top client"),
   bindkey("client", mod, "j", f.focus_bottom, "focus the bottom client"),
@@ -118,8 +119,6 @@ local globalkeys = gears.table.join(
   bindkey("dropdown", mod_shift, "y", cmus_toggle, "toggle cmus"),
 
   -- Layout manipulation
-  -- bindkey("screen", mod_ctrl, "j", f.focus_next_screen, "focus the next screen"),
-  -- bindkey("screen", mod_ctrl, "k", f.focus_prev_screen, "focus the previous screen"),
   bindkey("client", mod, "u", f.jump_to_urgent, "jump to urgent client"),
 
   -- Standard program
@@ -130,8 +129,6 @@ local globalkeys = gears.table.join(
 
   bindkey("layout", mod_shift, "t", f.inc_number_of_masters, "increase the number of master clients"),
   bindkey("layout", mod_shift, "z", f.dec_number_of_masters, "decrease the number of master clients"),
-  -- bindkey("layout", mod_ctrl, "h", f.inc_number_of_columns, "increase the number of columns"),
-  -- bindkey("layout", mod_ctrl, "l", f.dec_number_of_columns, "decrease the number of columns"),
 
   bindkey("client", mod, "n", f.restore_minimized, "restore minimized"),
 
@@ -148,7 +145,8 @@ local globalkeys = gears.table.join(
   bindkey("backlight", {}, "XF86MonBrightnessDown", f.dec_brightness_5, "decrease the screen brightness by 5%"),
   bindkey("awesome", {}, "XF86ScreenSaver", f.lock, "lock the screen"),
   bindkey("audio", {}, "XF86AudioMute", f.toggle_audio, "toggle the audio output"),
-  bindkey("audio", {}, "XF86AudioMicMute", f.toggle_mic, "toggle the microphone"),
+  bindkey("audio", {}, "XF86AudioMicMute", f.toggle_mic_pci, "toggle the pci microphone"),
+  bindkey("audio", mod, ",", f.toggle_mic_usb, "toggle the usb microphone"),
   bindkey("audio", {}, "XF86AudioRaiseVolume", f.inc_volume, "increase the volume by 5%"),
   bindkey("audio", {}, "XF86AudioLowerVolume", f.dec_volume, "decrease the volume by 5%"),
   bindkey("audio", mod, "m", f.inc_volume, "increase the volume by 5%"),
@@ -196,4 +194,4 @@ for k, v in pairs({ o = 2, i = 3, u = 4, p = 7 }) do
   )
 end
 
-return globalkeys;
+return globalkeys

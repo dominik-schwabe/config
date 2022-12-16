@@ -30,7 +30,7 @@ end
 
 local function should_show(c)
   local current_tag = f.focused_tag()
-  local was_different_tag = not c.hidden and not c.sticky and current_tag and not client_is_on_tag(c, current_tag)
+  local was_different_tag = not c.hidden and not c.sticky and current_tag ~= nil and not client_is_on_tag(c, current_tag)
   return c.hidden or was_different_tag
 end
 
@@ -38,7 +38,7 @@ local function option_applier(c, config)
   return function(show)
     if show == nil then
       local cf = client.focus
-      show = should_show(c) or (cf and c ~= cf and (cf.fullscreen or cf.floating))
+      show = should_show(c) or (cf ~= nil and c ~= cf and (cf.fullscreen or cf.floating))
     end
     c.hidden = not show
     c.floating = show
@@ -81,6 +81,7 @@ local function client_matcher(config)
 end
 
 local function build_toggle_dropdown(config)
+  config.alignment = config.alignment or "centered"
   local matcher = client_matcher(config)
   local border_color = config.border_color
   local border_width = config.border_width

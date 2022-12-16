@@ -52,6 +52,7 @@ openresolv
 openssh
 pacman-contrib
 pamixer
+easyeffects
 helvum
 wireplumber
 pipewire

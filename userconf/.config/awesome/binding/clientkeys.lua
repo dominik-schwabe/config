@@ -21,7 +21,6 @@ local top_left_sticky = f.client_fix("top_left", { width = dpi(400), height = dp
 
 return gears.table.join(
   bindkey("client", mod, "f", f.fullscreen, "toggle fullscreen"),
-  bindkey("client", mod, "udiaeresis", f.focus_next_screen, "focus next screen"),
   bindkey("client", mod_shift, "udiaeresis", f.move_to_screen, "move to screen"),
   bindkey("client", mod_shift, "q", f.kill, "close"),
   bindkey("client", mod_shift, "space", f.toggle_float, "toggle floating"),
@@ -30,8 +29,8 @@ return gears.table.join(
   bindkey("layout", mod_shift, "+", f.resize_grow_x, "increase the size of the client or float-y"),
   bindkey("layout", mod, "-", f.resize_shrink, "decrease the size of the master or float-x"),
   bindkey("layout", mod_shift, "-", f.resize_shrink_x, "decrease the size of the client or float-y"),
-  bindkey("layout", mod, "9", top_right_sticky, "topleft 400px * 225px"),
-  bindkey("layout", mod, "0", top_left_sticky, "topright 400px * 225px"),
+  bindkey("layout", mod, "9", top_left_sticky, "topleft 400px * 225px"),
+  bindkey("layout", mod, "ß", top_right_sticky, "topright 400px * 225px"),
   bindkey("layout", mod, ".", center_fixer, "center 1200px * 675px"),
   bindkey("client", mod, "s", f.toggle_sticky, "toggle sticky"),
   bindkey("client", mod_shift, "h", f.swap_resize_left, "focus the left client"),

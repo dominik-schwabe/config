@@ -1,13 +1,11 @@
-local F = require("util.functional")
 local awful = require("awful")
--- local shell = require("awful.util").shell
 local gears = require("gears")
 local wibox = require("wibox")
 local string = string
 local events = require("events")
 
--- PulseAudio volume
--- lain.widget.pulse
+local F = require("util.functional")
+
 
 local function factory(args)
   args = args or {}
@@ -16,18 +14,23 @@ local function factory(args)
   local timeout = args.timeout or 5
   local settings = args.settings or function() end
 
-  pulse.cmd = "pamixer --get-volume --get-mute"
-
   function pulse.update()
-    awful.spawn.easy_async_with_shell(pulse.cmd, function(out, _, _, exit_code)
+    awful.spawn.easy_async_with_shell("volume_info", function(out, _, _, exit_code)
       local muted = "N/A"
       local volume = "N/A"
+      local mics = {}
       if exit_code == 0 then
-        muted, volume = table.unpack(F.consume(string.gmatch(out, "%S+")))
+        local iter = string.gmatch(out, "%S+")
+        muted = iter()
+        volume = iter()
+        mics = F.map(F.consume(iter), function(e)
+          return e == "true"
+        end)
       end
       volume_now = {
         volume = volume,
         muted = muted == "true",
+        mics = mics,
       }
 
       widget = pulse.widget

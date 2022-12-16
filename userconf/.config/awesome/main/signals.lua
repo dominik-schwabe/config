@@ -77,7 +77,7 @@ local function update_border(c, s)
   end
   if client.focus ~= c then
     if c.sticky and not c._border_color then
-      c.border_color = "#ffffff"
+      c.border_color = "#999999"
     else
       c.border_color = beautiful.border_normal
     end

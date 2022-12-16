@@ -5,6 +5,27 @@ local clientbuttons = require("binding.clientbuttons")
 local dpi = require("beautiful.xresources").apply_dpi
 local f = require("functions")
 
+local default_placement = awful.placement.centered + awful.placement.no_overlap + awful.placement.no_offscreen
+
+local function spawn_no_overlap(c)
+  c.floating = true
+  f.set_geometry(c, { honor_workarea = true, width = dpi(800), height = dpi(500) })
+  default_placement(c)
+end
+
+local float_properties = {
+  floating = true,
+  callback = spawn_no_overlap,
+}
+
+local function assign(tag_name)
+  return {
+    screen = 1,
+    tag = tag_name,
+    callback = awful.client.focus.history.add,
+  }
+end
+
 awful.rules.rules = {
   {
     rule = {},
@@ -21,7 +42,7 @@ awful.rules.rules = {
       keys = clientkeys,
       buttons = clientbuttons,
       screen = awful.screen.preferred,
-      placement = awful.placement.no_overlap + awful.placement.no_offscreen + awful.placement.centered,
+      placement = default_placement,
     },
   },
 
@@ -62,10 +83,7 @@ awful.rules.rules = {
         "pop-up", -- e.g. Google Chrome's (detached) Developer Tools.
       },
     },
-    properties = {
-      floating = true,
-      callback = f.client_fix("centered", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
 
   {
@@ -82,57 +100,39 @@ awful.rules.rules = {
       class = "Steam",
       name = ".*Steam Guard.*",
     },
-    properties = {
-      floating = true,
-      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
   {
     rule = {
       class = "Steam",
       name = "Steam - .*",
     },
-    properties = {
-      floating = true,
-      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
   {
     rule = {
       instance = "Places",
       class = "firefox",
     },
-    properties = {
-      floating = true,
-      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
   {
     rule = {
       instance = "Toolkit",
       class = "firefox",
     },
-    properties = {
-      floating = true,
-      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
   {
     rule = {
       instance = "Msgcompose",
       class = "Thunderbird",
     },
-    properties = {
-      floating = true,
-      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
   {
     rule = { name = "Figure *", class = " " },
-    properties = {
-      floating = true,
-      callback = f.client_fix("center", { width = dpi(800), height = dpi(500) }),
-    },
+    properties = float_properties,
   },
 
   -- Add titlebars to normal clients and dialogs
@@ -147,38 +147,22 @@ awful.rules.rules = {
 
   {
     rule_any = { class = { "Brave-browser", "firefox" } },
-    properties = {
-      screen = 1,
-      tag = "1",
-      callback = awful.client.focus.history.add,
-    },
+    properties = assign("1"),
   },
   {
     rule_any = {
       name = { "^Steam$" },
       class = { "Steam" },
     },
-    properties = {
-      screen = 1,
-      tag = "3",
-      callback = awful.client.focus.history.add,
-    },
+    properties = assign("3"),
   },
   {
     rule = { class = "steam_app" },
-    properties = {
-      screen = 1,
-      tag = "4",
-      callback = awful.client.focus.history.add,
-    },
+    properties = assign("4"),
   },
   {
     rule = { class = "discord" },
-    properties = {
-      screen = 1,
-      tag = "7",
-      callback = awful.client.focus.history.add,
-    },
+    properties = assign("7"),
   },
   {
     rule_any = { class = { "Slay the Spire" } },

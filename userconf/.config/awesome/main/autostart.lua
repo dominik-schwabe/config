@@ -3,9 +3,10 @@ local F = require("util.functional")
 
 local autostart_programs = {
   "brave",
+  "sleep 2; easyeffects --gapplication-service",
   "sleep 2; unclutter --timeout 0.7",
   "sleep 2; flameshot",
-  "sleep 2; spotify",
+  "sleep 2; spotify-launcher",
   "sleep 5; telegram-desktop -startintray",
   "sleep 5; launch_discord",
   "sleep 7; birdtray",

@@ -27,14 +27,14 @@ local battery = require("widget.battery").create()
 local systray = wibox.widget.systray()
 
 local function set_wallpaper(s)
-  -- Wallpaper
-  if beautiful.wallpaper then
+  if s.index == 1 and beautiful.wallpaper then
     local wallpaper = beautiful.wallpaper
-    -- If wallpaper is a function, call it with the screen
     if type(wallpaper) == "function" then
       wallpaper = wallpaper(s)
     end
     gears.wallpaper.maximized(wallpaper, s, true)
+  else
+    gears.wallpaper.set("#000000")
   end
 end
 
@@ -70,17 +70,15 @@ awful.layout.layouts = layouts
 awful.screen.connect_for_each_screen(function(s)
   -- s.padding = -1
   -- Wallpaper
+  set_wallpaper(s)
 
   awful.tag({ "1", "2", "3", "4", "5", "6" }, s, layouts[1])
   if s.index == 1 then
-    set_wallpaper(s)
     awful.tag.add("7", {
       screen = s,
       layout = layouts[2],
       selected = false,
     })
-  else
-    gears.wallpaper.set("#000000")
   end
 
   -- Create a promptbox for each screen
