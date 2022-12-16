@@ -33,7 +33,7 @@ return gears.table.join(
   bindkey("layout", mod, "9", top_right_sticky, "topleft 400px * 225px"),
   bindkey("layout", mod, "0", top_left_sticky, "topright 400px * 225px"),
   bindkey("layout", mod, ".", center_fixer, "center 1200px * 675px"),
-  bindkey("client", mod, "comma", f.toggle_sticky, "toggle sticky"),
+  bindkey("client", mod, "s", f.toggle_sticky, "toggle sticky"),
   bindkey("client", mod_shift, "h", f.swap_resize_left, "focus the left client"),
   bindkey("client", mod_shift, "j", f.swap_resize_bottom, "focus the bottom client"),
   bindkey("client", mod_shift, "k", f.swap_resize_top, "focus the top client"),

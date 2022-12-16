@@ -7,7 +7,6 @@ if awesome.startup_errors then
     preset = naughty.config.presets.critical,
     title = "Oops, there were errors during startup!",
     text = awesome.startup_errors,
-    screen = 1,
   })
 end
 
@@ -25,7 +24,6 @@ do
       preset = naughty.config.presets.critical,
       title = "Oops, an error happened! (error)",
       text = tostring(err),
-      screen = 1,
     })
     in_error = false
   end)
@@ -44,7 +42,6 @@ do
       preset = naughty.config.presets.critical,
       title = "Oops, an error happened! (deprecation)",
       text = tostring(err),
-      screen = 1,
     })
     in_error = false
   end)
@@ -63,7 +60,6 @@ do
       preset = naughty.config.presets.critical,
       title = "Oops, an error happened! (index::miss)",
       text = tostring(err),
-      screen = 1,
     })
     in_error = false
   end)
@@ -82,7 +78,6 @@ do
       preset = naughty.config.presets.critical,
       title = "Oops, an error happened! (newindex::miss)",
       text = tostring(err),
-      screen = 1,
     })
     in_error = false
   end)

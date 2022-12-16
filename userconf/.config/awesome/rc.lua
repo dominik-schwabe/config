@@ -13,13 +13,11 @@ function D(arg, timeout)
     naughty.notify({
       text = inspect(arg),
       timeout = timeout,
-      screen = 1,
     })
   else
     naughty.notify({
       text = "unable to load inspect, please install it",
       timeout = 5,
-      screen = 1,
     })
   end
 end
@@ -35,6 +33,14 @@ function D0(arg)
 end
 
 f = require("functions")
+
+function DCB(instance)
+  D0(f.dcb(instance))
+end
+
+function DCV(instance)
+  D0(f.dcv(instance))
+end
 
 function DC(instance)
   D0(f.dc(instance))
@@ -84,3 +90,4 @@ require("main.autostart")
 
 naughty.config.defaults.margin = theme.notification_margin
 naughty.config.defaults.border_width = theme.notification_border_width
+naughty.config.defaults.screen = 1

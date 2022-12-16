@@ -13,7 +13,7 @@ local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
 local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -q -t ___dropdownterminal___ -o font.size=9.5 -e bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
+  cmd = "alacritty -qq -t ___dropdownterminal___ -o font.size=9.5 -e bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
   name = "___dropdownterminal___",
   border_width = 3,
   overlap = false,
@@ -95,7 +95,7 @@ local sxiv_toggle = dropdown.build_toggle_dropdown({
 })
 
 local globalkeys = gears.table.join(
-  bindkey("awesome", mod, "s", f.show_help, "show help"),
+  bindkey("awesome", mod, "#", f.show_help, "show help"),
 
   -- Tag browsing
   -- bindkey("tag", mod, "h", f.prev_tag, "view previous"),
@@ -196,4 +196,4 @@ for k, v in pairs({ o = 2, i = 3, u = 4, p = 7 }) do
   )
 end
 
-return globalkeys
+return globalkeys;

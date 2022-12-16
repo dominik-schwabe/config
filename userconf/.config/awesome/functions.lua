@@ -120,7 +120,7 @@ M.set_geometry = function(c, config)
   awful.placement.align(c, { honor_workarea = not overlap, position = position })
 end
 
-M.dc = function(c)
+M.dcb = function(c)
   if type(c) == "string" then
     c = F.filter(client.get(), function(e)
       return e.instance == c
@@ -135,25 +135,87 @@ M.dc = function(c)
   return {
     above = c.above,
     below = c.below,
-    border_color = c.border_color,
-    border_width = c.border_width,
-    class = c.class,
     dockable = c.dockable,
     floating = c.floating,
     focusable = c.focusable,
     fullscreen = c.fullscreen,
-    group_window = c.group_window,
-    height = c.height,
     hidden = c.hidden,
     immobilized = c.immobilized,
-    instance = c.instance,
-    leader_window = c.leader_window,
     marked = c.marked,
     maximized = c.maximized,
     maximized_horizontal = c.maximized_horizontal,
     maximized_vertical = c.maximized_vertical,
     minimized = c.minimized,
     modal = c.modal,
+    ontop = c.ontop,
+    requests_no_titlebar = c.requests_no_titlebar,
+    size_hints_honor = c.size_hints_honor,
+    skip_taskbar = c.skip_taskbar,
+    sticky = c.sticky,
+    urgent = c.urgent,
+    valid = c.valid,
+  }
+end
+
+M.dcv = function(c)
+  if type(c) == "string" then
+    c = F.filter(client.get(), function(e)
+      return e.instance == c
+    end)[1]
+    if not c then
+      return "no client found"
+    end
+  end
+  if not c then
+    c = client.focus
+  end
+  return {
+    border_color = c.border_color,
+    border_width = c.border_width,
+    class = c.class,
+    group_window = c.group_window,
+    height = c.height,
+    hidden = c.hidden,
+    instance = c.instance,
+    leader_window = c.leader_window,
+    name = c.name,
+    pid = c.pid,
+    role = c.role,
+    size_hints = c.size_hints,
+    startup_id = c.startup_id,
+    transient_for = c.transient_for,
+    type = c.type,
+    width = c.width,
+    window = c.window,
+    x = c.x,
+    y = c.y,
+  }
+end
+
+M.dc = function(c)
+  if type(c) == "string" then
+    c = F.filter(client.get(), function(e)
+      return e.instance == c
+    end)[1]
+    if not c then
+      return "no client found"
+    end
+  end
+  if not c then
+    c = client.focus
+  end
+  return {
+    below = c.below,
+    class = c.class,
+    dockable = c.dockable,
+    floating = c.floating,
+    focusable = c.focusable,
+    fullscreen = c.fullscreen,
+    height = c.height,
+    hidden = c.hidden,
+    instance = c.instance,
+    leader_window = c.leader_window,
+    marked = c.marked,
     name = c.name,
     ontop = c.ontop,
     pid = c.pid,
@@ -164,16 +226,12 @@ M.dc = function(c)
     skip_taskbar = c.skip_taskbar,
     startup_id = c.startup_id,
     sticky = c.sticky,
-    transient_for = c.transient_for,
     type = c.type,
-    urgent = c.urgent,
-    valid = c.valid,
     width = c.width,
     window = c.window,
-    x = c.x,
-    y = c.y,
   }
 end
+
 
 M.focused_tag = function()
   return awful.screen.focused().selected_tag
