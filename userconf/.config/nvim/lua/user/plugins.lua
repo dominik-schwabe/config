@@ -82,9 +82,9 @@ require("packer").startup(function(use)
   })
 
   use({
-    "jlanzarotta/bufexplorer",
+    "matbme/JABS.nvim",
     config = function()
-      require("user.plugins.bufexplorer")
+      require("user.plugins.jabs")
     end,
   })
   use("wellle/targets.vim")
@@ -112,6 +112,12 @@ require("packer").startup(function(use)
   use("kyazdani42/nvim-web-devicons")
 
   if not config.minimal then
+    use({
+      "chentoast/marks.nvim",
+      config = function()
+        require("user.plugins.marks")
+      end,
+    })
     use({
       "stevearc/dressing.nvim",
       config = function()
@@ -159,7 +165,6 @@ require("packer").startup(function(use)
     })
     use("onsails/lspkind.nvim")
     use("WhoIsSethDaniel/mason-tool-installer.nvim")
-    use("kosayoda/nvim-lightbulb")
     use("b0o/schemastore.nvim")
     use("simrat39/rust-tools.nvim")
     use({
@@ -318,12 +323,6 @@ require("packer").startup(function(use)
 
   -- use("pwntester/octo.nvim") -- github issues and pull request
   -- use("NTBBloodbath/rest.nvim")
-  -- use({
-  --   "matbme/JABS.nvim",
-  --   config = function()
-  --     require("user.plugins.jabs")
-  --   end,
-  -- })
 
   -- use({
   --   "AckslD/swenv.nvim",
@@ -338,20 +337,6 @@ require("packer").startup(function(use)
   --   end,
   -- })
 
-  -- use({
-  --   "VonHeikemen/fine-cmdline.nvim",
-  --   requires = {
-  --     { "MunifTanjim/nui.nvim" },
-  --   },
-  -- })
-
-  -- use({
-  --   "VonHeikemen/searchbox.nvim",
-  --   requires = {
-  --     { "MunifTanjim/nui.nvim" },
-  --   },
-  -- })
-
   -- use("David-Kunz/markid")
 
   -- use("tpope/vim-repeat")
@@ -362,6 +347,8 @@ require("packer").startup(function(use)
   --     require("user.plugins.toggleterm")
   --   end,
   -- })
+
+  -- use("kosayoda/nvim-lightbulb")
 
   if packer_bootstrap then
     require("packer").sync()

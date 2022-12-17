@@ -14,7 +14,8 @@ opt.number = true
 opt.relativenumber = true
 opt.wrap = false
 opt.cursorline = true
-opt.signcolumn = "yes"
+opt.signcolumn = "yes:2"
+vim.opt.shada = "'0,f0"
 opt.mouse = nil
 
 opt.completeopt = { "menu", "menuone", "noselect" }

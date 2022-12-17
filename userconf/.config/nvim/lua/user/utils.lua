@@ -8,12 +8,24 @@ function M.replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, false, true, true)
 end
 
+function M.feedkeys(key, mode, need_escape)
+  if mode == nil then
+    mode = ""
+  end
+  need_escape = need_escape == nil or need_escape
+  if need_escape then
+    key = M.replace_termcodes(key)
+  end
+  D(need_escape)
+  api.nvim_feedkeys(key, mode, need_escape)
+end
+
 local esc = M.replace_termcodes("<Esc>")
 local ctrl_v = M.replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
   local to_end = fn.winsaveview().curswant == 2147483647
-  api.nvim_feedkeys(M.replace_termcodes("<Esc>"), "nx", false)
+  M.feedkeys(esc, "nx", false)
   local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))
   local line_end, column_end = unpack(api.nvim_buf_get_mark(buffer, ">"))
   local lines = api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
@@ -89,9 +101,7 @@ end
 
 function M.esc_wrap(func)
   return function()
-    -- vim.cmd("stopinsert")
-    -- api.nvim_feedkeys(esc, "nx", false)
-    api.nvim_feedkeys(esc, "", false)
+    M.feedkeys(esc, "", false)
     func()
   end
 end

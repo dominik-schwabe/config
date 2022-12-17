@@ -103,6 +103,7 @@ playerctl
 redshift
 rofi
 scrot
+spotify-launcher
 sxiv
 system-config-printer
 telegram-desktop

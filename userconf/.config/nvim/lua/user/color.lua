@@ -269,18 +269,18 @@ hl.treesitter = {
 }
 
 hl.diagnostics = {
-  DiagnosticSignError = { fg = palette.red },
+  DiagnosticSignError = { fg = palette.danger },
   DiagnosticSignHint = { fg = palette.aqua },
-  DiagnosticSignInfo = { fg = palette.white },
-  DiagnosticSignWarn = { fg = palette.yellow },
+  DiagnosticSignInfo = { fg = palette.aqua },
+  DiagnosticSignWarn = { fg = palette.warning },
   DiagnosticUnderlineError = { bg = palette.light_red },
   DiagnosticUnderlineHint = { bg = palette.light_aqua },
   DiagnosticUnderlineInfo = { bg = palette.light_white },
   DiagnosticUnderlineWarn = { bg = palette.light_yellow },
-  DiagnosticVirtualTextError = { fg = palette.red },
+  DiagnosticVirtualTextError = { fg = palette.danger },
   DiagnosticVirtualTextHint = { fg = palette.aqua },
-  DiagnosticVirtualTextInfo = { fg = palette.white },
-  DiagnosticVirtualTextWarn = { fg = palette.yellow },
+  DiagnosticVirtualTextInfo = { fg = palette.aqua },
+  DiagnosticVirtualTextWarn = { fg = palette.warning },
 }
 hl.nvim_tree = {
   NvimTreeFolderName = { fg = palette.white },
@@ -389,6 +389,8 @@ hl.other = {
   IlluminatedWordText = { link = "CursorLine" },
   IlluminatedWordRead = { link = "CursorLine" },
   IlluminatedWordWrite = { link = "CursorLine" },
+  MarkSignHL = { fg = palette.purple },
+  MarkSignNumHL = { link = "LineNr" },
 }
 
 function M.setup()
