@@ -63,6 +63,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
   group = "TrailingWhitespace",
   callback = F.f(trailing_highlight, "auto")
 })
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = "TrailingWhitespace",
+  callback = update_trailing_highlight,
+})
 vim.api.nvim_create_autocmd("FileType", {
   group = "TrailingWhitespace",
   callback = update_trailing_highlight,

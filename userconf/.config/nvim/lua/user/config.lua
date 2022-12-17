@@ -67,6 +67,7 @@ M.rooter = {
   },
 }
 M.whitespace_blacklist = {
+  "",
   "TelescopePrompt",
   "TelescopeResults",
   "Trouble",
@@ -91,7 +92,6 @@ M.illuminate_blacklist = {
   "markdown",
   "packer",
   "qf",
-  "term",
   "vista",
   "yaml",
   "TelescopePrompt",
@@ -241,10 +241,10 @@ M.brackets = {
   { "<", ">" },
 }
 M.quotes = { '"', "'", "`" }
-M.closable_terminals = { "term://repl*" }
+M.closable_terminals = { "term://repl*", "term://toggleterm" }
 M.colorizer_disable_filetypes = {
   "r",
-  "term",
+  "",
 }
 
 return M

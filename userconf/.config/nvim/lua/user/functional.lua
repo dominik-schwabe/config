@@ -93,6 +93,14 @@ function M.remove(list, e)
   end)
 end
 
+function M.reverse(list)
+  local reversed = {}
+  for i = #list, 1, -1 do
+    reversed[#reversed+1] = list[i]
+  end
+  return reversed
+end
+
 function M.next(iter)
   for e in iter do
     return e

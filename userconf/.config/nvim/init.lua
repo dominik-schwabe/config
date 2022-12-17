@@ -38,12 +38,6 @@ require("repl").setup({
   ensure_win = true,
 })
 
-local function test()
-  vim.api.nvim_win_set_cursor(0, { 3, 10 })
-end
-
-vim.keymap.set("n", "<F11>", test)
-
 vim.keymap.set("n", "<F3>", "<CMD>UndotreeToggle<CR>")
 
 local send = require("repl.send")
@@ -52,6 +46,10 @@ local window = require("repl.window")
 local function mark_jump()
   vim.cmd("mark '")
 end
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  command = "clearjumps",
+})
 
 vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph))
 vim.keymap.set("n", "<CR>", F.f(send.line_next))

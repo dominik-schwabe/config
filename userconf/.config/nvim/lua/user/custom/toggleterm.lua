@@ -83,10 +83,3 @@ vim.keymap.set({ "n", "x", "t" }, "<F10>", toggle_term_bottom)
 vim.keymap.set("i", "<F10>", toggle_term_bottom)
 vim.keymap.set({ "n", "x", "t" }, "<F22>", toggle_term_right)
 vim.keymap.set("i", "<F22>", toggle_term_right)
-
-vim.api.nvim_create_autocmd("TermClose", {
-  pattern = { "term://toggleterm" },
-  callback = function(args)
-    api.nvim_buf_delete(args.buf, { force = true })
-  end,
-})

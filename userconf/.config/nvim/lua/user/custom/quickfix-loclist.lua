@@ -37,7 +37,7 @@ local function quickfix_toggle()
   end
 end
 
-vim.keymap.set({ "n", "x" }, "Ä", loclist_toggle)
+-- vim.keymap.set({ "n", "x" }, "Ä", loclist_toggle)
 vim.keymap.set({ "n", "x" }, "Ö", quickfix_toggle)
 
 local function quickfix_mapping(opt)
