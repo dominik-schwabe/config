@@ -85,15 +85,6 @@ local function _rg_word(here)
   rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, here = here })
 end
 
-local function rg_input()
-  fn.inputsave()
-  local query = fn.input("Search in files: ")
-  fn.inputrestore()
-  if not (query == "") then
-    return rg(query)
-  end
-end
-
 local function _rg_visual(here)
   local selection = utils.get_visual_selection(0)
   if #selection == 0 then
@@ -103,20 +94,18 @@ local function _rg_visual(here)
   rg(table.concat(selection, ""), { raw = true, here = here })
 end
 
-local rg_word = F.f(_rg_word, false)
-local rg_word_here = F.f(_rg_word, true)
-local rg_visual = F.f(_rg_visual, false)
-local rg_visual_here = F.f(_rg_visual, true)
+vim.keymap.set("n", "<space>-", F.f(_rg_word, false))
+vim.keymap.set("x", "<space>-", F.f(_rg_visual, false))
+vim.keymap.set("n", "<space>_", F.f(_rg_word, true))
+vim.keymap.set("x", "<space>_", F.f(_rg_visual, true))
 
-vim.api.nvim_create_user_command("RgWord", rg_word, {})
-vim.api.nvim_create_user_command("RgWordHere", rg_word_here, {})
-vim.api.nvim_create_user_command("RgInput", rg_input, {})
-vim.api.nvim_create_user_command("RgVisual", rg_visual, {})
-vim.api.nvim_create_user_command("RgVisualHere", rg_visual_here, {})
+-- local function rg_input()
+--   fn.inputsave()
+--   local query = fn.input("Search in files: ")
+--   fn.inputrestore()
+--   if not (query == "") then
+--     return rg(query)
+--   end
+-- end
 
-vim.keymap.set("n", "<space>-", rg_word)
-vim.keymap.set("x", "<space>-", rg_visual)
-vim.keymap.set("n", "<space>_", rg_word_here)
-vim.keymap.set("x", "<space>_", rg_visual_here)
-vim.keymap.set({ "n", "x" }, "<space>x", F.f(rg, "local", true, true, 10))
-vim.keymap.set("n", "_", rg_input)
+-- vim.keymap.set("n", "_", rg_input)

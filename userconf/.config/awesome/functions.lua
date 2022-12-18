@@ -55,22 +55,23 @@ local function move(c, rel_x, rel_y)
   end
 end
 
-local function screen_ratio()
-  local geometry = awful.screen.focused().workarea
-  return geometry.height / geometry.width
+local function screen_ratio(s)
+  s = s or awful.screen.focused()
+  return s.geometry.height / s.geometry.width
 end
 
 local function resize_float(c, x, y)
-  local ratio = screen_ratio()
   x = x or 0
   y = y or 0
   local size_hints = c.size_hints
   local min_width = math.max(size_hints.min_width or 0, dpi(400))
-  local min_height = math.max(size_hints.min_height or 0, min_width * ratio)
+  local min_height = math.max(size_hints.min_height or 0, dpi(225))
   if c.width <= min_width then
+    c.width = min_width
     x = math.max(x, 0)
   end
   if c.height <= min_height then
+    c.height = min_height
     y = math.max(y, 0)
   end
   c:relative_move(-x, -y, 2 * x, 2 * y)
@@ -491,20 +492,46 @@ local shrink_pixels = dpi(20)
 local grow_pixels = dpi(10)
 M.resize_grow = function(c)
   if c.floating then
-    local ratio = screen_ratio()
+    local ratio = screen_ratio(c.screen)
     local x = shrink_pixels
     local y = x * ratio - 0.5
     resize_float(c, x, y)
   else
     awful.tag.incmwfact(0.05)
   end
+  M.no_offscreen(c)
 end
+
+local snap_offset_x = 10
+local snap_offset_y = 10
 M.resize_shrink = function(c)
   if c.floating then
-    local ratio = screen_ratio()
+    local align_x
+    local align_y
+    local sg = c.screen.geometry
+    if c.x <= snap_offset_x then
+      align_x = "left"
+    end
+    if sg.width - (c.x + c.width) <= snap_offset_x then
+      align_x = "right"
+    end
+    if sg.height - (c.y + c.height) <= snap_offset_y then
+      align_y = "bottom"
+    end
+    if c.y <= snap_offset_y then
+      align_y = "top"
+    end
+    local ratio = screen_ratio(c.screen)
     local x = -shrink_pixels
     local y = x * ratio - 0.5
     resize_float(c, x, y)
+    if align_x and align_y then
+      local position = align_y .. "_" .. align_x
+      awful.placement.align(c, {
+        honor_workarea = false,
+        position = position,
+      })
+    end
   else
     awful.tag.incmwfact(-0.05)
   end

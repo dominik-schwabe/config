@@ -4,6 +4,7 @@ local api = vim.api
 local cmd = vim.cmd
 
 local config = require("user.config")
+local utils = require("user.utils")
 
 local function leave_term()
   b.term_was_normal = true
@@ -18,26 +19,37 @@ local function delete_term(args)
   end
 end
 
-local function set_term_options()
-  wo.spell = false
-  wo.number = false
-  wo.relativenumber = false
-  wo.signcolumn = "no"
+local function set_term_options(args)
+  local bufnr = args.buf
+  local buftype = api.nvim_buf_get_option(bufnr, "buftype")
+  if buftype == "terminal" then
+    wo.spell = false
+    wo.number = false
+    wo.relativenumber = false
+    wo.signcolumn = "no"
+  elseif not vim.tbl_contains({ "quickfix", "nofile" }, buftype) and utils.exists(api.nvim_buf_get_name(bufnr)) then
+    wo.number = true
+    wo.relativenumber = true
+    wo.signcolumn = "yes:2"
+  end
 end
 
 vim.api.nvim_create_autocmd("TermOpen", {
   callback = function(args)
-    set_term_options()
+    set_term_options(args)
     vim.api.nvim_create_autocmd("BufEnter", {
       buffer = args.buf,
       callback = function()
-        set_term_options()
         if not b.term_was_normal then
           cmd("startinsert")
         end
       end,
     })
   end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = set_term_options,
 })
 
 vim.api.nvim_create_autocmd("TermClose", {

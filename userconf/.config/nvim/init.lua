@@ -33,7 +33,7 @@ require("repl").setup({
     r = { "radian", "R" },
     lua = { "lua5.4", "luajit" },
   },
-  listed = true,
+  listed = false,
   debug = false,
   ensure_win = true,
 })
