@@ -102,7 +102,7 @@ alias sqc='squeue -S i -o "%5i %10u %5C %10m %o"'
 alias sk='scancel --user dschwabe'
 alias sdel='srun --pty --mem=8G enroot remove'
 
-alias pr='systemctl restart --user wireplumber.service pipewire.service pipewire-pulse.service'
+alias pw-reload='systemctl restart --user wireplumber.service pipewire.service pipewire-pulse.service'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

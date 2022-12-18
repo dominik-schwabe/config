@@ -1,4 +1,4 @@
-local F = require("repl.functional")
+local F = require("user.functional")
 
 local marks = require("marks")
 marks.setup({
