@@ -1,5 +1,6 @@
 local fn = vim.fn
 local cmd = vim.cmd
+local api = vim.api
 
 local F = require("user.functional")
 
@@ -41,6 +42,7 @@ end
 vim.keymap.set({ "n", "x" }, "Ö", quickfix_toggle)
 
 local function quickfix_mapping(opt)
+  api.nvim_buf_set_option(opt.buf, "buflisted", false)
   vim.keymap.set("n", "q", "<CMD>q<CR>", { buffer = opt.buf })
 end
 

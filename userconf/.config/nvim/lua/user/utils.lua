@@ -2,10 +2,12 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
+local F = require("user.functional")
+
 local M = {}
 
 function M.replace_termcodes(str)
-  return vim.api.nvim_replace_termcodes(str, false, true, true)
+  return api.nvim_replace_termcodes(str, false, true, true)
 end
 
 function M.feedkeys(key, mode, need_escape)
@@ -16,7 +18,6 @@ function M.feedkeys(key, mode, need_escape)
   if need_escape then
     key = M.replace_termcodes(key)
   end
-  D(need_escape)
   api.nvim_feedkeys(key, mode, need_escape)
 end
 
@@ -53,10 +54,10 @@ function M.get_visual_selection(buffer)
 end
 
 function M.get_motion(motion_type)
-  local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(0, "["))
-  local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(0, "]"))
+  local line_start, column_start = unpack(api.nvim_buf_get_mark(0, "["))
+  local line_end, column_end = unpack(api.nvim_buf_get_mark(0, "]"))
 
-  local lines = vim.api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
+  local lines = api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
 
   if motion_type ~= "line" then
     lines[#lines] = lines[#lines]:sub(0, column_end + 1)
@@ -77,6 +78,12 @@ function M.get_shifts(num)
   return text
 end
 
+function M.buf_options_set(bufnr, options)
+  return F.all(options, function(option)
+    return api.nvim_buf_get_option(bufnr, option)
+  end)
+end
+
 function M.tbl_merge(t1, t2)
   for k, v in pairs(t2) do
     if (type(v) == "table") and (type(t1[k] or false) == "table") then
@@ -89,12 +96,12 @@ function M.tbl_merge(t1, t2)
 end
 
 function M.load_neighbor_modules(this_file, module_path)
-  local this_folder = vim.fn.fnamemodify(this_file, ":h")
-  local this_file_end = vim.fn.fnamemodify(this_file, ":t")
-  local files = vim.fn.readdir(this_folder)
+  local this_folder = fn.fnamemodify(this_file, ":h")
+  local this_file_end = fn.fnamemodify(this_file, ":t")
+  local files = fn.readdir(this_folder)
   for _, file in ipairs(files) do
     if file ~= this_file_end then
-      require(module_path .. "." .. vim.fn.fnamemodify(file, ":r"))
+      require(module_path .. "." .. fn.fnamemodify(file, ":r"))
     end
   end
 end
@@ -107,17 +114,26 @@ function M.esc_wrap(func)
 end
 
 function M.exists(path)
-  return vim.fn.empty(vim.fn.glob(path)) == 0
+  return fn.empty(fn.glob(path)) == 0
 end
 
-function M.concat(...)
-  local new_table = {}
-  for _, t in ipairs({ ... }) do
-    for _, v in ipairs(t) do
-      new_table[#new_table + 1] = v
-    end
-  end
-  return new_table
+function M.mru_buffers()
+  local buffers = api.nvim_exec(":ls t", true)
+  buffers = F.split(buffers, "\n")
+  buffers = F.map(buffers, function (e)
+    return tonumber(e:match("^%s*(%d+)"))
+  end)
+  return buffers
+end
+
+function M.last_regular_buffer()
+  local buffers = M.mru_buffers()
+  return F.find(buffers, function(bufnr)
+    local buftype = api.nvim_buf_get_option(bufnr, "buftype")
+    return not vim.tbl_contains({ "terminal", "quickfix", "nofile" }, buftype)
+      and M.buf_options_set(bufnr, { "modifiable" })
+      and M.exists(api.nvim_buf_get_name(bufnr))
+  end)
 end
 
 return M

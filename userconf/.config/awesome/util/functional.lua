@@ -36,7 +36,7 @@ function M.dict(list)
 end
 
 function M.consume(obj)
-  data = {}
+  local data = {}
   for e in obj do
     data[#data + 1] = e
   end

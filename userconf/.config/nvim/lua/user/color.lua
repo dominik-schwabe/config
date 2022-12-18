@@ -390,7 +390,6 @@ hl.other = {
   IlluminatedWordRead = { link = "CursorLine" },
   IlluminatedWordWrite = { link = "CursorLine" },
   MarkSignHL = { fg = palette.purple },
-  MarkSignNumHL = { link = "LineNr" },
 }
 
 function M.setup()

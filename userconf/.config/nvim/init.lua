@@ -7,7 +7,7 @@ require("user.custom")
 
 vim.cmd("colorscheme monokai")
 
-F = require("user.functional")
+local F = require("user.functional")
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   command = "quit",
@@ -31,7 +31,7 @@ require("repl").setup({
   preferred = {
     python = { "ipython", "python", "python3", "qtconsole" },
     r = { "radian", "R" },
-    lua = { "lua5.1", "luajit" },
+    lua = { "lua5.4", "luajit" },
   },
   listed = true,
   debug = false,
@@ -40,16 +40,16 @@ require("repl").setup({
 
 vim.keymap.set("n", "<F3>", "<CMD>UndotreeToggle<CR>")
 
+vim.api.nvim_create_autocmd("VimEnter", {
+  command = "clearjumps",
+})
+
 local send = require("repl.send")
 local window = require("repl.window")
 
 local function mark_jump()
   vim.cmd("mark '")
 end
-
-vim.api.nvim_create_autocmd("VimEnter", {
-  command = "clearjumps",
-})
 
 vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph))
 vim.keymap.set("n", "<CR>", F.f(send.line_next))

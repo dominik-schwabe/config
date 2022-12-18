@@ -1,8 +1,8 @@
 local M = {}
 
 function M.foreach(list, cb)
-  for i, el in ipairs(list) do
-    cb(el, i)
+  for _, el in ipairs(list) do
+    cb(el)
   end
 end
 
@@ -22,6 +22,14 @@ function M.filter(list, cb)
     end
   end
   return filtered
+end
+
+function M.find(list, cb)
+  for _, el in ipairs(list) do
+    if cb(el) then
+      return el
+    end
+  end
 end
 
 function M.any(list, cb)
@@ -93,10 +101,20 @@ function M.remove(list, e)
   end)
 end
 
+function M.concat(...)
+  local new_table = {}
+  for _, t in ipairs({ ... }) do
+    for _, v in ipairs(t) do
+      new_table[#new_table + 1] = v
+    end
+  end
+  return new_table
+end
+
 function M.reverse(list)
   local reversed = {}
   for i = #list, 1, -1 do
-    reversed[#reversed+1] = list[i]
+    reversed[#reversed + 1] = list[i]
   end
   return reversed
 end
@@ -106,6 +124,19 @@ function M.next(iter)
     return e
   end
   return nil
+end
+
+function M.consume(obj)
+  local data = {}
+  for e in obj do
+    data[#data + 1] = e
+  end
+  return data
+end
+
+function M.split(str, sep)
+  sep = sep or "%s"
+  return M.consume(string.gmatch(str, "([^" .. sep .. "]+)"))
 end
 
 function M.load(src)

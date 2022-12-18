@@ -113,12 +113,6 @@ require("packer").startup(function(use)
 
   if not config.minimal then
     use({
-      "chentoast/marks.nvim",
-      config = function()
-        require("user.plugins.marks")
-      end,
-    })
-    use({
       "stevearc/dressing.nvim",
       config = function()
         require("user.plugins.dressing")
@@ -248,13 +242,6 @@ require("packer").startup(function(use)
       "https://gitlab.com/yorickpeterse/nvim-pqf",
       config = function()
         require("pqf").setup()
-      end,
-    })
-
-    use({
-      "folke/trouble.nvim",
-      config = function()
-        require("user.plugins.trouble")
       end,
     })
 

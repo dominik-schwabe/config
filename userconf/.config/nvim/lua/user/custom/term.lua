@@ -18,15 +18,20 @@ local function delete_term(args)
   end
 end
 
+local function set_term_options()
+  wo.spell = false
+  wo.number = false
+  wo.relativenumber = false
+  wo.signcolumn = "no"
+end
+
 vim.api.nvim_create_autocmd("TermOpen", {
   callback = function(args)
-    wo.spell = false
-    wo.number = false
-    wo.relativenumber = false
-    wo.signcolumn = "no"
+    set_term_options()
     vim.api.nvim_create_autocmd("BufEnter", {
       buffer = args.buf,
       callback = function()
+        set_term_options()
         if not b.term_was_normal then
           cmd("startinsert")
         end
@@ -34,11 +39,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
     })
   end,
 })
-vim.api.nvim_create_autocmd("TermEnter", {
-  callback = function()
-    b.term_was_normal = false
-  end,
-})
+
 vim.api.nvim_create_autocmd("TermClose", {
   pattern = config.closable_terminals,
   callback = delete_term,
