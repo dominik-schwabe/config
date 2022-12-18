@@ -34,11 +34,26 @@ local function set_wallpaper(s)
     end
     gears.wallpaper.maximized(wallpaper, s, true)
   else
-    gears.wallpaper.set("#000000")
+    gears.wallpaper.fit(nil, s, "#000000")
   end
 end
 
-screen.connect_signal("property::geometry", set_wallpaper)
+local function update_padding(s)
+  if s.geometry.width > dpi(2000) or s.geometry.height > dpi(1500) then
+    s.padding = 20
+  else
+    s.padding = 0
+  end
+end
+
+screen.connect_signal("property::geometry", function(s)
+  update_padding(s)
+  set_wallpaper(s)
+end)
+
+screen.connect_signal("property::index", function(s)
+  set_wallpaper(s)
+end)
 
 local mod = { vars.modkey }
 
@@ -68,8 +83,7 @@ end))
 awful.layout.layouts = layouts
 
 awful.screen.connect_for_each_screen(function(s)
-  -- s.padding = -1
-  -- Wallpaper
+  update_padding(s)
   set_wallpaper(s)
 
   awful.tag({ "1", "2", "3", "4", "5", "6" }, s, layouts[1])
@@ -81,34 +95,14 @@ awful.screen.connect_for_each_screen(function(s)
     })
   end
 
-  -- Create a promptbox for each screen
   s.promptbox = awful.widget.prompt()
-  -- Create an imagebox widget which will contain an icon indicating which layout we're using.
-  -- We need one layoutbox per screen.
-  -- s.layoutbox = awful.widget.layoutbox(s)
-  -- s.layoutbox:buttons(gears.table.join(
-  --   awful.button({}, 1, function()
-  --     awful.layout.inc(1)
-  --   end),
-  --   awful.button({}, 3, function()
-  --     awful.layout.inc(-1)
-  --   end),
-  --   awful.button({}, 4, function()
-  --     awful.layout.inc(1)
-  --   end),
-  --   awful.button({}, 5, function()
-  --     awful.layout.inc(-1)
-  --   end)
-  -- ))
 
-  -- Create a taglist widget
   s.taglist = awful.widget.taglist({
     screen = s,
     filter = awful.widget.taglist.filter.noempty,
     buttons = taglist_buttons,
   })
 
-  -- Create a tasklist widget
   s.tasklist = awful.widget.tasklist({
     screen = s,
     filter = function(_client, _screen)
@@ -118,7 +112,6 @@ awful.screen.connect_for_each_screen(function(s)
     buttons = tasklist_buttons,
   })
 
-  -- Create the wibox
   s.wibox_bottom = awful.wibar({
     position = "bottom",
     screen = s,

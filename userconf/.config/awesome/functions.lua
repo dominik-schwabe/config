@@ -509,16 +509,16 @@ M.resize_shrink = function(c)
     local align_x
     local align_y
     local sg = c.screen.geometry
-    if c.x <= snap_offset_x then
+    if c.x - sg.x <= snap_offset_x then
       align_x = "left"
     end
-    if sg.width - (c.x + c.width) <= snap_offset_x then
+    if (sg.width - c.width) - (c.x - sg.x) <= snap_offset_x then
       align_x = "right"
     end
-    if sg.height - (c.y + c.height) <= snap_offset_y then
+    if (sg.height - c.height) - (c.y - sg.y) <= snap_offset_y then
       align_y = "bottom"
     end
-    if c.y <= snap_offset_y then
+    if c.y - sg.y <= snap_offset_y then
       align_y = "top"
     end
     local ratio = screen_ratio(c.screen)
