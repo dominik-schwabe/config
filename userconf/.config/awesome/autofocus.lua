@@ -27,9 +27,6 @@ local function check_focus(obj)
   -- When no visible client has the focus...
   if not client.focus or not client.focus:isvisible() then
     local c = aclient.focus.history.get(screen[obj.screen], 0, filter_sticky)
-    -- if not c then
-    --   c = aclient.focus.history.get(screen[obj.screen], 0, aclient.focus.filter)
-    -- end
     if c then
       c:emit_signal("request::activate", "autofocus.check_focus", { raise = false })
     end
@@ -54,9 +51,6 @@ local function check_focus_tag(t)
   check_focus({ screen = s })
   if client.focus and screen[client.focus.screen] ~= s then
     local c = aclient.focus.history.get(s, 0, filter_sticky)
-    -- if not c then
-    --   c = aclient.focus.history.get(s, 0, aclient.focus.filter)
-    -- end
     if c then
       c:emit_signal("request::activate", "autofocus.check_focus_tag", { raise = false })
     end

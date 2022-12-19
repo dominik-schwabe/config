@@ -184,7 +184,7 @@ for i = 1, 7 do
   )
 end
 
-for k, v in pairs({ o = 2, i = 3, u = 4, p = 7 }) do
+for k, v in pairs({ p = 7 }) do
   globalkeys = gears.table.join(
     globalkeys,
     bindkey("tag", mod, k, f.tag_viewer(v), "view tag #" .. v),

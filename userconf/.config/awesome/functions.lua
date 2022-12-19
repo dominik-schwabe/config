@@ -499,26 +499,25 @@ M.resize_grow = function(c)
   else
     awful.tag.incmwfact(0.05)
   end
-  M.no_offscreen(c)
+  awful.placement.no_offscreen(c)
 end
 
-local snap_offset_x = 10
-local snap_offset_y = 10
+local snap_offset = 20
 M.resize_shrink = function(c)
   if c.floating then
     local align_x
     local align_y
-    local sg = c.screen.geometry
-    if c.x - sg.x <= snap_offset_x then
+    local sg = c.screen.workarea
+    if c.x - sg.x <= snap_offset then
       align_x = "left"
     end
-    if (sg.width - c.width) - (c.x - sg.x) <= snap_offset_x then
+    if (sg.width - c.width) - (c.x - sg.x) <= snap_offset then
       align_x = "right"
     end
-    if (sg.height - c.height) - (c.y - sg.y) <= snap_offset_y then
+    if (sg.height - c.height) - (c.y - sg.y) <= snap_offset then
       align_y = "bottom"
     end
-    if c.y - sg.y <= snap_offset_y then
+    if c.y - sg.y <= snap_offset then
       align_y = "top"
     end
     local ratio = screen_ratio(c.screen)
@@ -528,7 +527,7 @@ M.resize_shrink = function(c)
     if align_x and align_y then
       local position = align_y .. "_" .. align_x
       awful.placement.align(c, {
-        honor_workarea = false,
+        honor_workarea = true,
         position = position,
       })
     end
