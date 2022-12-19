@@ -168,6 +168,9 @@ setopt sharehistory
 setopt auto_cd
 setopt multios
 setopt prompt_subst
+setopt auto_pushd
+setopt pushd_minus
+setopt cdable_vars
 
 exit_zsh() { exit }
 zle -N exit_zsh
