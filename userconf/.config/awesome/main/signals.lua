@@ -6,6 +6,15 @@ local f = require("functions")
 local client = client
 local awesome = awesome
 local screen = screen
+local mouse = mouse
+
+local timer = require("gears.timer")
+
+local function unfocus_sticky(c)
+  if c.sticky and not c._dropdown_show and client.focus == c then
+    client.focus = nil
+  end
+end
 
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -40,6 +49,8 @@ client.connect_signal("property::minimized", function(c)
     client.focus = c
   end
 end)
+
+client.connect_signal("mouse::leave", unfocus_sticky)
 
 client.connect_signal("property::class", function(c)
   if c.class == "Spotify" then
