@@ -44,7 +44,7 @@ local mason_lspconfig = require("mason-lspconfig")
 local mason_registry = require("mason-registry")
 local lspconfig = require("lspconfig")
 local mti = F.load("mason-tool-installer")
-local cmp_nvim_lsp = require("cmp_nvim_lsp")
+local cmp_nvim_lsp = F.load("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
 
 local ensure_installed = {}
@@ -65,7 +65,7 @@ if mti then
   })
 end
 
-local capabilities = cmp_nvim_lsp.default_capabilities()
+local capabilities = cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities()
 
 for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
   local opts = lsp_configs[server_name] or {}

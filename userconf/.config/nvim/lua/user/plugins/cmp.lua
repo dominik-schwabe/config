@@ -1,15 +1,10 @@
-local api = vim.api
-
 local F = require("user.functional")
+local utils = require("user.utils")
 
 local luasnip = F.load("luasnip")
 local lspkind = F.load("lspkind")
 local cmp = require("cmp")
 local cmp_autopairs = F.load("nvim-autopairs.completion.cmp")
-
-local feedkey = function(key, mode)
-  api.nvim_feedkeys(api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
 
 local cmp_formats = {
   buffer = "[buf]",
@@ -48,39 +43,31 @@ if luasnip then
   jump_next = function()
     if luasnip.in_snippet() and luasnip.jumpable(1) then
       luasnip.jump(1)
-    else
-      feedkey("<Tab>", "n")
     end
   end
 
   jump_prev = function()
     if luasnip.in_snippet() and luasnip.jumpable(-1) then
       luasnip.jump(-1)
-    else
-      feedkey("<Tab>", "n")
     end
   end
 
-  vim.keymap.set("v", "<Tab>", jump_next)
-  vim.keymap.set("v", "<S-Tab>", jump_prev)
+  vim.keymap.set({ "v", "i" }, "<C-e>", jump_next)
+  vim.keymap.set({ "v", "i" }, "<C-w>", jump_prev)
 end
 
 mappings["<Tab>"] = function()
   if cmp.visible() then
     cmp.select_next_item()
   else
-    if jump_next then
-      jump_next()
-    end
+    utils.feedkeys("<Tab>", "n")
   end
 end
 mappings["<S-Tab>"] = function()
   if cmp.visible() then
     cmp.select_prev_item()
   else
-    if jump_prev then
-      jump_prev()
-    end
+    utils.feedkeys("<S-Tab>", "n")
   end
 end
 
