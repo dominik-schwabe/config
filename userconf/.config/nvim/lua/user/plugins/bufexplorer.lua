@@ -1,4 +1,3 @@
--- TODO: replace with modern option
 local g = vim.g
 
 g.bufExplorerDefaultHelp = 0

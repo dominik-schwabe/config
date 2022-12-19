@@ -18,6 +18,8 @@ local center_fixer =
 
 local top_right_sticky = f.client_fix("top_right", { width = dpi(400), height = dpi(225), sticky = true })
 local top_left_sticky = f.client_fix("top_left", { width = dpi(400), height = dpi(225), sticky = true })
+local bottom_right_sticky = f.client_fix("bottom_right", { width = dpi(400), height = dpi(225), sticky = true })
+local bottom_left_sticky = f.client_fix("bottom_left", { width = dpi(400), height = dpi(225), sticky = true })
 
 return gears.table.join(
   bindkey("client", mod, "f", f.fullscreen, "toggle fullscreen"),
@@ -29,8 +31,10 @@ return gears.table.join(
   bindkey("layout", mod_shift, "+", f.resize_grow_x, "increase the size of the client or float-y"),
   bindkey("layout", mod, "-", f.resize_shrink, "decrease the size of the master or float-x"),
   bindkey("layout", mod_shift, "-", f.resize_shrink_x, "decrease the size of the client or float-y"),
-  bindkey("layout", mod, "9", top_left_sticky, "topleft 400px * 225px"),
-  bindkey("layout", mod, "ß", top_right_sticky, "topright 400px * 225px"),
+  bindkey("layout", mod, "9", top_left_sticky, "top left 400px * 225px"),
+  bindkey("layout", mod, "ß", top_right_sticky, "top right 400px * 225px"),
+  bindkey("layout", mod_shift, "9", bottom_left_sticky, "bottom left 400px * 225px"),
+  bindkey("layout", mod_shift, "ß", bottom_right_sticky, "bottom right 400px * 225px"),
   bindkey("layout", mod, ".", center_fixer, "center 1200px * 675px"),
   bindkey("client", mod, "s", f.toggle_sticky, "toggle sticky"),
   bindkey("client", mod_shift, "h", f.swap_resize_left, "focus the left client"),

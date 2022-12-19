@@ -7,9 +7,9 @@ local autostart_programs = {
   "sleep 2; unclutter --timeout 0.7",
   "sleep 2; flameshot",
   "sleep 2; spotify-launcher",
-  "sleep 5; telegram-desktop -startintray",
-  "sleep 5; launch_discord",
-  "sleep 7; birdtray",
+  "sleep 4; birdtray",
+  "sleep 6; launch_discord",
+  "sleep 8; telegram-desktop -startintray",
 }
 
 awful.spawn.easy_async_with_shell("xrdb -query | grep -q '^awesome\\.started:\\s*true$'", function(_, _, _, exit_code)

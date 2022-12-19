@@ -32,12 +32,12 @@ awful.rules.rules = {
     properties = {
       border_width = beautiful.border_width,
       border_color = beautiful.border_normal,
-      focus = function(_client)
-        local should_focus = awful.client.focus.filter(_client)
+      focus = function(c)
+        local should_focus = awful.client.focus.filter(c)
         return should_focus
-          and _client.class ~= "TelegramDesktop"
-          and _client.class ~= "thunderbird"
-          and (_client.class or _client.instance or _client.name) -- Spotify
+          and c.class ~= "TelegramDesktop"
+          and c.class ~= "thunderbird"
+          and (c.class or c.instance or c.name) -- Spotify
       end,
       keys = clientkeys,
       buttons = clientbuttons,
