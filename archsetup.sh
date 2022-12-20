@@ -145,6 +145,7 @@ birdtray
 brave-bin
 jmtpfs
 lain-git
+lua-inspect
 "
 
 installyay() {

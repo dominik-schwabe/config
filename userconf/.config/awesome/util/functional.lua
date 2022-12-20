@@ -61,20 +61,28 @@ function M.all(list, cb)
   return true
 end
 
-function M.keys(list)
+function M.keys(obj)
   local keys = {}
-  for key, _ in pairs(list) do
+  for key, _ in pairs(obj) do
     keys[#keys + 1] = key
   end
   return keys
 end
 
-function M.values(list)
+function M.values(obj)
   local values = {}
-  for _, el in pairs(list) do
+  for _, el in pairs(obj) do
     values[#values + 1] = el
   end
   return values
+end
+
+function M.entries(obj)
+  local entries = {}
+  for key, el in pairs(obj) do
+    entries[#entries + 1] = { key, el }
+  end
+  return entries
 end
 
 function M.contains(list, x)
@@ -121,6 +129,50 @@ end
 
 function M.call(cb)
   cb()
+end
+
+function M.concat(...)
+  local new_table = {}
+  for _, t in ipairs({ ... }) do
+    for _, v in ipairs(t) do
+      new_table[#new_table + 1] = v
+    end
+  end
+  return new_table
+end
+
+function M.extend(list, ...)
+  local new_table = list
+  for _, t in ipairs({ ... }) do
+    for _, v in ipairs(t) do
+      new_table[#new_table + 1] = v
+    end
+  end
+  return new_table
+end
+
+function M.compress(obj)
+  local entries = M.entries(obj)
+  table.sort(entries, function(a, b)
+    return a[1] < b[1]
+  end)
+  return M.map(entries, function(e)
+    return e[2]
+  end)
+end
+
+function M.load(src, cb)
+  local success, pkg = pcall(require, src)
+  if success then
+    if cb then
+      cb(pkg)
+    end
+    return pkg
+  end
+  if require("main.vars").debug then
+    require("notify").error("loading '" .. src .. "' failed")
+  end
+  return nil
 end
 
 return M

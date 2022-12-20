@@ -4,25 +4,27 @@ package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua
 package.path = package.path .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua/5.3/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.3/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
+package.path = package.path .. ";" .. "/usr/share/lua/5.4/?.lua"
+package.path = package.path .. ";" .. "/usr/share/lua/5.4/?/init.lua"
 
-local naughty = require("naughty")
+local vars = require("main.vars")
+local awful = require("awful")
+local gears = require("gears")
+local beautiful = require("beautiful")
 
-function D(arg, timeout)
-  local inspect_loaded, inspect = pcall(require, "inspect")
-  if inspect_loaded then
-    naughty.notify({
-      text = inspect(arg),
-      timeout = timeout,
-    })
-  else
-    naughty.notify({
-      text = "unable to load inspect, please install it",
-      timeout = 5,
-    })
-  end
-end
+beautiful.init(gears.filesystem.get_configuration_dir() .. "theme.lua")
+beautiful.wallpaper = vars.wallpaper
+awful.util.shell = vars.shell
+awful.mouse.snap.edge_enabled = false
 
 local F = require("util.functional")
+local notify = require("notify")
+
+function D(arg, timeout)
+  F.load("inspect", function(inspect)
+    notify.info(inspect(arg), timeout)
+  end)
+end
 
 function DK(list)
   D(list ~= nil and F.keys(list) or nil)
@@ -57,27 +59,12 @@ end
 
 local root = root
 
-local theme = require("theme")
-
 require("main.errors")
 require("main.signals")
-
-local vars = require("main.vars")
-
-local awful = require("awful")
-awful.util.shell = vars.shell
-
-local gears = require("gears")
-local beautiful = require("beautiful")
-
-beautiful.init(gears.filesystem.get_configuration_dir() .. "theme.lua")
 
 require("autofocus")
 
 require("main.rules")
-
-beautiful.wallpaper = vars.wallpaper
-awful.mouse.snap.edge_enabled = false
 
 root.buttons(require("binding.globalbuttons"))
 root.keys(require("binding.globalkeys"))
@@ -87,7 +74,3 @@ require("menubar").utils.terminal = vars.terminal -- Set the terminal for applic
 require("deco.statusbar")
 
 require("main.autostart")
-
-naughty.config.defaults.margin = theme.notification_margin
-naughty.config.defaults.border_width = theme.notification_border_width
-naughty.config.defaults.screen = 1

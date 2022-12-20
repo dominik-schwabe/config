@@ -48,6 +48,12 @@ vim.api.nvim_create_autocmd("TermOpen", {
   end,
 })
 
+vim.api.nvim_create_autocmd("TermEnter", {
+  callback = function()
+    b.term_was_normal = false
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = set_term_options,
 })

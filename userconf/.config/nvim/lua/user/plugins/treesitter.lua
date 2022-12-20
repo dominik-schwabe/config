@@ -6,8 +6,7 @@ local F = require("user.functional")
 
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
-local tc = F.load("nvim-treesitter.configs")
-if tc then
+F.load("nvim-treesitter.configs", function(tc)
   tc.setup({
     playground = {
       enable = false,
@@ -119,14 +118,13 @@ if tc then
     },
     additional_vim_regex_highlighting = false,
   })
-end
+end)
 
-local treesitter_unit = F.load("treesitter-unit")
-if treesitter_unit then
+F.load("treesitter-unit", function(treesitter_unit)
   vim.keymap.set({ "x", "o" }, "iu", function()
     treesitter_unit.select(true)
   end)
   vim.keymap.set({ "x", "o" }, "au", function()
     treesitter_unit.select()
   end)
-end
+end)

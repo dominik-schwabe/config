@@ -2,6 +2,7 @@ local fn = vim.fn
 local cmd = vim.cmd
 
 local config = require("user.config")
+local F = require("user.functional")
 
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
@@ -13,143 +14,53 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 require("packer").startup(function(use)
-  use({
-    "wbthomason/packer.nvim",
-    config = function()
-      require("user.plugins.packer")
-    end,
-  })
+  use({ "wbthomason/packer.nvim", config = F.loader("user.plugins.packer") })
 
   use({
     "kylechui/nvim-surround",
-    config = function()
-      require("nvim-surround").setup({})
-    end,
+    config = F.loader("nvim-surround", function(surround)
+      surround.setup({})
+    end),
   })
 
-  use("nvim-lua/plenary.nvim")
+  use({ "nvim-lua/plenary.nvim" })
+  use({ "hrsh7th/nvim-cmp", config = F.loader("user.plugins.cmp") })
+  use({ "hrsh7th/cmp-nvim-lsp" })
+  use({ "hrsh7th/cmp-buffer" })
+  use({ "saadparwaiz1/cmp_luasnip" })
+  use({ "hrsh7th/cmp-path" })
+  use({ "neovim/nvim-lspconfig", config = F.loader("user.plugins.lsp") })
+  use({ "williamboman/mason.nvim", config = F.loader("mason") })
+  use({ "williamboman/mason-lspconfig.nvim" })
+  use({ "jose-elias-alvarez/null-ls.nvim", config = F.loader("user.plugins.null-ls") })
+  use({ "nvim-telescope/telescope.nvim", config = F.loader("user.plugins.telescope") })
+  use({ "L3MON4D3/LuaSnip", config = F.loader("user.plugins.luasnip") })
+  use({ "rafamadriz/friendly-snippets" })
+  use({ "numToStr/Comment.nvim", config = F.loader("user.plugins.comment-nvim") })
+  use({ "matbme/JABS.nvim", config = F.loader("user.plugins.jabs") })
+  use({ "wellle/targets.vim" })
+  use({ "mg979/vim-visual-multi", config = F.loader("user.plugins.visual-multi") })
+  use({ "mbbill/undotree" })
+  use({ "kevinhwang91/nvim-bqf", config = F.loader("user.plugins.bqf") })
 
-  use({
-    "hrsh7th/nvim-cmp",
-    config = function()
-      require("user.plugins.cmp")
-    end,
-  })
-  use("hrsh7th/cmp-nvim-lsp")
-  use("hrsh7th/cmp-buffer")
-  use("saadparwaiz1/cmp_luasnip")
-  use("hrsh7th/cmp-path")
-  use({
-    "neovim/nvim-lspconfig",
-    config = function()
-      require("user.plugins.lsp")
-    end,
-  })
-  use({
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
-  })
-  use("williamboman/mason-lspconfig.nvim")
-  use({
-    "jose-elias-alvarez/null-ls.nvim",
-    config = function()
-      require("user.plugins.null-ls")
-    end,
-  })
-
-  use({
-    "nvim-telescope/telescope.nvim",
-    config = function()
-      require("user.plugins.telescope")
-    end,
-  })
-
-  use({
-    "L3MON4D3/LuaSnip",
-    config = function()
-      require("user.plugins.luasnip")
-    end,
-  })
-  use("rafamadriz/friendly-snippets")
-
-  use({
-    "numToStr/Comment.nvim",
-    config = function()
-      require("user.plugins.comment-nvim")
-    end,
-  })
-
-  use({
-    "matbme/JABS.nvim",
-    config = function()
-      require("user.plugins.jabs")
-    end,
-  })
-  use("wellle/targets.vim")
-  use({
-    "mg979/vim-visual-multi",
-    config = function()
-      require("user.plugins.visual-multi")
-    end,
-  })
-  use("mbbill/undotree")
-
-  use({
-    "kevinhwang91/nvim-bqf",
-    config = function()
-      require("user.plugins.bqf")
-    end,
-  })
-
-  use({
-    "kyazdani42/nvim-tree.lua",
-    config = function()
-      require("user.plugins.nvim-tree")
-    end,
-  })
-  use("kyazdani42/nvim-web-devicons")
+  use({ "kyazdani42/nvim-tree.lua", config = F.loader("user.plugins.nvim-tree") })
+  use({ "kyazdani42/nvim-web-devicons" })
 
   if not config.minimal then
-    use({
-      "stevearc/dressing.nvim",
-      config = function()
-        require("user.plugins.dressing")
-      end,
-    })
+    use({ "stevearc/dressing.nvim", config = F.loader("user.plugins.dressing") })
+    use({ "nvim-lualine/lualine.nvim", config = F.loader("user.plugins.lualine") })
+    use({ "monaqa/dial.nvim", config = F.loader("user.plugins.dial") })
+    use({ "rhysd/clever-f.vim" })
+    use({ "windwp/nvim-autopairs", config = F.loader("user.plugins.nvim-autopairs") })
 
-    use({
-      "nvim-lualine/lualine.nvim",
-      config = function()
-        require("user.plugins.lualine")
-      end,
-    })
+    use({ "tpope/vim-sleuth" })
 
-    use({
-      "monaqa/dial.nvim",
-      config = function()
-        require("user.plugins.dial")
-      end,
-    })
+    use({ "lewis6991/impatient.nvim" })
 
-    use("rhysd/clever-f.vim")
+    use({ "NvChad/nvim-colorizer.lua" })
 
-    use({
-      "windwp/nvim-autopairs",
-      config = function()
-        require("user.plugins.nvim-autopairs")
-      end,
-    })
-
-    use("tpope/vim-sleuth")
-
-    use("lewis6991/impatient.nvim")
-
-    use("NvChad/nvim-colorizer.lua")
-
-    use("hrsh7th/cmp-nvim-lua")
-    use("andersevenrud/cmp-tmux")
+    use({ "hrsh7th/cmp-nvim-lua" })
+    use({ "andersevenrud/cmp-tmux" })
 
     use({
       "RRethy/vim-illuminate",

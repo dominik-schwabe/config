@@ -4,6 +4,7 @@ local webbrowser = os.getenv("BROWSER") or "brave"
 local terminal = "alacritty"
 
 local M = {
+  debug = true,
   home = home,
   terminal = terminal,
   editor = editor,

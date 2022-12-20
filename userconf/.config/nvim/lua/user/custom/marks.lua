@@ -73,9 +73,7 @@ local function get_next_mark(bufnr)
   marks = F.map(marks, function(mark_info)
     return mark_info.mark:byte()
   end)
-  table.sort(marks, function(a, b)
-    return a < b
-  end)
+  table.sort(marks)
   local lowest = 97
   for _, byte in ipairs(marks) do
     if lowest ~= byte then

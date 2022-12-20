@@ -1,4 +1,5 @@
 local M = {}
+local config = require("user.config")
 
 function M.foreach(list, cb)
   for _, el in ipairs(list) do
@@ -111,6 +112,16 @@ function M.concat(...)
   return new_table
 end
 
+function M.extend(list, ...)
+  local new_table = list
+  for _, t in ipairs({ ... }) do
+    for _, v in ipairs(t) do
+      new_table[#new_table + 1] = v
+    end
+  end
+  return new_table
+end
+
 function M.reverse(list)
   local reversed = {}
   for i = #list, 1, -1 do
@@ -139,12 +150,24 @@ function M.split(str, sep)
   return M.consume(string.gmatch(str, "([^" .. sep .. "]+)"))
 end
 
-function M.load(src)
+function M.load(src, cb)
   local success, pkg = pcall(require, src)
   if success then
+    if cb then
+      cb(pkg)
+    end
     return pkg
   end
+  if config.debug then
+    print("loading '" .. src .. "' failed")
+  end
   return nil
+end
+
+function M.loader(src, cb)
+  return function()
+    return M.load(src, cb)
+  end
 end
 
 return M

@@ -2,7 +2,7 @@ local awful = require("awful")
 local gears = require("gears")
 local wibox = require("wibox")
 
-local lain = require("lain")
+local color = require("util.color")
 
 local M = {}
 
@@ -24,7 +24,7 @@ function M.create()
     local hours = math.floor(minutes / 60)
     minutes = minutes - hours * 60
     local text = string.format("%d:%02d", hours, minutes)
-    text = lain.util.markup.color(fg, bg, text)
+    text = color.color(fg, bg, text)
     stopwatch:set_markup(text)
   end
   timer:connect_signal("start", function()

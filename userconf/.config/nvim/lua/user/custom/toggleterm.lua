@@ -2,6 +2,8 @@ local cmd = vim.cmd
 local api = vim.api
 local fn = vim.fn
 
+local F = require("user.functional")
+
 local term_buf
 local term_win
 local function open_term(height, bottom)
@@ -83,3 +85,5 @@ vim.keymap.set({ "n", "x", "t" }, "<F10>", toggle_term_bottom)
 vim.keymap.set("i", "<F10>", toggle_term_bottom)
 vim.keymap.set({ "n", "x", "t" }, "<F22>", toggle_term_right)
 vim.keymap.set("i", "<F22>", toggle_term_right)
+
+-- TODO: keybind to cd to current file location

@@ -1,6 +1,6 @@
 local interpolate = require("util.interpolate")
 
-local lain = require("lain")
+local color = require("util.color")
 
 local M = {}
 
@@ -11,7 +11,7 @@ local function temp_formatter()
     local fg
     local text
     if temp == nil or temp == 0 then
-      text = lain.util.markup.fg("#FF0000", "N/A")
+      text = color.fg("#FF0000", "N/A")
     else
       if temp >= 85 then
         if last_was_highlighted then
@@ -33,10 +33,10 @@ local function temp_formatter()
         fg = "#ffffff"
       end
       text = string.format("%2d", temp)
-      text = lain.util.markup.fg(fg, text)
-      text = text .. lain.util.markup.fg("#ffffff", "°C")
+      text = color.fg(fg, text)
+      text = text .. color.fg("#ffffff", "°C")
     end
-    text = lain.util.markup.bg(bg, text)
+    text = color.bg(bg, text)
     return text
   end
 end
@@ -44,7 +44,7 @@ end
 local cpu_formatter = temp_formatter()
 local gpu_formatter = temp_formatter()
 
-function M.create()
+function M.create(lain)
   return lain.widget.temp({
     timeout = 1,
     settings = function()

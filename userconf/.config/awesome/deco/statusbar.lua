@@ -6,25 +6,49 @@ local wibox = require("wibox")
 local vars = require("main.vars")
 local dpi = require("beautiful.xresources").apply_dpi
 
+local color = require("util.color")
+local F = require("util.functional")
+
 local screen = screen
 local client = client
 
-local lain = require("lain")
+local wibox_content = {
+  layout = wibox.layout.fixed.horizontal,
+}
 
-local timebox = wibox.widget.textclock(lain.util.markup.color("#DEED12", "#000000", "%H:%M"))
-local datebox = wibox.widget.textclock(lain.util.markup.color("#F92782", "#000000", "%a %d.%m.%Y"))
-local sep_mid = wibox.widget.textbox(lain.util.markup.color("#ED9D12", "#000000", " ❱ ❰ "))
-local sep_right = wibox.widget.textbox(lain.util.markup.color("#ED9D12", "#000000", " ❱ "))
-local sep_left = wibox.widget.textbox(lain.util.markup.color("#ED9D12", "#000000", " ❰ "))
+local sep_left_start = wibox.widget.textbox(color.color("#ED9D12", "#000000", " ❰ "))
+local sep_left = wibox.widget.textbox(color.color("#ED9D12", "#000000", "❰ "))
+local sep_right = wibox.widget.textbox(color.color("#ED9D12", "#000000", " ❱ "))
 
-local stopwatch = require("widget.stopwatch").create()
-local net = require("widget.net").create()
-local volume = require("widget.volume").create()
-local mem = require("widget.mem").create()
-local temp = require("widget.temp").create()
-local battery = require("widget.battery").create()
+local function add_wibox_content(content)
+  content = F.compress(content)
+  content = F.map(content, function(element)
+    return { sep_left, element, sep_right }
+  end)
+  content = F.concat(table.unpack(content))
+  local wibox_was_empty = #wibox_content == 0
+  wibox_content = F.extend(wibox_content, content)
+  if wibox_was_empty and #content > 0 then
+    wibox_content[1] = sep_left_start
+  end
+end
 
-local systray = wibox.widget.systray()
+local widgets = {}
+
+widgets[2] = require("widget.stopwatch").create()
+widgets[6] = require("widget.volume").create()
+widgets[7] = wibox.widget.textclock(color.color("#F92782", "#000000", "%a %d.%m.%Y"))
+widgets[8] = wibox.widget.textclock(color.color("#DEED12", "#000000", "%H:%M"))
+
+F.load("lain", function(lain)
+  widgets[1] = require("widget.net").create(lain)
+  widgets[3] = require("widget.mem").create(lain)
+  widgets[4] = require("widget.temp").create(lain)
+  widgets[5] = require("widget.battery").create(lain)
+end)
+
+add_wibox_content(widgets)
+wibox_content[#wibox_content + 1] = wibox.widget.systray()
 
 local function set_wallpaper(s)
   if s.index == 1 and beautiful.wallpaper then
@@ -131,27 +155,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.tasklist,
   }
   if s.index == 1 then
-    wibox_args[#wibox_args + 1] = {
-      layout = wibox.layout.fixed.horizontal,
-      sep_left,
-      net.widget,
-      sep_mid,
-      stopwatch,
-      sep_mid,
-      mem,
-      sep_mid,
-      temp,
-      sep_mid,
-      battery,
-      sep_mid,
-      volume,
-      sep_mid,
-      datebox,
-      sep_mid,
-      timebox,
-      sep_right,
-      systray,
-    }
+    wibox_args[#wibox_args + 1] = wibox_content
   end
   s.wibox_bottom:setup(wibox_args)
 end)

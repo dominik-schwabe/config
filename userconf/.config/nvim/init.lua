@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-pcall(require, "user.plugins.colorizer")
+F.load("user.plugins.colorizer")
 
 require("repl").setup({
   preferred = {

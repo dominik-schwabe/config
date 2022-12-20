@@ -1,12 +1,12 @@
 local interpolate = require("util.interpolate")
 
-local lain = require("lain")
+local color = require("util.color")
 
 local M = {}
 
 local glyphs = { "", "", "", "", "", "", "", "", "", "", "" }
 
-function M.create()
+function M.create(lain)
   local last_was_highlighted = false
   return lain.widget.bat({
     timeout = 1,
@@ -27,7 +27,7 @@ function M.create()
           text = string.format("%2d", bat_now.perc)
           local glyph
           if bat_now.status == "Charging" then
-            glyph = lain.util.markup.color("#DEED12", bg, "")
+            glyph = color.color("#DEED12", bg, "")
           else
             glyph = glyphs[math.ceil(bat_now.perc / (100 / #glyphs))]
           end
@@ -52,11 +52,11 @@ function M.create()
           end
         end
       end
-      text = lain.util.markup.fg(fg, text)
+      text = color.fg(fg, text)
       if bat_now.status ~= "N/A" then
         text = text .. "%"
       end
-      text = lain.util.markup.color("#ffffff", bg, text)
+      text = color.color("#ffffff", bg, text)
       widget:set_markup(text)
     end,
   })

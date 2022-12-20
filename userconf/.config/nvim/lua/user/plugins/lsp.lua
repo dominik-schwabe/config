@@ -6,7 +6,7 @@ local diagnostic = vim.diagnostic
 local def_opt = { silent = true }
 
 local F = require("user.functional")
-local tbl_merge = require("user.utils").tbl_merge
+local utils = require("user.utils")
 
 local navic = F.load("nvim-navic")
 
@@ -40,81 +40,78 @@ local on_attach = function(client, bufnr)
 end
 
 local config = require("user.config")
-local mason_lspconfig = require("mason-lspconfig")
-local mason_registry = require("mason-registry")
 local lspconfig = require("lspconfig")
-local mti = F.load("mason-tool-installer")
-local cmp_nvim_lsp = F.load("cmp_nvim_lsp")
 local lsp_configs = config.lsp_configs
+local ensure_installed = config.minimal and {} or config.lsp_ensure_installed
+local mason_ensure_installed = config.minimal and {} or config.mason_ensure_installed
 
-local ensure_installed = {}
-if not config.minimal then
-  ensure_installed = config.lsp_ensure_installed
-end
-mason_lspconfig.setup({
-  ensure_installed = ensure_installed,
-  log_level = vim.log.levels.ERROR,
-})
-
-if mti then
-  mti.setup({
-    ensure_installed = config.mason_ensure_installed,
-    auto_update = false,
-    run_on_start = true,
-    start_delay = 3000,
+F.load("mason-lspconfig", function(mason_lspconfig)
+  mason_lspconfig.setup({
+    ensure_installed = ensure_installed,
+    log_level = vim.log.levels.ERROR,
   })
-end
 
-local capabilities = cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities()
+  local mason_registry = require("mason-registry")
 
-for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
-  local opts = lsp_configs[server_name] or {}
-  opts.on_attach = on_attach
-  opts.capabilities = capabilities
-  if server_name == "jsonls" then
-    local schemastore = F.load("schemastore")
-    local schemas = schemastore and schemastore.json.schemas()
-    opts = tbl_merge(opts, {
-      settings = { json = { schemas = { schemas } } },
+  F.load("mason-tool-installer", function(mti)
+    mti.setup({
+      ensure_installed = mason_ensure_installed,
+      auto_update = false,
+      run_on_start = true,
+      start_delay = 3000,
     })
-  end
-  if server_name == "clangd" then
-    local cap = vim.lsp.protocol.make_client_capabilities()
-    cap.offsetEncoding = { "utf-16" }
-    opts.capabilities = cap
-  end
-  opts.lsp_flags = {
-    debounce_text_changes = 250,
-  }
-  if server_name == "rust_analyzer" then
-    opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
-    opts.settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-        },
-      },
-    }
-    local rust_tools = F.load("rust-tools")
-    if rust_tools then
-      rust_tools.setup({ server = opts })
+  end)
+
+  local cmp_nvim_lsp = F.load("cmp_nvim_lsp")
+  local capabilities = cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities()
+
+  for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
+    local opts = lsp_configs[server_name] or {}
+    opts.on_attach = on_attach
+    opts.capabilities = capabilities
+    if server_name == "jsonls" then
+      local schemastore = F.load("schemastore")
+      local schemas = schemastore and schemastore.json.schemas()
+      opts = utils.tbl_merge(opts, {
+        settings = { json = { schemas = { schemas } } },
+      })
     end
-  else
-    lspconfig[server_name].setup(opts)
+    if server_name == "clangd" then
+      local cap = vim.lsp.protocol.make_client_capabilities()
+      cap.offsetEncoding = { "utf-16" }
+      opts.capabilities = cap
+    end
+    opts.lsp_flags = {
+      debounce_text_changes = 250,
+    }
+    if server_name == "rust_analyzer" then
+      opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
+      opts.settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy",
+          },
+        },
+      }
+      F.load("rust-tools", function(rust_tools)
+        rust_tools.setup({ server = opts })
+      end)
+    else
+      lspconfig[server_name].setup(opts)
+    end
   end
-end
+end)
 
 for type, icon in pairs(config.lsp_signs) do
   local hl = "LspDiagnosticsSign" .. type
   fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
-local lightbulb = F.load("nvim-lightbulb")
-if lightbulb then
+F.load("nvim-lightbulb", function(lightbulb)
   vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     callback = lightbulb.update_lightbulb,
   })
-end
+end)
 
 vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>")
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>")

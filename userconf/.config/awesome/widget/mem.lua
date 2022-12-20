@@ -1,10 +1,10 @@
 local interpolate = require("util.interpolate")
 
-local lain = require("lain")
+local color = require("util.color")
 
 local M = {}
 
-function M.create()
+function M.create(lain)
   return lain.widget.mem({
     timeout = 2,
     unit = 1000,
@@ -27,10 +27,10 @@ function M.create()
         fg = "#FF0000"
       end
       local text = string.format("%2d", mem_now.perc)
-        .. lain.util.markup.fg("#ffffff", "% (")
-        .. lain.util.markup.fg("#00FFFF", string.format("%2.1f", mem_now.total * 1024 / 1000 / 1000))
-        .. lain.util.markup.fg("#ffffff", "G)")
-      text = lain.util.markup.color(fg, "#000000", text)
+        .. color.fg("#ffffff", "% (")
+        .. color.fg("#00FFFF", string.format("%2.1f", mem_now.total * 1024 / 1000 / 1000))
+        .. color.fg("#ffffff", "G)")
+      text = color.color(fg, "#000000", text)
       widget:set_markup(text)
     end,
   })

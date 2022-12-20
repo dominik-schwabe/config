@@ -1,6 +1,7 @@
 local M = {}
 
 M.minimal = os.getenv("MINIMAL_CONFIG")
+M.debug = false
 M.lsp_signs = {
   Error = " ",
   Warning = " ",
