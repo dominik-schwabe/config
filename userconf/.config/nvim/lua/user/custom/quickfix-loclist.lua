@@ -25,7 +25,7 @@ local function loclist_toggle()
     cmd("lclose")
   else
     if not pcall(cmd, "lopen") then
-      print("Loclist ist empty")
+      vim.notify("Loclist ist empty")
     end
   end
 end

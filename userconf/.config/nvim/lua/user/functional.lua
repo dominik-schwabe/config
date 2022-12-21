@@ -51,20 +51,28 @@ function M.all(list, cb)
   return true
 end
 
-function M.keys(list)
+function M.keys(obj)
   local keys = {}
-  for key, _ in pairs(list) do
+  for key, _ in pairs(obj) do
     keys[#keys + 1] = key
   end
   return keys
 end
 
-function M.values(list)
+function M.values(obj)
   local values = {}
-  for _, el in pairs(list) do
+  for _, el in pairs(obj) do
     values[#values + 1] = el
   end
   return values
+end
+
+function M.entries(obj)
+  local entries = {}
+  for key, el in pairs(obj) do
+    entries[#entries + 1] = { key, el }
+  end
+  return entries
 end
 
 function M.contains(list, x)
@@ -159,7 +167,7 @@ function M.load(src, cb)
     return pkg
   end
   if config.debug then
-    print("loading '" .. src .. "' failed")
+    vim.notify("loading '" .. src .. "' failed", vim.log.levels.ERROR)
   end
   return nil
 end

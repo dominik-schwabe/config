@@ -1,9 +1,7 @@
 local F = require("user.functional")
 
-local navic = F.load("nvim-navic")
-
 local navic_section = nil
-if navic then
+F.load("nvim-navic", function (navic)
   navic.setup({
     icons = require("user.config").navic_icons,
     highlight = true,
@@ -12,7 +10,7 @@ if navic then
     depth_limit_indicator = "..",
   })
   navic_section = { navic.get_location, cond = navic.is_available }
-end
+end)
 
 local config = {
   extensions = { "quickfix" },

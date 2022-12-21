@@ -14,7 +14,7 @@ local aclient = require("awful.client")
 local timer = require("gears.timer")
 
 local function filter_sticky(c)
-  return (not c.sticky or c._dropdown_show ~= nil) and aclient.focus.filter(c)
+  return (not c.sticky or c._dropdown_show ~= nil or c.fullscreen) and aclient.focus.filter(c)
 end
 
 --- Give focus when clients appear/disappear.

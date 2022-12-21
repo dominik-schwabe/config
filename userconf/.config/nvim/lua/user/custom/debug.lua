@@ -1,4 +1,5 @@
 local F = require("user.functional")
+local utils = require("user.utils")
 
 function Draw(...)
   return F.map({ ... }, vim.inspect)

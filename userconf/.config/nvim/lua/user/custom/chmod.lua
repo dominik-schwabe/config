@@ -5,14 +5,14 @@ local F = require("user.functional")
 local function chmod_current(x)
   local path = fn.expand("%:p")
   if fn.empty(fn.glob(path)) == 1 then
-    print("this file does not exist")
+    vim.notify("this file does not exist")
     return
   end
   os.execute("chmod a" .. (x and "+" or "-") .. "x " .. path)
   if x then
-    print("made executable")
+    vim.notify("made executable")
   else
-    print("removed execution rights")
+    vim.notify("removed execution rights")
   end
 end
 

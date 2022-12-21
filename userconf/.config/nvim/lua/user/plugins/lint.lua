@@ -12,9 +12,9 @@ local function lint_buffer()
   local filetype = bo.filetype
   local ft_linters = linters[filetype]
   if ft_linters then
-    print("try lint with [" .. table.concat(ft_linters, ", ") .. "] ...")
+    vim.notify("try lint with [" .. table.concat(ft_linters, ", ") .. "] ...")
   else
-    print("no linters for " .. filetype)
+    vim.notify("no linters for " .. filetype)
   end
 end
 

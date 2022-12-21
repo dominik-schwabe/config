@@ -231,10 +231,6 @@ M.linters = {
   python = { "pylint" },
   lua = { "luacheck" },
 }
-M.repls = {
-  python = { command = { "ipython" } },
-  r = { command = { "radian" } },
-}
 M.brackets = {
   { "(", ")" },
   { "[", "]" },

@@ -60,7 +60,7 @@ local function rg(string, opt)
           local command = "rg " .. table.concat(args, " ")
           local lines = j:result()
           if #lines == 0 then
-            vim.notify("nothing found", "ERR")
+            vim.notify("nothing found")
           else
             vim.fn.setqflist({}, "r", { title = command, lines = lines })
             api.nvim_command("botright copen")
@@ -70,9 +70,9 @@ local function rg(string, opt)
         vim.schedule_wrap(function()
           local lines = j:stderr_result()
           if #lines == 0 then
-            vim.notify("nothing was returned", "ERR")
+            vim.notify("nothing was returned")
           else
-            vim.notify(table.concat(lines, "\n"), "ERR")
+            vim.notify(table.concat(lines, "\n"), vim.log.levels.ERROR)
           end
         end)()
       end
@@ -88,7 +88,7 @@ end
 local function _rg_visual(here)
   local selection = utils.get_visual_selection(0)
   if #selection == 0 then
-    print("empty selection")
+    vim.notify("empty selection")
     return
   end
   rg(table.concat(selection, ""), { raw = true, here = here })

@@ -6,11 +6,11 @@ local F = require("user.functional")
 local function set_spell(lang)
   if lang == nil or (o.spelllang == lang and o.spell) then
     opt.spell = false
-    print("nospell")
+    vim.notify("nospell")
   else
     opt.spelllang = lang
     opt.spell = true
-    print("language: " .. lang)
+    vim.notify("language: " .. lang)
   end
 end
 

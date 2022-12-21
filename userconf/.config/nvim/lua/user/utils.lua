@@ -136,4 +136,8 @@ function M.last_regular_buffer()
   end)
 end
 
+function M.setup(obj)
+  obj.setup()
+end
+
 return M

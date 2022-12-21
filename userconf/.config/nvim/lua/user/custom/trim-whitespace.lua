@@ -3,7 +3,7 @@ local api = vim.api
 local function trim_whitespace()
   local buffer = api.nvim_buf_get_number(0)
   if not api.nvim_buf_get_option(buffer, "modifiable") then
-    print("not modifiable")
+    vim.notify("not modifiable")
     return
   end
   local lines = api.nvim_buf_get_lines(buffer, 0, -1, false)

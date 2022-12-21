@@ -11,9 +11,8 @@ local args = {
   },
 }
 
-local ttscc = F.load("ts_context_commentstring.integrations.comment_nvim")
-if ttscc then
+F.load("ts_context_commentstring.integrations.comment_nvim", function(ttscc)
   args.pre_hook = ttscc.create_pre_hook()
-end
+end)
 
 require("Comment").setup(args)

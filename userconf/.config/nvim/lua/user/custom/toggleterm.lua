@@ -3,9 +3,11 @@ local api = vim.api
 local fn = vim.fn
 
 local F = require("user.functional")
+local utils = require("user.utils")
 
 local term_buf
 local term_win
+local jobnr
 local function open_term(height, bottom)
   if bottom then
     cmd("botright new")
@@ -17,16 +19,12 @@ local function open_term(height, bottom)
   if term_buf ~= nil and api.nvim_buf_is_loaded(term_buf) then
     api.nvim_win_set_buf(term_win, term_buf)
   else
-    fn.termopen(os.getenv("SHELL"), { detach = 0 })
+    jobnr = fn.termopen(os.getenv("SHELL"), { detach = 0 })
     term_buf = fn.bufnr("")
     cmd("startinsert")
   end
   api.nvim_buf_set_name(term_buf, "term://toggleterm")
   api.nvim_buf_set_option(term_buf, "buflisted", false)
-  api.nvim_win_set_option(term_win, "spell", false)
-  api.nvim_win_set_option(term_win, "number", false)
-  api.nvim_win_set_option(term_win, "relativenumber", false)
-  api.nvim_win_set_option(term_win, "signcolumn", "no")
 end
 
 local function has_neighbour(winid, direction)
@@ -56,14 +54,19 @@ local function has_neighbour(winid, direction)
   return false
 end
 
-local function toggle_term(height, bottom)
+local function toggle_term(opts)
+  opts = opts or {}
+  local height = opts.height or 10
+  local bottom = vim.F.if_nil(opts.bottom, true)
   if term_win ~= nil and api.nvim_win_is_valid(term_win) then
-    local is_bottom = F.all({ "left", "bottom", "right" }, function(direction)
-      return not has_neighbour(term_win, direction)
-    end)
-    api.nvim_win_close(term_win, true)
-    if is_bottom ~= bottom then
-      open_term(height, bottom)
+    if not opts.only_open then
+      local is_bottom = F.all({ "left", "bottom", "right" }, function(direction)
+        return not has_neighbour(term_win, direction)
+      end)
+      api.nvim_win_close(term_win, true)
+      if is_bottom ~= bottom then
+        open_term(height, bottom)
+      end
     end
   else
     open_term(height, bottom)
@@ -71,11 +74,23 @@ local function toggle_term(height, bottom)
 end
 
 local function toggle_term_bottom()
-  toggle_term(10, true)
+  toggle_term()
 end
 
 local function toggle_term_right()
-  toggle_term(10, false)
+  toggle_term({ bottom = false })
+end
+
+local function open_term_cd()
+  toggle_term({ only_open = true })
+  local bufnr = utils.last_regular_buffer()
+  if bufnr then
+    local path = vim.api.nvim_buf_get_name(bufnr)
+    path = vim.fs.normalize(path)
+    local name = vim.fs.basename(path)
+    path = vim.fs.dirname(path)
+    fn.chansend(jobnr, "\23cd " .. path .. " # " .. name .. "\r\n")
+  end
 end
 
 vim.api.nvim_create_user_command("ToggleTermBottom", toggle_term_bottom, {})
@@ -83,7 +98,5 @@ vim.api.nvim_create_user_command("ToggleTermRight", toggle_term_right, {})
 
 vim.keymap.set({ "n", "x", "t" }, "<F10>", toggle_term_bottom)
 vim.keymap.set("i", "<F10>", toggle_term_bottom)
-vim.keymap.set({ "n", "x", "t" }, "<F22>", toggle_term_right)
-vim.keymap.set("i", "<F22>", toggle_term_right)
-
--- TODO: keybind to cd to current file location
+vim.keymap.set({ "n", "x", "t" }, "<F22>", open_term_cd)
+vim.keymap.set("i", "<F22>", open_term_cd)
