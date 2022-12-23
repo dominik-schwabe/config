@@ -9,7 +9,7 @@ local CB = S.callbacks
 local R = require("repl.repls")
 local U = require("repl.utils")
 
-M = {}
+local M = {}
 
 M.running_repls = {}
 

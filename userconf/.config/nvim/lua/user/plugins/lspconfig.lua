@@ -107,8 +107,11 @@ for type, icon in pairs(config.lsp_signs) do
   fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
+vim.api.nvim_create_augroup("UserLsp", {})
+
 F.load("nvim-lightbulb", function(lightbulb)
   vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+    group = "UserLsp",
     callback = lightbulb.update_lightbulb,
   })
 end)

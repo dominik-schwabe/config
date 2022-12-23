@@ -1,6 +1,8 @@
 local api = vim.api
 local fn = vim.fn
 
+local unpack = unpack
+
 local F = require("user.functional")
 
 local FLOAT_WIN
@@ -91,7 +93,9 @@ local function fullscreen_toggle()
   end
 end
 
+api.nvim_create_augroup("UserFullscreen", {})
 api.nvim_create_autocmd({ "WinEnter" }, {
+  group = "UserFullscreen",
   callback = function(args)
     if args.file ~= "" and args.buf ~= BUFFER then
       fullscreen_off(false)
@@ -100,6 +104,7 @@ api.nvim_create_autocmd({ "WinEnter" }, {
 })
 
 api.nvim_create_autocmd({ "WinClosed" }, {
+  group = "UserFullscreen",
   callback = function(args)
     if api.nvim_win_get_config(tonumber(args.file)).relative == "" then
       fullscreen_off(true)
@@ -108,12 +113,14 @@ api.nvim_create_autocmd({ "WinClosed" }, {
 })
 
 api.nvim_create_autocmd({ "BufAdd", "WinNew" }, {
+  group = "UserFullscreen",
   callback = function()
     fullscreen_off(false)
   end,
 })
 
 api.nvim_create_autocmd("VimResized", {
+  group = "UserFullscreen",
   callback = function()
     resize_fullscreen()
   end,

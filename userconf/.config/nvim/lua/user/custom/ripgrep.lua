@@ -100,12 +100,11 @@ vim.keymap.set("n", "<space>_", F.f(_rg_word, true))
 vim.keymap.set("x", "<space>_", F.f(_rg_visual, true))
 
 -- local function rg_input()
---   fn.inputsave()
---   local query = fn.input("Search in files: ")
---   fn.inputrestore()
---   if not (query == "") then
---     return rg(query)
---   end
+--   vim.ui.input({ prompt = "Search in files: : " }, function(query)
+--     if query then
+--       rg(query)
+--     end
+--   end)
 -- end
 
 -- vim.keymap.set("n", "_", rg_input)

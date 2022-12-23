@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-streamlink --player /bin/mpv $1 720p60 &>/dev/null &!

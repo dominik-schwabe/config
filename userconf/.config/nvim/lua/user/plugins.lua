@@ -18,9 +18,12 @@ local function loader(plugin_name)
   plugin_name = plugin_name:gsub("%.n?vim$", "")
   plugin_name = plugin_name:lower()
   local src = "user.plugins." .. plugin_name
-  local success, _ = pcall(require, src)
+  local success, message = pcall(require, src)
   if not success then
-    vim.notify("loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "'", vim.log.levels.ERROR)
+    vim.notify(
+      "loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. message,
+      vim.log.levels.INFO
+    )
   end
 end
 
@@ -35,8 +38,8 @@ local function setup_loader(plugin_name)
     pkg.setup()
   else
     vim.notify(
-      "setup_loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "'",
-      vim.log.levels.ERROR
+      "setup_loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. pkg,
+      vim.log.levels.INFO
     )
   end
 end
@@ -48,7 +51,7 @@ local function setup_loader_raw(plugin_name)
     pkg.setup()
   else
     vim.notify(
-      "setup_loader_raw for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "'",
+      "setup_loader_raw for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "'" .. "\n" .. pkg,
       vim.log.levels.ERROR
     )
   end
@@ -70,15 +73,17 @@ require("packer").startup(function(use)
   use({ "L3MON4D3/LuaSnip", config = loader })
   use({ "rafamadriz/friendly-snippets" })
   use({ "kyazdani42/nvim-tree.lua", config = loader })
-  use({ "kyazdani42/nvim-web-devicons" })
   use({ "kevinhwang91/nvim-bqf", config = loader })
   use({ "numToStr/Comment.nvim", config = loader })
   use({ "matbme/JABS.nvim", config = loader })
   use({ "wellle/targets.vim" })
   use({ "mg979/vim-visual-multi", config = loader })
   use({ "mbbill/undotree" })
+  use({ "MunifTanjim/nui.nvim" })
 
   if not config.minimal then
+    use({ "kyazdani42/nvim-web-devicons" })
+    use({ "johmsalas/text-case.nvim", config = loader })
     use({ "stevearc/dressing.nvim", config = loader })
     use({ "nvim-lualine/lualine.nvim", config = loader })
     use({ "monaqa/dial.nvim", config = loader })
@@ -113,27 +118,19 @@ require("packer").startup(function(use)
     use({ "theHamsta/nvim-dap-virtual-text" })
     use({ "tpope/vim-fugitive", config = loader })
     use({ "simrat39/symbols-outline.nvim", config = loader })
-
-    use({
-      "aserowy/tmux.nvim",
-      config = loader,
-      cond = function()
-        return os.getenv("TMUX") ~= nil
-      end,
-    })
     use({ "lervag/vimtex", config = loader })
     use({ "https://gitlab.com/yorickpeterse/nvim-pqf", config = setup_loader })
     use({ "folke/todo-comments.nvim", config = loader })
     use({ "AndrewRadev/sideways.vim", config = loader })
+    use({ "ziontee113/icon-picker.nvim", config = loader })
+    use({ "ggandor/leap.nvim", config = loader })
+    use({ "lark-parser/vim-lark-syntax" })
+    use({ "sheerun/vim-polyglot" })
     use({
       "iamcco/markdown-preview.nvim",
       run = "cd app && npm install",
       config = loader,
     })
-    use({ "ziontee113/icon-picker.nvim", config = loader })
-    use({ "ggandor/leap.nvim", config = loader })
-    use({ "lark-parser/vim-lark-syntax" })
-    use({ "sheerun/vim-polyglot" })
   end
 
   -- use({ "CRAG666/code_runner.nvim" })

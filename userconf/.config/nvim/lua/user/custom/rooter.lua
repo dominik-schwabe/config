@@ -75,6 +75,8 @@ local function chdir()
   end
 end
 
+vim.api.nvim_create_augroup("UserRooter", {})
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  group = "UserRooter",
   callback = chdir,
 })

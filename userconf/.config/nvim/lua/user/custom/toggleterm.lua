@@ -2,6 +2,8 @@ local cmd = vim.cmd
 local api = vim.api
 local fn = vim.fn
 
+local unpack = unpack
+
 local F = require("user.functional")
 local utils = require("user.utils")
 
@@ -89,7 +91,7 @@ local function open_term_cd()
     path = vim.fs.normalize(path)
     local name = vim.fs.basename(path)
     path = vim.fs.dirname(path)
-    fn.chansend(jobnr, "\23cd " .. path .. " # " .. name .. "\r\n")
+    fn.chansend(jobnr, "i\23cd " .. path .. " # " .. name .. "\r")
   end
 end
 

@@ -13,7 +13,9 @@ g.vimtex_quickfix_open_on_warning = 0
 g.tex_conceal = "abdmg"
 g.texflavor = "latex"
 
+vim.api.nvim_create_augroup("TexUser", {})
 vim.api.nvim_create_autocmd("FileType", {
+  group = "TexUser",
   pattern = "tex",
   command = "setlocal conceallevel=1",
 })

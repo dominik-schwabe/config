@@ -36,7 +36,9 @@ local function quit(opt)
   vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = opt.buf })
 end
 
+vim.api.nvim_create_augroup("UserGit", {})
 api.nvim_create_autocmd("BufAdd", {
+  group = "UserGit",
   pattern = { "fugitive://*", "*.fugitiveblame" },
   callback = quit,
 })

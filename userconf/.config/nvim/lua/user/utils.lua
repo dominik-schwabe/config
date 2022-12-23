@@ -2,12 +2,21 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
+local unpack = unpack
+
 local F = require("user.functional")
 
 local M = {}
 
+function M.reverse_replace_termcodes(str)
+  str = str:gsub("\27", "<ESC>")
+  str = str:gsub("\r\n", "<CR>")
+  str = str:gsub("\r", "<CR>")
+  return str
+end
+
 function M.replace_termcodes(str)
-  return api.nvim_replace_termcodes(str, false, true, true)
+  return api.nvim_replace_termcodes(str, true, true, true)
 end
 
 function M.feedkeys(key, mode, need_escape)
@@ -119,7 +128,7 @@ end
 
 function M.mru_buffers()
   local buffers = api.nvim_exec(":ls t", true)
-  buffers = F.split(buffers, "\n")
+  buffers = vim.split(buffers, "\n")
   buffers = F.map(buffers, function (e)
     return tonumber(e:match("^%s*(%d+)"))
   end)
@@ -134,6 +143,10 @@ function M.last_regular_buffer()
       and M.buf_options_set(bufnr, { "modifiable" })
       and M.exists(api.nvim_buf_get_name(bufnr))
   end)
+end
+
+function M.clip(value, lower, upper)
+  return math.min(math.max(value, lower), upper)
 end
 
 function M.setup(obj)

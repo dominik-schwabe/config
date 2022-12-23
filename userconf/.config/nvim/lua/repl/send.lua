@@ -1,5 +1,7 @@
 local api = vim.api
 
+local unpack = unpack
+
 local window = require("repl.window")
 local get = require("repl.get")
 

@@ -136,7 +136,9 @@ vim.keymap.set({ "n", "x" }, "m", toggle_mark)
 vim.keymap.set({ "n", "x" }, "M", mark_qf)
 vim.keymap.set({ "n" }, "dam", clear_all_marks)
 
+api.nvim_create_augroup("UserMarks", {})
 api.nvim_create_autocmd("BufUnload", {
+  group = "UserMarks",
   callback = function(args)
     delete_mark(args.buf)
   end,
@@ -151,6 +153,7 @@ api.nvim_create_autocmd("BufUnload", {
 -- end
 
 -- api.nvim_create_autocmd("BufRead", {
+--   group = "UserMarks",
 --   callback = function(args)
 --     update_signs(args.buf)
 --   end,

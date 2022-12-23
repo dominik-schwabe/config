@@ -1,25 +1,30 @@
 pcall(require, "impatient")
 
-require("user.options")
-require("user.plugins")
-require("user.mappings")
-require("user.custom")
+vim.api.nvim_create_augroup("user", {})
 
 vim.cmd("colorscheme monokai")
+
+require("user.options")
+require("user.custom")
+require("user.plugins")
+require("user.mappings")
 
 local F = require("user.functional")
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
+  group = "user",
   command = "quit",
 })
 
 -- vim.api.nvim_create_autocmd("TextYankPost", {
+--   group = "user",
 --   callback = function()
 --     vim.highlight.on_yank({ higroup = "IncSearch", timeout = 200 })
 --   end,
 -- })
 
 vim.api.nvim_create_autocmd("BufEnter", {
+  group = "user",
   callback = function()
     vim.opt.formatoptions:remove({ "c", "r", "o" })
   end,
@@ -41,6 +46,7 @@ require("repl").setup({
 vim.keymap.set("n", "<F3>", "<CMD>UndotreeToggle<CR>")
 
 vim.api.nvim_create_autocmd("VimEnter", {
+  group = "user",
   command = "clearjumps",
 })
 

@@ -34,10 +34,13 @@ local function set_term_options(args)
   end
 end
 
+vim.api.nvim_create_augroup("UserTerm", {})
 vim.api.nvim_create_autocmd("TermOpen", {
+  group = "UserTerm",
   callback = function(args)
     set_term_options(args)
     vim.api.nvim_create_autocmd("BufEnter", {
+      group = "UserTerm",
       buffer = args.buf,
       callback = function()
         if not b.term_was_normal then
@@ -49,16 +52,19 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 
 vim.api.nvim_create_autocmd("TermEnter", {
+  group = "UserTerm",
   callback = function()
     b.term_was_normal = false
   end,
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
+  group = "UserTerm",
   callback = set_term_options,
 })
 
 vim.api.nvim_create_autocmd("TermClose", {
+  group = "UserTerm",
   pattern = config.closable_terminals,
   callback = delete_term,
 })

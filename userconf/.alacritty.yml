@@ -37,7 +37,7 @@ colors:
     foreground: '#dddddd'
 
   normal:
-    black:   '#4d5154'
+    black:   '#9ca0a4'
     red:     '#ff1111'
     green:   '#3fff3f'
     yellow:  '#ed9d12'

@@ -42,8 +42,8 @@ jabs.setup({
   keymap = {
     close = "d", -- Close buffer. Default D
     jump = "<cr>", -- Jump to buffer. Default <cr>
-    h_split = "s", -- Horizontally split buffer. Default s
-    v_split = "v", -- Vertically split buffer. Default v
+    h_split = "v", -- Horizontally split buffer. Default s
+    v_split = "s", -- Vertically split buffer. Default v
     preview = "p", -- Open buffer preview. Default P
   },
 

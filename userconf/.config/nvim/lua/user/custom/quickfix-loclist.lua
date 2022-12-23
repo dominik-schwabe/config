@@ -46,8 +46,9 @@ local function quickfix_mapping(opt)
   vim.keymap.set("n", "q", "<CMD>q<CR>", { buffer = opt.buf })
 end
 
+vim.api.nvim_create_augroup("UserQfLl", {})
 vim.api.nvim_create_autocmd("FileType", {
+  group = "UserQfLl",
   pattern = "qf",
   callback = quickfix_mapping,
 })
-

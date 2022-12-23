@@ -2,7 +2,9 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
-M = {}
+local unpack = unpack
+
+local M = {}
 
 local function replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, false, true, true)

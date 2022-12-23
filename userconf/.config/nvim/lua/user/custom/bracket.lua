@@ -1,6 +1,8 @@
 local api = vim.api
 local bo = vim.bo
 
+local unpack = unpack
+
 local utils = require("user.utils")
 local config = require("user.config")
 

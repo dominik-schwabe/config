@@ -16,7 +16,7 @@ end
 
 function M.num_leading_spaces(str)
   local first_char = str:find("[^ ]")
-  return first_char and first_char - 1 or #str
+  return first_char and first_char or #str
 end
 
 function M.replace_tab(str)

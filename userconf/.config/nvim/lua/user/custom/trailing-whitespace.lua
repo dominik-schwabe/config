@@ -50,29 +50,29 @@ local function update_trailing_highlight(args)
   trailing_highlight("auto")
 end
 
-vim.api.nvim_create_augroup("TrailingWhitespace", {})
+vim.api.nvim_create_augroup("UserTrailingWhitespace", {})
 vim.api.nvim_create_autocmd("InsertLeave", {
-  group = "TrailingWhitespace",
+  group = "UserTrailingWhitespace",
   callback = F.f(trailing_highlight, "n")
 })
 vim.api.nvim_create_autocmd("InsertEnter", {
-  group = "TrailingWhitespace",
+  group = "UserTrailingWhitespace",
   callback = F.f(trailing_highlight, "i")
 })
 vim.api.nvim_create_autocmd("BufEnter", {
-  group = "TrailingWhitespace",
+  group = "UserTrailingWhitespace",
   callback = F.f(trailing_highlight, "auto")
 })
 vim.api.nvim_create_autocmd("TermOpen", {
-  group = "TrailingWhitespace",
+  group = "UserTrailingWhitespace",
   callback = update_trailing_highlight,
 })
 vim.api.nvim_create_autocmd("FileType", {
-  group = "TrailingWhitespace",
+  group = "UserTrailingWhitespace",
   callback = update_trailing_highlight,
 })
 vim.api.nvim_create_autocmd("OptionSet", {
-  group = "TrailingWhitespace",
+  group = "UserTrailingWhitespace",
   pattern = "modifiable",
   callback = update_trailing_highlight,
 })

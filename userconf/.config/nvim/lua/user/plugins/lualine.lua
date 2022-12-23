@@ -1,7 +1,7 @@
 local F = require("user.functional")
 
 local navic_section = nil
-F.load("nvim-navic", function (navic)
+F.load("nvim-navic", function(navic)
   navic.setup({
     icons = require("user.config").navic_icons,
     highlight = true,

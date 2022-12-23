@@ -247,6 +247,7 @@ end
 M.client_fix = function(pos, config)
   config.alignment = pos
   return function(c)
+    c.fullscreen = false
     c.floating = true
     if config.sticky then
       c.sticky = true

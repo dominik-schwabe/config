@@ -3,7 +3,7 @@ local o = vim.o
 local cmd = vim.cmd
 local fn = vim.fn
 
-M = {}
+local M = {}
 
 M.rainbow = {
   "#dd5ddd",
@@ -407,23 +407,6 @@ function M.setup()
   end
 
   g.VM_theme_set_by_colorscheme = true
-
-  g.terminal_color_0 = "#000000"
-  g.terminal_color_1 = "#ff0000"
-  g.terminal_color_2 = "#3fff3f"
-  g.terminal_color_3 = "#ed9d12"
-  g.terminal_color_4 = "#5f87af"
-  g.terminal_color_5 = "#f92782"
-  g.terminal_color_6 = "#66d9ef"
-  g.terminal_color_7 = "#f8f8f2"
-  g.terminal_color_8 = "#ff0000"
-  g.terminal_color_9 = "#ff3f3f"
-  g.terminal_color_10 = "#3fff3f"
-  g.terminal_color_11 = "#deed12"
-  g.terminal_color_12 = "#5f87af"
-  g.terminal_color_13 = "#f92672"
-  g.terminal_color_14 = "#66d9ef"
-  g.terminal_color_15 = "#f8f8f2"
 end
 
 return M

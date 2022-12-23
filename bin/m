@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+LINK=$1
+[[ -z $LINK ]] && {
+    echo "link missing"
+    exit 1
+}
+if [[ $LINK == "https://www.youtube.com/"* ]]; then
+    mpv --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]" $1 &>/dev/null &!
+else
+    streamlink --player /bin/mpv $1 720p60 &>/dev/null &!
+fi
+
+exit 0
