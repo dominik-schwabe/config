@@ -193,6 +193,14 @@ function M.limit(tbl, upper)
   return tbl
 end
 
+function M.copy(obj)
+  local new_obj = {}
+  for key, value in pairs(obj) do
+    new_obj[key] = value
+  end
+  return setmetatable(new_obj, getmetatable(obj))
+end
+
 function M.load(src, cb, silent)
   silent = silent == nil and true or silent
   local success, pkg = pcall(require, src)

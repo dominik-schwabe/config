@@ -1,6 +1,8 @@
 local F = require("user.functional")
 local utils = require("user.utils")
 
+require("user.completions")
+
 local cmp = require("cmp")
 
 local cmp_options = {
@@ -34,6 +36,7 @@ local cmp_options = {
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
     { name = "luasnip" },
+    { name = "yank_history" },
     { name = "path" },
     { name = "crates" },
     { name = "tmux" },
@@ -86,6 +89,7 @@ F.load("lspkind", function(lspkind)
     path = "[path]",
     rg = "[rg]",
     copilot = "[cp]",
+    yank_history = "[yank]",
   }
 
   cmp_options.formatting = {

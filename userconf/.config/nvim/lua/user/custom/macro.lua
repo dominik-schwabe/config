@@ -3,8 +3,6 @@ local v = vim.v
 local normal = vim.cmd.normal
 local keymap = vim.keymap.set
 
-local yank = require("user.custom.yank")
-
 local F = require("user.functional")
 local utils = require("user.utils")
 local preview = require("user.preview")
@@ -12,8 +10,6 @@ local preview = require("user.preview")
 local macro_regs = { "a" }
 local slot = 1
 local toggle_key = "q"
-
-local M = {}
 
 local function is_recording()
   return fn.reg_recording() ~= ""
@@ -54,11 +50,16 @@ local function show_macro()
   preview.show({ (current_macro == "" and "-- empty --" or current_macro) }, { title = get_long_string() })
 end
 
+local function clean_macro(macro)
+  return macro:sub(1, -1 * (#toggle_key + 1))
+end
+
 local function toggle_recording()
   if is_recording() then
     local prev_rec = get_macro()
     stop_macro()
-    set_macro(get_macro():sub(1, -1 * (#toggle_key + 1)))
+    local macro_content = clean_macro(get_macro())
+    set_macro(macro_content)
     if get_macro() == "" then
       set_macro(prev_rec)
       vim.notify("Recording aborted.")
@@ -71,7 +72,6 @@ local function toggle_recording()
 end
 
 local function play_recording()
-  show_macro()
   if get_macro() ~= "" then
     play_macro()
   end
@@ -90,6 +90,17 @@ local function next_macro()
   switch_macro_slot(1)
 end
 
+local History = require("user.history")
+local history = History:new({
+  name = "Macro",
+  register = function()
+    return macro_regs[slot]
+  end,
+  filter = function(entry)
+    return entry:text() == ""
+  end,
+})
+
 local function edit_macro()
   local macro_content = get_macro()
   local macro_string = get_long_string()
@@ -97,7 +108,7 @@ local function edit_macro()
     if edited_macro then
       set_macro(edited_macro)
       local register = macro_regs[slot]
-      yank.add_entry_to_macro_history({
+      history:add({
         regtype = vim.fn.getregtype(register),
         contents = vim.fn.getreg(register, 1, true),
       })
@@ -105,6 +116,24 @@ local function edit_macro()
     end
   end)
 end
+
+vim.api.nvim_create_augroup("UserMacroHistory", {})
+vim.api.nvim_create_autocmd("RecordingLeave", {
+  group = "UserMacroHistory",
+  callback = function()
+    history:add({
+      regtype = "v",
+      contents = { clean_macro(vim.v.event.regcontents) },
+    })
+  end,
+})
+
+vim.keymap.set("n", "ü", function()
+  history:cycle(-1)
+end)
+vim.keymap.set("n", "Ü", function()
+  history:cycle(1)
+end)
 
 F.foreach(macro_regs, function(reg)
   fn.setreg(reg, "")
@@ -116,4 +145,4 @@ keymap("n", "<space>re", edit_macro)
 keymap("n", "<space>rf", next_macro)
 keymap("n", "<space>rb", prev_macro)
 
-return M
+return { history = history }

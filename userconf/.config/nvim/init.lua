@@ -1,4 +1,4 @@
-pcall(require, "impatient")
+-- pcall(require, "impatient")
 
 vim.api.nvim_create_augroup("user", {})
 

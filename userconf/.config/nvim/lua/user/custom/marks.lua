@@ -1,6 +1,7 @@
 local api = vim.api
 
 local F = require("user.functional")
+local U = require("user.utils")
 
 local function is_lower(byte)
   return 97 <= byte and byte <= 122
@@ -60,7 +61,7 @@ local function mark_qf()
     local mark = mark_info.mark
     local bufnr = mark_info.bufnr
     local line = mark_info.pos[2]
-    local text = api.nvim_buf_get_lines(bufnr, line - 1, line, true)[1]
+    local text = U.remove_leading_space(api.nvim_buf_get_lines(bufnr, line - 1, line, true)[1])
     return { bufnr = bufnr, lnum = line, col = 0, text = " -- " .. mark .. " -- : " .. text }
   end)
   vim.fn.setqflist(marklist, " ")

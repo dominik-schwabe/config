@@ -36,6 +36,8 @@ require("telescope").setup({
     layout_config = { horizontal = { prompt_position = "top" } },
   },
 })
+require("telescope").load_extension("yank_history")
+require("telescope").load_extension("macro_history")
 
 vim.keymap.set({ "n", "x", "i" }, "<C-p>", "<CMD>Telescope find_files<CR>")
 vim.keymap.set({ "n", "x" }, "_", "<CMD>Telescope live_grep<CR>")
@@ -45,3 +47,5 @@ vim.keymap.set({ "n", "x" }, "<space>h", "<CMD>Telescope help_tags<CR>")
 vim.keymap.set({ "n", "x" }, "<space>,,", "<CMD>Telescope resume<CR>")
 vim.keymap.set({ "n", "x" }, "<space>,k", "<CMD>Telescope keymaps<CR>")
 vim.keymap.set({ "n", "x" }, "<space>,j", "<CMD>Telescope jumplist<CR>")
+vim.keymap.set({ "n", "x" }, "<space>,y", "<CMD>Telescope yank_history<CR>")
+vim.keymap.set({ "n", "x" }, "<space>,q", "<CMD>Telescope macro_history<CR>")

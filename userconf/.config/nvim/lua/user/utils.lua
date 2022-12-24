@@ -129,7 +129,7 @@ end
 function M.mru_buffers()
   local buffers = api.nvim_exec(":ls t", true)
   buffers = vim.split(buffers, "\n")
-  buffers = F.map(buffers, function (e)
+  buffers = F.map(buffers, function(e)
     return tonumber(e:match("^%s*(%d+)"))
   end)
   return buffers
@@ -149,8 +149,51 @@ function M.clip(value, lower, upper)
   return math.min(math.max(value, lower), upper)
 end
 
-function M.setup(obj)
-  obj.setup()
+local function num_leading_spaces(str)
+  local first_char = str:find("[^ ]")
+  return first_char and first_char or #str
+end
+
+local function replace_tab(str)
+  return str:gsub("\t", string.rep(" ", vim.bo.tabstop))
+end
+
+function M.replace_tabs(lines)
+  return F.map(lines, replace_tab)
+end
+
+local function is_whitespace(str)
+  return str:match([[^%s*$]])
+end
+
+function M.remove_empty_lines(lines)
+  return F.filter(lines, function(str)
+    return not is_whitespace(str)
+  end)
+end
+
+function M.fix_indent(lines)
+  local spaces = F.map(M.remove_empty_lines(lines), num_leading_spaces)
+  local min_indent = #spaces > 0 and F.min(spaces) or 0
+  return F.map(lines, function(line)
+    return line:sub(min_indent)
+  end)
+end
+
+function M.lines_are_same(lines1, lines2)
+  if #lines1 ~= #lines2 then
+    return false
+  end
+  for i, v in ipairs(lines1) do
+    if v ~= lines2[i] then
+      return false
+    end
+  end
+  return true
+end
+
+function M.remove_leading_space(str)
+  return str:gsub("^[\t\n ]+", "")
 end
 
 return M

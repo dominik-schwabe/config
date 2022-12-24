@@ -17,6 +17,7 @@ local popup
 
 M.show = function(lines, opts)
   opts = opts or {}
+  local filetype = opts.filetype
   local title = opts.title
   local buf_callback = opts.buf_callback
   if not popup then
@@ -43,17 +44,17 @@ M.show = function(lines, opts)
       end,
     })
     popup:mount()
+    vim.api.nvim_buf_set_option(popup.bufnr, "filetype", "nofile")
   end
   local limit = math.min(#lines, 15)
-  lines = F.limit(lines, limit)
   size = {
     width = "50%",
     height = limit,
   }
+  lines = F.concat({ "```" .. (filetype == nil and "" or filetype) }, lines, { "```" })
   popup:update_layout({ size = size })
   popup.border:set_text("top", title, "left")
-  vim.api.nvim_buf_set_lines(popup.bufnr, 0, -1, false, lines)
-  vim.api.nvim_buf_set_option(popup.bufnr, "filetype", opts.filetype or "")
+  vim.lsp.util.stylize_markdown(popup.bufnr, lines, { height = limit })
   if buf_callback then
     buf_callback(popup.bufnr)
   end
