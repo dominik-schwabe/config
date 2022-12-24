@@ -9,6 +9,7 @@ opt.softtabstop = 2
 opt.autoindent = true
 opt.smartindent = true
 opt.expandtab = true
+opt.cmdwinheight = 1
 
 opt.number = true
 opt.relativenumber = true

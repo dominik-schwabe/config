@@ -6,6 +6,9 @@ require("user.completions")
 local cmp = require("cmp")
 
 local cmp_options = {
+  enabled = function()
+    return vim.bo.buftype ~= "prompt" and vim.bo.buftype ~= "nofile"
+  end,
   mapping = cmp.mapping.preset.insert({
     ["<C-w>"] = cmp.mapping.scroll_docs(-4),
     ["<C-e>"] = cmp.mapping.scroll_docs(4),

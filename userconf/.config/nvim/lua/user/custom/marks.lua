@@ -116,7 +116,8 @@ local function toggle_mark()
       delete_mark(bufnr, mark)
     end)
   else
-    if api.nvim_buf_get_option(bufnr, "buflisted") then
+    local bufopt = vim.bo[bufnr]
+    if bufopt.buflisted and bufopt.buftype ~= "prompt" and bufopt.buftype ~= "nofile" then
       place_next_mark(bufnr, line)
     end
   end

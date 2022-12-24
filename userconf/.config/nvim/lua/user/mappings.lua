@@ -1,3 +1,5 @@
+local U = require("user.utils")
+
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>qa<CR>")
 vim.keymap.set({ "n", "x" }, "ö", "<CMD>noh<CR>")
 vim.keymap.set("x", "<", "<gv")
@@ -20,3 +22,11 @@ vim.keymap.set({ "n", "x" }, "gw", "<CMD>write<CR>")
 vim.keymap.set("n", "<space>cw", function()
   vim.cmd("cd %:p:h")
 end)
+vim.keymap.set({ "n" }, ":", function ()
+  if not vim.api.nvim_buf_get_name(0):match("%[Command Line%]$") then
+    U.feedkeys("<ESC>q:", "n", true)
+  else
+    U.feedkeys("<ESC>:", "n", true)
+  end
+end)
+vim.keymap.set({ "c" }, "<C-c>", "<ESC>:quit<CR>")

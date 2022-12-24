@@ -10,11 +10,28 @@ require("user.plugins")
 require("user.mappings")
 
 local F = require("user.functional")
+local U = require("user.utils")
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   group = "user",
-  command = "quit",
+  callback = function(args)
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+    vim.wo.signcolumn = "no"
+    vim.keymap.set({ "n", "i", "c" }, "<C-c>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.keymap.set({ "n" }, "<ESC>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.keymap.set({ "n" }, "<CR>", "<CR>", { buffer = args.buf })
+    vim.keymap.set({ "n", "i" }, "<C-h>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.keymap.set({ "n", "i" }, "<C-j>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.keymap.set({ "n", "i" }, "<C-k>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.keymap.set({ "n", "i" }, "<C-l>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.cmd("startinsert")
+  end,
 })
+
+function R()
+  U.feedkeys("q:", "n", false)
+end
 
 -- vim.api.nvim_create_autocmd("TextYankPost", {
 --   group = "user",
