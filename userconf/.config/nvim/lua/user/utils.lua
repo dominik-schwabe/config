@@ -154,12 +154,12 @@ local function num_leading_spaces(str)
   return first_char and first_char or #str
 end
 
-local function replace_tab(str)
+function M.replace_tab(str)
   return str:gsub("\t", string.rep(" ", vim.bo.tabstop))
 end
 
 function M.replace_tabs(lines)
-  return F.map(lines, replace_tab)
+  return F.map(lines, M.replace_tab)
 end
 
 local function is_whitespace(str)

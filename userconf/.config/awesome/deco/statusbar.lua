@@ -37,8 +37,8 @@ local widgets = {}
 
 widgets[2] = require("widget.stopwatch").create()
 widgets[6] = require("widget.volume").create()
-widgets[7] = wibox.widget.textclock(color.color("#F92782", "#000000", "%a %d.%m.%Y"))
-widgets[8] = wibox.widget.textclock(color.color("#DEED12", "#000000", "%H:%M"))
+widgets[7] = wibox.widget.textclock(color.color("#F92782", "#000000", "%a %d.%m.%Y"), 1)
+widgets[8] = wibox.widget.textclock(color.color("#DEED12", "#000000", "%H:%M"), 1)
 
 F.load("lain", function(lain)
   widgets[1] = require("widget.net").create(lain)
