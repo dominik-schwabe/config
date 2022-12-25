@@ -7,9 +7,6 @@ package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.4/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.4/?/init.lua"
 
-local root = root
-local client = client
-
 local vars = require("main.vars")
 local awful = require("awful")
 local gears = require("gears")
@@ -37,7 +34,7 @@ function D0(arg)
   D(arg, 0)
 end
 
-f = require("functions")
+local f = require("functions")
 
 function DCB(instance)
   D0(f.dcb(instance))

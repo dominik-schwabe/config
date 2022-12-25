@@ -9,7 +9,6 @@
 -- @module awful.autofocus
 ---------------------------------------------------------------------------
 
-local client = client
 local aclient = require("awful.client")
 local timer = require("gears.timer")
 

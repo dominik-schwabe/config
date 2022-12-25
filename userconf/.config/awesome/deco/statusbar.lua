@@ -9,9 +9,6 @@ local dpi = require("beautiful.xresources").apply_dpi
 local color = require("util.color")
 local F = require("util.functional")
 
-local screen = screen
-local client = client
-
 local wibox_content = {
   layout = wibox.layout.fixed.horizontal,
 }

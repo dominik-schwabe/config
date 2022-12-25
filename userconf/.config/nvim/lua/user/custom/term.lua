@@ -21,7 +21,7 @@ end
 
 local function set_term_options(args)
   local bufnr = args.buf
-  local buftype = api.nvim_buf_get_option(bufnr, "buftype")
+  local buftype = vim.bo[bufnr].buftype
   if buftype == "terminal" then
     wo.spell = false
     wo.number = false

@@ -61,8 +61,8 @@ local function find_root(base_path)
   return nil
 end
 
-local function chdir()
-  if not vim.tbl_contains({ "", "acwrite" }, vim.bo.buftype) then
+local function chdir(args)
+  if not vim.tbl_contains({ "", "acwrite" }, vim.bo[args.buf].buftype) then
     return
   end
   local base_path = vim.fn.expand("%:p:h", true)

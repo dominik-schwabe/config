@@ -3,8 +3,6 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local beautiful = require("beautiful")
 local vars = require("main.vars")
 
-local awesome = awesome
-
 local function hotkeys()
   hotkeys_popup.show_help(nil, awful.screen.focused())
 end

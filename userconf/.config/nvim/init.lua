@@ -71,11 +71,19 @@ local function mark_jump()
   vim.cmd("mark '")
 end
 
-vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph))
-vim.keymap.set("n", "<CR>", F.f(send.line_next))
-vim.keymap.set("x", "<CR>", F.f(send.visual))
-vim.keymap.set("n", "=", F.f(send.line))
-vim.keymap.set("n", "<leader><space>", F.f(send.buffer))
-vim.keymap.set("n", "<leader>m", F.f(send.motion))
-vim.keymap.set("n", "<leader>M", F.f(send.newline))
-vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl))
+vim.api.nvim_create_autocmd("FileType", {
+  group = "user",
+  callback = function(args)
+    local bufopt = vim.bo[args.buf]
+    if bufopt.buflisted and bufopt.buftype == "" then
+      vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph), { buffer = args.buf })
+      vim.keymap.set("n", "<CR>", F.f(send.line_next), { buffer = args.buf })
+      vim.keymap.set("x", "<CR>", F.f(send.visual), { buffer = args.buf })
+      vim.keymap.set("n", "=", F.f(send.line), { buffer = args.buf })
+      vim.keymap.set("n", "<leader><space>", F.f(send.buffer), { buffer = args.buf })
+      vim.keymap.set("n", "<leader>m", F.f(send.motion), { buffer = args.buf })
+      vim.keymap.set("n", "<leader>M", F.f(send.newline), { buffer = args.buf })
+      vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl), { buffer = args.buf })
+    end
+  end,
+})

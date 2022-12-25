@@ -7,10 +7,6 @@ local beautiful = require("beautiful")
 local events = require("events")
 local dpi = require("beautiful.xresources").apply_dpi
 
-local client = client
-local awesome = awesome
-local unpack = table.unpack
-
 local compositor = vars.compositor
 local terminal = vars.terminal
 local playerctl = vars.playerctl
@@ -29,7 +25,7 @@ end
 local function j(func, ...)
   local args = { ... }
   return function()
-    func(unpack(args))
+    func(table.unpack(args))
   end
 end
 

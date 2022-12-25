@@ -5,8 +5,6 @@ local f = require("functions")
 local beautiful = require("beautiful")
 local timer = require("gears.timer")
 
-local client = client
-
 local groups = {}
 
 local function hide_group(c, group)
@@ -30,7 +28,10 @@ end
 
 local function should_show(c)
   local current_tag = f.focused_tag()
-  local was_different_tag = not c.hidden and not c.sticky and current_tag ~= nil and not client_is_on_tag(c, current_tag)
+  local was_different_tag = not c.hidden
+    and not c.sticky
+    and current_tag ~= nil
+    and not client_is_on_tag(c, current_tag)
   return c.hidden or was_different_tag
 end
 

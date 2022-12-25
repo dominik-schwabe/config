@@ -2,8 +2,6 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
-local unpack = unpack
-
 local F = require("user.functional")
 
 local M = {}

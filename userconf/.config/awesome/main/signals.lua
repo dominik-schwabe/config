@@ -3,13 +3,6 @@ local dpi = require("beautiful.xresources").apply_dpi
 local F = require("util.functional")
 local f = require("functions")
 
-local client = client
-local awesome = awesome
-local screen = screen
-local mouse = mouse
-
-local timer = require("gears.timer")
-
 local function unfocus_sticky(c)
   if c.sticky and not c._dropdown_show and client.focus == c then
     client.focus = nil

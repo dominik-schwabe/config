@@ -1,8 +1,6 @@
 local M = {}
 local config = require("user.config")
 
-local unpack = unpack
-
 function M.foreach(list, cb)
   for _, value in ipairs(list) do
     cb(value)

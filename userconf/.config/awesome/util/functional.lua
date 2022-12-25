@@ -1,5 +1,3 @@
-local unpack = table.unpack
-
 local M = {}
 
 function M.foreach(list, cb)
@@ -29,7 +27,7 @@ end
 function M.dict(list)
   local data = {}
   M.foreach(list, function(e)
-    local key, value = unpack(e)
+    local key, value = table.unpack(e)
     data[key] = value
   end)
   return data
@@ -93,7 +91,7 @@ end
 
 function M.min(list)
   if #list > 0 then
-    return math.min(unpack(list))
+    return math.min(table.unpack(list))
   end
   return nil
 end
@@ -101,7 +99,7 @@ end
 function M.f(func, ...)
   local tbl = { ... }
   return function()
-    return func(unpack(tbl))
+    return func(table.unpack(tbl))
   end
 end
 

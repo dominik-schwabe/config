@@ -2,8 +2,6 @@ local cmd = vim.cmd
 local api = vim.api
 local fn = vim.fn
 
-local unpack = unpack
-
 local F = require("user.functional")
 local utils = require("user.utils")
 

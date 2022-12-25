@@ -1,5 +1,3 @@
-local unpack = unpack
-
 local M = {}
 
 function M.map(list, cb)

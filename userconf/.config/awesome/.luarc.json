@@ -1,6 +1,14 @@
 {
-  "Lua": {
-    "runtime.version": "LuaJIT",
-    "workspace.checkThirdParty": false
-  }
+    "Lua": {
+        "runtime.version": "Lua4",
+        "workspace.checkThirdParty": false
+    },
+    "Lua.diagnostics.globals": [
+        "root",
+        "client",
+        "screen",
+        "tag",
+        "awesome",
+        "mouse"
+    ]
 }

@@ -2,12 +2,10 @@ local api = vim.api
 local fn = vim.fn
 local o = vim.o
 
-local unpack = unpack
-
 local M = {}
 
 local function replace_termcodes(str)
-  return vim.api.nvim_replace_termcodes(str, false, true, true)
+  return api.nvim_replace_termcodes(str, false, true, true)
 end
 
 local esc = replace_termcodes("<Esc>")
@@ -45,10 +43,10 @@ function M.get_visual_selection(buffer)
 end
 
 function M.get_motion(motion_type)
-  local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(0, "["))
-  local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(0, "]"))
+  local line_start, column_start = unpack(api.nvim_buf_get_mark(0, "["))
+  local line_end, column_end = unpack(api.nvim_buf_get_mark(0, "]"))
 
-  local lines = vim.api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
+  local lines = api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
 
   if motion_type ~= "line" then
     lines[#lines] = lines[#lines]:sub(0, column_end + 1)
@@ -59,7 +57,7 @@ function M.get_motion(motion_type)
 end
 
 function M.path_exists(path)
-  return vim.fn.empty(vim.fn.glob(path)) == 0
+  return fn.empty(fn.glob(path)) == 1
 end
 
 function M.extend(tbl)

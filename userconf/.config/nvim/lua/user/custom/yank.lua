@@ -1,5 +1,3 @@
-local unpack = unpack
-
 local tmux = require("user.custom.tmux")
 
 local F = require("user.functional")

@@ -1,7 +1,5 @@
 local notify = require("notify")
 
-local awesome = awesome
-
 if awesome.startup_errors then
   notify.error(awesome.startup_errors, "ERROR (startup)")
 end

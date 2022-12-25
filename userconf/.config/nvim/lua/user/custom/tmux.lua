@@ -1,5 +1,3 @@
-local unpack = unpack
-
 local F = require("user.functional")
 
 local Job = require("plenary.job")
