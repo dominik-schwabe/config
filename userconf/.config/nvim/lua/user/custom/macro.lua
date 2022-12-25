@@ -107,11 +107,7 @@ local function edit_macro()
   vim.ui.input({ prompt = "Edit " .. macro_string, default = macro_content }, function(edited_macro)
     if edited_macro then
       set_macro(edited_macro)
-      local register = macro_regs[slot]
-      history:add({
-        regtype = vim.fn.getregtype(register),
-        contents = vim.fn.getreg(register, 1, true),
-      })
+      history:add_register()
       show_macro()
     end
   end)

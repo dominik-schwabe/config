@@ -55,9 +55,9 @@ local function jabs_toggle()
   if vim.bo.filetype == "JABSwindow" then
     vim.cmd("close")
   else
-    utils.feedkeys("<ESC>:JABSOpen<CR>")
+    vim.cmd("JABSOpen")
   end
 end
 
 vim.keymap.set({ "n", "x", "i" }, "<F2>", jabs_toggle)
-vim.keymap.set("t", "<F2>", "<CMD>JABSOpen<CR>")
+vim.keymap.set("t", "<F2>", jabs_toggle)

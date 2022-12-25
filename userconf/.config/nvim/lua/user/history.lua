@@ -49,38 +49,37 @@ function History:new(obj)
   return setmetatable(obj, self)
 end
 
-function History:current(pos)
-  return self.entries[pos == nil and self.pos or pos]
+function History:current()
+  return self.entries[self.pos]
 end
 
-function History:is_present(entry)
-  return self.pos ~= 0 and entries_are_same(entry, self.entries[self.pos])
+function History:top()
+  return self.entries[#self.entries]
 end
 
-function History:prune()
-  local entries = self.entries
-  local pos = self.pos
-  if pos ~= #entries then
-    local element = entries[pos]
-    while pos < #entries do
-      entries[pos] = entries[pos + 1]
-      pos = pos + 1
-    end
-    entries[pos] = element
+function History:is_same(entry)
+  return self.pos ~= 0 and entries_are_same(entry, self:current())
+end
+
+function History:_add(entry)
+  self.entries[#self.entries + 1] = entry
+  self.pos = #self.entries
+  if #self.entries > self.size then
+    self.entries = F.slice(self.entries, #self.entries - self.size + 1)
   end
-  if #entries >= self.size then
-    entries = F.slice(entries, #entries - self.size + 2)
-  end
-  self.entries = entries
-  self.pos = pos
 end
 
-function History:add(entry)
+function History:add(entry, opts)
   entry = Entry:new(entry)
-  if not (self.filter and self.filter(entry)) and not self:is_present(entry) then
-    self:prune()
-    self.entries[#self.entries + 1] = entry
-    self.pos = #self.entries
+  opts = opts or {}
+  if not (self.filter and self.filter(entry)) then
+    local same = self:is_same(entry)
+    if not (opts.ignore_if_current and same) then
+      self:move_current_front()
+    end
+    if not same then
+      self:_add(entry)
+    end
   end
 end
 
@@ -88,7 +87,7 @@ function History:get_register_name()
   return type(self.register) == "function" and self.register() or self.register
 end
 
-function History:read_register()
+function History:read_register_to_entry()
   local register = self:get_register_name()
   return {
     regtype = vim.fn.getregtype(register),
@@ -96,7 +95,7 @@ function History:read_register()
   }
 end
 
-function History:write_register()
+function History:write_current_to_register()
   local entry = self:current()
   local register = self:get_register_name()
   vim.fn.setreg(register, entry.contents, entry.regtype)
@@ -105,23 +104,36 @@ function History:write_register()
   end
 end
 
-function History:add_current()
-  self:add(self:read_register())
+function History:add_register(opts)
+  self:add(self:read_register_to_entry(), opts)
+end
+
+function History:remove_current()
+  local entry = self:current()
+  table.remove(self.entries, self.pos)
+  self.pos = #self.entries
+  return entry
+end
+
+function History:move_current_front()
+  self:_add(self:remove_current())
+end
+
+function History:set_pos(index)
+  self.pos = U.clip(index, 1, #self.entries)
 end
 
 function History:select_by_index(index)
-  index = U.clip(index, 1, #self.entries)
-  local entry = self.entries[index]
-  table.remove(self.entries, index)
-  self.pos = #self.entries
-  self:add_current()
-  self:add(entry)
-  self:write_register()
+  self:set_pos(index)
+  local entry = self:remove_current()
+  self:add_register()
+  self:_add(entry)
+  self:write_current_to_register()
 end
 
 function History:select_by_direction(direction)
-  self.pos = U.clip(self.pos + direction, 1, #self.entries)
-  self:write_register()
+  self:set_pos(self.pos + direction)
+  self:write_current_to_register()
 end
 
 function History:preview(entry)
@@ -145,13 +157,13 @@ function History:notify_empty()
 end
 
 function History:cycle(direction)
-  self:add_current()
+  self:add_register({ ignore_if_current = true })
   local current_entry = self:current()
   if not current_entry then
     self:notify_empty()
     return
   end
-  if not entries_are_same(self:read_register(), current_entry) then
+  if not entries_are_same(self:read_register_to_entry(), current_entry) then
     direction = 0
   end
   self:select_by_direction(direction)
@@ -162,7 +174,7 @@ function History:select(index)
   self:select_by_index(#self.entries - index + 1)
 end
 
-function History:top(num)
+function History:topn(num)
   return F.slice(self.entries, #self.entries - num)
 end
 
@@ -269,7 +281,7 @@ function History:make_completion_source()
 
   function Source:complete(request, callback)
     local input = request.context.cursor_before_line:sub(request.offset - 1)
-    local items = F.map(history:top(10), function(entry)
+    local items = F.map(history:topn(10), function(entry)
       return {
         label = entry:text(true),
         documentation = {

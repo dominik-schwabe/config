@@ -50,7 +50,7 @@ vim.api.nvim_create_autocmd("TextYankPost ", {
     history:add({
       regtype = vim.v.event.regtype,
       contents = vim.v.event.regcontents,
-      filetype = vim.api.nvim_buf_get_option(args.buf, "filetype"),
+      filetype = vim.bo[args.buf].filetype,
     })
   end,
 })
@@ -61,6 +61,25 @@ end)
 vim.keymap.set("n", "Ä", function()
   history:cycle(1)
 end)
+
+vim.keymap.set("n", "ä", function()
+  history:cycle(-1)
+end)
+vim.keymap.set("n", "Ä", function()
+  history:cycle(1)
+end)
+
+local function bind_paste_func(key)
+  vim.keymap.set("n", key, function()
+    history:add_register()
+    U.feedkeys(key, "n", false)
+  end)
+end
+
+bind_paste_func("p")
+bind_paste_func("P")
+bind_paste_func("gp")
+bind_paste_func("gP")
 
 F.load("cmp", function(cmp)
   cmp.register_source("yank_history", history:make_completion_source():new())

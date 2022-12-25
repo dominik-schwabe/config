@@ -173,11 +173,6 @@ function M.consume(obj)
   return data
 end
 
--- function M.split(str, sep)
---   sep = sep or "%s"
---   return M.consume(string.gmatch(str, "([^" .. sep .. "]+)"))
--- end
-
 function M.slice(tbl, first, last, step)
   local sliced = {}
   for i = first or 1, last or #tbl, step or 1 do

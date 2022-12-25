@@ -22,11 +22,10 @@ vim.keymap.set({ "n", "x" }, "gw", "<CMD>write<CR>")
 vim.keymap.set("n", "<space>cw", function()
   vim.cmd("cd %:p:h")
 end)
-vim.keymap.set({ "n" }, ":", function ()
-  if not vim.api.nvim_buf_get_name(0):match("%[Command Line%]$") then
-    U.feedkeys("<ESC>q:", "n", true)
-  else
-    U.feedkeys("<ESC>:", "n", true)
-  end
-end)
-vim.keymap.set({ "c" }, "<C-c>", "<ESC>:quit<CR>")
+-- vim.keymap.set({ "n" }, ":", function()
+--   if not vim.api.nvim_buf_get_name(0):match("%[Command Line%]$") and vim.api.nvim_win_get_config(0).relative == "" then
+--     U.feedkeys("<ESC>q:", "nt", true)
+--   else
+--     U.feedkeys("<ESC>:", "nt", true)
+--   end
+-- end)

@@ -117,7 +117,7 @@ end
 
 function M.esc_wrap(func)
   return function()
-    M.feedkeys(esc, "", false)
+    M.feedkeys(esc, "n", false)
     func()
   end
 end

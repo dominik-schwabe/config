@@ -25,13 +25,10 @@ vim.api.nvim_create_autocmd("CmdWinEnter", {
     vim.keymap.set({ "n", "i" }, "<C-j>", "<ESC>:quit<CR>", { buffer = args.buf })
     vim.keymap.set({ "n", "i" }, "<C-k>", "<ESC>:quit<CR>", { buffer = args.buf })
     vim.keymap.set({ "n", "i" }, "<C-l>", "<ESC>:quit<CR>", { buffer = args.buf })
+    vim.keymap.set({ "c" }, "<C-c>", "<CMD>quit<CR>", { buffer = args.buf })
     vim.cmd("startinsert")
   end,
 })
-
-function R()
-  U.feedkeys("q:", "n", false)
-end
 
 -- vim.api.nvim_create_autocmd("TextYankPost", {
 --   group = "user",
