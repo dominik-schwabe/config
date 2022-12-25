@@ -70,6 +70,9 @@ function History:_add(entry)
 end
 
 function History:add(entry, opts)
+  if self.regtype_normalization then
+    entry.regtype = self.regtype_normalization(entry.regtype)
+  end
   entry = Entry:new(entry)
   opts = opts or {}
   if not (self.filter and self.filter(entry)) then

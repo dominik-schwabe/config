@@ -58,6 +58,7 @@ local function setup_loader_raw(plugin_name)
 end
 
 require("packer").startup(function(use)
+  use({ "ibhagwan/fzf-lua", requires = { "nvim-tree/nvim-web-devicons" } })
   use({ "wbthomason/packer.nvim", config = loader })
   use({ "kylechui/nvim-surround", config = setup_loader_raw })
   use({ "nvim-lua/plenary.nvim" })

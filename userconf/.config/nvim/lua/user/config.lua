@@ -1,7 +1,7 @@
 local M = {}
 
 M.minimal = os.getenv("MINIMAL_CONFIG")
-M.log_level = vim.log.levels.INFO
+M.log_level = vim.log.levels.OFF
 M.lsp_signs = {
   Error = " ",
   Warning = " ",

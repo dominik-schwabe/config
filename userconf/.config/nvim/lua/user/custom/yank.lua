@@ -10,7 +10,7 @@ local function entry_length(entry)
 end
 
 local History = require("user.history")
-local history = History:new({
+local args = {
   name = "Yank",
   register = function()
     local clipboard_flags = vim.opt.clipboard:get()
@@ -26,9 +26,6 @@ local history = History:new({
     lines = U.fix_indent(lines)
     return lines
   end,
-  write_callback = function(register)
-    tmux.write_clipboard(vim.fn.getreg(register, 1, true), vim.fn.getregtype(register))
-  end,
   filter = function(entry)
     local length = entry_length(entry)
     if entry.regtype == "v" and length <= 3 then
@@ -39,7 +36,19 @@ local history = History:new({
     end
     return false
   end,
-})
+}
+if tmux.loaded then
+  function args.regtype_normalization(regtype)
+    if regtype ~= "V" and regtype ~= "v" then
+      return "v"
+    end
+    return regtype
+  end
+  function args.write_callback(register)
+    tmux.write_clipboard(vim.fn.getreg(register, 1, true), vim.fn.getregtype(register))
+  end
+end
+local history = History:new(args)
 
 vim.api.nvim_create_augroup("UserYankHistory", {})
 vim.api.nvim_create_autocmd("TextYankPost ", {
