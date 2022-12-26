@@ -12,6 +12,19 @@ if fn.empty(fn.glob(install_path)) > 0 then
   cmd("packadd packer.nvim")
 end
 
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "--single-branch",
+    "https://github.com/folke/lazy.nvim.git",
+    lazypath,
+  })
+end
+vim.opt.runtimepath:prepend(lazypath)
+
 local function loader(plugin_name)
   plugin_name = plugin_name:gsub("^n?vim%-", "")
   plugin_name = plugin_name:gsub("%.lua$", "")
@@ -117,7 +130,6 @@ require("packer").startup(function(use)
     use({ "rcarriga/nvim-dap-ui" })
     use({ "mfussenegger/nvim-dap-python" })
     use({ "theHamsta/nvim-dap-virtual-text" })
-    use({ "tpope/vim-fugitive", config = loader })
     use({ "simrat39/symbols-outline.nvim", config = loader })
     use({ "lervag/vimtex", config = loader })
     use({ "https://gitlab.com/yorickpeterse/nvim-pqf", config = setup_loader })

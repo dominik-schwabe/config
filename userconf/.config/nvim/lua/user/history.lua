@@ -63,10 +63,10 @@ end
 
 function History:_add(entry)
   self.entries[#self.entries + 1] = entry
-  self.pos = #self.entries
   if #self.entries > self.size then
     self.entries = F.slice(self.entries, #self.entries - self.size + 1)
   end
+  self.pos = #self.entries
 end
 
 function History:add(entry, opts)
@@ -218,7 +218,6 @@ function History:make_telescope_extension()
     end
     map("i", "<CR>", accept)
     map("n", "<CR>", accept)
-
     return true
   end
 

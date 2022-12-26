@@ -194,4 +194,20 @@ function M.remove_leading_space(str)
   return str:gsub("^[\t\n ]+", "")
 end
 
+function M.call_deferred(callback)
+  vim.loop.new_timer():start(0, 0, vim.schedule_wrap(callback))
+end
+
+function M.deferred_callback(callback)
+  return function()
+    M.call_deferred(callback)
+  end
+end
+
+function M.close_win(win)
+  if vim.api.nvim_win_is_valid(win) then
+    vim.api.nvim_win_close(win, true)
+  end
+end
+
 return M

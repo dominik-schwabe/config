@@ -5,7 +5,7 @@ local utils = require("user.utils")
 local config = require("user.config")
 
 local F = require("user.functional")
-local U = require("repl.utils")
+local U = require("user.utils")
 
 local function num_leading_spaces(str)
   local first_char = str:find("[^ ]")
