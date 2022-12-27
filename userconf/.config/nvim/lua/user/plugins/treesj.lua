@@ -35,5 +35,3 @@ treesj.setup({
   max_join_length = 100000,
   langs = langs,
 })
-
-vim.keymap.set({ "n", "x" }, "Y", treesj.toggle)

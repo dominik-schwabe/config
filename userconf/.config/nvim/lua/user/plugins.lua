@@ -1,16 +1,7 @@
-local fn = vim.fn
-local cmd = vim.cmd
+local F = require("user.functional")
+local U = require("user.utils")
 
 local config = require("user.config")
-
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-
-local packer_bootstrap
-if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap =
-    fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
-  cmd("packadd packer.nvim")
-end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -25,150 +16,365 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
-local function loader(plugin_name)
-  plugin_name = plugin_name:gsub("^n?vim%-", "")
-  plugin_name = plugin_name:gsub("%.lua$", "")
-  plugin_name = plugin_name:gsub("%.n?vim$", "")
-  plugin_name = plugin_name:lower()
-  local src = "user.plugins." .. plugin_name
-  local success, message = pcall(require, src)
-  if not success then
-    vim.notify(
-      "loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. message,
-      vim.log.levels.INFO
-    )
+local function l(plugin_name)
+  return function()
+    local src = "user.plugins." .. plugin_name
+    local success, message = pcall(require, src)
+    if not success then
+      vim.notify(
+        "loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. message,
+        vim.log.levels.INFO
+      )
+    end
   end
 end
 
-local function setup_loader(plugin_name)
-  plugin_name = plugin_name:gsub("^n?vim%-", "")
-  plugin_name = plugin_name:gsub("%.lua$", "")
-  plugin_name = plugin_name:gsub("%.n?vim$", "")
-  plugin_name = plugin_name:lower()
-  local src = plugin_name
-  local success, pkg = pcall(require, src)
-  if success then
-    pkg.setup()
-  else
-    vim.notify(
-      "setup_loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. pkg,
-      vim.log.levels.INFO
-    )
-  end
+local function req(plugin_name)
+  return setmetatable({}, {
+    __index = function(_, method_name)
+      return function(...)
+        local args = { ... }
+        local method = require(plugin_name)[method_name]
+        if args[1] then
+          return function()
+            method(unpack(args))
+          end
+        end
+        method()
+      end
+    end,
+  })
 end
 
-local function setup_loader_raw(plugin_name)
-  local src = plugin_name
-  local success, pkg = pcall(require, src)
-  if success then
-    pkg.setup()
-  else
-    vim.notify(
-      "setup_loader_raw for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "'" .. "\n" .. pkg,
-      vim.log.levels.ERROR
-    )
-  end
-end
-
-require("packer").startup(function(use)
-  use({ "ibhagwan/fzf-lua", requires = { "nvim-tree/nvim-web-devicons" } })
-  use({ "wbthomason/packer.nvim", config = loader })
-  use({ "kylechui/nvim-surround", config = setup_loader_raw })
-  use({ "nvim-lua/plenary.nvim" })
-  use({ "neovim/nvim-lspconfig", config = loader })
-  use({ "williamboman/mason.nvim", config = setup_loader })
-  use({ "williamboman/mason-lspconfig.nvim" })
-  use({ "jose-elias-alvarez/null-ls.nvim", config = loader })
-  use({ "nvim-telescope/telescope.nvim", config = loader })
-  use({ "hrsh7th/nvim-cmp", config = loader })
-  use({ "hrsh7th/cmp-nvim-lsp" })
-  use({ "hrsh7th/cmp-buffer" })
-  use({ "saadparwaiz1/cmp_luasnip" })
-  use({ "L3MON4D3/LuaSnip", config = loader })
-  use({ "rafamadriz/friendly-snippets" })
-  use({ "kyazdani42/nvim-tree.lua", config = loader })
-  use({ "kevinhwang91/nvim-bqf", config = loader })
-  use({ "numToStr/Comment.nvim", config = loader })
-  use({ "matbme/JABS.nvim", config = loader })
-  use({ "wellle/targets.vim" })
-  use({ "mg979/vim-visual-multi", config = loader })
-  use({ "mbbill/undotree" })
-  use({ "MunifTanjim/nui.nvim" })
-
+local function with_dependencies(plugin, optional_dependencies)
   if not config.minimal then
-    use({ "kyazdani42/nvim-web-devicons" })
-    use({ "johmsalas/text-case.nvim", config = loader })
-    use({ "stevearc/dressing.nvim", config = loader })
-    use({ "nvim-lualine/lualine.nvim", config = loader })
-    use({ "monaqa/dial.nvim", config = loader })
-    use({ "rhysd/clever-f.vim" })
-    use({ "windwp/nvim-autopairs", config = loader })
-    use({ "tpope/vim-sleuth" })
-    use({ "lewis6991/impatient.nvim" })
-    use({ "NvChad/nvim-colorizer.lua" })
-    use({ "hrsh7th/cmp-path" })
-    use({ "hrsh7th/cmp-nvim-lua" })
-    use({ "andersevenrud/cmp-tmux" })
-    use({ "RRethy/vim-illuminate", config = loader })
-    use({ "onsails/lspkind.nvim" })
-    use({ "WhoIsSethDaniel/mason-tool-installer.nvim" })
-    use({ "b0o/schemastore.nvim" })
-    use({ "simrat39/rust-tools.nvim" })
-    use({ "saecki/crates.nvim", event = { "BufRead Cargo.toml" }, config = setup_loader })
-    use({ "nvim-treesitter/nvim-treesitter", config = loader })
-    use({ "p00f/nvim-ts-rainbow" })
-    use({ "m-demare/hlargs.nvim", config = loader })
-    use({ "Wansmer/treesj", config = loader })
-    use({ "JoosepAlviste/nvim-ts-context-commentstring" })
-    use({ "nvim-treesitter/playground" })
-    use({ "nvim-treesitter/nvim-treesitter-textobjects" })
-    use({ "nvim-treesitter/nvim-treesitter-context" })
-    use({ "windwp/nvim-ts-autotag" })
-    use({ "David-Kunz/treesitter-unit" })
-    use({ "SmiteshP/nvim-navic" })
-    use({ "mfussenegger/nvim-dap", config = loader })
-    use({ "rcarriga/nvim-dap-ui" })
-    use({ "mfussenegger/nvim-dap-python" })
-    use({ "theHamsta/nvim-dap-virtual-text" })
-    use({ "simrat39/symbols-outline.nvim", config = loader })
-    use({ "lervag/vimtex", config = loader })
-    use({ "https://gitlab.com/yorickpeterse/nvim-pqf", config = setup_loader })
-    use({ "folke/todo-comments.nvim", config = loader })
-    use({ "AndrewRadev/sideways.vim", config = loader })
-    use({ "ziontee113/icon-picker.nvim", config = loader })
-    use({ "ggandor/leap.nvim", config = loader })
-    use({ "lark-parser/vim-lark-syntax" })
-    use({ "sheerun/vim-polyglot" })
-    use({
+    plugin.dependencies = plugin.dependencies or {}
+    plugin.dependencies = F.concat(plugin.dependencies, optional_dependencies)
+  end
+  return plugin
+end
+
+local function jabs_toggle()
+  if vim.bo.filetype == "JABSwindow" then
+    vim.cmd("close")
+  else
+    vim.cmd("JABSOpen")
+  end
+end
+
+local lspconfig = with_dependencies({
+  "neovim/nvim-lspconfig",
+  config = l("lspconfig"),
+  dependencies = {
+    { "williamboman/mason.nvim", config = true },
+    { "williamboman/mason-lspconfig.nvim" },
+  },
+}, {
+  { "WhoIsSethDaniel/mason-tool-installer.nvim" },
+  { "SmiteshP/nvim-navic" },
+  { "b0o/schemastore.nvim" },
+  {
+    "RRethy/vim-illuminate",
+    config = function()
+      require("illuminate").configure({
+        providers = { "lsp" },
+        filetypes_denylist = config.illuminate_blacklist,
+        modes_allowlist = { "n" },
+      })
+    end,
+  },
+  { "simrat39/rust-tools.nvim" },
+})
+
+local cmp = with_dependencies({
+  "hrsh7th/nvim-cmp",
+  config = l("cmp"),
+  event = "InsertEnter",
+  dependencies = {
+    { "onsails/lspkind.nvim" },
+    {
+      "L3MON4D3/LuaSnip",
+      config = l("luasnip"),
+      dependencies = {
+        { "rafamadriz/friendly-snippets" },
+      },
+    },
+    { "hrsh7th/cmp-nvim-lsp" },
+    { "hrsh7th/cmp-buffer" },
+    { "saadparwaiz1/cmp_luasnip" },
+  },
+}, {
+  { "hrsh7th/cmp-path" },
+  { "hrsh7th/cmp-nvim-lua" },
+  { "andersevenrud/cmp-tmux" },
+})
+
+local nvim_tree = with_dependencies({
+  "kyazdani42/nvim-tree.lua",
+  config = l("tree"),
+  keys = {
+    { "<F1>", U.esc_wrap(req("nvim-tree").toggle), mode = { "n", "x", "i", "t" } },
+  },
+}, { { "kyazdani42/nvim-web-devicons" } })
+
+local comment = with_dependencies(
+  { "numToStr/Comment.nvim", config = l("comment"), keys = { { "gc", mode = { "n", "x" } } } },
+  { { "JoosepAlviste/nvim-ts-context-commentstring" } }
+)
+
+local plugins = {
+  lspconfig,
+  nvim_tree,
+  cmp,
+  comment,
+  { "kylechui/nvim-surround", config = true, event = "InsertEnter" },
+  { "nvim-lua/plenary.nvim", lazy = true },
+  { "MunifTanjim/nui.nvim", lazy = true },
+  { "jose-elias-alvarez/null-ls.nvim", config = l("null-ls"), event = "InsertEnter" },
+  {
+    "nvim-telescope/telescope.nvim",
+    config = l("telescope"),
+    cmd = "Telescope",
+    keys = {
+      { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" } },
+      { "_", "<CMD>Telescope live_grep<CR>", mode = { "n", "x" } },
+      { "z=", "<CMD>Telescope spell_suggest<CR><ESC>" },
+      { "<space>/", "<CMD>Telescope current_buffer_fuzzy_find<CR>", mode = { "n", "x" } },
+      { "<space>h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" } },
+      { "<space>,,", "<CMD>Telescope resume<CR>", mode = { "n", "x" } },
+      { "<space>,k", "<CMD>Telescope keymaps<CR>", mode = { "n", "x" } },
+      { "<space>,j", "<CMD>Telescope jumplist<CR>", mode = { "n", "x" } },
+      { "<space>,y", "<CMD>Telescope yank_history<CR>", mode = { "n", "x" } },
+      { "<space>,q", "<CMD>Telescope macro_history<CR>", mode = { "n", "x" } },
+      { "<space>,d", "<CMD>Telescope diffsplit<CR>", mode = { "n", "x" } },
+      { "<space>,s", "<CMD>Telescope git_status<CR>", mode = { "n", "x" } },
+    },
+  },
+  {
+    "kevinhwang91/nvim-bqf",
+    config = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },
+    ft = "qf",
+  },
+  {
+    "matbme/JABS.nvim",
+    config = l("jabs"),
+    dependencies = { { "kyazdani42/nvim-web-devicons" } },
+    keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" } } },
+  },
+  { "wellle/targets.vim" },
+  {
+    "mg979/vim-visual-multi",
+    config = function()
+      vim.g.VM_maps = {
+        ["Select Cursor Down"] = "L",
+        ["Select Cursor Up"] = "K",
+      }
+    end,
+  }, -- TODO: lazy
+  { "mbbill/undotree", keys = {
+    { "<F3>", "<CMD>UndotreeToggle<CR>" },
+  } },
+}
+
+if not config.minimal then
+  plugins = F.concat(plugins, {
+    {
+      "johmsalas/text-case.nvim",
+      config = l("text-case"),
+      keys = { "<space>u", "<space>U", "<space>K", "<space>k", "<space>cs", "<space>ck", "<space>cm", "<space>cp" },
+    },
+    {
+      "stevearc/dressing.nvim",
+      config = {
+        input = {
+          insert_only = false,
+          win_options = {
+            winblend = 0,
+            winhighlight = "",
+          },
+          override = function(conf)
+            conf.col = -1
+            conf.row = 0
+            return conf
+          end,
+        },
+      },
+    },
+    {
+      "nvim-lualine/lualine.nvim",
+      config = l("lualine"),
+      dependencies = {
+        { "SmiteshP/nvim-navic" },
+        { "kyazdani42/nvim-web-devicons" },
+      },
+    },
+    {
+      "monaqa/dial.nvim",
+      config = l("dial"),
+      keys = {
+        { "<C-a>", "<Plug>(dial-increment)", mode = { "n", "x" } },
+        { "<C-x>", "<Plug>(dial-decrement)", mode = { "n", "x" } },
+        { "g<C-a>", "<Plug>(dial-increment-additional)", mode = "x" },
+        { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x" },
+      },
+    },
+    { "rhysd/clever-f.vim", keys = { "f", "F", "t", "T" } },
+    { "windwp/nvim-autopairs", config = true, event = "InsertEnter" },
+    { "NvChad/nvim-colorizer.lua", config = l("colorizer"), event = "VimEnter" },
+    { "saecki/crates.nvim", config = true, event = "BufRead Cargo.toml" },
+    {
+      "nvim-treesitter/nvim-treesitter",
+      config = l("treesitter"),
+      dependencies = {
+        { "p00f/nvim-ts-rainbow" },
+        {
+          "m-demare/hlargs.nvim",
+          config = {
+            color = "#00ffaf", -- "#5fafff" "#04c99b" "#02b4ef"
+            excluded_argnames = {
+              declarations = {},
+              usages = {
+                python = { "self", "cls" },
+                lua = { "self" },
+              },
+            },
+          },
+        },
+        { "nvim-treesitter/nvim-treesitter-textobjects" },
+        { "nvim-treesitter/nvim-treesitter-context" },
+        { "windwp/nvim-ts-autotag" },
+        { "David-Kunz/treesitter-unit" },
+      },
+    },
+    {
+      "Wansmer/treesj",
+      config = l("treesj"),
+      keys = { { "Y", req("treesj").toggle, mode = { "n", "x" } } },
+    },
+    { "nvim-treesitter/playground", cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" } },
+    {
+      "mfussenegger/nvim-dap",
+      config = l("dap"),
+      dependencies = {
+        { "rcarriga/nvim-dap-ui" },
+        { "theHamsta/nvim-dap-virtual-text" },
+        { "mfussenegger/nvim-dap-python" },
+      },
+      keys = {
+        { "<space>b", req("dap").toggle_breakpoint },
+        { "<space>B", F.f(U.input, "Breakpoint condition: ", req("dap").set_breakpoint) },
+        { "<F5>", req("dap").step_over },
+        { "<F6>", req("dap").step_into },
+        { "<F18>", req("dap").step_out },
+        { "<F8>", req("dap").continue },
+        { "<F20>", req("dap").terminate },
+      },
+    },
+    {
+      "simrat39/symbols-outline.nvim",
+      config = { width = 40 },
+      keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>" } },
+    },
+    { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
+    { url = "https://gitlab.com/yorickpeterse/nvim-pqf", config = true },
+    {
+      "folke/todo-comments.nvim",
+      config = {
+        search = {
+          command = "rg",
+          args = {
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--max-filesize=1M",
+            "--ignore-file",
+            ".gitignore",
+          },
+        },
+      },
+      lazy = false,
+      keys = { { "<space>at", "<CMD>TodoQuickFix<CR>" } },
+    },
+    {
+      "AndrewRadev/sideways.vim",
+      keys = {
+        { "R", "<CMD>SidewaysLeft<CR>" },
+        { "U", "<CMD>SidewaysRight<CR>" },
+      },
+    },
+    {
+      "ziontee113/icon-picker.nvim",
+      config = true,
+      keys = { { "<space>ai", "<CMD>PickIcons<CR>" } },
+    },
+    { "ggandor/leap.nvim", config = req("leap").set_default_keymaps, keys = { "s", "S" } },
+    { "tpope/vim-sleuth" },
+    { "lark-parser/vim-lark-syntax" },
+    { "sheerun/vim-polyglot" },
+    {
       "iamcco/markdown-preview.nvim",
-      run = "cd app && npm install",
-      config = loader,
-    })
-  end
+      build = "cd app && npm install",
+      lazy = false,
+      config = function()
+        vim.g.mkdp_auto_start = 0
+        vim.g.mkdp_auto_close = 0
+      end,
+      keys = { { "<space>am", "<CMD>MarkdownPreviewToggle<CR>" } },
+    },
+  })
+end
 
-  -- use({ "CRAG666/code_runner.nvim" })
-  -- use({ "mfussenegger/nvim-lint", config = loader })
-  -- use({ "Wansmer/sibling-swap.nvim", config = setup_loader })
-  -- use({ "pwntester/octo.nvim" }) -- github issues and pull request
-  -- use({ "NTBBloodbath/rest.nvim" })
-  -- use({
-  --   "AckslD/swenv.nvim",
-  --   config = function()
-  --     require("swenv").setup({
-  --       get_venvs = function(venvs_path)
-  --         return require("swenv.api").get_venvs(venvs_path)
-  --       end,
-  --       venvs_path = vim.fn.expand("~/.local/share/virtualenvs"),
-  --       post_set_venv = nil,
-  --     })
-  --   end,
-  -- })
-  -- use({ "David-Kunz/markid" })
-  -- use({ "tpope/vim-repeat" })
-  -- use({ "akinsho/toggleterm.nvim", config = loader })
-  -- use({ "kosayoda/nvim-lightbulb" })
+require("lazy").setup(plugins, {
+  defaults = {
+    lazy = false,
+    version = "*",
+  },
+  checker = {
+    enabled = false,
+  },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
+})
 
-  if packer_bootstrap then
-    require("packer").sync()
-  end
-end)
+-- local unused = {
+--   { "CRAG666/code_runner.nvim" },
+--   { "mfussenegger/nvim-lint", config = l("lint") },
+--   { "Wansmer/sibling-swap.nvim", config = true },
+--   { "pwntester/octo.nvim" },
+--   { "NTBBloodbath/rest.nvim" },
+--   {
+--     "AckslD/swenv.nvim",
+--     config = function()
+--       require("swenv").setup({
+--         get_venvs = function(venvs_path)
+--           return require("swenv.api").get_venvs(venvs_path)
+--         end,
+--         venvs_path = vim.fn.expand("~/.local/share/virtualenvs"),
+--         post_set_venv = nil,
+--       })
+--     end,
+--   },
+--   { "David-Kunz/markid" },
+--   { "tpope/vim-repeat" },
+--   { "akinsho/toggleterm.nvim", config = l("toggleterm") },
+--   { "kosayoda/nvim-lightbulb" },
+-- }
+
+vim.keymap.set("n", "<space>p", "<ESC>:Lazy sync<CR>")

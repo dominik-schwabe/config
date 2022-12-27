@@ -1,5 +1,4 @@
 local jabs = require("jabs")
-local utils = require("user.utils")
 
 jabs.setup({
   -- Options for the main window
@@ -50,14 +49,3 @@ jabs.setup({
   -- Whether to use nvim-web-devicons next to filenames
   use_devicons = true, -- true or false. Default true
 })
-
-local function jabs_toggle()
-  if vim.bo.filetype == "JABSwindow" then
-    vim.cmd("close")
-  else
-    vim.cmd("JABSOpen")
-  end
-end
-
-vim.keymap.set({ "n", "x", "i" }, "<F2>", jabs_toggle)
-vim.keymap.set("t", "<F2>", jabs_toggle)

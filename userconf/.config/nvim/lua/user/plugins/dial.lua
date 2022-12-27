@@ -37,8 +37,3 @@ require("dial.config").augends:register_group({
     augend.date.alias["%H:%M:%S"],
   },
 })
-
-vim.keymap.set({ "n", "v" }, "<C-a>", "<Plug>(dial-increment)")
-vim.keymap.set({ "n", "v" }, "<C-x>", "<Plug>(dial-decrement)")
-vim.keymap.set("v", "g<C-a>", "<Plug>(dial-increment-additional)")
-vim.keymap.set("v", "g<C-x>", "<Plug>(dial-decrement-additional)")

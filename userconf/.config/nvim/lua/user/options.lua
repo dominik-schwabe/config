@@ -40,8 +40,6 @@ opt.ttyfast = true
 opt.termguicolors = true
 opt.timeout = false
 
-g.polyglot_disabled = { "autoindent", "sensible" }
-
 g.clever_f_across_no_line = 1
 g.clever_f_smart_case = 1
 g.clever_f_mark_direct = 1

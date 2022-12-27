@@ -1,16 +1,18 @@
-pcall(require, "impatient")
+vim.g.polyglot_disabled = { "autoindent", "sensible" }
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-vim.api.nvim_create_augroup("user", {})
+require("user.options")
+require("user.plugins")
+require("user.custom")
+require("user.mappings")
 
 vim.cmd("colorscheme monokai")
 
-require("user.options")
-require("user.custom")
-require("user.plugins")
-require("user.mappings")
-
 local F = require("user.functional")
 local U = require("user.utils")
+
+vim.api.nvim_create_augroup("user", {})
 
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   group = "user",
@@ -43,8 +45,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.opt.formatoptions:remove({ "c", "r", "o" })
   end,
 })
-
-F.load("user.plugins.colorizer")
 
 require("repl").setup({
   preferred = {

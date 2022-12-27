@@ -210,4 +210,12 @@ function M.close_win(win)
   end
 end
 
+function M.input(prompt, callback)
+  vim.ui.input(prompt, function(arg)
+    if arg ~= nil then
+      callback(arg)
+    end
+  end)
+end
+
 return M

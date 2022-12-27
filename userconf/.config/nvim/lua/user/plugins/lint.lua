@@ -20,4 +20,4 @@ end
 
 vim.api.nvim_create_user_command("Lint", lint_buffer, {})
 
-vim.keymap.set("n", "<space>ql", lint_buffer)
+vim.keymap.set("n", "<space>al", lint_buffer)
