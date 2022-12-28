@@ -89,19 +89,11 @@ local lspconfig = with_dependencies({
 local cmp = with_dependencies({
   "hrsh7th/nvim-cmp",
   config = l("cmp"),
-  event = "InsertEnter",
   dependencies = {
+    { "saadparwaiz1/cmp_luasnip" },
     { "onsails/lspkind.nvim" },
-    {
-      "L3MON4D3/LuaSnip",
-      config = l("luasnip"),
-      dependencies = {
-        { "rafamadriz/friendly-snippets" },
-      },
-    },
     { "hrsh7th/cmp-nvim-lsp" },
     { "hrsh7th/cmp-buffer" },
-    { "saadparwaiz1/cmp_luasnip" },
   },
 }, {
   { "hrsh7th/cmp-path" },
@@ -127,6 +119,9 @@ local plugins = {
   nvim_tree,
   cmp,
   comment,
+  { "L3MON4D3/LuaSnip", config = l("luasnip"), dependencies = {
+    { "rafamadriz/friendly-snippets" },
+  } },
   { "kylechui/nvim-surround", config = true, event = "InsertEnter" },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
@@ -386,4 +381,4 @@ require("lazy").setup(plugins, {
 --   { "kosayoda/nvim-lightbulb" },
 -- }
 
-vim.keymap.set("n", "<space>p", "<ESC>:Lazy sync<CR>", { desc = "install, clean, and update plugins" })
+vim.keymap.set("n", "<space>ps", "<ESC>:Lazy sync<CR>", { desc = "install, clean, and update plugins" })

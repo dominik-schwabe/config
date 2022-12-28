@@ -36,21 +36,14 @@ local cmp_options = {
     end,
   }),
   sources = cmp.config.sources({
+    { name = "luasnip" },
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
-    -- { name = "luasnip" },
     { name = "yank_history" },
     { name = "path" },
     { name = "crates" },
     { name = "tmux" },
-    {
-      name = "buffer",
-      -- option = {
-      --   get_bufnrs = function()
-      --     return vim.api.nvim_list_bufs()
-      --   end,
-      -- },
-    },
+    { name = "buffer" },
   }),
 }
 
