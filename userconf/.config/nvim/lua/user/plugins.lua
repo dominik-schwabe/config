@@ -155,7 +155,6 @@ local plugins = {
       { "<space>,s", "<CMD>Telescope git_status<CR>", mode = { "n", "x" }, desc = "search changed files" },
     },
   },
-  { "tpope/vim-fugitive" },
   {
     "kevinhwang91/nvim-bqf",
     config = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },

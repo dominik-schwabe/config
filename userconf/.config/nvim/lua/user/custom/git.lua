@@ -52,7 +52,8 @@ local function git(args)
 end
 
 local function commits(paths)
-  local entries = git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h (%ar %an) %s", paths.file_path })
+  local entries =
+    git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h (%ar %an) %s", paths.file_path })
   return F.map(entries, function(text)
     local commit, message = text:gmatch("(%w+) (.*)")()
     return {
@@ -102,9 +103,8 @@ local function _diffsplit(original_bufnr, commit)
     end
   end
   vim.api.nvim_win_set_cursor(original_win, { original_line, 0 })
-  U.call_deferred(function()
-    vim.api.nvim_set_current_win(diff_win)
-  end)
+  vim.cmd.normal("h") -- this is for syncing the cursors
+  vim.api.nvim_set_current_win(diff_win)
   vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
     buffer = original_bufnr,
     callback = reset_diff,
@@ -127,7 +127,7 @@ local function diffsplit(commit)
 end
 
 vim.keymap.set("n", "<space>gg", function()
-  vim.ui.input({ default = "HEAD", completion = { "test" } }, function(commit)
+  vim.ui.input({ default = "HEAD" }, function(commit)
     if commit ~= nil then
       diffsplit(commit)
     end
