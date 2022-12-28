@@ -81,7 +81,7 @@ F.load("nvim-treesitter.configs", function(tc)
         enable = true,
         set_jumps = true,
         goto_next_start = {
-          ["}"] = "@function.outer",
+          -- ["}"] = "@function.outer",
           ['"'] = "@class.outer",
         },
         -- goto_next_end = {
@@ -89,7 +89,7 @@ F.load("nvim-treesitter.configs", function(tc)
         --   ["]["] = "@class.outer",
         -- },
         goto_previous_start = {
-          ["{"] = "@function.outer",
+          -- ["{"] = "@function.outer",
           ["!"] = "@class.outer",
         },
         -- goto_previous_end = {
@@ -98,7 +98,7 @@ F.load("nvim-treesitter.configs", function(tc)
         -- },
       },
       swap = {
-        enable = false,
+        enable = true,
         swap_next = {
           ["U"] = "@parameter.inner",
         },
@@ -123,8 +123,8 @@ end)
 F.load("treesitter-unit", function(treesitter_unit)
   vim.keymap.set({ "x", "o" }, "iu", function()
     treesitter_unit.select(true)
-  end, { desc = "increment selection of unit" })
+  end, { desc = "inside unit" })
   vim.keymap.set({ "x", "o" }, "au", function()
     treesitter_unit.select()
-  end, { desc = "decrement selection of unit" })
+  end, { desc = "all unit" })
 end)

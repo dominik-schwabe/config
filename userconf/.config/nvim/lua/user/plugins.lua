@@ -302,13 +302,6 @@ if not config.minimal then
       keys = { { "<space>at", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
     },
     {
-      "AndrewRadev/sideways.vim",
-      keys = {
-        { "R", "<CMD>SidewaysLeft<CR>", desc = "swap argument with left argument" },
-        { "U", "<CMD>SidewaysRight<CR>", desc = "swap argument with right argument" },
-      },
-    },
-    {
       "ziontee113/icon-picker.nvim",
       config = true,
       keys = { { "<space>ai", "<CMD>PickIcons<CR>", desc = "open icon picker" } },
