@@ -1,6 +1,6 @@
 local cmd = vim.cmd
 
-local function latex_substitude()
+local function latex_substitute()
   cmd([[%s/\v\$.{-}\$/Udo/ge]])
   cmd([[%s/\v\\ref\{.{-}\}/eins/ge]])
   cmd([[%s/\v\\cite\{.{-}\}//ge]])
@@ -13,4 +13,4 @@ local function latex_substitude()
   cmd([[%s/\v +/ /ge]])
 end
 
-vim.keymap.set("", "<space>sl", latex_substitude)
+vim.keymap.set("", "<space>sl", latex_substitute, { desc = "latex substitute" })

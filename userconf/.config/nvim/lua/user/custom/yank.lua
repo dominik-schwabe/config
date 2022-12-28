@@ -64,23 +64,16 @@ vim.api.nvim_create_autocmd("TextYankPost ", {
 
 vim.keymap.set("n", "ä", function()
   history:cycle(-1)
-end)
+end, { desc = "select previous yank from history" })
 vim.keymap.set("n", "Ä", function()
   history:cycle(1)
-end)
-
-vim.keymap.set("n", "ä", function()
-  history:cycle(-1)
-end)
-vim.keymap.set("n", "Ä", function()
-  history:cycle(1)
-end)
+end, { desc = "select next yank from history" })
 
 local function bind_paste_func(key)
   vim.keymap.set("n", key, function()
     history:add_register()
     U.feedkeys(key, "n", false)
-  end)
+  end, { desc = "paste selection (" .. key .. ")" })
 end
 
 bind_paste_func("p")

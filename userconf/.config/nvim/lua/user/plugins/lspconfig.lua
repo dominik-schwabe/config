@@ -6,7 +6,7 @@ local diagnostic = vim.diagnostic
 local def_opt = { silent = true }
 
 local F = require("user.functional")
-local utils = require("user.utils")
+local U = require("user.utils")
 
 local navic = F.load("nvim-navic")
 
@@ -16,27 +16,27 @@ local on_attach = function(client, bufnr)
   end
 
   local map_opt = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set("n", "gD", lsp_buf.declaration, map_opt)
-  vim.keymap.set("n", "gd", lsp_buf.definition, map_opt)
-  vim.keymap.set("n", "gt", lsp_buf.type_definition, map_opt)
-  vim.keymap.set("n", "gr", lsp_buf.references, map_opt)
-  vim.keymap.set("n", "gi", lsp_buf.implementation, map_opt)
-  vim.keymap.set("n", "gs", lsp_buf.signature_help, map_opt)
-  vim.keymap.set("n", "gh", lsp_buf.hover, map_opt)
-  vim.keymap.set("n", "gm", diagnostic.open_float, map_opt)
-  vim.keymap.set("n", "gn", diagnostic.goto_next, map_opt)
-  vim.keymap.set("n", "gp", diagnostic.goto_prev, map_opt)
-  vim.keymap.set("n", "gll", lsp.codelens.refresh, map_opt)
-  vim.keymap.set("n", "glr", lsp.codelens.run, map_opt)
-  vim.keymap.set("n", "gli", lsp_buf.incoming_calls, map_opt)
-  vim.keymap.set("n", "glo", lsp_buf.outgoing_calls, map_opt)
-  vim.keymap.set("n", "<space>awa", lsp_buf.add_workspace_folder, map_opt)
-  vim.keymap.set("n", "<space>awr", lsp_buf.remove_workspace_folder, map_opt)
+  vim.keymap.set("n", "gD", lsp_buf.declaration, U.desc(map_opt, "go to declaration"))
+  vim.keymap.set("n", "gd", lsp_buf.definition, U.desc(map_opt, "go to definition"))
+  vim.keymap.set("n", "gt", lsp_buf.type_definition, U.desc(map_opt, "go to type definition"))
+  vim.keymap.set("n", "gr", lsp_buf.references, U.desc(map_opt, "go to reference"))
+  vim.keymap.set("n", "gi", lsp_buf.implementation, U.desc(map_opt, "go to implementation"))
+  vim.keymap.set("n", "gs", lsp_buf.signature_help, U.desc(map_opt, "show signature help"))
+  vim.keymap.set("n", "gh", lsp_buf.hover, U.desc(map_opt, "show hover info"))
+  vim.keymap.set("n", "gm", diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
+  vim.keymap.set("n", "gn", diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))
+  vim.keymap.set("n", "gp", diagnostic.goto_prev, U.desc(map_opt, "go to previous diagnostic"))
+  vim.keymap.set("n", "gll", lsp.codelens.refresh, U.desc(map_opt, "refresh codelens"))
+  vim.keymap.set("n", "glr", lsp.codelens.run, U.desc(map_opt, "run codelens"))
+  vim.keymap.set("n", "gli", lsp_buf.incoming_calls, U.desc(map_opt, "show incoming calls"))
+  vim.keymap.set("n", "glo", lsp_buf.outgoing_calls, U.desc(map_opt, "show outgoing calls"))
+  vim.keymap.set("n", "<space>awa", lsp_buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
+  vim.keymap.set("n", "<space>awr", lsp_buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
   vim.keymap.set("n", "<space>awl", function()
     D(lsp_buf.list_workspace_folders())
-  end, map_opt)
-  vim.keymap.set("n", "<space>rn", lsp_buf.rename, map_opt)
-  vim.keymap.set("n", "<space>ca", lsp_buf.code_action, map_opt)
+  end, U.desc(map_opt, "list loaded workspaces"))
+  vim.keymap.set("n", "<space>rn", lsp_buf.rename, U.desc(map_opt, "rename variable"))
+  vim.keymap.set("n", "<space>ca", lsp_buf.code_action, U.desc(map_opt, "select code action"))
 end
 
 local config = require("user.config")
@@ -72,7 +72,7 @@ F.load("mason-lspconfig", function(mason_lspconfig)
     if server_name == "jsonls" then
       local schemastore = F.load("schemastore")
       local schemas = schemastore and schemastore.json.schemas()
-      opts = utils.tbl_merge(opts, {
+      opts = U.tbl_merge(opts, {
         settings = { json = { schemas = { schemas } } },
       })
     end
@@ -116,10 +116,10 @@ F.load("nvim-lightbulb", function(lightbulb)
   })
 end)
 
-vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>")
-vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>")
+vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>", { desc = "show loaded lsp servers" })
+vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", { desc = "restart lsp server" })
 
-vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>")
+vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
 
 -- show settings of lspserver
 local function lsp_settings()
@@ -150,9 +150,9 @@ vim.keymap.set("n", "<space>f", function()
       end)
     end,
   })
-end, def_opt)
+end, U.desc(def_opt, "format buffer"))
 
 vim.api.nvim_create_user_command("LspRoot", lsp_root, {})
 
-vim.keymap.set("n", "<space>lds", lsp_settings)
-vim.keymap.set("n", "<space>ldr", lsp_root)
+vim.keymap.set("n", "<space>lds", lsp_settings, { desc = "show lsp settings" })
+vim.keymap.set("n", "<space>ldr", lsp_root, { desc = "show lsp roots" })

@@ -19,7 +19,7 @@ vim.opt.runtimepath:prepend(lazypath)
 local function l(plugin_name)
   return function()
     local src = "user.plugins." .. plugin_name
-    local success, message = pcall(require, src)
+    local success, message = true, require(src)
     if not success then
       vim.notify(
         "loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. message,
@@ -136,20 +136,26 @@ local plugins = {
     config = l("telescope"),
     cmd = "Telescope",
     keys = {
-      { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" } },
-      { "_", "<CMD>Telescope live_grep<CR>", mode = { "n", "x" } },
-      { "z=", "<CMD>Telescope spell_suggest<CR><ESC>" },
-      { "<space>/", "<CMD>Telescope current_buffer_fuzzy_find<CR>", mode = { "n", "x" } },
-      { "<space>h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" } },
-      { "<space>,,", "<CMD>Telescope resume<CR>", mode = { "n", "x" } },
-      { "<space>,k", "<CMD>Telescope keymaps<CR>", mode = { "n", "x" } },
-      { "<space>,j", "<CMD>Telescope jumplist<CR>", mode = { "n", "x" } },
-      { "<space>,y", "<CMD>Telescope yank_history<CR>", mode = { "n", "x" } },
-      { "<space>,q", "<CMD>Telescope macro_history<CR>", mode = { "n", "x" } },
-      { "<space>,d", "<CMD>Telescope diffsplit<CR>", mode = { "n", "x" } },
-      { "<space>,s", "<CMD>Telescope git_status<CR>", mode = { "n", "x" } },
+      { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" }, desc = "find files" },
+      { "_", "<CMD>Telescope live_grep<CR>", mode = { "n", "x" }, desc = "live grep" },
+      { "z=", "<CMD>Telescope spell_suggest<CR><ESC>", desc = "spell suggest" },
+      {
+        "<space>/",
+        "<CMD>Telescope current_buffer_fuzzy_find<CR>",
+        mode = { "n", "x" },
+        desc = "fuzzy find in current buffer",
+      },
+      { "<space>h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" }, desc = "search help tags" },
+      { "<space>,,", "<CMD>Telescope resume<CR>", mode = { "n", "x" }, desc = "resume last search" },
+      { "<space>,k", "<CMD>Telescope keymaps<CR>", mode = { "n", "x" }, desc = "search keymaps" },
+      { "<space>,j", "<CMD>Telescope jumplist<CR>", mode = { "n", "x" }, desc = "search jumplist" },
+      { "<space>,y", "<CMD>Telescope yank_history<CR>", mode = { "n", "x" }, desc = "search yank history" },
+      { "<space>,q", "<CMD>Telescope macro_history<CR>", mode = { "n", "x" }, desc = "search macro history" },
+      { "<space>,d", "<CMD>Telescope diffsplit<CR>", mode = { "n", "x" }, desc = "search diffsplit commits" },
+      { "<space>,s", "<CMD>Telescope git_status<CR>", mode = { "n", "x" }, desc = "search changed files" },
     },
   },
+  { "tpope/vim-fugitive" },
   {
     "kevinhwang91/nvim-bqf",
     config = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },
@@ -159,7 +165,7 @@ local plugins = {
     "matbme/JABS.nvim",
     config = l("jabs"),
     dependencies = { { "kyazdani42/nvim-web-devicons" } },
-    keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" } } },
+    keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
   },
   { "wellle/targets.vim" },
   {
@@ -172,7 +178,7 @@ local plugins = {
     end,
   }, -- TODO: lazy
   { "mbbill/undotree", keys = {
-    { "<F3>", "<CMD>UndotreeToggle<CR>" },
+    { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
   } },
 }
 
@@ -212,10 +218,10 @@ if not config.minimal then
       "monaqa/dial.nvim",
       config = l("dial"),
       keys = {
-        { "<C-a>", "<Plug>(dial-increment)", mode = { "n", "x" } },
-        { "<C-x>", "<Plug>(dial-decrement)", mode = { "n", "x" } },
-        { "g<C-a>", "<Plug>(dial-increment-additional)", mode = "x" },
-        { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x" },
+        { "<C-a>", "<Plug>(dial-increment)", mode = { "n", "x" }, desc = "increment next" },
+        { "<C-x>", "<Plug>(dial-decrement)", mode = { "n", "x" }, desc = "decrement next" },
+        { "g<C-a>", "<Plug>(dial-increment-additional)", mode = "x", desc = "increment additional" },
+        { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x", desc = "decrement additional" },
       },
     },
     { "rhysd/clever-f.vim", keys = { "f", "F", "t", "T" } },
@@ -249,7 +255,7 @@ if not config.minimal then
     {
       "Wansmer/treesj",
       config = l("treesj"),
-      keys = { { "Y", req("treesj").toggle, mode = { "n", "x" } } },
+      keys = { { "Y", req("treesj").toggle, mode = { "n", "x" }, desc = "toggle split join" } },
     },
     { "nvim-treesitter/playground", cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" } },
     {
@@ -261,19 +267,23 @@ if not config.minimal then
         { "mfussenegger/nvim-dap-python" },
       },
       keys = {
-        { "<space>b", req("dap").toggle_breakpoint },
-        { "<space>B", F.f(U.input, "Breakpoint condition: ", req("dap").set_breakpoint) },
-        { "<F5>", req("dap").step_over },
-        { "<F6>", req("dap").step_into },
-        { "<F18>", req("dap").step_out },
-        { "<F8>", req("dap").continue },
-        { "<F20>", req("dap").terminate },
+        { "<space>b", req("dap").toggle_breakpoint, desc = "toggle breakpoint" },
+        {
+          "<space>B",
+          F.f(U.input, "Breakpoint condition: ", req("dap").set_breakpoint),
+          desc = "set breakpoint condition",
+        },
+        { "<F5>", req("dap").step_over, desc = "step over" },
+        { "<F6>", req("dap").step_into, desc = "step into" },
+        { "<F18>", req("dap").step_out, desc = "step out" },
+        { "<F8>", req("dap").continue, desc = "continue debugging" },
+        { "<F20>", req("dap").terminate, desc = "terminate debugger" },
       },
     },
     {
       "simrat39/symbols-outline.nvim",
       config = { width = 40 },
-      keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>" } },
+      keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
     { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
     { url = "https://gitlab.com/yorickpeterse/nvim-pqf", config = true },
@@ -295,19 +305,19 @@ if not config.minimal then
         },
       },
       lazy = false,
-      keys = { { "<space>at", "<CMD>TodoQuickFix<CR>" } },
+      keys = { { "<space>at", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
     },
     {
       "AndrewRadev/sideways.vim",
       keys = {
-        { "R", "<CMD>SidewaysLeft<CR>" },
-        { "U", "<CMD>SidewaysRight<CR>" },
+        { "R", "<CMD>SidewaysLeft<CR>", desc = "swap argument with left argument" },
+        { "U", "<CMD>SidewaysRight<CR>", desc = "swap argument with right argument" },
       },
     },
     {
       "ziontee113/icon-picker.nvim",
       config = true,
-      keys = { { "<space>ai", "<CMD>PickIcons<CR>" } },
+      keys = { { "<space>ai", "<CMD>PickIcons<CR>", desc = "open icon picker" } },
     },
     { "ggandor/leap.nvim", config = req("leap").set_default_keymaps, keys = { "s", "S" } },
     { "tpope/vim-sleuth" },
@@ -321,7 +331,7 @@ if not config.minimal then
         vim.g.mkdp_auto_start = 0
         vim.g.mkdp_auto_close = 0
       end,
-      keys = { { "<space>am", "<CMD>MarkdownPreviewToggle<CR>" } },
+      keys = { { "<space>am", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
     },
   })
 end
@@ -377,4 +387,4 @@ require("lazy").setup(plugins, {
 --   { "kosayoda/nvim-lightbulb" },
 -- }
 
-vim.keymap.set("n", "<space>p", "<ESC>:Lazy sync<CR>")
+vim.keymap.set("n", "<space>p", "<ESC>:Lazy sync<CR>", { desc = "install, clean, and update plugins" })

@@ -30,6 +30,7 @@ function M.paragraph()
     if line == nil then
       break
     end
+    D({last_was_empty, pp.num_leading_spaces(line), indentation_of_first_line, line})
     if pp.is_whitespace(line) then
       last_was_empty = true
     else

@@ -39,11 +39,11 @@ local function quickfix_toggle()
 end
 
 -- vim.keymap.set({ "n", "x" }, "Ä", loclist_toggle)
-vim.keymap.set({ "n", "x" }, "Ö", quickfix_toggle)
+vim.keymap.set({ "n", "x" }, "Ö", quickfix_toggle, { desc = "toggle quickfix" })
 
 local function quickfix_mapping(opt)
   api.nvim_buf_set_option(opt.buf, "buflisted", false)
-  vim.keymap.set("n", "q", "<CMD>q<CR>", { buffer = opt.buf })
+  vim.keymap.set("n", "q", "<CMD>q<CR>", { buffer = opt.buf, desc = "close quickfix" })
 end
 
 vim.api.nvim_create_augroup("UserQfLl", {})

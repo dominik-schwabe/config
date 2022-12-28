@@ -133,10 +133,10 @@ end
 
 vim.keymap.set({ "n" }, "dm", function()
   delete_mark(api.nvim_get_current_buf())
-end)
-vim.keymap.set({ "n", "x" }, "m", toggle_mark)
-vim.keymap.set({ "n", "x" }, "M", mark_qf)
-vim.keymap.set({ "n" }, "dam", clear_all_marks)
+end, { desc = "delete all marks in buffer" })
+vim.keymap.set({ "n", "x" }, "m", toggle_mark, { desc = "toggle a mark on the current line" })
+vim.keymap.set({ "n", "x" }, "M", mark_qf, { desc = "open quickfix with all set marks" })
+vim.keymap.set({ "n" }, "dam", clear_all_marks, { desc = "delete all marks in all buffers" })
 
 api.nvim_create_augroup("UserMarks", {})
 api.nvim_create_autocmd("BufUnload", {

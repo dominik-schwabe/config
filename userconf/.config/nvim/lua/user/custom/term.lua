@@ -11,7 +11,7 @@ local function leave_term()
   api.nvim_feedkeys(api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "t", true)
 end
 
-vim.keymap.set("t", "<C-e>", leave_term)
+vim.keymap.set("t", "<C-e>", leave_term, { desc = "leave terminal mode" })
 
 local function delete_term(args)
   if api.nvim_buf_is_loaded(args.buf) then

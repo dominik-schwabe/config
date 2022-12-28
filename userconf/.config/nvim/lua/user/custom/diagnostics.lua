@@ -15,9 +15,9 @@ local function show_diagnostics(only_buffer)
   vim.api.nvim_command("botright copen")
 end
 
-vim.keymap.set("n", "<space>d", function ()
+vim.keymap.set("n", "<space>d", function()
   show_diagnostics(true)
-end)
-vim.keymap.set("n", "<space>w", function ()
+end, { desc = "show buffer diagnostics in quickfix" })
+vim.keymap.set("n", "<space>w", function()
   show_diagnostics(false)
-end)
+end, { desc = "show workspace diagnostics in quickfix" })

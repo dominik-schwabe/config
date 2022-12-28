@@ -20,7 +20,7 @@ local function set_jumplist()
   vim.api.nvim_command("botright copen")
 end
 
-vim.keymap.set({ "n", "x" }, "<space>j", set_jumplist)
+vim.keymap.set({ "n", "x" }, "<space>j", set_jumplist, { desc = "open the quickfix with the jumplist" })
 
 local backward_key = vim.api.nvim_replace_termcodes("<c-o>", true, false, true)
 local forward_key = vim.api.nvim_replace_termcodes("<c-i>", true, false, true)
@@ -58,7 +58,7 @@ local function jump(direction, opt)
   end
 end
 
-vim.keymap.set({ "n" }, "<C-i>", F.f(jump, 1))
-vim.keymap.set({ "n" }, "<C-o>", F.f(jump, -1))
-vim.keymap.set({ "n" }, "<space>i", F.f(jump, 1, { once_per_buffer = true }))
-vim.keymap.set({ "n" }, "<space>o", F.f(jump, -1, { once_per_buffer = true }))
+vim.keymap.set({ "n" }, "<C-i>", F.f(jump, 1), { desc = "jump to next jumpmark" })
+vim.keymap.set({ "n" }, "<C-o>", F.f(jump, -1), { desc = "jump to previous jumpmark" })
+vim.keymap.set({ "n" }, "<space>i", F.f(jump, 1, { once_per_buffer = true, desc = "jump to next file" }))
+vim.keymap.set({ "n" }, "<space>o", F.f(jump, -1, { once_per_buffer = true, desc = "jump to previous file" }))

@@ -1,7 +1,4 @@
 local fn = vim.fn
-local v = vim.v
-local normal = vim.cmd.normal
-local keymap = vim.keymap.set
 
 local F = require("user.functional")
 local utils = require("user.utils")
@@ -26,15 +23,15 @@ local function set_macro(str, s)
 end
 
 local function start_macro()
-  normal({ "q" .. macro_regs[slot], bang = true })
+  vim.cmd.normal({ "q" .. macro_regs[slot], bang = true })
 end
 
 local function stop_macro()
-  normal({ "q", bang = true })
+  vim.cmd.normal({ "q", bang = true })
 end
 
 local function play_macro()
-  normal({ v.count1 .. "@" .. macro_regs[slot], bang = true })
+  vim.cmd.normal({ vim.v.count1 .. "@" .. macro_regs[slot], bang = true })
 end
 
 local function get_short_string()
@@ -126,19 +123,19 @@ vim.api.nvim_create_autocmd("RecordingLeave", {
 
 vim.keymap.set("n", "ü", function()
   history:cycle(-1)
-end)
+end, { desc = "select previous macro from history" })
 vim.keymap.set("n", "Ü", function()
   history:cycle(1)
-end)
+end, { desc = "select next macro from history" })
 
 F.foreach(macro_regs, function(reg)
   fn.setreg(reg, "")
 end)
 
-keymap("n", toggle_key, toggle_recording)
-keymap("n", "<C-s>", play_recording)
-keymap("n", "<space>re", edit_macro)
-keymap("n", "<space>rf", next_macro)
-keymap("n", "<space>rb", prev_macro)
+vim.keymap.set("n", toggle_key, toggle_recording, { desc = "toggle macro recording" })
+vim.keymap.set("n", "<C-s>", play_recording, { desc = "replay last macro" })
+vim.keymap.set("n", "<space>re", edit_macro, { desc = "edit last macro" })
+vim.keymap.set("n", "<space>rf", next_macro, { desc = "select next macro" })
+vim.keymap.set("n", "<space>rb", prev_macro, { desc = "select previous macro" })
 
 return { history = history }

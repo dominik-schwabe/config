@@ -73,8 +73,8 @@ F.load("luasnip", function(luasnip)
     end
   end
 
-  vim.keymap.set({ "v", "i" }, "<C-e>", jump_next)
-  vim.keymap.set({ "v", "i" }, "<C-w>", jump_prev)
+  vim.keymap.set({ "v", "i" }, "<C-e>", jump_next, { desc = "jump to next position in snippet" })
+  vim.keymap.set({ "v", "i" }, "<C-w>", jump_prev, { desc = "jump to previous position in snippet" })
 end)
 
 F.load("lspkind", function(lspkind)

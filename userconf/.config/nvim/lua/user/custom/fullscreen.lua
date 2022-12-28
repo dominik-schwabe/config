@@ -124,4 +124,4 @@ api.nvim_create_autocmd("VimResized", {
   end,
 })
 
-vim.keymap.set({ "n", "x", "i", "t" }, "<F12>", fullscreen_toggle)
+vim.keymap.set({ "n", "x", "i", "t" }, "<F12>", fullscreen_toggle, { desc = "toggle fullscreen" })

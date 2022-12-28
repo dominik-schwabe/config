@@ -47,13 +47,12 @@ local function git(args)
     args = args,
     enable_recordings = true,
   })
-  D(job.code)
   local results = job:sync()
   return job.code == 0 and results or nil
 end
 
 local function commits(paths)
-  local entries = git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h %s", paths.file_path })
+  local entries = git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h (%ar %an) %s", paths.file_path })
   return F.map(entries, function(text)
     local commit, message = text:gmatch("(%w+) (.*)")()
     return {
@@ -79,14 +78,16 @@ local function _diffsplit(original_bufnr, commit)
   local original_win = vim.api.nvim_get_current_win()
   local diff_bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(diff_bufnr, 0, 1, true, lines)
+  local original_line, _ = unpack(vim.api.nvim_win_get_cursor(original_win))
   vim.cmd("vsplit")
   local diff_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_set_current_win(original_win)
   vim.bo[diff_bufnr].filetype = vim.bo[original_bufnr].filetype
   vim.bo[diff_bufnr].modifiable = false
   vim.bo[diff_bufnr].swapfile = false
   vim.bo[diff_bufnr].bufhidden = "wipe"
   vim.api.nvim_win_set_buf(diff_win, diff_bufnr)
-  vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = diff_bufnr })
+  vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = diff_bufnr, desc = "close the diffsplit buffer" })
   diff_on(original_win)
   diff_on(diff_win)
   vim.api.nvim_win_set_option(original_win, "foldenable", true)
@@ -100,6 +101,10 @@ local function _diffsplit(original_bufnr, commit)
       reseted = true
     end
   end
+  vim.api.nvim_win_set_cursor(original_win, { original_line, 0 })
+  U.call_deferred(function()
+    vim.api.nvim_set_current_win(diff_win)
+  end)
   vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
     buffer = original_bufnr,
     callback = reset_diff,
@@ -127,11 +132,11 @@ vim.keymap.set("n", "<space>gg", function()
       diffsplit(commit)
     end
   end)
-end)
+end, { desc = "select commit for diffsplit" })
 
 vim.keymap.set("n", "<space>gd", function()
   diffsplit("HEAD")
-end)
+end, { desc = "open diffsplit on HEAD commit" })
 
 function M.make_telescope_extension()
   local pickers = require("telescope.pickers")

@@ -16,5 +16,5 @@ local function chmod_current(x)
   end
 end
 
-vim.keymap.set({ "n", "x" }, "<leader>x", F.f(chmod_current, true))
-vim.keymap.set({ "n", "x" }, "<leader>X", F.f(chmod_current, false))
+vim.keymap.set({ "n", "x" }, "<leader>x", F.f(chmod_current, true), { desc = "make current executable" })
+vim.keymap.set({ "n", "x" }, "<leader>X", F.f(chmod_current, false), { desc = "remove execution rights" })

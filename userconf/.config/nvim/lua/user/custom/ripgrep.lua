@@ -94,10 +94,10 @@ local function _rg_visual(here)
   rg(table.concat(selection, ""), { raw = true, here = here })
 end
 
-vim.keymap.set("n", "<space>-", F.f(_rg_word, false))
-vim.keymap.set("x", "<space>-", F.f(_rg_visual, false))
-vim.keymap.set("n", "<space>_", F.f(_rg_word, true))
-vim.keymap.set("x", "<space>_", F.f(_rg_visual, true))
+vim.keymap.set("n", "<space>-", F.f(_rg_word, false), { desc = "search for word in files" })
+vim.keymap.set("x", "<space>-", F.f(_rg_visual, false), { desc = "search for visual selection in files" })
+vim.keymap.set("n", "<space>_", F.f(_rg_word, true), { desc = "search for word in files from current file" })
+vim.keymap.set("x", "<space>_", F.f(_rg_visual, true), { desc = "search for visual selection from current file" })
 
 -- local function rg_input()
 --   vim.ui.input({ prompt = "Search in files: : " }, function(query)

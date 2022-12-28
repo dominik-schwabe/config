@@ -194,13 +194,14 @@ function M.remove_leading_space(str)
   return str:gsub("^[\t\n ]+", "")
 end
 
-function M.call_deferred(callback)
-  vim.loop.new_timer():start(0, 0, vim.schedule_wrap(callback))
+function M.call_deferred(callback, timeout)
+  timeout = timeout or 0
+  vim.loop.new_timer():start(timeout, 0, vim.schedule_wrap(callback))
 end
 
-function M.deferred_callback(callback)
+function M.deferred_callback(callback, timeout)
   return function()
-    M.call_deferred(callback)
+    M.call_deferred(callback, timeout)
   end
 end
 
@@ -216,6 +217,12 @@ function M.input(prompt, callback)
       callback(arg)
     end
   end)
+end
+
+function M.desc(opts, description)
+  opts = vim.deepcopy(opts)
+  opts.desc = description
+  return opts
 end
 
 return M

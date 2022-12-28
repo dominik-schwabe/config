@@ -19,4 +19,4 @@ local function trim_whitespace()
 end
 
 vim.api.nvim_create_user_command("TrimWhitespace", trim_whitespace, {})
-vim.keymap.set({ "n", "x" }, "<space>.", trim_whitespace)
+vim.keymap.set({ "n", "x" }, "<space>.", trim_whitespace, { desc = "trim whitespace and last empty lines" })
