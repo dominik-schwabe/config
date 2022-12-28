@@ -33,7 +33,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "<space>awa", lsp_buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
   vim.keymap.set("n", "<space>awr", lsp_buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
   vim.keymap.set("n", "<space>awl", function()
-    D(lsp_buf.list_workspace_folders())
+    print(vim.inspect(lsp_buf.list_workspace_folders()))
   end, U.desc(map_opt, "list loaded workspaces"))
   vim.keymap.set("n", "<space>rn", lsp_buf.rename, U.desc(map_opt, "rename variable"))
   vim.keymap.set("n", "<space>ca", lsp_buf.code_action, U.desc(map_opt, "select code action"))
@@ -124,10 +124,9 @@ vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>", { desc = "show mason (install 
 -- show settings of lspserver
 local function lsp_settings()
   local clients = vim.lsp.buf_get_clients()
-  local settings = D(F.map(clients, function(client)
+  print(vim.inspect(F.map(clients, function(client)
     return client.config.settings
-  end))
-  D(settings)
+  end)))
 end
 
 vim.api.nvim_create_user_command("LspSettings", lsp_settings, {})
@@ -135,10 +134,9 @@ vim.api.nvim_create_user_command("LspSettings", lsp_settings, {})
 -- show lsp root
 local function lsp_root()
   local clients = F.values(vim.lsp.buf_get_clients())
-  local root_dirs = D(F.map(clients, function(client)
+  print(vim.inspect(F.map(clients, function(client)
     return client.config.root_dir
-  end))
-  D(root_dirs)
+  end)))
 end
 
 vim.keymap.set("n", "<space>f", function()
