@@ -114,14 +114,23 @@ local comment = with_dependencies(
   { { "JoosepAlviste/nvim-ts-context-commentstring" } }
 )
 
+vim.g.VM_maps = {
+  ["Select Cursor Down"] = "L",
+  ["Select Cursor Up"] = "K",
+}
+
 local plugins = {
   lspconfig,
   nvim_tree,
   cmp,
   comment,
-  { "L3MON4D3/LuaSnip", config = l("luasnip"), dependencies = {
-    { "rafamadriz/friendly-snippets" },
-  } },
+  {
+    "L3MON4D3/LuaSnip",
+    config = l("luasnip"),
+    dependencies = {
+      { "rafamadriz/friendly-snippets" },
+    },
+  },
   { "kylechui/nvim-surround", config = true, event = "InsertEnter" },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
@@ -162,15 +171,7 @@ local plugins = {
     keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
   },
   { "wellle/targets.vim" },
-  {
-    "mg979/vim-visual-multi",
-    config = function()
-      vim.g.VM_maps = {
-        ["Select Cursor Down"] = "L",
-        ["Select Cursor Up"] = "K",
-      }
-    end,
-  }, -- TODO: lazy
+  { "mg979/vim-visual-multi", keys = { "L", "K", "<C-n>" } },
   { "mbbill/undotree", keys = {
     { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
   } },
