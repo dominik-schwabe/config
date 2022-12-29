@@ -125,7 +125,7 @@ local plugins = {
   { "kylechui/nvim-surround", config = true, event = "InsertEnter" },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
-  { "jose-elias-alvarez/null-ls.nvim", config = l("null-ls"), event = "InsertEnter" },
+  { "jose-elias-alvarez/null-ls.nvim", config = l("null-ls") },
   {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
@@ -326,7 +326,6 @@ end
 require("lazy").setup(plugins, {
   defaults = {
     lazy = false,
-    version = "*",
   },
   checker = {
     enabled = false,
@@ -339,7 +338,7 @@ require("lazy").setup(plugins, {
       disabled_plugins = {
         "gzip",
         "matchit",
-        "matchparen",
+        -- "matchparen",
         "netrwPlugin",
         "tarPlugin",
         "tohtml",
