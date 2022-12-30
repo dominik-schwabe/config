@@ -1,5 +1,3 @@
-vim.g.polyglot_disabled = { "autoindent", "sensible" }
-
 require("user.options")
 require("user.plugins")
 require("user.custom")

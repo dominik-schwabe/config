@@ -29,18 +29,27 @@ local function l(plugin_name)
   end
 end
 
+local function creq(plugin_name)
+  return setmetatable({}, {
+    __index = function(_, method_name)
+      return function(...)
+        local args = { ... }
+        return function()
+	  local method = require(plugin_name)[method_name]
+          method(unpack(args))
+        end
+      end
+    end,
+  })
+end
+
 local function req(plugin_name)
   return setmetatable({}, {
     __index = function(_, method_name)
       return function(...)
         local args = { ... }
         local method = require(plugin_name)[method_name]
-        if args[1] then
-          return function()
-            method(unpack(args))
-          end
-        end
-        method()
+        return method(unpack(args))
       end
     end,
   })
@@ -105,7 +114,7 @@ local nvim_tree = with_dependencies({
   "kyazdani42/nvim-tree.lua",
   config = l("tree"),
   keys = {
-    { "<F1>", U.esc_wrap(req("nvim-tree").toggle), mode = { "n", "x", "i", "t" } },
+    { "<F1>", U.esc_wrap(creq("nvim-tree").toggle()), mode = { "n", "x", "i", "t" } },
   },
 }, { { "kyazdani42/nvim-web-devicons" } })
 
@@ -113,6 +122,8 @@ local comment = with_dependencies(
   { "numToStr/Comment.nvim", config = l("comment"), keys = { { "gc", mode = { "n", "x" } } } },
   { { "JoosepAlviste/nvim-ts-context-commentstring" } }
 )
+
+vim.g.polyglot_disabled = { "autoindent", "sensible" }
 
 vim.g.VM_maps = {
   ["Select Cursor Down"] = "L",
@@ -250,7 +261,7 @@ if not config.minimal then
     {
       "Wansmer/treesj",
       config = l("treesj"),
-      keys = { { "Y", req("treesj").toggle, mode = { "n", "x" }, desc = "toggle split join" } },
+      keys = { { "Y", creq("treesj").toggle(), mode = { "n", "x" }, desc = "toggle split join" } },
     },
     { "nvim-treesitter/playground", cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" } },
     {
@@ -262,17 +273,17 @@ if not config.minimal then
         { "mfussenegger/nvim-dap-python" },
       },
       keys = {
-        { "<space>b", req("dap").toggle_breakpoint, desc = "toggle breakpoint" },
+        { "<space>b", creq("dap").toggle_breakpoint(), desc = "toggle breakpoint" },
         {
           "<space>B",
           F.f(U.input, "Breakpoint condition: ", req("dap").set_breakpoint),
           desc = "set breakpoint condition",
         },
-        { "<F5>", req("dap").step_over, desc = "step over" },
-        { "<F6>", req("dap").step_into, desc = "step into" },
-        { "<F18>", req("dap").step_out, desc = "step out" },
-        { "<F8>", req("dap").continue, desc = "continue debugging" },
-        { "<F20>", req("dap").terminate, desc = "terminate debugger" },
+        { "<F5>", creq("dap").step_over(), desc = "step over" },
+        { "<F6>", creq("dap").step_into(), desc = "step into" },
+        { "<F18>", creq("dap").step_out(), desc = "step out" },
+        { "<F8>", creq("dap").continue(), desc = "continue debugging" },
+        { "<F20>", creq("dap").terminate(), desc = "terminate debugger" },
       },
     },
     {
@@ -307,7 +318,7 @@ if not config.minimal then
       config = true,
       keys = { { "<space>ai", "<CMD>PickIcons<CR>", desc = "open icon picker" } },
     },
-    { "ggandor/leap.nvim", config = req("leap").set_default_keymaps, keys = { "s", "S" } },
+    { "ggandor/leap.nvim", config = creq("leap").set_default_keymaps(), keys = { "s", "S" } },
     { "tpope/vim-sleuth" },
     { "lark-parser/vim-lark-syntax" },
     { "sheerun/vim-polyglot" },

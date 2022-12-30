@@ -61,7 +61,7 @@ alias pythonserver='python -m http.server 8000'
 alias ppjson='python -m json.tool'
 
 alias install_zsh='curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh'
-alias install_treesitter='cargo install --git https://github.com/tree-sitter/tree-sitter.git'
+alias install_treesitter='cargo install tree-sitter-cli'
 alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'
 alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh && chmod 755 ~/bin/cht.sh'
 alias install_tldr='npm install -g tldr'
