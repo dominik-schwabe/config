@@ -67,7 +67,7 @@ require("main.rules")
 root.buttons(require("binding.globalbuttons"))
 root.keys(require("binding.globalkeys"))
 
-require("menubar").utils.terminal = vars.terminal -- Set the terminal for applications that require it
+require("menubar").utils.terminal = vars.terminal -- set the terminal for applications that require it
 
 require("deco.statusbar")
 

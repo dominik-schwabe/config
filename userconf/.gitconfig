@@ -1,3 +1,7 @@
 [user]
 	email = schwabedominik@gmail.com
 	name = Dominik Schwabe
+[protocol "file"]
+	allow = always
+[init]
+	defaultBranch = main

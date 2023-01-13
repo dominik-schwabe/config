@@ -86,3 +86,5 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
+
+F.load("user.plugins.colorizer")

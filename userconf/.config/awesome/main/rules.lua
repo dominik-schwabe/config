@@ -5,7 +5,16 @@ local clientbuttons = require("binding.clientbuttons")
 local dpi = require("beautiful.xresources").apply_dpi
 local f = require("functions")
 
-local default_placement = awful.placement.centered + awful.placement.no_overlap + awful.placement.no_offscreen
+local dialog_placement = awful.placement.centered + awful.placement.no_offscreen
+local normal_placement = awful.placement.centered + awful.placement.no_overlap + awful.placement.no_offscreen
+
+local function default_placement(c)
+  if c.type == "normal" then
+    normal_placement(c)
+  else
+    dialog_placement(c)
+  end
+end
 
 local function spawn_no_overlap(c)
   c.floating = true
@@ -22,7 +31,6 @@ local function assign(tag_name)
   return {
     screen = 1,
     tag = tag_name,
-    callback = awful.client.focus.history.add,
   }
 end
 
@@ -144,7 +152,6 @@ awful.rules.rules = {
       titlebars_enabled = false,
     },
   },
-
   {
     rule_any = { class = { "Brave-browser", "firefox" } },
     properties = assign("1"),
@@ -180,7 +187,7 @@ awful.rules.rules = {
   {
     rule = {},
     callback = function(c)
-      if c.height < 100 then
+      if c.height <= 60 then
         awful.placement.align(c, {
           position = "bottom",
           margins = -30,

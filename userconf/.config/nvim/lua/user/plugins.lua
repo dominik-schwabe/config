@@ -35,7 +35,7 @@ local function creq(plugin_name)
       return function(...)
         local args = { ... }
         return function()
-	  local method = require(plugin_name)[method_name]
+          local method = require(plugin_name)[method_name]
           method(unpack(args))
         end
       end
@@ -92,7 +92,7 @@ local lspconfig = with_dependencies({
       })
     end,
   },
-  { "simrat39/rust-tools.nvim" },
+  { "kdarkhan/rust-tools.nvim" }, -- TODO: reset to simrat39 when active again
 })
 
 local cmp = with_dependencies({
@@ -142,7 +142,7 @@ local plugins = {
       { "rafamadriz/friendly-snippets" },
     },
   },
-  { "kylechui/nvim-surround", config = true, event = "InsertEnter" },
+  { "kylechui/nvim-surround", config = true },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
   { "jose-elias-alvarez/null-ls.nvim", config = l("null-ls") },
@@ -232,13 +232,13 @@ if not config.minimal then
     },
     { "rhysd/clever-f.vim", keys = { "f", "F", "t", "T" } },
     { "windwp/nvim-autopairs", config = true, event = "InsertEnter" },
-    { "NvChad/nvim-colorizer.lua", config = l("colorizer"), event = "VimEnter" },
-    { "saecki/crates.nvim", config = true, event = "BufRead Cargo.toml" },
+    { "NvChad/nvim-colorizer.lua" },
+    { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },
     {
       "nvim-treesitter/nvim-treesitter",
       config = l("treesitter"),
       dependencies = {
-        { "p00f/nvim-ts-rainbow" },
+        { "mrjones2014/nvim-ts-rainbow" },
         {
           "m-demare/hlargs.nvim",
           config = {

@@ -12,11 +12,6 @@ end
 -- Theme handling library
 local beautiful = require("beautiful")
 client.connect_signal("manage", function(c)
-  if not c.floating and F.any(c.screen.clients, function(e)
-    return e.fullscreen
-  end) then
-    awful.client.focus.history.previous()
-  end
   -- Set the windows at the slave,
   -- i.e. put it at the end of others instead of setting it master.
   if not awesome.startup then
@@ -98,12 +93,6 @@ local function update_border(c, s)
   end
 end
 
-local function raise_focused_floating(c)
-  if client.focus == c and c.floating then
-    c:raise()
-  end
-end
-
 local function update_z_order(c)
   c.above = not c.fullscreen and c.floating
   c.below = not c.fullscreen and not c.floating
@@ -111,10 +100,10 @@ end
 
 local function update_properties(c)
   update_border(c)
-  raise_focused_floating(c)
   update_z_order(c)
 end
 
+-- disallow the client from moving to far away from the edges of the screen
 local offset = dpi(30)
 client.connect_signal("property::geometry", function(c)
   if c.floating then
@@ -131,7 +120,19 @@ client.connect_signal("property::geometry", function(c)
   end
 end)
 
-client.connect_signal("focus", update_properties)
+-- prevent fullscreen clients from losing focus (only necessary because of Spotify)
+client.connect_signal("focus", function(c)
+  if not c.floating and not c.fullscreen then
+    local fullscreen_clients = F.filter(c.screen.clients, function(e)
+      return e.fullscreen
+    end)
+    if #fullscreen_clients > 0 then
+      client.focus = fullscreen_clients[1]
+    end
+  end
+  c:raise()
+  update_properties(c)
+end)
 client.connect_signal("unfocus", update_properties)
 client.connect_signal("property::floating", function(c)
   c.sticky = false
@@ -140,12 +141,16 @@ end)
 client.connect_signal("property::sticky", function(c)
   update_border(c, c.screen)
 end)
+
+-- only one fullscreen client allowed per tag
 client.connect_signal("property::fullscreen", function(c)
   if c.fullscreen then
     unfullscreen_all_other_clients_on_screen(c)
   end
   update_properties(c)
 end)
+
+-- keep sticky clients on the focused tag
 tag.connect_signal("property::selected", function(t)
   if t.selected then
     local tag = awful.screen.focused().selected_tag
@@ -157,13 +162,24 @@ tag.connect_signal("property::selected", function(t)
   end
 end)
 
+-- update borders based on clients position
 screen.connect_signal("arrange", function(s)
   if not s.selected_tag then
     return
   end
-  for _, c in pairs(s.clients) do
+  F.foreach(s.clients, function(c)
     update_border(c, s)
-  end
+  end)
 end)
+
+local function filter_focus_func(c)
+  return c.fullscreen or c.floating or #F.filter(c.screen.clients, function(e)
+    return e.fullscreen
+  end) == 0
+end
+
+client.connect_signal("request::activate", awful.client.focus.history.add)
+awful.ewmh.add_activate_filter(filter_focus_func, "ewmh")
+awful.ewmh.add_activate_filter(filter_focus_func, "rules")
 
 require("deco.titlebar")

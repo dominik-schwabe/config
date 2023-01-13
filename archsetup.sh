@@ -146,6 +146,7 @@ brave-bin
 jmtpfs
 lain-git
 lua-inspect
+unclutter-xfixes-git
 "
 
 installyay() {
