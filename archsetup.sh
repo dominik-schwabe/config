@@ -7,7 +7,12 @@ BLUE="\e[34m"
 VIOLET="\e[35m"
 RESET="\e[0m"
 
+grep -q vmx /proc/cpuinfo && UCODE="intel-ucode"
+grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
+
 BASE="
+$UCODE
+reflector
 alsa
 alsa-tools
 alsa-utils
@@ -75,7 +80,10 @@ zip
 zsh
 "
 
+echo $BASE
+
 GRAPHIC="
+brightnessctl
 accountsservice
 alacritty
 android-file-transfer

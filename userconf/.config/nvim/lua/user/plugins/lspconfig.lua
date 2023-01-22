@@ -93,8 +93,22 @@ F.load("mason-lspconfig", function(mason_lspconfig)
           },
         },
       }
-      F.load("rust-tools", function(rust_tools)
-        rust_tools.setup({ server = opts })
+      F.load("rust-tools", function(rt)
+        local extension_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/"
+        local codelldb_path = extension_path .. "adapter/codelldb"
+        local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+
+        opts.on_attach = function(client, bufnr)
+          on_attach(client, bufnr)
+          local map_opt = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set("n", "gh", rt.hover_actions.hover_actions, U.desc(map_opt, "rust hover actions"))
+        end
+        rt.setup({
+          server = opts,
+          dap = {
+            adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+          },
+        })
       end)
     else
       lspconfig[server_name].setup(opts)

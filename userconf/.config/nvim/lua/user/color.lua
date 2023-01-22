@@ -31,7 +31,7 @@ local palette = {
   grey = "#8F908A",
   black = "#000000",
   pink = "#f92672",
-  alt_pink = "#ffc0cb",
+  alt_pink = "#ff0077",
   alt_green = "#aadb00",
   green = "#87ff00",
   aqua = "#66d9ef",
@@ -235,6 +235,7 @@ hl.treesitter = {
   ["@punctuation.special"] = { fg = palette.pink },
   ["@repeat"] = { fg = palette.pink },
   ["@storageclass"] = { fg = palette.aqua },
+  ["@storageclass.lifetime"] = { fg = palette.yellow, bold = true },
   ["@string"] = { fg = palette.yellow },
   ["@string.regex"] = { fg = palette.purple },
   ["@string.escape"] = { fg = palette.purple },
@@ -261,7 +262,7 @@ hl.treesitter = {
   ["@todo"] = { fg = palette.aqua },
   ["@type"] = { fg = palette.aqua },
   ["@type.builtin"] = { fg = palette.neon_purple },
-  ["@type.qualifier"] = { fg = palette.red },
+  ["@type.qualifier"] = { fg = palette.alt_pink, bold = true },
   ["@type.definition"] = { fg = palette.neon_purple },
   ["@variable"] = { fg = palette.white },
   ["@variable.builtin"] = { fg = palette.orange },
@@ -390,6 +391,11 @@ hl.other = {
   IlluminatedWordRead = { link = "CursorLine" },
   IlluminatedWordWrite = { link = "CursorLine" },
   MarkSignHL = { fg = palette.purple },
+  HydraRed = { fg = palette.red },
+  HydraBlue = { fg = palette.cool_blue1 },
+  HydraPink = { fg = palette.pink },
+  HydraAmaranth = { fg = "#ff1757" },
+  HydraTeal = { fg = "#00a1a1" },
 }
 
 function M.setup()

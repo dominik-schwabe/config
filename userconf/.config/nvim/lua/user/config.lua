@@ -81,6 +81,8 @@ M.whitespace_blacklist = {
   "qf",
   "unite",
   "checkhealth",
+  "dap-repl",
+  "dapui_watches",
 }
 M.illuminate_blacklist = {
   "",

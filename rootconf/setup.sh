@@ -22,9 +22,9 @@ main() {
         fi
     }
 
-    set \
-        /etc/lightdm/lightdm.conf \
+    set /etc/lightdm/lightdm.conf \
         /etc/lightdm/lightdm-gtk-greeter.conf \
+        /etc/xdg/reflector/reflector.conf \
         /usr/share/backgrounds/stars.png
 
 
@@ -34,6 +34,10 @@ main() {
         cpconfig $ARG
         shift &> /dev/null
     done
+
+    systemctl enable --now paccache.timer
+    systemctl enable --now reflector.timer
+    systemctl enable --now fstrim.timer
 }
 
 FUNC=$(declare -f main)

@@ -53,7 +53,6 @@ awful.rules.rules = {
       placement = default_placement,
     },
   },
-
   {
     rule_any = {
       instance = {
@@ -93,14 +92,14 @@ awful.rules.rules = {
     },
     properties = float_properties,
   },
-
   {
     rule = {
       class = "TelegramDesktop",
     },
     properties = {
       floating = true,
-      callback = f.right,
+      sticky = true,
+      placement = f.right
     },
   },
   {

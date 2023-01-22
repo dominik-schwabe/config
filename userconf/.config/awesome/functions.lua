@@ -253,12 +253,11 @@ M.client_fix = function(pos, config)
 end
 
 M.right = function(c)
-  c.floating = true
-  c.sticky = true
   M.set_geometry(c, { width = 0.5, height = 1, alignment = "bottom_right" })
 end
 
 M.right_sticky = function(c)
+  c.floating = true
   M.right(c)
   c.sticky = true
 end
@@ -569,10 +568,10 @@ M.layout_magnifier = j(awful.layout.set, awful.layout.suit.magnifier)
 M.layout_dwindle = j(awful.layout.set, awful.layout.suit.spiral.dwindle)
 
 M.open_terminal = cmd(terminal)
-M.inc_brightness_1 = cmd("xbacklight -time 0 +1")
-M.dec_brightness_1 = cmd("xbacklight -time 0 -1")
-M.inc_brightness_5 = cmd("xbacklight -time 0 +5")
-M.dec_brightness_5 = cmd("xbacklight -time 0 -5")
+M.inc_brightness_1 = cmd("brightnessctl set +1%")
+M.dec_brightness_1 = cmd("brightnessctl set 1%-")
+M.inc_brightness_5 = cmd("brightnessctl set +5%")
+M.dec_brightness_5 = cmd("brightnessctl set 5%-")
 M.rofi = cmd("rofi -show drun")
 M.lock = cmd("playerctl -a pause ; exec i3lock -c 000000")
 M.reboot = cmd("reboot")

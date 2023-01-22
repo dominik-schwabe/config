@@ -92,7 +92,7 @@ local lspconfig = with_dependencies({
       })
     end,
   },
-  { "kdarkhan/rust-tools.nvim" }, -- TODO: reset to simrat39 when active again
+  { "simrat39/rust-tools.nvim" },
 })
 
 local cmp = with_dependencies({
@@ -108,6 +108,14 @@ local cmp = with_dependencies({
   { "hrsh7th/cmp-path" },
   { "hrsh7th/cmp-nvim-lua" },
   { "andersevenrud/cmp-tmux" },
+  -- {
+  --   "roobert/tailwindcss-colorizer-cmp.nvim",
+  --   config = function()
+  --     require("tailwindcss-colorizer-cmp").setup({
+  --       color_square_width = 2,
+  --     })
+  --   end,
+  -- },
 })
 
 local nvim_tree = with_dependencies({
@@ -272,19 +280,6 @@ if not config.minimal then
         { "theHamsta/nvim-dap-virtual-text" },
         { "mfussenegger/nvim-dap-python" },
       },
-      keys = {
-        { "<space>b", creq("dap").toggle_breakpoint(), desc = "toggle breakpoint" },
-        {
-          "<space>B",
-          F.f(U.input, "Breakpoint condition: ", req("dap").set_breakpoint),
-          desc = "set breakpoint condition",
-        },
-        { "<F5>", creq("dap").step_over(), desc = "step over" },
-        { "<F6>", creq("dap").step_into(), desc = "step into" },
-        { "<F18>", creq("dap").step_out(), desc = "step out" },
-        { "<F8>", creq("dap").continue(), desc = "continue debugging" },
-        { "<F20>", creq("dap").terminate(), desc = "terminate debugger" },
-      },
     },
     {
       "simrat39/symbols-outline.nvim",
@@ -322,6 +317,7 @@ if not config.minimal then
     { "tpope/vim-sleuth" },
     { "lark-parser/vim-lark-syntax" },
     { "sheerun/vim-polyglot" },
+    { "anuvyklack/hydra.nvim" },
     {
       "iamcco/markdown-preview.nvim",
       build = "cd app && npm install",
