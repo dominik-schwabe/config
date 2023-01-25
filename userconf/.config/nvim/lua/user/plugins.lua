@@ -250,6 +250,7 @@ if not config.minimal then
         {
           "m-demare/hlargs.nvim",
           opts = {
+            paint_arg_declarations = false,
             color = "#00ffaf", -- "#5fafff" "#04c99b" "#02b4ef"
             excluded_argnames = {
               declarations = {},
