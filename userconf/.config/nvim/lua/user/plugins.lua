@@ -180,7 +180,7 @@ local plugins = {
   },
   {
     "kevinhwang91/nvim-bqf",
-    config = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },
+    opts = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },
     ft = "qf",
   },
   {
@@ -205,7 +205,7 @@ if not config.minimal then
     },
     {
       "stevearc/dressing.nvim",
-      config = {
+      opts = {
         input = {
           insert_only = false,
           win_options = {
@@ -249,7 +249,7 @@ if not config.minimal then
         { "mrjones2014/nvim-ts-rainbow" },
         {
           "m-demare/hlargs.nvim",
-          config = {
+          opts = {
             color = "#00ffaf", -- "#5fafff" "#04c99b" "#02b4ef"
             excluded_argnames = {
               declarations = {},
@@ -283,14 +283,14 @@ if not config.minimal then
     },
     {
       "simrat39/symbols-outline.nvim",
-      config = { width = 40 },
+      opts = { width = 40 },
       keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
     { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
     { url = "https://gitlab.com/yorickpeterse/nvim-pqf", config = true },
     {
       "folke/todo-comments.nvim",
-      config = {
+      opts = {
         search = {
           command = "rg",
           args = {
