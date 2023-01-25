@@ -76,6 +76,10 @@ local function _diffsplit(original_bufnr, commit)
   end
   commit_hash = commit_hash[1]
   local lines = git({ "-C", paths.project_path, "--literal-pathspecs", "show", commit_hash .. ":" .. paths.rel_path })
+  if not lines then
+    vim.notify("no lines")
+    return
+  end
   local original_win = vim.api.nvim_get_current_win()
   local diff_bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(diff_bufnr, 0, 1, true, lines)
