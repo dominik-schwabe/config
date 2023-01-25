@@ -157,9 +157,7 @@ vim.keymap.set("n", "<space>f", function()
   vim.lsp.buf.format({
     async = true,
     filter = function(a)
-      return F.any(config.format_clients, function(client)
-        return client == a["name"]
-      end)
+      return F.contains(config.format_clients, a.name)
     end,
   })
 end, U.desc(def_opt, "format buffer"))

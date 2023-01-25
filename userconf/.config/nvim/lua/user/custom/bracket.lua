@@ -39,8 +39,6 @@ for _, brackets in ipairs(config.brackets) do
   end
 end
 
-vim.keymap.set("i", "<C-e>", F.f(insert_brackets, "(", ")", true), {})
-
 for _, quote in ipairs(config.quotes) do
   vim.keymap.set("i", "<C-S>" .. quote, F.f(insert_brackets, quote, quote, true), {})
   vim.keymap.set("i", "<C-S><C-" .. quote .. ">", F.f(insert_brackets, quote, quote, true), {})
