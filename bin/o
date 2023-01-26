@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 for ARG in "$@"; do
-    xdg-open "$ARG" &>/dev/null &!
+    nohup xdg-open "$ARG" &>/dev/null &
 done
 exit 0
