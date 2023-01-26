@@ -93,7 +93,7 @@ local lspconfig = with_dependencies({
     end,
   },
   { "simrat39/rust-tools.nvim" },
-  { "folke/neodev.nvim" },
+  -- { "folke/neodev.nvim" },
 })
 
 local cmp = with_dependencies({
