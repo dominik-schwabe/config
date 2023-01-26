@@ -93,6 +93,7 @@ local lspconfig = with_dependencies({
     end,
   },
   { "simrat39/rust-tools.nvim" },
+  { "folke/neodev.nvim" },
 })
 
 local cmp = with_dependencies({
@@ -315,7 +316,7 @@ if not config.minimal then
       keys = { { "<space>ai", "<CMD>PickIcons<CR>", desc = "open icon picker" } },
     },
     { "ggandor/leap.nvim", config = creq("leap").set_default_keymaps(), keys = { "s", "S" } },
-    { "tpope/vim-sleuth" },
+    { "nmac427/guess-indent.nvim", opts = {} },
     { "lark-parser/vim-lark-syntax" },
     { "sheerun/vim-polyglot" },
     { "anuvyklack/hydra.nvim" },

@@ -10,6 +10,10 @@ local U = require("user.utils")
 
 local navic = F.load("nvim-navic")
 
+F.load("neodev", function(neodev)
+  neodev.setup({})
+end)
+
 local on_attach = function(client, bufnr)
   if navic and client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
