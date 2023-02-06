@@ -11,6 +11,15 @@ local U = require("user.utils")
 
 vim.api.nvim_create_augroup("user", {})
 
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function(opt)
+    local bo = vim.bo[opt.buf]
+    if bo.readonly then
+      bo.modifiable = false
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("CmdWinEnter", {
   group = "user",
   callback = function(args)

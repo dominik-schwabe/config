@@ -1,5 +1,7 @@
 local F = require("user.functional")
 
+local lualine = require("lualine")
+
 local navic_section = nil
 F.load("nvim-navic", function(navic)
   navic.setup({
@@ -10,6 +12,17 @@ F.load("nvim-navic", function(navic)
     depth_limit_indicator = "..",
   })
   navic_section = { navic.get_location, cond = navic.is_available }
+end)
+
+local progress = nil
+F.load("lsp-progress", function(lsp_progress)
+  progress = lsp_progress.progress
+
+  vim.api.nvim_create_augroup("lualine_refresh_augroup", {})
+  vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
+    group = "lualine_refresh_augroup",
+    callback = lualine.refresh,
+  })
 end)
 
 local config = {
@@ -23,9 +36,9 @@ local config = {
     lualine_a = { "mode" },
     lualine_b = { "branch", "diff", "diagnostics" },
     lualine_c = { "filename", navic_section },
-    lualine_x = { "filetype" },
+    lualine_x = { progress, "filetype" },
     lualine_y = { "%3p%%" },
     lualine_z = { "location" },
   },
 }
-require("lualine").setup(config)
+lualine.setup(config)

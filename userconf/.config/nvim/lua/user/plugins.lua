@@ -120,12 +120,12 @@ local cmp = with_dependencies({
 })
 
 local nvim_tree = with_dependencies({
-  "kyazdani42/nvim-tree.lua",
+  "nvim-tree/nvim-tree.lua",
   config = l("tree"),
   keys = {
     { "<F1>", U.esc_wrap(creq("nvim-tree").toggle()), mode = { "n", "x", "i", "t" } },
   },
-}, { { "kyazdani42/nvim-web-devicons" } })
+}, { { "nvim-tree/nvim-web-devicons" } })
 
 local comment = with_dependencies(
   { "numToStr/Comment.nvim", config = l("comment"), keys = { { "gc", mode = { "n", "x" } } } },
@@ -146,6 +146,7 @@ local plugins = {
   comment,
   {
     "L3MON4D3/LuaSnip",
+    build = "make install_jsregexp",
     config = l("luasnip"),
     dependencies = {
       { "rafamadriz/friendly-snippets" },
@@ -187,11 +188,11 @@ local plugins = {
   {
     "matbme/JABS.nvim",
     config = l("jabs"),
-    dependencies = { { "kyazdani42/nvim-web-devicons" } },
+    dependencies = { { "nvim-tree/nvim-web-devicons" } },
     keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
   },
   { "wellle/targets.vim" },
-  { "mg979/vim-visual-multi", keys = { "L", "K", "<C-n>" } },
+  { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
   { "mbbill/undotree", keys = {
     { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
   } },
@@ -226,7 +227,16 @@ if not config.minimal then
       config = l("lualine"),
       dependencies = {
         { "SmiteshP/nvim-navic" },
-        { "kyazdani42/nvim-web-devicons" },
+        { "nvim-tree/nvim-web-devicons" },
+        {
+          "linrongbin16/lsp-progress.nvim",
+          dependencies = { "nvim-tree/nvim-web-devicons" },
+          opts = {
+            spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
+            spin_update_time = 100,
+            decay = 100,
+          },
+        },
       },
     },
     {
@@ -270,7 +280,13 @@ if not config.minimal then
     },
     {
       "Wansmer/treesj",
-      config = l("treesj"),
+      opts = {
+        use_default_keymaps = false,
+        check_syntax_error = true,
+        cursor_behavior = "hold",
+        notify = true,
+        max_join_length = 100000,
+      },
       keys = { { "Y", creq("treesj").toggle(), mode = { "n", "x" }, desc = "toggle split join" } },
     },
     { "nvim-treesitter/playground", cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" } },
