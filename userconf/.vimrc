@@ -159,6 +159,7 @@ set ttyfast
 set incsearch
 set hlsearch
 set modeline
+set paste
 
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 

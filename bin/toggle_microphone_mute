@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TYPE=${1-pci}
+TYPE=${1-pci} # pci, usb
 
 OUTPUT=$(pamixer --list-sources | grep "alsa_input\.$TYPE-")
 if [[ "$OUTPUT" != "" ]]; then
