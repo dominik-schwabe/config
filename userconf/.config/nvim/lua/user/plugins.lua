@@ -342,6 +342,7 @@ if not config.minimal then
       build = "cd app && npm install",
       lazy = false,
       config = function()
+        vim.g.mkdp_port = 8210
         vim.g.mkdp_auto_start = 0
         vim.g.mkdp_auto_close = 0
       end,
