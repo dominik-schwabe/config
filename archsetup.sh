@@ -36,6 +36,7 @@ dosfstools
 efibootmgr
 gcc-fortran
 git
+git-lfs
 grub
 gutenprint
 gvfs

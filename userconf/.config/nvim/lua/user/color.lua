@@ -274,6 +274,16 @@ hl.treesitter = {
   markdownTSStringEscape = { bg = palette.base6 },
 }
 
+hl.rainbow = {
+  TSRainbowRed = { fg = "#ee4444" },
+  TSRainbowYellow = { fg = "#dddd00" },
+  TSRainbowBlue = { fg = "#5eaeee" },
+  TSRainbowOrange = { fg = "#ddad00" },
+  TSRainbowGreen = { fg = "#00cc00" },
+  TSRainbowViolet = { fg = "#dd5ddd" },
+  TSRainbowCyan = { fg = "#00dddd" },
+}
+
 hl.diagnostics = {
   DiagnosticSignError = { fg = palette.danger },
   DiagnosticSignHint = { fg = palette.aqua },

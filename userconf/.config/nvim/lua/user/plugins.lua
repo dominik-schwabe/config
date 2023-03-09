@@ -191,7 +191,6 @@ local plugins = {
     dependencies = { { "nvim-tree/nvim-web-devicons" } },
     keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
   },
-  { "wellle/targets.vim" },
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
   { "mbbill/undotree", keys = {
     { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
@@ -258,6 +257,7 @@ if not config.minimal then
       config = l("treesitter"),
       dependencies = {
         { "mrjones2014/nvim-ts-rainbow" },
+        -- { "HiPhish/nvim-ts-rainbow2" },
         {
           "m-demare/hlargs.nvim",
           opts = {

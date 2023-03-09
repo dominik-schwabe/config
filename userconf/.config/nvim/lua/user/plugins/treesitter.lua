@@ -66,6 +66,24 @@ F.load("nvim-treesitter.configs", function(tc)
       extended_mode = true,
       max_file_lines = 1000,
     },
+    -- rainbow = {
+    --   enable = true,
+    --   strategy = {
+    --     function()
+    --       local rainbow = F.load("ts-rainbow")
+    --       if rainbow then
+    --         local num_lines = vim.fn.line("$")
+    --         if num_lines > 10000 then
+    --           return nil
+    --         elseif num_lines > 1000 then
+    --           return rainbow.strategy["local"]
+    --         end
+    --         return rainbow.strategy["global"]
+    --       end
+    --       return nil
+    --     end,
+    --   },
+    -- },
     textobjects = {
       select = {
         enable = true,
@@ -73,8 +91,26 @@ F.load("nvim-treesitter.configs", function(tc)
         keymaps = {
           ["af"] = "@function.outer",
           ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
+          ["ia"] = "@parameter.inner",
+          ["aa"] = "@parameter.outer",
+          ["ii"] = "@conditional.inner",
+          ["ai"] = "@conditional.outer",
+          ["al"] = "@loop.outer",
+          ["il"] = "@loop.inner",
+          ["a,"] = "@attribute.outer",
+          ["i,"] = "@attribute.inner",
+          ["h"] = "@assignment.lhs",
+          ["l"] = "@assignment.rhs",
+          ["a-"] = "@block.outer",
+          ["i-"] = "@block.inner",
+          ["ac"] = "@call.outer",
+          ["ic"] = "@call.inner",
+          ["ar"] = "@return.outer",
+          ["ir"] = "@return.inner",
+          ["a="] = "@assignment.outer",
+          ["i="] = "@assignment.inner",
+          ["ak"] = "@class.outer",
+          ["ik"] = "@class.inner",
         },
       },
       move = {
