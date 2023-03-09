@@ -160,9 +160,12 @@ local plugins = {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
     dependencies = {
-      { "debugloop/telescope-undo.nvim", keys = {
-        { "<F3>", "<CMD>Telescope undo<CR>", desc = "undo tree" },
-      } },
+      {
+        "debugloop/telescope-undo.nvim",
+        keys = {
+          { "<F3>", "<CMD>Telescope undo<CR>", desc = "undo tree" },
+        },
+      },
     },
     cmd = "Telescope",
     keys = {
@@ -342,7 +345,18 @@ if not config.minimal then
       build = "cd app && npm install",
       lazy = false,
       config = function()
-        vim.g.mkdp_port = 8210
+        vim.cmd([[
+          function OpenMarkdown(url)
+            echo a:url
+            if empty($SSH_TTY)
+              call system($BROWSER .. " " .. a:url)
+            endif
+          endfunction
+        ]])
+        vim.g.mkdp_browserfunc = "OpenMarkdown"
+        if os.getenv("SSH_TTY") then
+          vim.g.mkdp_port = 8100
+        end
         vim.g.mkdp_auto_start = 0
         vim.g.mkdp_auto_close = 0
       end,
