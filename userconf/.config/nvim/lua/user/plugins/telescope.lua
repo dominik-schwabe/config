@@ -39,3 +39,4 @@ require("telescope").setup({
 require("telescope").load_extension("yank_history")
 require("telescope").load_extension("macro_history")
 require("telescope").load_extension("diffsplit")
+require("telescope").load_extension("undo")

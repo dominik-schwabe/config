@@ -122,11 +122,11 @@ vim.api.nvim_create_autocmd("RecordingLeave", {
 })
 
 vim.keymap.set("n", "ü", function()
-  history:cycle(-1)
-end, { desc = "select previous macro from history" })
-vim.keymap.set("n", "Ü", function()
   history:cycle(1)
 end, { desc = "select next macro from history" })
+vim.keymap.set("n", "Ü", function()
+  history:cycle(-1)
+end, { desc = "select previous macro from history" })
 
 F.foreach(macro_regs, function(reg)
   fn.setreg(reg, "")

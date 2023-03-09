@@ -159,6 +159,11 @@ local plugins = {
   {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
+    dependencies = {
+      { "debugloop/telescope-undo.nvim", keys = {
+        { "<F3>", "<CMD>Telescope undo<CR>", desc = "undo tree" },
+      } },
+    },
     cmd = "Telescope",
     keys = {
       { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" }, desc = "find files" },
@@ -192,9 +197,6 @@ local plugins = {
     keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
   },
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
-  { "mbbill/undotree", keys = {
-    { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
-  } },
 }
 
 if not config.minimal then
@@ -333,7 +335,6 @@ if not config.minimal then
     },
     { "ggandor/leap.nvim", config = creq("leap").set_default_keymaps(), keys = { "s", "S" } },
     { "nmac427/guess-indent.nvim", opts = {} },
-    { "lark-parser/vim-lark-syntax" },
     { "sheerun/vim-polyglot" },
     { "anuvyklack/hydra.nvim" },
     {

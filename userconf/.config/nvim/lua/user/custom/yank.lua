@@ -9,8 +9,11 @@ local function entry_length(entry)
   end))
 end
 
+local MIN_SIZE = 4
+local MAX_SIZE = 1024 * 1024
+
 local History = require("user.history")
-local args = {
+local conf = {
   name = "Yank",
   register = function()
     local clipboard_flags = vim.opt.clipboard:get()
@@ -28,27 +31,24 @@ local args = {
   end,
   filter = function(entry)
     local length = entry_length(entry)
-    if entry.regtype == "v" and length <= 3 then
-      return true
-    end
-    if 1024 * 1024 < length then
+    if length < MIN_SIZE or length > MAX_SIZE then
       return true
     end
     return false
   end,
 }
 if tmux.loaded then
-  function args.regtype_normalization(regtype)
+  function conf.regtype_normalization(regtype)
     if regtype ~= "V" and regtype ~= "v" then
       return "v"
     end
     return regtype
   end
-  function args.write_callback(register)
+  function conf.write_callback(register)
     tmux.write_clipboard(vim.fn.getreg(register, 1, true), vim.fn.getregtype(register))
   end
 end
-local history = History:new(args)
+local history = History:new(conf)
 
 vim.api.nvim_create_augroup("UserYankHistory", {})
 vim.api.nvim_create_autocmd("TextYankPost ", {
@@ -63,11 +63,11 @@ vim.api.nvim_create_autocmd("TextYankPost ", {
 })
 
 vim.keymap.set("n", "ä", function()
-  history:cycle(-1)
-end, { desc = "select previous yank from history" })
-vim.keymap.set("n", "Ä", function()
   history:cycle(1)
 end, { desc = "select next yank from history" })
+vim.keymap.set("n", "Ä", function()
+  history:cycle(-1)
+end, { desc = "select previous yank from history" })
 
 local function bind_paste_func(key)
   vim.keymap.set("n", key, function()
