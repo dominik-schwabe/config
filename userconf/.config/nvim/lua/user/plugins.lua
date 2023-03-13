@@ -123,7 +123,8 @@ local nvim_tree = with_dependencies({
   "nvim-tree/nvim-tree.lua",
   config = l("tree"),
   keys = {
-    { "<F1>", U.esc_wrap(creq("nvim-tree").toggle()), mode = { "n", "x", "i", "t" } },
+    { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
+    { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
   },
 }, { { "nvim-tree/nvim-web-devicons" } })
 

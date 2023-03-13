@@ -8,7 +8,7 @@ import requests
 try:
     data = sys.argv[1]
 except:
-    print("data method route port host")
+    print("data method(POST) route(/) port(5000) host(localhost)")
     exit()
 
 try:
@@ -40,7 +40,12 @@ kwargs = {}
 if method != "GET":
     kwargs["json"] = data
 
-r = requests.request(method, url, **kwargs)
+try:
+    r = requests.request(method, url, **kwargs)
+except requests.exceptions.ConnectionError:
+    print(f"{url} unreachable")
+    exit()
+
 result = r.text
 try:
     result = json.dumps(r.json())

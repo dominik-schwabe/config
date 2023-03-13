@@ -270,7 +270,7 @@ hl.treesitter = {
   ["@type.qualifier"] = { fg = palette.alt_pink, bold = true },
   ["@type.definition"] = { fg = palette.neon_purple },
   ["@variable"] = { fg = palette.white },
-  ["@variable.builtin"] = { fg = palette.orange },
+  ["@variable.builtin"] = { fg = palette.purple },
   markdownTSStringEscape = { bg = palette.base6 },
 }
 
