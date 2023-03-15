@@ -10,17 +10,18 @@ local term_win
 local jobnr
 local function open_term(height, bottom)
   if bottom then
-    cmd("botright new")
+    cmd("botright split")
     api.nvim_win_set_height(0, height)
   else
-    cmd("vertical botright new")
+    cmd("vertical botright split")
   end
   term_win = api.nvim_get_current_win()
   if term_buf ~= nil and api.nvim_buf_is_loaded(term_buf) then
     api.nvim_win_set_buf(term_win, term_buf)
   else
+    term_buf = api.nvim_create_buf(false, false)
+    api.nvim_win_set_buf(term_win, term_buf)
     jobnr = fn.termopen(os.getenv("SHELL"), { detach = 0 })
-    term_buf = fn.bufnr("")
     cmd("startinsert")
   end
   api.nvim_buf_set_name(term_buf, "term://toggleterm")

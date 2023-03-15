@@ -161,12 +161,9 @@ local plugins = {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
     dependencies = {
-      {
-        "debugloop/telescope-undo.nvim",
-        keys = {
-          { "<F3>", "<CMD>Telescope undo<CR>", desc = "undo tree" },
-        },
-      },
+      { "mbbill/undotree", keys = {
+        { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
+      } },
     },
     cmd = "Telescope",
     keys = {

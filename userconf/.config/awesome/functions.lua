@@ -56,20 +56,27 @@ local function screen_ratio(s)
   return s.geometry.height / s.geometry.width
 end
 
+local function get_min_width(c)
+  return math.max(c.size_hints.min_width or 0, dpi(400))
+end
+
+local function get_min_height(c)
+  return math.max(c.size_hints.min_height or 0, dpi(225))
+end
+
 local function resize_float(c, x, y)
   x = x or 0
   y = y or 0
-  local size_hints = c.size_hints
-  local min_width = math.max(size_hints.min_width or 0, dpi(400))
-  local min_height = math.max(size_hints.min_height or 0, dpi(225))
-  if c.width <= min_width then
-    c.width = min_width
-    x = math.max(x, 0)
+  local min_width = get_min_width(c)
+  local min_height = get_min_height(c)
+  if c.width + x < min_width then
+    x = min_width - c.width
   end
-  if c.height <= min_height then
-    c.height = min_height
-    y = math.max(y, 0)
+  if c.height + y < min_height then
+    y = min_height - c.height
   end
+  x = x / 2
+  y = y / 2
   c:relative_move(-x, -y, 2 * x, 2 * y)
 end
 
@@ -484,8 +491,8 @@ M.focus_right = function()
     awful.client.focus.bydirection("right")
   end
 end
-local shrink_pixels = dpi(20)
-local grow_pixels = dpi(10)
+local shrink_pixels = dpi(40)
+local grow_pixels = dpi(20)
 M.resize_grow = function(c)
   if c.floating then
     local ratio = screen_ratio(c.screen)

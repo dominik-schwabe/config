@@ -169,7 +169,7 @@ function M.make_telescope_extension()
     return function(entry)
       return {
         value = entry,
-        ordinal = entry.commit,
+        ordinal = entry.text,
         content = entry.text,
         display = make_display,
       }

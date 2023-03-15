@@ -29,10 +29,10 @@ end
 
 function M.create_window(height, bottom)
   if bottom then
-    cmd("botright new")
+    cmd("botright split")
     api.nvim_win_set_height(0, height)
   else
-    cmd("vertical botright new")
+    cmd("vertical botright split")
   end
 end
 
@@ -49,21 +49,19 @@ end
 local function start_terminal(ft, meta)
   local previous_window = vim.api.nvim_get_current_win()
   CB.create_window()
+  local bufnr = api.nvim_create_buf(S.listed, false)
+  api.nvim_win_set_buf(0, bufnr)
   local jobnr = fn.termopen(meta.command, { detach = 0 })
-  local bufnr = api.nvim_win_get_buf(0)
-  api.nvim_buf_set_name(bufnr, S.term_name .. "_" .. ft)
-  api.nvim_buf_set_option(bufnr, "buflisted", S.listed)
   local timer = vim.loop.new_timer()
   timer:start(
     0,
     0,
     vim.schedule_wrap(function()
-      if vim.api.nvim_win_is_valid(previous_window) then
-        api.nvim_set_current_win(previous_window)
-      end
+      pcall(vim.api.nvim_set_current_win, previous_window)
     end)
   )
   local repl = { ft = ft, jobnr = jobnr, bufnr = bufnr, meta = meta }
+  api.nvim_buf_set_name(bufnr, S.term_name .. "_" .. ft)
   api.nvim_buf_set_var(bufnr, "repl", repl)
   return repl
 end
@@ -201,17 +199,17 @@ function M.send(ft, lines)
   fn.chansend(repl.jobnr, lines)
   -- api.nvim_chan_send(repl.jobnr, table.concat(lines, "\n"))
 
-  local timer = vim.loop.new_timer()
-  timer:start(
-    0,
-    0,
-    vim.schedule_wrap(function()
-      local windows = CB.find_windows_with_repl(repl.bufnr)
-      F.foreach(windows, function(win)
-        vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(repl.bufnr), 0 })
-      end)
-    end)
-  )
+  -- local timer = vim.loop.new_timer()
+  -- timer:start(
+  --   0,
+  --   0,
+  --   vim.schedule_wrap(function()
+  local windows = CB.find_windows_with_repl(repl.bufnr)
+  F.foreach(windows, function(win)
+    vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(repl.bufnr), 0 })
+  end)
+  --   end)
+  -- )
 end
 
 return M
