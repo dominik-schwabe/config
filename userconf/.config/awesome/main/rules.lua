@@ -99,7 +99,7 @@ awful.rules.rules = {
     properties = {
       floating = true,
       sticky = true,
-      placement = f.right
+      placement = f.right,
     },
   },
   {
@@ -183,7 +183,16 @@ awful.rules.rules = {
       size_hints_honor = false,
     },
   },
-  {
+  { -- twitch streams at bottom right sticky but not focus
+    rule = { class = "mpv", name = "^https://www.twitch.tv/.* - mpv$" },
+    properties = {
+      focus = false,
+      callback = function (c)
+        f.bottom_right_sticky(c)
+      end,
+    },
+  },
+  { -- very small widgets should not be in the way
     rule = {},
     callback = function(c)
       if c.height <= 60 then

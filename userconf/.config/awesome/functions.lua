@@ -259,6 +259,11 @@ M.client_fix = function(pos, config)
   end
 end
 
+M.top_right_sticky = M.client_fix("top_right", { width = dpi(400), height = dpi(225), sticky = true })
+M.top_left_sticky = M.client_fix("top_left", { width = dpi(400), height = dpi(225), sticky = true })
+M.bottom_right_sticky = M.client_fix("bottom_right", { width = dpi(400), height = dpi(225), sticky = true })
+M.bottom_left_sticky = M.client_fix("bottom_left", { width = dpi(400), height = dpi(225), sticky = true })
+
 M.right = function(c)
   M.set_geometry(c, { width = 0.5, height = 1, alignment = "bottom_right" })
 end
