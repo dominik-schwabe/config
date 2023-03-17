@@ -30,8 +30,6 @@ require("telescope").setup({
       "--column",
       "--ignore-case",
       "--max-filesize=1M",
-      "--ignore-file",
-      ".gitignore",
     },
     layout_config = { horizontal = { prompt_position = "top" } },
   },

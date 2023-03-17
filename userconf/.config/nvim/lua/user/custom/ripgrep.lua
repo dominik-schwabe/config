@@ -27,8 +27,6 @@ local function rg(string, opt)
     "--no-heading",
     "--vimgrep",
     "--max-filesize=1M",
-    "--ignore-file",
-    ".gitignore",
   }
   if raw then
     string = vim.fn.escape(string, "^$.*+?()[]{}|")

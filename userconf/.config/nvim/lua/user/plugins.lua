@@ -321,8 +321,6 @@ if not config.minimal then
             "--line-number",
             "--column",
             "--max-filesize=1M",
-            "--ignore-file",
-            ".gitignore",
           },
         },
       },
