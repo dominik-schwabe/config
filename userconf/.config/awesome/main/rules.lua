@@ -187,8 +187,13 @@ awful.rules.rules = {
     rule = { class = "mpv", name = "^https://www.twitch.tv/.* - mpv$" },
     properties = {
       focus = false,
-      callback = function (c)
-        f.bottom_right_sticky(c)
+      callback = function(c)
+        c.fullscreen = false
+        c.floating = true
+        c.sticky = true
+        c.width = dpi(400)
+        c.height = dpi(225)
+        awful.placement.bottom_right(c, { honor_workarea = true })
       end,
     },
   },

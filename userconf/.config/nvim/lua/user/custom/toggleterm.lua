@@ -97,5 +97,5 @@ end
 vim.api.nvim_create_user_command("ToggleTermBottom", toggle_term_bottom, {})
 vim.api.nvim_create_user_command("ToggleTermRight", toggle_term_right, {})
 
-vim.keymap.set({ "i", "n", "x", "t" }, "<F10>", toggle_term_bottom, { desc = "toggle terminal at bottom" })
-vim.keymap.set({ "i", "n", "x", "t" }, "<F22>", open_term_cd, { desc = "change directory to current file in terminal" })
+vim.keymap.set({ "i", "n", "x", "t" }, "<F22>", toggle_term_bottom, { desc = "toggle terminal at bottom" })
+vim.keymap.set({ "i", "n", "x", "t" }, "<F23>", open_term_cd, { desc = "change directory to current file in terminal" })

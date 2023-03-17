@@ -20,15 +20,15 @@ _n_: step over
 _+_: step into
 _-_: step out
 _c_: continue
-_H_: to cursor
-_R_: run last
-_b_: toggle bp
-_gb_: cond bp
+_<F8>_: to cursor
+_<F9>_: run last
+_<F5>_: toggle bp
+_<F17>_: cond bp
 _gx_: clear bp
 _L_: list bp
 _K_: Eval
-_gq_: terminate
-_<F5>_: exit
+_<F12>_: terminate
+_<F21>_: exit
 ]]
 
 local dapui = F.load("dapui", function(dapui)
@@ -51,21 +51,21 @@ F.load("hydra", function(Hydra)
     },
     name = "dap",
     mode = { "n", "x" },
-    body = "<F5>",
+    body = "<F21>",
     heads = {
       { "n", dap.step_over, { silent = true, nowait = true } },
       { "+", dap.step_into, { silent = true, nowait = true } },
       { "-", dap.step_out, { silent = true, nowait = true } },
       { "c", dap.continue, { silent = true, nowait = true } },
-      { "H", dap.run_to_cursor, { silent = true, nowait = true } },
-      { "R", dap.run_last, { silent = true, nowait = true } },
-      { "b", dap.toggle_breakpoint, { silent = true, nowait = true } },
-      { "gb", F.f(U.input, "Breakpoint condition: ", dap.set_breakpoint), { silent = true, nowait = true } },
+      { "<F8>", dap.run_to_cursor, { silent = true, nowait = true } },
+      { "<F9>", dap.run_last, { silent = true, nowait = true } },
+      { "<F5>", dap.toggle_breakpoint, { silent = true, nowait = true } },
+      { "<F17>", F.f(U.input, "Breakpoint condition: ", dap.set_breakpoint), { silent = true, nowait = true } },
       { "gx", dap.clear_breakpoints, { silent = true, nowait = true } },
       { "L", dap.list_breakpoints, { silent = true, nowait = true } },
       { "K", require("dap.ui.widgets").hover, { silent = true, nowait = true } },
-      { "gq", dap.terminate, { silent = true, nowait = true } },
-      { "<F5>", nil, { exit = true, nowait = true } },
+      { "<F12>", dap.terminate, { silent = true, nowait = true } },
+      { "<F21>", nil, { exit = true, nowait = true } },
     },
   })
   if dapui then
@@ -75,7 +75,7 @@ F.load("hydra", function(Hydra)
     end
   end
 
-  vim.keymap.set({ "n", "x" }, "<F8>", function()
+  vim.keymap.set({ "n", "x" }, "<F24>", function()
     dap_hydra:exit()
     dap.disconnect({ terminateDebuggee = true })
     if dapui then

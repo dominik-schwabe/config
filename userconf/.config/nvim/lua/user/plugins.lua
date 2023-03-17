@@ -205,7 +205,7 @@ if not config.minimal then
     {
       "johmsalas/text-case.nvim",
       config = l("text-case"),
-      keys = { "<space>u", "<space>U", "<space>k", "<space>K", "<space>cu", "<space>cU", "<space>ck", "<space>cK" },
+      keys = { "<space>ac" },
     },
     {
       "stevearc/dressing.nvim",
