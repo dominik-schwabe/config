@@ -157,7 +157,7 @@ local function lsp_root()
   end)))
 end
 
-vim.keymap.set("n", "<space>f", function()
+vim.keymap.set({ "n", "x" }, "<space>f", function()
   vim.lsp.buf.format({
     async = true,
     filter = function(a)
@@ -170,10 +170,3 @@ vim.api.nvim_create_user_command("LspRoot", lsp_root, {})
 
 vim.keymap.set("n", "<space>lds", lsp_settings, { desc = "show lsp settings" })
 vim.keymap.set("n", "<space>ldr", lsp_root, { desc = "show lsp roots" })
-
--- make gq work
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    vim.bo[args.buf].formatexpr = nil
-  end,
-})

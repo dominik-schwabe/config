@@ -1,9 +1,11 @@
 local F = require("user.functional")
-local utils = require("user.utils")
+local U = require("user.utils")
 
 require("user.completions")
 
 local cmp = require("cmp")
+
+local max_buffer_size = 100 * 1024
 
 local cmp_options = {
   enabled = function()
@@ -24,14 +26,14 @@ local cmp_options = {
       if cmp.visible() then
         cmp.select_next_item()
       else
-        utils.feedkeys("<Tab>", "n")
+        U.feedkeys("<Tab>", "n")
       end
     end,
     ["<S-Tab>"] = function()
       if cmp.visible() then
         cmp.select_prev_item()
       else
-        utils.feedkeys("<S-Tab>", "n")
+        U.feedkeys("<S-Tab>", "n")
       end
     end,
   }),
@@ -42,8 +44,27 @@ local cmp_options = {
     { name = "yank_history" },
     { name = "path" },
     { name = "crates" },
-    { name = "tmux" },
-    { name = "buffer", max_item_count=5 },
+    {
+      name = "buffer",
+      option = {
+        get_bufnrs = function()
+          local bufs = F.filter(vim.api.nvim_list_bufs(), function(buf)
+            return vim.bo[buf].buflisted
+              and vim.api.nvim_buf_is_loaded(buf)
+              and not U.is_big_buffer(buf, max_buffer_size)
+          end)
+          return bufs
+        end,
+      },
+      max_item_count = 3,
+    },
+    {
+      name = "tmux",
+      option = {
+        all_panes = true,
+      },
+      max_item_count = 3,
+    },
   }),
 }
 
@@ -102,6 +123,8 @@ end)
 
 cmp.setup(cmp_options)
 
-F.load("nvim-autopairs.completion.cmp", function(cmp_autopairs)
-  cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-end)
+cmp.setup.filetype({ "tex", "plaintex" }, {
+  sources = {
+    { name = "lua-latex-symbols" },
+  },
+})

@@ -1,5 +1,4 @@
-local config = require("user.config")
-
+local U = require("user.utils")
 local F = require("user.functional")
 
 vim.api.nvim_create_augroup("options", {})
@@ -7,7 +6,7 @@ vim.api.nvim_create_augroup("options", {})
 vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
   group = "options",
   callback = function(opts)
-    if config.is_big_buffer(opts.buf) then
+    if U.is_big_buffer_whitelisted(opts.buf) then
       vim.bo[opts.buf].syntax = "off"
       vim.opt_local.swapfile = false
       F.load("illuminate.engine", function(illuminate)

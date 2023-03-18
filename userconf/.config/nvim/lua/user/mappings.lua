@@ -1,5 +1,25 @@
 local U = require("user.utils")
 
+local home = vim.env.HOME
+
+local function file_stats()
+  local win = vim.api.nvim_get_current_win()
+  local buf = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_line_count(buf)
+  local size = U.convert(U.buffer_size(buf))
+  local cwd = vim.fn.getcwd(win)
+  if cwd:sub(1, #home) == home then
+    cwd = "~" .. cwd:sub(#home + 1)
+  end
+  local subpath = vim.fn.expand("%p")
+
+  print(string.format("%d | %s / %s | %d | %s", buf, cwd, subpath, lines, size))
+end
+
+local function filepath()
+  print(vim.api.nvim_buf_get_name(0))
+end
+
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>qa<CR>", { desc = "quit neovim" })
 vim.keymap.set({ "n", "x" }, "ö", "<CMD>noh<CR>", { desc = "clear selection" })
 vim.keymap.set("x", "<", "<gv", { desc = "decrement indentation" })
@@ -20,16 +40,12 @@ vim.keymap.set("n", "db", "dvb", { desc = "delete word backwards" })
 vim.keymap.set("n", "dB", "dvB", { desc = "delete word backwards with punctuation" })
 vim.keymap.set("n", "cb", "cvb", { desc = "change word backwards" })
 vim.keymap.set("n", "cB", "cvB", { desc = "change word backwards with punctuation" })
-vim.keymap.set("n", "<C-g>", "2<C-g>", { desc = "show information about buffer" })
+vim.keymap.set("n", "<C-g>", file_stats, { desc = "show information about buffer" })
+vim.keymap.set("n", "<space>ag", filepath, { desc = "show current file path" })
 vim.keymap.set({ "n", "x" }, "gw", "<CMD>write<CR>", { desc = "write buffer changes" })
+vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "break line" })
+vim.keymap.set({ "n" }, "gqq", "gwl", { desc = "break line" })
 vim.keymap.set({ "n", "x" }, "<space>tw", "<CMD>set wrap!<CR>", { desc = "write buffer changes" })
 vim.keymap.set("n", "<space>cw", function()
   vim.cmd("cd %:p:h")
 end, { desc = "change directory to current file" })
--- vim.keymap.set({ "n" }, ":", function()
---   if not vim.api.nvim_buf_get_name(0):match("%[Command Line%]$") and vim.api.nvim_win_get_config(0).relative == "" then
---     U.feedkeys("<ESC>q:", "nt", true)
---   else
---     U.feedkeys("<ESC>:", "nt", true)
---   end
--- end)

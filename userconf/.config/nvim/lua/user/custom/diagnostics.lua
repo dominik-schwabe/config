@@ -1,10 +1,10 @@
 local F = require("user.functional")
-local utils = require("user.utils")
+local U = require("user.utils")
 
 local function show_diagnostics(only_buffer)
   local diagnostics = vim.diagnostic.get()
   if only_buffer then
-    local bufnr = utils.last_regular_buffer()
+    local bufnr = U.last_regular_buffer()
     diagnostics = F.filter(diagnostics, function(e)
       return e.bufnr == bufnr
     end)

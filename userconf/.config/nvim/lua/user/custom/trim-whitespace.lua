@@ -1,5 +1,7 @@
 local api = vim.api
 
+local F = require("user.functional")
+
 local function trim_whitespace()
   local buffer = api.nvim_buf_get_number(0)
   if not api.nvim_buf_get_option(buffer, "modifiable") then
@@ -7,9 +9,9 @@ local function trim_whitespace()
     return
   end
   local lines = api.nvim_buf_get_lines(buffer, 0, -1, false)
-  for i = 1, #lines do
-    lines[i] = lines[i]:gsub("%s+$", "")
-  end
+  lines = F.map(lines, function(line)
+    return line:gsub("%s+$", "")
+  end)
   local end_index = #lines
   while end_index > 0 and lines[end_index] == "" do
     lines[end_index] = nil

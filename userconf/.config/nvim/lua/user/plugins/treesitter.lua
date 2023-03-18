@@ -2,12 +2,13 @@ local config = require("user.config")
 local treesitter_config = config.treesitter
 local rainbow = require("user.color").rainbow
 
+local U = require("user.utils")
 local F = require("user.functional")
 
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
 local function disable_func(filetype, bufnr)
-  return config.is_big_buffer(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
+  return U.is_big_buffer_whitelisted(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
 end
 
 F.load("nvim-treesitter.configs", function(tc)
@@ -107,8 +108,8 @@ F.load("nvim-treesitter.configs", function(tc)
           ["i,"] = "@attribute.inner",
           [","] = "@assignment.lhs",
           ["."] = "@assignment.rhs",
-          ["a-"] = "@block.outer",
-          ["i-"] = "@block.inner",
+          ["au"] = "@block.outer",
+          ["iu"] = "@block.inner",
           ["ac"] = "@call.outer",
           ["ic"] = "@call.inner",
           ["ar"] = "@return.outer",
@@ -164,11 +165,17 @@ F.load("nvim-treesitter.configs", function(tc)
   })
 end)
 
-F.load("treesitter-unit", function(treesitter_unit)
-  vim.keymap.set({ "x", "o" }, "iu", function()
-    treesitter_unit.select(true)
-  end, { desc = "inside unit" })
-  vim.keymap.set({ "x", "o" }, "au", function()
-    treesitter_unit.select()
-  end, { desc = "all unit" })
+F.load("hlargs", function(hlargs)
+  hlargs.setup({
+    paint_arg_declarations = false,
+    color = "#00ffaf",
+    disable = disable_func,
+    excluded_argnames = {
+      declarations = {},
+      usages = {
+        python = { "self", "cls" },
+        lua = { "self" },
+      },
+    },
+  })
 end)

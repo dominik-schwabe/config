@@ -1,7 +1,7 @@
 local fn = vim.fn
 local api = vim.api
 
-local utils = require("user.utils")
+local U = require("user.utils")
 local F = require("user.functional")
 
 local curr_rg_job = nil
@@ -84,7 +84,7 @@ local function _rg_word(here)
 end
 
 local function _rg_visual(here)
-  local selection = utils.get_visual_selection(0)
+  local selection = U.get_visual_selection(0)
   if #selection == 0 then
     vim.notify("empty selection")
     return

@@ -1,5 +1,4 @@
-local utils = require("user.utils")
-
+local U = require("user.utils")
 local F = require("user.functional")
 
 vim.opt.autochdir = false
@@ -22,7 +21,7 @@ end
 
 local function has(dir, content)
   for _, c in ipairs(content) do
-    if utils.exists(dir .. "/" .. c) then
+    if U.exists(dir .. "/" .. c) then
       return true
     end
   end
@@ -68,7 +67,7 @@ local function chdir(args)
     return
   end
   local base_path = vim.fn.expand("%:p:h", true)
-  if not utils.exists(base_path) then
+  if not U.exists(base_path) then
     return
   end
   local root = find_root(base_path) or base_path

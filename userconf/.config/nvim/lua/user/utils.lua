@@ -3,6 +3,7 @@ local fn = vim.fn
 local o = vim.o
 
 local F = require("user.functional")
+local config = require("user.config")
 
 local M = {}
 
@@ -212,6 +213,47 @@ function M.desc(opts, description)
   opts = vim.deepcopy(opts)
   opts.desc = description
   return opts
+end
+
+function M.buffer_size(buf)
+  return vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+end
+
+function M.is_big_buffer(buf, max_size)
+  max_size = max_size or config.max_buffer_size
+  return M.buffer_size(buf) > max_size
+end
+
+function M.is_big_buffer_whitelisted(buf, max_size, whitelist)
+  whitelist = whitelist or config.big_files_whitelist
+  return M.is_big_buffer(buf, max_size) and not vim.tbl_contains(config.big_files_whitelist, vim.bo[buf].filetype)
+end
+
+function M.convert(b)
+  local num_digits = math.floor(math.log10(b))
+  local lower_power = num_digits - num_digits % 3
+  local order = lower_power / 3
+  local unit
+  if order <= 1 then
+    order = 1
+    unit = "K"
+  elseif order == 2 then
+    unit = "M"
+  elseif order == 3 then
+    unit = "G"
+  elseif order == 4 then
+    unit = "T"
+  elseif order == 5 then
+    unit = "P"
+  elseif order == 6 then
+    unit = "E"
+  elseif order == 7 then
+    unit = "Z"
+  elseif order == 8 then
+    unit = "Y"
+  end
+  local num = b / math.pow(1000, order)
+  return string.format("%.0f%s", num, unit)
 end
 
 return M

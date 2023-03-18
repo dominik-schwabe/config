@@ -1,7 +1,7 @@
 local api = vim.api
 
 local pp = require("repl.preprocess")
-local utils = require("repl.utils")
+local U = require("repl.utils")
 
 local M = {}
 
@@ -15,7 +15,7 @@ function M.line(number)
 end
 
 function M.visual()
-  return utils.get_visual_selection(0)
+  return U.get_visual_selection(0)
 end
 
 function M.paragraph()

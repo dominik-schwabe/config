@@ -1,7 +1,6 @@
 local api = vim.api
 local bo = vim.bo
 
-local utils = require("user.utils")
 local config = require("user.config")
 
 local F = require("user.functional")
@@ -20,7 +19,7 @@ local function insert_brackets(open, close, same_line)
   else
     local prev_line = api.nvim_buf_get_lines(0, row - 1, row, false)[1]
     local num_tabs = math.floor(num_leading_spaces(U.replace_tab(prev_line)) / bo.shiftwidth)
-    local lines = { open, utils.get_shifts(num_tabs + 1), utils.get_shifts(num_tabs) .. close }
+    local lines = { open, U.get_shifts(num_tabs + 1), U.get_shifts(num_tabs) .. close }
     api.nvim_buf_set_text(0, row - 1, col, row - 1, col, lines)
     local line = api.nvim_buf_get_lines(0, row, row + 1, false)[1]
     api.nvim_win_set_cursor(0, { row + 1, #line })

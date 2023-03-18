@@ -2,13 +2,8 @@ local M = {}
 
 M.minimal = os.getenv("MINIMAL_CONFIG")
 M.log_level = vim.log.levels.OFF
-local max_file_size = 100 * 1024
-local big_files_whitelist = { "help" }
-M.is_big_buffer = function(buf)
-  local file_size = vim.api.nvim_buf_call(buf, vim.fn.wordcount).bytes
-  local filetype = vim.bo[buf].filetype
-  return file_size > max_file_size and not vim.tbl_contains(big_files_whitelist, filetype)
-end
+M.max_buffer_size = 300 * 1024
+M.big_files_whitelist = { "help" }
 M.lsp_signs = {
   Error = " ",
   Warning = " ",

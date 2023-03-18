@@ -4,6 +4,7 @@ local bo = vim.bo
 local fn = vim.fn
 local api = vim.api
 
+local U = require("user.utils")
 local config = require("user.config")
 
 local F = require("user.functional")
@@ -46,7 +47,7 @@ end
 local function update_trailing_highlight(opts)
   local buf = opts.buf
   local filetype = bo[buf].filetype
-  b[buf].disable_trailing = config.is_big_buffer(buf)
+  b[buf].disable_trailing = U.is_big_buffer_whitelisted(buf)
     or F.contains(whitespace_blacklist, filetype)
     or not bo[buf].modifiable
   trailing_highlight()

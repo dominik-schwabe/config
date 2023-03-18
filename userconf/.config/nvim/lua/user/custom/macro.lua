@@ -1,7 +1,7 @@
 local fn = vim.fn
 
 local F = require("user.functional")
-local utils = require("user.utils")
+local U = require("user.utils")
 local preview = require("user.preview")
 
 local macro_regs = { "a" }
@@ -14,12 +14,12 @@ end
 
 local function get_macro(s)
   s = s or slot
-  return utils.reverse_replace_termcodes(fn.getreg(macro_regs[s]))
+  return U.reverse_replace_termcodes(fn.getreg(macro_regs[s]))
 end
 
 local function set_macro(str, s)
   s = s or slot
-  fn.setreg(macro_regs[s], utils.replace_termcodes(str))
+  fn.setreg(macro_regs[s], U.replace_termcodes(str))
 end
 
 local function start_macro()

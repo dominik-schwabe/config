@@ -80,7 +80,6 @@ local lspconfig = with_dependencies({
   },
 }, {
   { "WhoIsSethDaniel/mason-tool-installer.nvim" },
-  { "SmiteshP/nvim-navic" },
   { "b0o/schemastore.nvim" },
   {
     "RRethy/vim-illuminate",
@@ -103,7 +102,14 @@ local cmp = with_dependencies({
     { "saadparwaiz1/cmp_luasnip" },
     { "onsails/lspkind.nvim" },
     { "hrsh7th/cmp-nvim-lsp" },
-    { "hrsh7th/cmp-buffer" },
+    {
+      "hrsh7th/cmp-buffer",
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end,
+      },
+    },
   },
 }, {
   { "hrsh7th/cmp-path" },
@@ -261,24 +267,10 @@ if not config.minimal then
       dependencies = {
         { "mrjones2014/nvim-ts-rainbow" },
         -- { "HiPhish/nvim-ts-rainbow2" },
-        {
-          "m-demare/hlargs.nvim",
-          opts = {
-            paint_arg_declarations = false,
-            color = "#00ffaf", -- "#5fafff" "#04c99b" "#02b4ef"
-            excluded_argnames = {
-              declarations = {},
-              usages = {
-                python = { "self", "cls" },
-                lua = { "self" },
-              },
-            },
-          },
-        },
+        { "m-demare/hlargs.nvim" },
         { "nvim-treesitter/nvim-treesitter-textobjects" },
         { "nvim-treesitter/nvim-treesitter-context" },
         { "windwp/nvim-ts-autotag" },
-        { "David-Kunz/treesitter-unit" },
       },
     },
     {

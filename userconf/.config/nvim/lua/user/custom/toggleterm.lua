@@ -3,7 +3,7 @@ local api = vim.api
 local fn = vim.fn
 
 local F = require("user.functional")
-local utils = require("user.utils")
+local U = require("user.utils")
 
 local term_buf
 local term_win
@@ -84,7 +84,7 @@ end
 
 local function open_term_cd()
   toggle_term({ only_open = true })
-  local bufnr = utils.last_regular_buffer()
+  local bufnr = U.last_regular_buffer()
   if bufnr then
     local path = vim.api.nvim_buf_get_name(bufnr)
     path = vim.fs.normalize(path)
