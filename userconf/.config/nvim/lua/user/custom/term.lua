@@ -3,6 +3,8 @@ local wo = vim.wo
 local api = vim.api
 local cmd = vim.cmd
 
+local F = require("user.functional")
+
 local config = require("user.config")
 local utils = require("user.utils")
 
@@ -27,7 +29,7 @@ local function set_term_options(args)
     wo.number = false
     wo.relativenumber = false
     wo.signcolumn = "no"
-  elseif not vim.tbl_contains({ "quickfix", "nofile" }, buftype) and utils.exists(api.nvim_buf_get_name(bufnr)) then
+  elseif not F.contains({ "quickfix", "nofile" }, buftype) and utils.exists(api.nvim_buf_get_name(bufnr)) then
     wo.number = true
     wo.relativenumber = true
     wo.signcolumn = "yes:2"

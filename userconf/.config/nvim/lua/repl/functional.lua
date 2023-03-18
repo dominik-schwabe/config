@@ -1,30 +1,12 @@
 local M = {}
 
-function M.map(list, cb)
-  local mapped = {}
-  for _, el in ipairs(list) do
-    mapped[#mapped + 1] = cb(el)
-  end
-  return mapped
+M.map = function(tbl, func)
+  return vim.tbl_map(func, tbl)
 end
-
-function M.filter(list, cb)
-  local filtered = {}
-  for _, el in ipairs(list) do
-    if cb(el) then
-      filtered[#filtered + 1] = el
-    end
-  end
-  return filtered
+M.filter = function(tbl, func)
+  return vim.tbl_filter(func, tbl)
 end
-
-function M.keys(list)
-  local keys = {}
-  for key, _ in pairs(list) do
-    keys[#keys + 1] = key
-  end
-  return keys
-end
+M.keys = vim.tbl_keys
 
 function M.min(list)
   if #list > 0 then

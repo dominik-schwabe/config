@@ -1,5 +1,7 @@
 local utils = require("user.utils")
 
+local F = require("user.functional")
+
 vim.opt.autochdir = false
 
 local base = {
@@ -62,7 +64,7 @@ local function find_root(base_path)
 end
 
 local function chdir(args)
-  if not vim.tbl_contains({ "", "acwrite" }, vim.bo[args.buf].buftype) then
+  if not F.contains({ "", "acwrite" }, vim.bo[args.buf].buftype) then
     return
   end
   local base_path = vim.fn.expand("%:p:h", true)

@@ -173,4 +173,8 @@ function M.load(src, cb)
   return nil
 end
 
+function M.schedule(cb)
+  require("gears.timer").delayed_call(cb)
+end
+
 return M

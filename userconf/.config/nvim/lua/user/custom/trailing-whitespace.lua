@@ -1,4 +1,5 @@
 local b = vim.b
+local w = vim.w
 local bo = vim.bo
 local fn = vim.fn
 local api = vim.api
@@ -8,80 +9,68 @@ local config = require("user.config")
 local F = require("user.functional")
 
 local whitespace_blacklist = config.whitespace_blacklist
-local window_matches = {}
 
 local trailing_patterns = {
   n = [[\(\s\|\r\)\+$]],
   i = [[\(\s\|\r\)\+\%#\@<!$]],
 }
 
-local function trailing_highlight(buf, mode)
-  if b[buf].disable_trailing then
-    return
-  end
+local function trailing_highlight(mode)
   mode = mode or fn.mode()
-  local win_id = api.nvim_get_current_win()
-  local win_state = window_matches[win_id]
-  if win_state ~= nil then
-    if win_state.mode == mode then
-      return
-    else
-      pcall(fn.matchdelete, win_state.id)
-      window_matches[win_id] = nil
+  local current_window = api.nvim_get_current_win()
+  local windows = api.nvim_list_wins()
+  F.foreach(windows, function(window)
+    local new_win_mode = nil
+    local buf = api.nvim_win_get_buf(window)
+    if not b[buf].disable_trailing and window == current_window then
+      new_win_mode = mode
     end
-  end
-  if mode ~= nil then
-    window_matches[win_id] = {
-      id = fn.matchadd("TrailingWhitespace", trailing_patterns[mode]),
-      mode = mode,
-    }
-  end
+    local trailing_state = w[window].trailing_state or {}
+    if trailing_state.mode ~= new_win_mode then
+      if trailing_state.id ~= nil then
+        fn.matchdelete(trailing_state.id, window)
+      end
+      local new_win_state = nil
+      local pattern = trailing_patterns[new_win_mode]
+      if pattern ~= nil then
+        new_win_state = {
+          id = fn.matchadd("TrailingWhitespace", pattern, 10, -1, { window = window }),
+          mode = new_win_mode,
+        }
+      end
+      w[window].trailing_state = new_win_state
+    end
+  end)
 end
 
-local function update_trailing_highlight(buf)
+local function update_trailing_highlight(opts)
+  local buf = opts.buf
   local filetype = bo[buf].filetype
-  b[buf].disable_trailing = vim.tbl_contains(whitespace_blacklist, filetype) or not bo[buf].modifiable
-  trailing_highlight(buf)
+  b[buf].disable_trailing = config.is_big_buffer(buf)
+    or F.contains(whitespace_blacklist, filetype)
+    or not bo[buf].modifiable
+  trailing_highlight()
 end
 
 vim.api.nvim_create_augroup("UserTrailingWhitespace", {})
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function(opts)
-    local buf = opts.buf
-    b[opts.buf].is_big_buffer = config.is_big_buffer(buf)
-    if not b[opts.buf].is_big_buffer then
-      update_trailing_highlight(buf)
-      vim.api.nvim_create_autocmd({ "InsertLeave" }, {
-        group = "UserTrailingWhitespace",
-        buffer = buf,
-        callback = F.f(trailing_highlight, buf, "n"),
-      })
-      vim.api.nvim_create_autocmd({ "InsertEnter" }, {
-        group = "UserTrailingWhitespace",
-        buffer = buf,
-        callback = F.f(trailing_highlight, buf, "i"),
-      })
-      vim.api.nvim_create_autocmd({ "BufEnter" }, {
-        group = "UserTrailingWhitespace",
-        buffer = buf,
-        callback = F.f(trailing_highlight, buf),
-      })
-      vim.api.nvim_create_autocmd({ "FileType" }, {
-        group = "UserTrailingWhitespace",
-        buffer = buf,
-        callback = F.f(update_trailing_highlight, buf),
-      })
-    end
-  end,
+vim.api.nvim_create_autocmd({ "BufWrite", "BufEnter", "WinEnter", "FileType" }, {
+  group = "UserTrailingWhitespace",
+  callback = update_trailing_highlight,
 })
 
 vim.api.nvim_create_autocmd("OptionSet", {
   group = "UserTrailingWhitespace",
   pattern = "modifiable",
-  callback = function(opts)
-    if not b[opts.buf].is_big_buffer then
-      update_trailing_highlight(opts.buf)
-    end
-  end,
+  callback = update_trailing_highlight,
+})
+
+vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+  group = "UserTrailingWhitespace",
+  callback = F.f(trailing_highlight, "n"),
+})
+
+vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+  group = "UserTrailingWhitespace",
+  callback = F.f(trailing_highlight, "i"),
 })

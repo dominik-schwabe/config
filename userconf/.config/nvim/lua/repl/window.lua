@@ -52,14 +52,9 @@ local function start_terminal(ft, meta)
   local bufnr = api.nvim_create_buf(S.listed, false)
   api.nvim_win_set_buf(0, bufnr)
   local jobnr = fn.termopen(meta.command, { detach = 0 })
-  local timer = vim.loop.new_timer()
-  timer:start(
-    0,
-    0,
-    vim.schedule_wrap(function()
-      pcall(vim.api.nvim_set_current_win, previous_window)
-    end)
-  )
+  vim.schedule(function()
+    pcall(vim.api.nvim_set_current_win, previous_window)
+  end)
   local repl = { ft = ft, jobnr = jobnr, bufnr = bufnr, meta = meta }
   api.nvim_buf_set_name(bufnr, S.term_name .. "_" .. ft)
   api.nvim_buf_set_var(bufnr, "repl", repl)
@@ -94,14 +89,9 @@ local function show_term(bufnr)
   CB.create_window()
   local term_window = vim.api.nvim_get_current_win()
   api.nvim_win_set_buf(term_window, bufnr)
-  local timer = vim.loop.new_timer()
-  timer:start(
-    0,
-    0,
-    vim.schedule_wrap(function()
-      pcall(vim.api.nvim_set_current_win, previous_window)
-    end)
-  )
+  vim.schedule(function()
+    pcall(vim.api.nvim_set_current_win, previous_window)
+  end)
 end
 
 local function job_exists(jobnr)

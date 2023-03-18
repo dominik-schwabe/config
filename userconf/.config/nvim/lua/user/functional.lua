@@ -1,28 +1,20 @@
 local M = {}
 local config = require("user.config")
 
+M.map = function(tbl, func)
+  return vim.tbl_map(func, tbl)
+end
+M.filter = function(tbl, func)
+  return vim.tbl_filter(func, tbl)
+end
+M.keys = vim.tbl_keys
+M.values = vim.tbl_values
+M.contains = vim.tbl_contains
+
 function M.foreach(list, cb)
   for _, value in ipairs(list) do
     cb(value)
   end
-end
-
-function M.map(list, cb)
-  local mapped = {}
-  for _, value in ipairs(list) do
-    mapped[#mapped + 1] = cb(value)
-  end
-  return mapped
-end
-
-function M.filter(list, cb)
-  local filtered = {}
-  for _, value in ipairs(list) do
-    if cb(value) then
-      filtered[#filtered + 1] = value
-    end
-  end
-  return filtered
 end
 
 function M.reduce(list, cb, default)
@@ -69,34 +61,12 @@ function M.all(list, cb)
   return true
 end
 
-function M.keys(obj)
-  local keys = {}
-  for key, _ in pairs(obj) do
-    keys[#keys + 1] = key
-  end
-  return keys
-end
-
-function M.values(obj)
-  local values = {}
-  for _, value in pairs(obj) do
-    values[#values + 1] = value
-  end
-  return values
-end
-
 function M.entries(obj)
   local entries = {}
   for key, value in pairs(obj) do
     entries[#entries + 1] = { key, value }
   end
   return entries
-end
-
-function M.contains(list, x)
-  return M.any(list, function(value)
-    return value == x
-  end)
 end
 
 function M.min(list)

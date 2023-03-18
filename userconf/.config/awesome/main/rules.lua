@@ -5,6 +5,8 @@ local clientbuttons = require("binding.clientbuttons")
 local dpi = require("beautiful.xresources").apply_dpi
 local f = require("functions")
 
+local F = require("util.functional")
+
 local dialog_placement = awful.placement.centered + awful.placement.no_offscreen
 local normal_placement = awful.placement.centered + awful.placement.no_overlap + awful.placement.no_offscreen
 
@@ -193,7 +195,9 @@ awful.rules.rules = {
         c.sticky = true
         c.width = dpi(400)
         c.height = dpi(225)
-        awful.placement.bottom_right(c, { honor_workarea = true })
+        F.schedule(function()
+          awful.placement.bottom_right(c, { honor_workarea = true })
+        end)
       end,
     },
   },
