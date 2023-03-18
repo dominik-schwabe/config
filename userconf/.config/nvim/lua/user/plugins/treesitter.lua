@@ -6,11 +6,14 @@ local F = require("user.functional")
 
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
+local function disable_func(filetype, bufnr)
+  return config.is_big_buffer(bufnr) or vim.tbl_contains(treesitter_config.highlight_disable, filetype)
+end
+
 F.load("nvim-treesitter.configs", function(tc)
   tc.setup({
     playground = {
       enable = false,
-      disable = {},
       updatetime = 25,
       persist_queries = false,
       keybindings = {
@@ -28,7 +31,7 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     highlight = {
       enable = true,
-      disable = treesitter_config.highlight_disable,
+      disable = disable_func,
     },
     incremental_selection = {
       enable = true,
@@ -40,6 +43,7 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     markid = {
       enable = false,
+      disable = disable_func,
       colors = {
         "#ffffff",
         "#eeeeee",
@@ -56,15 +60,17 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     matchup = {
       enable = false,
+      disable = disable_func,
     },
     indent = {
       enable = false,
+      disable = disable_func,
     },
     rainbow = {
       colors = rainbow,
       enable = true,
+      disable = disable_func,
       extended_mode = true,
-      max_file_lines = 1000,
     },
     -- rainbow = {
     --   enable = true,
@@ -145,11 +151,13 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     autotag = {
       enable = true,
+      disable = disable_func,
     },
     ensure_installed = ensure_installed,
     ignore_install = treesitter_config.ignore_install,
     context_commentstring = {
       enable = true,
+      disable = disable_func,
       enable_autocmd = false,
     },
     additional_vim_regex_highlighting = false,

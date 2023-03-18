@@ -16,17 +16,17 @@ F.load("dap-python", function(dap_python)
 end)
 
 local hydra_hint = [[
-_n_: step over
 _+_: step into
 _-_: step out
-_c_: continue
-_<F8>_: to cursor
-_<F9>_: run last
 _<F5>_: toggle bp
 _<F17>_: cond bp
+_<F6>_: continue
+_<F8>_: to cursor
+_<F9>_: step over
 _gx_: clear bp
-_L_: list bp
-_K_: Eval
+_<F7>_: list bp
+_<F10>_: Eval
+_<F11>_: run last
 _<F12>_: terminate
 _<F21>_: exit
 ]]
@@ -53,17 +53,17 @@ F.load("hydra", function(Hydra)
     mode = { "n", "x" },
     body = "<F21>",
     heads = {
-      { "n", dap.step_over, { silent = true, nowait = true } },
       { "+", dap.step_into, { silent = true, nowait = true } },
       { "-", dap.step_out, { silent = true, nowait = true } },
-      { "c", dap.continue, { silent = true, nowait = true } },
-      { "<F8>", dap.run_to_cursor, { silent = true, nowait = true } },
-      { "<F9>", dap.run_last, { silent = true, nowait = true } },
       { "<F5>", dap.toggle_breakpoint, { silent = true, nowait = true } },
       { "<F17>", F.f(U.input, "Breakpoint condition: ", dap.set_breakpoint), { silent = true, nowait = true } },
+      { "<F6>", dap.continue, { silent = true, nowait = true } },
+      { "<F8>", dap.run_to_cursor, { silent = true, nowait = true } },
+      { "<F9>", dap.step_over, { silent = true, nowait = true } },
+      { "<F11>", dap.run_last, { silent = true, nowait = true } },
       { "gx", dap.clear_breakpoints, { silent = true, nowait = true } },
-      { "L", dap.list_breakpoints, { silent = true, nowait = true } },
-      { "K", require("dap.ui.widgets").hover, { silent = true, nowait = true } },
+      { "<F7>", dap.list_breakpoints, { silent = true, nowait = true } },
+      { "<F10>", require("dap.ui.widgets").hover, { silent = true, nowait = true } },
       { "<F12>", dap.terminate, { silent = true, nowait = true } },
       { "<F21>", nil, { exit = true, nowait = true } },
     },
@@ -75,7 +75,7 @@ F.load("hydra", function(Hydra)
     end
   end
 
-  vim.keymap.set({ "n", "x" }, "<F24>", function()
+  vim.keymap.set({ "n", "x" }, "<F20>", function()
     dap_hydra:exit()
     dap.disconnect({ terminateDebuggee = true })
     if dapui then

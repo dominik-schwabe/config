@@ -15,17 +15,13 @@ local trailing_patterns = {
   i = [[\(\s\|\r\)\+\%#\@<!$]],
 }
 
-local function trailing_highlight(mode)
-  if b.disable_trailing then
-    mode = nil
-  elseif mode == "auto" then
-    mode = fn.mode()
-  end
-  local win_id = api.nvim_get_current_win()
-  local win_state = window_matches[win_id]
-  if win_state == nil and mode == nil then
+local function trailing_highlight(buf, mode)
+  if b[buf].disable_trailing then
     return
   end
+  mode = mode or fn.mode()
+  local win_id = api.nvim_get_current_win()
+  local win_state = window_matches[win_id]
   if win_state ~= nil then
     if win_state.mode == mode then
       return
@@ -35,44 +31,57 @@ local function trailing_highlight(mode)
     end
   end
   if mode ~= nil then
-    local pattern = trailing_patterns[mode]
-    local match_id = fn.matchadd("TrailingWhitespace", pattern)
-    window_matches[win_id] = { id = match_id, mode = mode }
+    window_matches[win_id] = {
+      id = fn.matchadd("TrailingWhitespace", trailing_patterns[mode]),
+      mode = mode,
+    }
   end
 end
 
-local function update_trailing_highlight(args)
-  local filetype = args.match
-  if filetype == "" then
-    filetype = bo.filetype
-  end
-  b.disable_trailing = F.contains(whitespace_blacklist, filetype) or not bo.modifiable
-  trailing_highlight("auto")
+local function update_trailing_highlight(buf)
+  local filetype = bo[buf].filetype
+  b[buf].disable_trailing = vim.tbl_contains(whitespace_blacklist, filetype) or not bo[buf].modifiable
+  trailing_highlight(buf)
 end
 
 vim.api.nvim_create_augroup("UserTrailingWhitespace", {})
-vim.api.nvim_create_autocmd("InsertLeave", {
-  group = "UserTrailingWhitespace",
-  callback = F.f(trailing_highlight, "n")
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function(opts)
+    local buf = opts.buf
+    b[opts.buf].is_big_buffer = config.is_big_buffer(buf)
+    if not b[opts.buf].is_big_buffer then
+      update_trailing_highlight(buf)
+      vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+        group = "UserTrailingWhitespace",
+        buffer = buf,
+        callback = F.f(trailing_highlight, buf, "n"),
+      })
+      vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+        group = "UserTrailingWhitespace",
+        buffer = buf,
+        callback = F.f(trailing_highlight, buf, "i"),
+      })
+      vim.api.nvim_create_autocmd({ "BufEnter" }, {
+        group = "UserTrailingWhitespace",
+        buffer = buf,
+        callback = F.f(trailing_highlight, buf),
+      })
+      vim.api.nvim_create_autocmd({ "FileType" }, {
+        group = "UserTrailingWhitespace",
+        buffer = buf,
+        callback = F.f(update_trailing_highlight, buf),
+      })
+    end
+  end,
 })
-vim.api.nvim_create_autocmd("InsertEnter", {
-  group = "UserTrailingWhitespace",
-  callback = F.f(trailing_highlight, "i")
-})
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = "UserTrailingWhitespace",
-  callback = F.f(trailing_highlight, "auto")
-})
-vim.api.nvim_create_autocmd("TermOpen", {
-  group = "UserTrailingWhitespace",
-  callback = update_trailing_highlight,
-})
-vim.api.nvim_create_autocmd("FileType", {
-  group = "UserTrailingWhitespace",
-  callback = update_trailing_highlight,
-})
+
 vim.api.nvim_create_autocmd("OptionSet", {
   group = "UserTrailingWhitespace",
   pattern = "modifiable",
-  callback = update_trailing_highlight,
+  callback = function(opts)
+    if not b[opts.buf].is_big_buffer then
+      update_trailing_highlight(opts.buf)
+    end
+  end,
 })

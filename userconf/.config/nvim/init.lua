@@ -12,6 +12,7 @@ local U = require("user.utils")
 vim.api.nvim_create_augroup("user", {})
 
 vim.api.nvim_create_autocmd("BufReadPost", {
+  group = "user",
   callback = function(opt)
     local bo = vim.bo[opt.buf]
     if bo.readonly then

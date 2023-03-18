@@ -207,7 +207,7 @@ function M.make_telescope_extension()
     local function attach_mappings(_, map)
       local function accept(bufnr)
         actions.close(bufnr)
-        U.call_deferred(function()
+        vim.schedule(function()
           _diffsplit(original_bufnr, action_state.get_selected_entry().value.commit)
         end)
       end
