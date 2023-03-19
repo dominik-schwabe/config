@@ -186,7 +186,7 @@ awful.rules.rules = {
     },
   },
   { -- twitch streams at bottom right sticky but not focus
-    rule = { class = "mpv", name = "^https://www.twitch.tv/.* - mpv$" },
+    rule = { class = "mpv", name = "^mpv_media_stream.*$" },
     properties = {
       focus = false,
       callback = function(c)

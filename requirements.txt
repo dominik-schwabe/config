@@ -6,3 +6,4 @@ neovim-remote
 pipenv
 pynvim
 telegram-send
+yt-dlp

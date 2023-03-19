@@ -102,14 +102,7 @@ local cmp = with_dependencies({
     { "saadparwaiz1/cmp_luasnip" },
     { "onsails/lspkind.nvim" },
     { "hrsh7th/cmp-nvim-lsp" },
-    {
-      "hrsh7th/cmp-buffer",
-      option = {
-        get_bufnrs = function()
-          return vim.api.nvim_list_bufs()
-        end,
-      },
-    },
+    { "hrsh7th/cmp-buffer" },
   },
 }, {
   { "hrsh7th/cmp-path" },
