@@ -487,6 +487,15 @@ HL.other = {
   HydraPink = { fg = palette.pink },
   HydraAmaranth = { fg = palette.amaranth },
   HydraTeal = { fg = palette.teal },
+  Orange = { fg = palette.orange },
+  Pink = { fg = palette.pink },
+  Yellow = { fg = palette.yellow },
+  Purple = { fg = palette.purple },
+  Green = { fg = palette.green },
+  Aqua = { fg = palette.aqua },
+  Blue = { fg = palette.fn },
+  White = { fg = palette.white },
+  Grey = { fg = palette.grey },
 }
 
 function M.setup()

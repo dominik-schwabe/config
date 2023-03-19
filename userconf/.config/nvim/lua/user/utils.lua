@@ -234,26 +234,41 @@ function M.convert(b)
   local lower_power = num_digits - num_digits % 3
   local order = lower_power / 3
   local unit
-  if order <= 1 then
-    order = 1
+  local color
+  if order == 0 then
+    unit = "B"
+    color = "White"
+  elseif order <= 1 then
     unit = "K"
+    color = "Aqua"
   elseif order == 2 then
     unit = "M"
+    color = "Yellow"
   elseif order == 3 then
     unit = "G"
+    color = "Pink"
   elseif order == 4 then
     unit = "T"
+    color = "Pink"
   elseif order == 5 then
     unit = "P"
+    color = "Pink"
   elseif order == 6 then
     unit = "E"
+    color = "Pink"
   elseif order == 7 then
     unit = "Z"
+    color = "Pink"
   elseif order == 8 then
     unit = "Y"
+    color = "Pink"
   end
   local num = b / math.pow(1000, order)
-  return string.format("%.0f%s", num, unit)
+  return {
+    value = num,
+    unit = unit,
+    color = color,
+  }
 end
 
 return M

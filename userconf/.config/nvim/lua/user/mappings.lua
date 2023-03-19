@@ -7,13 +7,24 @@ local function file_stats()
   local buf = vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_line_count(buf)
   local size = U.convert(U.buffer_size(buf))
-  local cwd = vim.fn.getcwd(win)
+  local cwd = vim.fn.getcwd(win) .. "/"
   if cwd:sub(1, #home) == home then
     cwd = "~" .. cwd:sub(#home + 1)
   end
   local subpath = vim.fn.expand("%p")
 
-  print(string.format("%d | %s / %s | %d | %s", buf, cwd, subpath, lines, size))
+  vim.api.nvim_echo({
+    { tostring(buf), "Green" },
+    { " ", "White" },
+    { tostring(win), "Blue" },
+    { " ", "White" },
+    { cwd, "Yellow" },
+    { subpath, "Pink" },
+    { " ", "White" },
+    { string.format("%.0f%s", size.value, size.unit), size.color },
+    { " ", "White" },
+    { tostring(lines), "White" },
+  }, false, {})
 end
 
 local function filepath()
