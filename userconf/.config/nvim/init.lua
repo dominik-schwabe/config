@@ -9,6 +9,14 @@ vim.cmd("colorscheme monokai")
 local F = require("user.functional")
 local U = require("user.utils")
 
+local function current_color()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local id = vim.fn.synID(row, col, false)
+  D(vim.fn.synIDattr(id, "name"))
+end
+
+vim.keymap.set({ "n" }, "<space>ah", current_color)
+
 vim.api.nvim_create_augroup("user", {})
 
 vim.api.nvim_create_autocmd("BufReadPost", {
@@ -98,4 +106,18 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-F.load("user.plugins.colorizer")
+F.load("colorizer", function(colorizer)
+  local config = require("user.config")
+
+  local filetypes = F.concat(
+    { "*" },
+    F.foreach(config.colorizer_disable_filetypes, function(filetype)
+      return "!" .. filetype
+    end)
+  )
+
+  colorizer.setup({
+    filetypes = filetypes,
+    user_default_options = { tailwind = true },
+  })
+end)

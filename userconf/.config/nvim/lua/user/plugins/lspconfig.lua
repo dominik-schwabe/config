@@ -8,40 +8,57 @@ local def_opt = { silent = true }
 local F = require("user.functional")
 local U = require("user.utils")
 
-local navic = F.load("nvim-navic")
-
 F.load("neodev", function(neodev)
   neodev.setup({})
 end)
 
-local on_attach = function(client, bufnr)
-  if navic and client.server_capabilities.documentSymbolProvider then
-    navic.attach(client, bufnr)
-  end
+local map_opt = { noremap = true, silent = true }
+vim.keymap.set("n", "gD", lsp_buf.declaration, U.desc(map_opt, "go to declaration"))
+vim.keymap.set("n", "gd", lsp_buf.definition, U.desc(map_opt, "go to definition"))
+vim.keymap.set("n", "gt", lsp_buf.type_definition, U.desc(map_opt, "go to type definition"))
+vim.keymap.set("n", "gr", lsp_buf.references, U.desc(map_opt, "go to reference"))
+vim.keymap.set("n", "gi", lsp_buf.implementation, U.desc(map_opt, "go to implementation"))
+vim.keymap.set("n", "gs", lsp_buf.signature_help, U.desc(map_opt, "show signature help"))
+vim.keymap.set("n", "gh", lsp_buf.hover, U.desc(map_opt, "show hover info"))
+vim.keymap.set("n", "gm", diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
+vim.keymap.set("n", "gn", diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))
+vim.keymap.set("n", "gp", diagnostic.goto_prev, U.desc(map_opt, "go to previous diagnostic"))
+vim.keymap.set("n", "gll", lsp.codelens.refresh, U.desc(map_opt, "refresh codelens"))
+vim.keymap.set("n", "glr", lsp.codelens.run, U.desc(map_opt, "run codelens"))
+vim.keymap.set("n", "gli", lsp_buf.incoming_calls, U.desc(map_opt, "show incoming calls"))
+vim.keymap.set("n", "glo", lsp_buf.outgoing_calls, U.desc(map_opt, "show outgoing calls"))
+vim.keymap.set("n", "<space>awa", lsp_buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
+vim.keymap.set("n", "<space>awr", lsp_buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
+vim.keymap.set("n", "<space>awl", function()
+  print(vim.inspect(lsp_buf.list_workspace_folders()))
+end, U.desc(map_opt, "list loaded workspaces"))
+vim.keymap.set("n", "<space>rn", lsp_buf.rename, U.desc(map_opt, "rename variable"))
+vim.keymap.set("n", "<space>ca", lsp_buf.code_action, U.desc(map_opt, "select code action"))
 
-  local map_opt = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set("n", "gD", lsp_buf.declaration, U.desc(map_opt, "go to declaration"))
-  vim.keymap.set("n", "gd", lsp_buf.definition, U.desc(map_opt, "go to definition"))
-  vim.keymap.set("n", "gt", lsp_buf.type_definition, U.desc(map_opt, "go to type definition"))
-  vim.keymap.set("n", "gr", lsp_buf.references, U.desc(map_opt, "go to reference"))
-  vim.keymap.set("n", "gi", lsp_buf.implementation, U.desc(map_opt, "go to implementation"))
-  vim.keymap.set("n", "gs", lsp_buf.signature_help, U.desc(map_opt, "show signature help"))
-  vim.keymap.set("n", "gh", lsp_buf.hover, U.desc(map_opt, "show hover info"))
-  vim.keymap.set("n", "gm", diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
-  vim.keymap.set("n", "gn", diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))
-  vim.keymap.set("n", "gp", diagnostic.goto_prev, U.desc(map_opt, "go to previous diagnostic"))
-  vim.keymap.set("n", "gll", lsp.codelens.refresh, U.desc(map_opt, "refresh codelens"))
-  vim.keymap.set("n", "glr", lsp.codelens.run, U.desc(map_opt, "run codelens"))
-  vim.keymap.set("n", "gli", lsp_buf.incoming_calls, U.desc(map_opt, "show incoming calls"))
-  vim.keymap.set("n", "glo", lsp_buf.outgoing_calls, U.desc(map_opt, "show outgoing calls"))
-  vim.keymap.set("n", "<space>awa", lsp_buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
-  vim.keymap.set("n", "<space>awr", lsp_buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
-  vim.keymap.set("n", "<space>awl", function()
-    print(vim.inspect(lsp_buf.list_workspace_folders()))
-  end, U.desc(map_opt, "list loaded workspaces"))
-  vim.keymap.set("n", "<space>rn", lsp_buf.rename, U.desc(map_opt, "rename variable"))
-  vim.keymap.set("n", "<space>ca", lsp_buf.code_action, U.desc(map_opt, "select code action"))
-end
+vim.api.nvim_create_autocmd({ "LspAttach" }, {
+  callback = function(args)
+    vim.schedule(function()
+      local buf_map_opt = { noremap = true, silent = true, buffer = args.bufnr }
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      local should_attach = not vim.b[args.buf].is_big_buffer or client.name == "null-ls"
+      if should_attach then
+        F.load("nvim-navic", function(navic)
+          if client.server_capabilities.documentSymbolProvider then
+            navic.attach(client, args.buf)
+          end
+        end)
+
+        if client.name == "rust_analyzer" then
+          F.load("rust-tools", function(rt)
+            vim.keymap.set("n", "gh", rt.hover_actions.hover_actions, U.desc(buf_map_opt, "rust hover actions"))
+          end)
+        end
+      else
+        vim.lsp.buf_detach_client(args.buf, args.data.client_id)
+      end
+    end)
+  end,
+})
 
 local config = require("user.config")
 local lspconfig = require("lspconfig")
@@ -71,23 +88,20 @@ F.load("mason-lspconfig", function(mason_lspconfig)
 
   for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
     local opts = lsp_configs[server_name] or {}
-    opts.on_attach = on_attach
     opts.capabilities = capabilities
-    if server_name == "jsonls" then
-      local schemastore = F.load("schemastore")
-      local schemas = schemastore and schemastore.json.schemas()
-      opts = U.tbl_merge(opts, {
-        settings = { json = { schemas = { schemas } } },
-      })
-    end
-    if server_name == "clangd" then
-      local cap = vim.lsp.protocol.make_client_capabilities()
-      cap.offsetEncoding = { "utf-16" }
-      opts.capabilities = cap
-    end
     opts.lsp_flags = {
       debounce_text_changes = 250,
     }
+    if server_name == "jsonls" then
+      F.load("schemastore", function(schemastore)
+        opts = U.tbl_merge(opts, {
+          settings = { json = { schemas = { schemastore.json.schemas() } } },
+        })
+      end)
+    elseif server_name == "clangd" then
+      opts.capabilities = vim.lsp.protocol.make_client_capabilities()
+      opts.capabilities.offsetEncoding = { "utf-16" }
+    end
     if server_name == "rust_analyzer" then
       opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
       opts.settings = {
@@ -101,12 +115,6 @@ F.load("mason-lspconfig", function(mason_lspconfig)
         local extension_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/"
         local codelldb_path = extension_path .. "adapter/codelldb"
         local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
-
-        opts.on_attach = function(client, bufnr)
-          on_attach(client, bufnr)
-          local map_opt = { noremap = true, silent = true, buffer = bufnr }
-          vim.keymap.set("n", "gh", rt.hover_actions.hover_actions, U.desc(map_opt, "rust hover actions"))
-        end
         rt.setup({
           server = opts,
           dap = {
@@ -139,24 +147,6 @@ vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", { desc = "restart lsp se
 
 vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
 
--- show settings of lspserver
-local function lsp_settings()
-  local clients = vim.lsp.buf_get_clients()
-  print(vim.inspect(F.map(clients, function(client)
-    return client.config.settings
-  end)))
-end
-
-vim.api.nvim_create_user_command("LspSettings", lsp_settings, {})
-
--- show lsp root
-local function lsp_root()
-  local clients = F.values(vim.lsp.buf_get_clients())
-  print(vim.inspect(F.map(clients, function(client)
-    return client.config.root_dir
-  end)))
-end
-
 vim.keymap.set({ "n", "x" }, "<space>f", function()
   vim.lsp.buf.format({
     async = true,
@@ -166,7 +156,13 @@ vim.keymap.set({ "n", "x" }, "<space>f", function()
   })
 end, U.desc(def_opt, "format buffer"))
 
-vim.api.nvim_create_user_command("LspRoot", lsp_root, {})
+-- show settings of lspserver
+local function lsp_settings()
+  local clients = vim.lsp.buf_get_clients()
+  print(vim.inspect(F.map(clients, function(client)
+    return client.config.settings
+  end)))
+end
 
+vim.api.nvim_create_user_command("LspSettings", lsp_settings, {})
 vim.keymap.set("n", "<space>lds", lsp_settings, { desc = "show lsp settings" })
-vim.keymap.set("n", "<space>ldr", lsp_root, { desc = "show lsp roots" })

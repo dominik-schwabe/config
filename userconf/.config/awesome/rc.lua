@@ -7,6 +7,7 @@ package.path = package.path .. ";" .. "/usr/share/lua/5.3/?/init.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.4/?.lua"
 package.path = package.path .. ";" .. "/usr/share/lua/5.4/?/init.lua"
 
+
 local vars = require("main.vars")
 local awful = require("awful")
 local gears = require("gears")
