@@ -271,4 +271,19 @@ function M.convert(b)
   }
 end
 
+function M.remove_path_prefix(path, prefix, prepend)
+  prefix = vim.fs.normalize(prefix)
+  if prefix:sub(-1) ~= "/" then
+    prefix = prefix .. "/"
+  end
+  path = vim.fs.normalize(path)
+  if path:sub(1, #prefix) == prefix then
+    path = path:sub(#prefix + 1)
+  end
+  if prepend then
+    path = prepend .. path
+  end
+  return path
+end
+
 return M

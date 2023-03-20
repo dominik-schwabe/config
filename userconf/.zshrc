@@ -8,8 +8,9 @@ export HISTFILE=~/.zsh_history
 
 echo -n "\e[6 q"
 
-FZF_DEFAULT_COMMAND="fd --type file --color=always"
-FZF_ALT_C_COMMAND="fd --type directory --color=always"
+local fzf_common="--hidden --no-ignore --color=always -E '.cache' -E '.asdf' -E '.local' -E '.thunderbird' -E '.rustup' -E '.cargo' -E '.npm' -E node_modules -E '.git' -E '__pycache__'"
+FZF_CTRL_T_COMMAND="fd $fzf_common --type file"
+FZF_ALT_C_COMMAND="fd $fzf_common --type directory"
 FZF_DEFAULT_OPTS="--ansi"
 
 [[ -z $DISPLAY ]] && export ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=1
@@ -119,39 +120,39 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
     bindkey -M vicmd 'k' history-substring-search-up
     bindkey -M vicmd 'j' history-substring-search-down
 
-  _yay_update() {
-      LBUFFER="yay -Syu"
-      RBUFFER=""
-      zle accept-line
-  }
+    _yay_update() {
+        LBUFFER="yay -Syu"
+        RBUFFER=""
+        zle accept-line
+    }
 
-  zle -N _yay_update
-  bindkey -M vicmd '^[[15~' _yay_update
-  bindkey -M viins '^[[15~' _yay_update
+    zle -N _yay_update
+    bindkey -M vicmd '^[[15~' _yay_update
+    bindkey -M viins '^[[15~' _yay_update
 else
-  PROMPT='%B%F{blue}%2~%f%b >>> '
-  RPS1=''
+    PROMPT='%B%F{blue}%2~%f%b >>> '
+    RPS1=''
 
-  bindkey -v
-  bindkey -M viins "^?" backward-delete-char
+    bindkey -v
+    bindkey -M viins "^?" backward-delete-char
 
-  autoload -Uz add-zsh-hook
-  autoload -Uz add-zle-hook-widget
+    autoload -Uz add-zsh-hook
+    autoload -Uz add-zle-hook-widget
 
-  vi-precmd () {
-      echo -n "\e[6 q"
-  }
+    vi-precmd () {
+        echo -n "\e[6 q"
+    }
 
-  vi-line-pre-redraw () {
-      case "$KEYMAP" in
-          v*) echo -n "\e[2 q" ;;
-          *) echo -n "\e[6 q" ;;
-      esac
-  }
-  add-zsh-hook precmd vi-precmd
-  add-zle-hook-widget line-pre-redraw vi-line-pre-redraw
+    vi-line-pre-redraw () {
+        case "$KEYMAP" in
+            v*) echo -n "\e[2 q" ;;
+            *) echo -n "\e[6 q" ;;
+        esac
+    }
+    add-zsh-hook precmd vi-precmd
+    add-zle-hook-widget line-pre-redraw vi-line-pre-redraw
 
-  export KEYTIMEOUT=10
+    export KEYTIMEOUT=10
 fi
 
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
@@ -192,6 +193,18 @@ alias -g ......='../../../../..'
 
 bindkey -r -M vicmd '\ec'
 bindkey -r -M viins '\ec'
+
+fzf-open-file-in-vim-widget() {
+    local value=$(__fsel)
+    zle reset-prompt
+    if [[ -n $value ]]; then
+        LBUFFER="vim $value"
+        zle accept-line
+    fi
+}
+zle     -N            fzf-open-file-in-vim-widget
+bindkey -M vicmd '^F' fzf-open-file-in-vim-widget
+bindkey -M viins '^F' fzf-open-file-in-vim-widget
 
 bindkey -M vicmd '^P' fzf-cd-widget
 bindkey -M viins '^P' fzf-cd-widget

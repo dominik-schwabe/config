@@ -19,8 +19,7 @@ local trailing_patterns = {
 local function trailing_highlight(mode)
   mode = mode or fn.mode()
   local current_window = api.nvim_get_current_win()
-  local windows = api.nvim_list_wins()
-  F.foreach(windows, function(window)
+  F.foreach(api.nvim_list_wins(), function(window)
     local new_win_mode = nil
     local buf = api.nvim_win_get_buf(window)
     if not b[buf].disable_trailing and window == current_window then
@@ -47,9 +46,7 @@ end
 local function update_trailing_highlight(opts)
   local buf = opts.buf
   local filetype = bo[buf].filetype
-  b[buf].disable_trailing = U.is_big_buffer_whitelisted(buf)
-    or F.contains(whitespace_blacklist, filetype)
-    or not bo[buf].modifiable
+  b[buf].disable_trailing = b[buf].is_big_buffer or F.contains(whitespace_blacklist, filetype) or not bo[buf].modifiable
   trailing_highlight()
 end
 

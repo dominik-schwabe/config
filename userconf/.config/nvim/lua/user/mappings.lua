@@ -18,9 +18,8 @@ local function file_stats()
   local subpath = vim.fn.expand("%p")
   if U.exists(subpath) then
     local cwd = vim.fn.getcwd(win) .. "/"
-    if cwd:sub(1, #home) == home then
-      cwd = "~" .. cwd:sub(#home + 1)
-    end
+    subpath = U.remove_path_prefix(subpath, cwd)
+    cwd = U.remove_path_prefix(cwd, home, "~/")
     sections = F.concat(sections, { { cwd, "Yellow" } })
   end
   sections = F.concat(sections, {
