@@ -1,4 +1,5 @@
 local U = require("user.utils")
+local F = require("user.functional")
 
 local home = vim.env.HOME
 
@@ -7,24 +8,29 @@ local function file_stats()
   local buf = vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_line_count(buf)
   local size = U.convert(U.buffer_size(buf))
-  local cwd = vim.fn.getcwd(win) .. "/"
-  if cwd:sub(1, #home) == home then
-    cwd = "~" .. cwd:sub(#home + 1)
-  end
-  local subpath = vim.fn.expand("%p")
 
-  vim.api.nvim_echo({
+  local sections = {
     { tostring(buf), "Green" },
     { " ", "White" },
     { tostring(win), "Blue" },
     { " ", "White" },
-    { cwd, "Yellow" },
+  }
+  local subpath = vim.fn.expand("%p")
+  if U.exists(subpath) then
+    local cwd = vim.fn.getcwd(win) .. "/"
+    if cwd:sub(1, #home) == home then
+      cwd = "~" .. cwd:sub(#home + 1)
+    end
+    sections = F.concat(sections, { { cwd, "Yellow" } })
+  end
+  sections = F.concat(sections, {
     { subpath, "Pink" },
     { " ", "White" },
     { string.format("%.0f%s", size.value, size.unit), size.color },
     { " ", "White" },
     { tostring(lines), "White" },
-  }, false, {})
+  })
+  vim.api.nvim_echo(sections, false, {})
 end
 
 local function filepath()

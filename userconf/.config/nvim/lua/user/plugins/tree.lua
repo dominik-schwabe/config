@@ -60,11 +60,6 @@ end
 
 nvim_tree.setup({
   on_attach = on_attach,
-  sync_root_with_cwd = true,
-  update_focused_file = {
-    enable = true,
-    update_cwd = true,
-  },
   filters = {
     dotfiles = true,
   },

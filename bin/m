@@ -2,13 +2,13 @@
 
 LINK=$1
 [[ -z $LINK ]] && {
-    echo "link missing"
-    exit 1
+  echo "link missing"
+  exit 1
 }
 if [[ $LINK == "https://www.youtube.com/"* ]]; then
-    nohup mpv --title="mpv_media_stream $1" --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]" $1 &>/dev/null &
+  nohup mpv --title="mpv_media_stream $1" --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]" $1 &>/dev/null &
 else
-    nohup streamlink --player "/bin/mpv --title 'mpv_media_stream $1' --geometry=50%" $1 720p60 &>/dev/null &
+  nohup streamlink --player "/bin/mpv --title='mpv_media_stream $1' --geometry=50%" $1 720p60 &>/dev/null &
 fi
 
 exit 0

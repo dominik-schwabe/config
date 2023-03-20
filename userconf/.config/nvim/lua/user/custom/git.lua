@@ -8,19 +8,99 @@ local M = {}
 local function diff_on(win)
   vim.api.nvim_win_call(win, function()
     vim.cmd("diffthis")
+    vim.wo.foldenable = true
   end)
 end
 
-local function diff_off(bufnr)
-  vim.api.nvim_buf_call(bufnr, function()
-    if vim.api.nvim_buf_is_loaded(bufnr) then
-      vim.cmd("diffoff")
+local function diff_off(win)
+  vim.api.nvim_win_call(win, function()
+    vim.cmd("diffoff!")
+  end)
+end
+
+local function reset_win(win)
+  if vim.api.nvim_win_is_valid(win) then
+    diff_off(win)
+    vim.w[win].get_diffstate = nil
+  end
+end
+
+local function reset_buf(buf)
+  if vim.api.nvim_buf_is_valid(buf) then
+    vim.b[buf].get_diffstate = nil
+  end
+end
+
+local Diffstate = {}
+Diffstate.__index = Diffstate
+
+function Diffstate:new(obj)
+  obj = setmetatable(obj, self)
+  local autocmd_ids = {}
+  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd("BufWinEnter", {
+    callback = function()
+      if not obj:is_consitent() then
+        obj:reset(true)
+      end
+    end,
+  })
+  local function reset_cb()
+    obj:reset()
+  end
+  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd("WinClosed", {
+    pattern = tostring(obj.main_win),
+    callback = reset_cb,
+  })
+  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd("WinClosed", {
+    pattern = tostring(obj.dependent_win),
+    callback = reset_cb,
+  })
+  obj.autocmd_ids = autocmd_ids
+  local function get_diffstate()
+    return obj
+  end
+  vim.w[obj.main_win].get_diffstate = get_diffstate
+  vim.b[obj.main_buf].get_diffstate = get_diffstate
+  vim.w[obj.dependent_win].get_diffstate = get_diffstate
+  vim.b[obj.dependent_buf].get_diffstate = get_diffstate
+  return obj
+end
+
+function Diffstate:is_consitent()
+  return vim.api.nvim_win_is_valid(self.main_win)
+    and vim.api.nvim_win_is_valid(self.dependent_win)
+    and vim.api.nvim_win_get_buf(self.main_win) == self.main_buf
+    and vim.api.nvim_win_get_buf(self.dependent_win) == self.dependent_buf
+end
+
+function Diffstate:reset(dont_set_buf)
+  F.foreach(self.autocmd_ids, vim.api.nvim_del_autocmd)
+  reset_win(self.main_win)
+  reset_win(self.dependent_win)
+  reset_buf(self.main_buf)
+  reset_buf(self.dependent_buf)
+  if
+    vim.api.nvim_win_is_valid(self.dependent_win)
+    and vim.api.nvim_win_get_buf(self.dependent_win) == self.dependent_buf
+  then
+    local current_win = vim.api.nvim_get_current_win()
+    local get_current_diffstate = vim.w[current_win].get_diffstate
+    local should_close = get_current_diffstate == nil
+      or get_current_diffstate().dependent_win == current_win
+      or #vim.api.nvim_tabpage_list_wins(self.tabpage) > 2
+    if should_close then
+      U.close_win(self.dependent_win)
+    else
+      if not dont_set_buf then
+        vim.api.nvim_win_set_buf(self.dependent_win, self.main_buf)
+      end
     end
-  end)
+  end
 end
 
-local function get_paths(bufnr)
-  local file_path = vim.api.nvim_buf_get_name(bufnr)
+local function get_paths(win)
+  local buf = vim.api.nvim_win_get_buf(win)
+  local file_path = vim.api.nvim_buf_get_name(buf)
   local paths = {}
   paths.file_path = U.exists(file_path) and file_path or nil
   paths.git_dir = paths.file_path
@@ -32,10 +112,10 @@ end
 
 local function bail_paths(paths)
   if not paths.file_path then
-    vim.notify("invalid file")
+    vim.notify("invalid file", vim.log.levels.ERROR)
     return true
   elseif not paths.git_dir then
-    vim.notify("not in a git project")
+    vim.notify("not in a git project", vim.log.levels.ERROR)
     return true
   end
   return false
@@ -64,70 +144,95 @@ local function commits(paths)
   end)
 end
 
-local function _diffsplit(original_bufnr, commit)
-  local paths = get_paths(original_bufnr)
+local function find_stats(main_win)
+  local tab_windows = vim.api.nvim_tabpage_list_wins(vim.api.nvim_win_get_tabpage(main_win))
+  local window_with_stats = F.find(tab_windows, function(win)
+    return vim.w[win].get_diffstate ~= nil
+  end)
+  return window_with_stats and vim.w[window_with_stats].get_diffstate()
+end
+
+local function resolve_commit_hash(git_dir, commit)
+  local commit_hash = git({ "--git-dir", git_dir, "--literal-pathspecs", "rev-parse", "--verify", commit, "--" })
+  return commit_hash and commit_hash[1]
+end
+
+local function get_rel_lines(project_path, commit_hash, rel_path)
+  return git({ "-C", project_path, "--literal-pathspecs", "show", commit_hash .. ":" .. rel_path })
+end
+
+local function reset_dependent(main_win)
+  local old_stats = vim.w[main_win].get_diffstate
+  if old_stats ~= nil and old_stats().dependent_win == main_win then
+    old_stats():reset()
+    return true
+  end
+  return false
+end
+
+local function reset_same_existing(main_win, commit_hash)
+  local old_stats = find_stats(main_win)
+  if old_stats ~= nil then
+    old_stats:reset()
+    if old_stats.main_win == main_win and old_stats.commit == commit_hash then
+      return true
+    end
+  end
+  return false
+end
+
+local function _diffsplit(main_win, commit)
+  if reset_dependent(main_win) then
+    return
+  end
+  local main_buf = vim.api.nvim_win_get_buf(main_win)
+  local paths = get_paths(main_win)
   if bail_paths(paths) then
     return
   end
-  local commit_hash = git({ "--git-dir", paths.git_dir, "--literal-pathspecs", "rev-parse", "--verify", commit, "--" })
+  local commit_hash = resolve_commit_hash(paths.git_dir, commit)
   if not commit_hash then
-    vim.notify("git command not successful")
+    vim.notify("git command not successful", vim.log.levels.ERROR)
     return
   end
-  commit_hash = commit_hash[1]
-  local lines = git({ "-C", paths.project_path, "--literal-pathspecs", "show", commit_hash .. ":" .. paths.rel_path })
+  if reset_same_existing(main_win, commit_hash) then
+    return
+  end
+  local lines = get_rel_lines(paths.project_path, commit_hash, paths.rel_path)
   if not lines then
-    vim.notify("no lines")
+    vim.notify("no lines", vim.log.levels.ERROR)
     return
   end
-  local original_win = vim.api.nvim_get_current_win()
-  local diff_bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(diff_bufnr, 0, 1, true, lines)
-  local original_line, _ = unpack(vim.api.nvim_win_get_cursor(original_win))
+  local dependent_buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(dependent_buf, 0, 1, true, lines)
+  local original_line, _ = unpack(vim.api.nvim_win_get_cursor(main_win))
   vim.cmd("vsplit")
-  local diff_win = vim.api.nvim_get_current_win()
-  vim.api.nvim_set_current_win(original_win)
-  vim.bo[diff_bufnr].filetype = vim.bo[original_bufnr].filetype
-  vim.bo[diff_bufnr].modifiable = false
-  vim.bo[diff_bufnr].swapfile = false
-  vim.bo[diff_bufnr].bufhidden = "wipe"
-  vim.api.nvim_win_set_buf(diff_win, diff_bufnr)
-  vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = diff_bufnr, desc = "close the diffsplit buffer" })
-  diff_on(original_win)
-  diff_on(diff_win)
-  vim.api.nvim_win_set_option(original_win, "foldenable", true)
-  vim.api.nvim_win_set_option(diff_win, "foldenable", true)
-  local reseted = false
-  local function reset_diff()
-    if not reseted then
-      diff_off(original_bufnr)
-      diff_off(diff_bufnr)
-      U.close_win(diff_win)
-      reseted = true
-    end
-  end
-  vim.api.nvim_win_set_cursor(original_win, { original_line, 0 })
+  local dependent_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_set_current_win(main_win)
+  vim.bo[dependent_buf].filetype = vim.bo[main_buf].filetype
+  vim.bo[dependent_buf].modifiable = false
+  vim.bo[dependent_buf].swapfile = false
+  vim.bo[dependent_buf].bufhidden = "wipe"
+  vim.api.nvim_win_set_buf(dependent_win, dependent_buf)
+  vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = dependent_buf, desc = "close the diffsplit buffer" })
+  diff_on(main_win)
+  diff_on(dependent_win)
+  Diffstate:new({
+    tabpage = vim.api.nvim_win_get_tabpage(main_win),
+    main_win = main_win,
+    main_buf = main_buf,
+    dependent_win = dependent_win,
+    dependent_buf = dependent_buf,
+    commit = commit_hash,
+  })
+  vim.api.nvim_win_set_cursor(main_win, { original_line, 0 })
   vim.cmd.normal("h") -- this is for syncing the cursors
-  vim.api.nvim_set_current_win(diff_win)
-  vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
-    buffer = original_bufnr,
-    callback = reset_diff,
-    once = true,
-  })
-  vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
-    buffer = diff_bufnr,
-    callback = reset_diff,
-    once = true,
-  })
-  vim.api.nvim_create_autocmd({ "WinNew", "WinClosed", "BufWinEnter" }, {
-    callback = reset_diff,
-    once = true,
-  })
+  vim.api.nvim_set_current_win(dependent_win)
 end
 
-local function diffsplit(commit)
-  local original_bufnr = U.mru_buffers()[1]
-  _diffsplit(original_bufnr, commit)
+local function diffsplit(commit, win)
+  local original_win = win or vim.api.nvim_get_current_win()
+  _diffsplit(original_win, commit)
 end
 
 vim.keymap.set("n", "<space>gg", function()
@@ -178,8 +283,8 @@ function M.make_telescope_extension()
 
   local function entry_point(opts)
     opts = opts or {}
-    local original_bufnr = U.mru_buffers()[1]
-    local paths = get_paths(original_bufnr)
+    local original_win = vim.api.nvim_get_current_win()
+    local paths = get_paths(original_win)
     if bail_paths(paths) then
       return
     end
@@ -208,7 +313,7 @@ function M.make_telescope_extension()
       local function accept(bufnr)
         actions.close(bufnr)
         vim.schedule(function()
-          _diffsplit(original_bufnr, action_state.get_selected_entry().value.commit)
+          _diffsplit(original_win, action_state.get_selected_entry().value.commit)
         end)
       end
       map("i", "<CR>", accept)

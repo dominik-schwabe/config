@@ -124,6 +124,7 @@ local nvim_tree = with_dependencies({
   keys = {
     { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
     { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
+    { "<space>af", "<CMD>NvimTreeFindFile!<CR><CMD>NvimTreeOpen<CR>", mode = { "n" } },
   },
 }, { { "nvim-tree/nvim-web-devicons" } })
 
