@@ -231,8 +231,7 @@ local function _diffsplit(main_win, opts)
   end
   local lines = get_rel_lines(paths.project_path, commit_hash, paths.rel_path)
   if not lines then
-    notify("no lines")
-    return
+    lines = {}
   end
   local dependent_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(dependent_buf, 0, 1, true, lines)

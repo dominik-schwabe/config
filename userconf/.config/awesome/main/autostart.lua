@@ -4,12 +4,12 @@ local F = require("util.functional")
 local autostart_programs = {
   { 0, "brave &>/dev/null" },
   { 2, "easyeffects --gapplication-service" },
-  { 2, "unclutter --timeout 0.7" },
-  { 2, "flameshot" },
-  { 4, "birdtray" },
-  { 5, "spotify-launcher &>/dev/null" },
-  { 6, "launch_discord" },
-  { 8, "telegram-desktop -startintray" },
+  { 3, "unclutter --timeout 0.7" },
+  { 4, "spotify-launcher &>/dev/null" },
+  { 6, "flameshot" },
+  { 8, "birdtray" },
+  { 10, "launch_discord" },
+  { 12, "telegram-desktop -startintray" },
 }
 
 awful.spawn.easy_async_with_shell("xrdb -query | grep -q '^awesome\\.started:\\s*true$'", function(_, _, _, exit_code)

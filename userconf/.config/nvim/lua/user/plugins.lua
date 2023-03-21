@@ -169,6 +169,7 @@ local plugins = {
     keys = {
       { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" }, desc = "find files" },
       { "_", "<CMD>Telescope live_grep<CR>", mode = { "n", "x" }, desc = "live grep" },
+      { "<space>a-", "<CMD>Telescope grep_string<CR>", mode = { "n", "x" }, desc = "live grep" },
       { "z=", "<CMD>Telescope spell_suggest<CR><ESC>", desc = "spell suggest" },
       {
         "<space>/",
