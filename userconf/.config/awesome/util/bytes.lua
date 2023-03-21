@@ -1,7 +1,7 @@
 local M = {}
 
 function M.convert(b)
-  local num_digits = math.floor(math.log10(b))
+  local num_digits = math.max(math.floor(math.log10(b)), 0)
   local lower_power = num_digits - num_digits % 3
   local order = lower_power / 3
   local unit

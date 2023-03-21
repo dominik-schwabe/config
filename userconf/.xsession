@@ -3,7 +3,7 @@ setxkbmap de nodeadkeys
 setxkbmap -option 'ctrl:nocaps'
 
 xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" -0.4
-killall xbindkeys; xbindkeys
+killall --quiet xbindkeys; xbindkeys
 
 [[ -f $HOME/.xmodmaprc ]] && xmodmap $HOME/.xmodmaprc
 

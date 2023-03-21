@@ -187,4 +187,20 @@ function M.load(src, cb, silent)
   return nil
 end
 
+function M.sorted_find(tbl, el)
+  local lower = 1
+  local upper = #tbl + 1
+  while lower < upper do
+    local mid = math.floor((lower + upper) / 2)
+    if tbl[mid] == el then
+      return true, mid
+    elseif tbl[mid] < el then
+      lower = mid + 1
+    else
+      upper = mid
+    end
+  end
+  return false, upper
+end
+
 return M

@@ -298,12 +298,14 @@ local function cycle(direction)
   end
   if prev_cycle_path then
     prev_cycle_path = U.remove_path_prefix(prev_cycle_path, project_path)
-    D({ project_path, prev_cycle_path })
-    next_index = math.fmod(vim.fn.index(changed_files, prev_cycle_path) + direction, #changed_files)
-    if next_index < 0 then
+    local found, index = F.sorted_find(changed_files, prev_cycle_path)
+    if not found and direction > 0 then
+      direction = direction - 1
+    end
+    next_index = math.fmod(index + direction, #changed_files)
+    if next_index <= 0 then
       next_index = #changed_files + next_index
     end
-    next_index = next_index + 1
   end
   local next_file = changed_files[next_index]
   vim.cmd("e " .. project_path .. "/" .. next_file)
