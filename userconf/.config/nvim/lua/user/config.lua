@@ -128,6 +128,9 @@ M.lsp_configs = {
             url = os.getenv("HOME") .. "/experiments/schema-test.json",
           },
         },
+        validate = {
+          enable = true,
+        },
       },
     },
   },

@@ -95,7 +95,7 @@ F.load("mason-lspconfig", function(mason_lspconfig)
     if server_name == "jsonls" then
       F.load("schemastore", function(schemastore)
         opts = U.tbl_merge(opts, {
-          settings = { json = { schemas = { schemastore.json.schemas() } } },
+          settings = { json = { schemas = schemastore.json.schemas() } },
         })
       end)
     elseif server_name == "clangd" then
