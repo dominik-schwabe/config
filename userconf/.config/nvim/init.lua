@@ -116,17 +116,12 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 F.load("colorizer", function(colorizer)
-  local config = require("user.config")
-
-  local filetypes = F.concat(
-    { "*" },
-    F.foreach(config.colorizer_disable_filetypes, function(filetype)
-      return "!" .. filetype
-    end)
-  )
-
   colorizer.setup({
-    filetypes = filetypes,
-    user_default_options = { tailwind = true },
+    user_default_options = {
+      names = false,
+      rgb_fn = true,
+      hsl_fn = true,
+      tailwind = true,
+    },
   })
 end)

@@ -246,9 +246,5 @@ M.brackets = {
 }
 M.quotes = { '"', "'", "`" }
 M.closable_terminals = { "term://repl*", "term://toggleterm" }
-M.colorizer_disable_filetypes = {
-  "r",
-  "",
-}
 
 return M
