@@ -6,7 +6,7 @@ local function register(group, cb)
   if not events[group] then
     events[group] = {}
   end
-  events[group][#events[group]+1] = cb
+  events[group][#events[group] + 1] = cb
 end
 
 local function call(group)

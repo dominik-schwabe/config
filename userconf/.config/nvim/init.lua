@@ -77,6 +77,15 @@ vim.api.nvim_create_autocmd("VimEnter", {
   command = "clearjumps",
 })
 
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  group = "user",
+  callback = function(opts)
+    if vim.bo[opts.buf].filetype == "help" then
+      vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = opts.buf, desc = "close the buffer" })
+    end
+  end,
+})
+
 local send = require("repl.send")
 local window = require("repl.window")
 

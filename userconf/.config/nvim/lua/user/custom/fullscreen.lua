@@ -1,76 +1,77 @@
 local api = vim.api
-local fn = vim.fn
 
 local F = require("user.functional")
 
-local FLOAT_WIN
-local WIN_ON_ENTER
-local OLD_WIN_HIGHLIGHT
-local BUFFER
+local FS
+
+local function is_floating(win)
+  return vim.api.nvim_win_get_config(win).zindex ~= nil
+end
 
 local function resize_fullscreen()
-  if FLOAT_WIN ~= nil and api.nvim_win_is_valid(FLOAT_WIN) then
-    local uis = api.nvim_list_uis()[1]
-    api.nvim_win_set_width(FLOAT_WIN, uis.width)
-    api.nvim_win_set_height(FLOAT_WIN, uis.height - 2)
-  end
+  local uis = api.nvim_list_uis()[1]
+  api.nvim_win_set_width(FS.win, uis.width)
+  api.nvim_win_set_height(FS.win, uis.height - 2)
 end
 
-local function fullscreen_off(goback)
-  if FLOAT_WIN ~= nil and api.nvim_win_is_valid(FLOAT_WIN) then
-    local float_win = FLOAT_WIN
-    local win_on_enter = WIN_ON_ENTER
-    local old_win_highlight = OLD_WIN_HIGHLIGHT
-    WIN_ON_ENTER = nil
-    FLOAT_WIN = nil
-    OLD_WIN_HIGHLIGHT = nil
-    vim.wo.winhighlight = old_win_highlight
-    local topline = vim.fn.line("w0")
-    local row, col = unpack(api.nvim_win_get_cursor(float_win))
-    api.nvim_win_close(float_win, true)
-    if api.nvim_win_is_valid(win_on_enter) then
-      api.nvim_win_set_cursor(win_on_enter, { row, col })
-      if goback then
-        api.nvim_set_current_win(win_on_enter)
-        vim.fn.winrestview({ topline = topline })
+local function fullscreen_off()
+  F.foreach(FS.autocmd_ids, vim.api.nvim_del_autocmd)
+  if api.nvim_win_is_valid(FS.win) then
+    if api.nvim_win_is_valid(FS.origin_win) then
+      if vim.api.nvim_win_get_buf(FS.origin_win) == FS.buf then
+        local current_buf = vim.api.nvim_win_get_buf(FS.win)
+        if current_buf ~= FS.buf then
+          vim.api.nvim_win_set_buf(FS.origin_win, current_buf)
+        end
+        if vim.api.nvim_get_current_win() == FS.win then
+          local row, col = unpack(api.nvim_win_get_cursor(FS.win))
+          local topline = vim.fn.line("w0")
+          api.nvim_win_set_cursor(FS.origin_win, { row, col })
+          api.nvim_set_current_win(FS.origin_win)
+          vim.fn.winrestview({ topline = topline })
+        end
       end
     end
+    api.nvim_win_close(FS.win, true)
   end
+  FS = nil
+end
+local function get_normal_windows()
+  return F.filter(vim.api.nvim_list_wins(), function(win)
+    return not is_floating(win)
+  end)
 end
 
-local function all_windows()
-  local winnr = fn.winnr("$")
-  local winids = {}
-
-  while winnr > 0 do
-    winids[#winids + 1] = fn.win_getid(winnr)
-    winnr = winnr - 1
+local function is_consistent()
+  if not vim.api.nvim_win_is_valid(FS.win) or vim.api.nvim_win_get_buf(FS.win) ~= FS.buf then
+    return false
   end
-
-  return winids
+  local normal_windows = get_normal_windows()
+  if #normal_windows ~= FS.state_len then
+    return false
+  end
+  return F.all(normal_windows, function(window)
+    return FS.state[window] == vim.api.nvim_win_get_buf(window)
+  end)
 end
 
 local function fullscreen_toggle()
-  if FLOAT_WIN ~= nil and api.nvim_win_is_valid(FLOAT_WIN) then
-    fullscreen_off(true)
+  if FS ~= nil then
+    fullscreen_off()
   else
-    local nonfloat_windows = F.filter(all_windows(), function(winid)
-      return api.nvim_win_get_config(winid).relative == ""
-    end)
-    if #nonfloat_windows <= 1 then
+    if #get_normal_windows() <= 1 then
       vim.notify("already one window")
       return
     end
     local topline = vim.fn.line("w0")
-    local window = api.nvim_get_current_win()
-    if api.nvim_win_get_config(window).relative ~= "" then
+    local origin_win = api.nvim_get_current_win()
+    if is_floating(origin_win) then
       vim.notify("can not fullscreen floating window")
       return
     end
-    WIN_ON_ENTER = window
     local uis = api.nvim_list_uis()[1]
-    BUFFER = api.nvim_win_get_buf(WIN_ON_ENTER)
-    FLOAT_WIN = api.nvim_open_win(BUFFER, true, {
+    local buf = api.nvim_win_get_buf(origin_win)
+    local win = api.nvim_open_win(buf, true, {
       relative = "editor",
       row = 0,
       col = 0,
@@ -80,48 +81,42 @@ local function fullscreen_toggle()
       zindex = 5,
       border = "none",
     })
-    if FLOAT_WIN ~= 0 then
+    if win ~= 0 then
       vim.fn.winrestview({ topline = topline })
-      vim.wo.signcolumn = "yes"
-      OLD_WIN_HIGHLIGHT = vim.wo.winhighlight
-      vim.wo.winhighlight = "SignColumn:FullscreenMarker,NormalFloat:TermBackground"
-      local row, col = unpack(api.nvim_win_get_cursor(WIN_ON_ENTER))
-      api.nvim_win_set_cursor(FLOAT_WIN, { row, col })
+      local row, col = unpack(api.nvim_win_get_cursor(origin_win))
+      api.nvim_win_set_cursor(win, { row, col })
+      local state = {}
+      local normal_windows = get_normal_windows()
+      F.foreach(normal_windows, function(window)
+        state[window] = vim.api.nvim_win_get_buf(window)
+      end)
+      FS = {
+        origin_win = origin_win,
+        win = win,
+        buf = buf,
+        state_len = #normal_windows,
+        state = state,
+      }
+      FS.autocmd_ids = {}
+      FS.autocmd_ids[#FS.autocmd_ids + 1] = api.nvim_create_autocmd({
+        "WinClosed",
+        "WinEnter",
+        "BufWinEnter",
+        "WinNew",
+      }, {
+        callback = function()
+          vim.schedule(function()
+            if FS ~= nil and not is_consistent() then
+              fullscreen_off()
+            end
+          end)
+        end,
+      })
+      FS.autocmd_ids[#FS.autocmd_ids + 1] = api.nvim_create_autocmd("VimResized", {
+        callback = resize_fullscreen,
+      })
     end
   end
 end
-
-api.nvim_create_augroup("UserFullscreen", {})
-api.nvim_create_autocmd({ "WinEnter" }, {
-  group = "UserFullscreen",
-  callback = function(args)
-    if args.file ~= "" and args.buf ~= BUFFER then
-      fullscreen_off(false)
-    end
-  end,
-})
-
-api.nvim_create_autocmd({ "WinClosed" }, {
-  group = "UserFullscreen",
-  callback = function(args)
-    if api.nvim_win_get_config(tonumber(args.file)).relative == "" then
-      fullscreen_off(true)
-    end
-  end,
-})
-
-api.nvim_create_autocmd({ "BufAdd", "WinNew" }, {
-  group = "UserFullscreen",
-  callback = function()
-    fullscreen_off(false)
-  end,
-})
-
-api.nvim_create_autocmd("VimResized", {
-  group = "UserFullscreen",
-  callback = function()
-    resize_fullscreen()
-  end,
-})
 
 vim.keymap.set({ "n", "x", "i", "t" }, "<F24>", fullscreen_toggle, { desc = "toggle fullscreen" })

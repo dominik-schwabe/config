@@ -8,7 +8,6 @@ local M = {}
 local function diff_on(win)
   vim.api.nvim_win_call(win, function()
     vim.cmd("diffthis")
-    vim.wo.foldenable = true
   end)
 end
 
@@ -52,25 +51,14 @@ function Diffstate:_register_autocmds()
     error("autocommands already registered")
   end
   local autocmd_ids = {}
-  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd("BufWinEnter", {
+  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufWinEnter", "WinClosed" }, {
     callback = function()
-      if not self:is_consitent() then
-        self:reset()
-      end
+      vim.schedule(function()
+        if not self.resetted and not self:is_consitent() then
+          self:reset()
+        end
+      end)
     end,
-  })
-  local function reset_cb()
-    vim.schedule(function()
-      self:reset()
-    end)
-  end
-  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd("WinClosed", {
-    pattern = tostring(self.main_win),
-    callback = reset_cb,
-  })
-  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd("WinClosed", {
-    pattern = tostring(self.dependent_win),
-    callback = reset_cb,
   })
   self.autocmd_ids = autocmd_ids
 end
@@ -104,13 +92,28 @@ function Diffstate:_close_untracked_wins()
   end)
 end
 
+function Diffstate:_with_main_buf_in_main_win(cb)
+  if vim.api.nvim_win_is_valid(self.main_win) then
+    local curr_main_buf = vim.api.nvim_win_get_buf(self.main_win)
+    if curr_main_buf ~= self.main_buf then
+      vim.api.nvim_win_set_buf(self.main_win, self.main_buf)
+      cb()
+      vim.api.nvim_win_set_buf(self.main_win, curr_main_buf)
+      return
+    end
+  end
+  cb()
+end
+
 function Diffstate:reset()
   self:_clear_autocmds()
   self:_close_untracked_wins()
-  reset_win(self.main_win)
-  reset_win(self.dependent_win)
-  reset_buf(self.main_buf)
-  reset_buf(self.dependent_buf)
+  self:_with_main_buf_in_main_win(function()
+    reset_win(self.main_win)
+    reset_win(self.dependent_win)
+    reset_buf(self.main_buf)
+    reset_buf(self.dependent_buf)
+  end)
   if vim.api.nvim_win_is_valid(self.dependent_win) then
     if vim.api.nvim_win_get_buf(self.dependent_win) == self.dependent_buf then
       if #vim.api.nvim_tabpage_list_wins(self.tabpage) >= 2 then
@@ -124,6 +127,7 @@ function Diffstate:reset()
       U.close_win(self.dependent_win)
     end
   end
+  self.resetted = true
 end
 
 local function get_git_path(base_path)
@@ -216,6 +220,10 @@ local function _diffsplit(main_win, opts)
   if not vim.api.nvim_win_is_valid(main_win) then
     return
   end
+  if U.is_floating(main_win) then
+    notify("can not diff on floating window")
+    return
+  end
   local main_buf = vim.api.nvim_win_get_buf(main_win)
   local paths = get_paths(main_buf)
   if are_paths_invalid(paths, old_stats ~= nil) then
@@ -231,7 +239,12 @@ local function _diffsplit(main_win, opts)
   end
   local lines = get_rel_lines(paths.project_path, commit_hash, paths.rel_path)
   if not lines then
-    lines = {}
+    if opts.force then
+      lines = {}
+    else
+      notify("no lines")
+      return
+    end
   end
   local dependent_buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(dependent_buf, 0, 1, true, lines)
@@ -267,7 +280,7 @@ end
 
 local function cycle(direction)
   local old_stats = reset_existing({ tabpage = vim.api.nvim_get_current_tabpage() })
-  local diff_opts = {}
+  local diff_opts = { force = true }
   local prev_cycle_path
   if old_stats then
     diff_opts.commit_hash = old_stats.commit

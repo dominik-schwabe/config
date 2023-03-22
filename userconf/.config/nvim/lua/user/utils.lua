@@ -290,4 +290,8 @@ function M.remove_path_prefix(path, prefix, prepend)
   return path
 end
 
+function M.is_floating(win)
+  return vim.api.nvim_win_get_config(win).zindex ~= nil
+end
+
 return M
