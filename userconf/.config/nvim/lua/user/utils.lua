@@ -220,7 +220,7 @@ function M.desc(opts, description)
 end
 
 function M.buffer_size(buf)
-  return vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+  return math.max(vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf)) - 1, 0)
 end
 
 function M.is_big_buffer(buf, max_size)
@@ -281,13 +281,24 @@ function M.remove_path_prefix(path, prefix, prepend)
     prefix = prefix .. "/"
   end
   path = vim.fs.normalize(path)
+  local starts_with_prefix = false
   if path:sub(1, #prefix) == prefix then
     path = path:sub(#prefix + 1)
+    starts_with_prefix = true
   end
-  if prepend then
+  if starts_with_prefix and prepend then
     path = prepend .. path
   end
-  return path
+  return path, starts_with_prefix
+end
+
+function M.remove_path_suffix(path, suffix)
+  suffix = vim.fs.normalize(suffix)
+  local ends_with_suffix = false
+  if path:sub(-#suffix) == suffix then
+    path = path:sub(1, -#suffix - 1)
+  end
+  return path, ends_with_suffix
 end
 
 function M.is_floating(win)

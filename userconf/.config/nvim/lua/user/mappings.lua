@@ -1,8 +1,6 @@
 local U = require("user.utils")
 local F = require("user.functional")
 
-local home = vim.env.HOME
-
 local function file_stats()
   local win = vim.api.nvim_get_current_win()
   local buf = vim.api.nvim_get_current_buf()
@@ -15,12 +13,18 @@ local function file_stats()
     { tostring(win), "Blue" },
     { " ", "White" },
   }
-  local subpath = vim.fn.expand("%p")
+  local subpath = vim.fn.expand("%:p")
   if U.exists(subpath) then
-    local cwd = vim.fn.getcwd(win) .. "/"
-    subpath = U.remove_path_prefix(subpath, cwd)
-    cwd = U.remove_path_prefix(cwd, home, "~/")
-    sections = F.concat(sections, { { cwd, "Yellow" } })
+    local root_path = vim.loop.cwd()
+    if root_path:sub(-1) ~= "/" then
+      root_path = root_path .. "/"
+    end
+    local was_removed
+    subpath, was_removed = U.remove_path_prefix(subpath, root_path)
+    if was_removed then
+      root_path = U.remove_path_prefix(root_path, vim.env.HOME, "~/")
+      sections = F.concat(sections, { { root_path, "Yellow" } })
+    end
   end
   sections = F.concat(sections, {
     { subpath, "Pink" },

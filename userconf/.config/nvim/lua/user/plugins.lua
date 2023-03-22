@@ -282,7 +282,7 @@ if not config.minimal then
         { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x", desc = "decrement additional" },
       },
     },
-    { "rhysd/clever-f.vim", keys = { "f", "F", "t", "T" } },
+    { "rhysd/clever-f.vim" },
     { "windwp/nvim-autopairs", config = true, event = "InsertEnter" },
     { "NvChad/nvim-colorizer.lua" },
     { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },
