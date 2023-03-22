@@ -1,43 +1,7 @@
-local U = require("user.utils")
-local F = require("user.functional")
-
-local function file_stats()
-  local win = vim.api.nvim_get_current_win()
-  local buf = vim.api.nvim_get_current_buf()
-  local lines = vim.api.nvim_buf_line_count(buf)
-  local size = U.convert(U.buffer_size(buf))
-
-  local sections = {
-    { tostring(buf), "Green" },
-    { " ", "White" },
-    { tostring(win), "Blue" },
-    { " ", "White" },
-  }
-  local subpath = vim.fn.expand("%:p")
-  if U.exists(subpath) then
-    local root_path = vim.loop.cwd()
-    if root_path:sub(-1) ~= "/" then
-      root_path = root_path .. "/"
-    end
-    local was_removed
-    subpath, was_removed = U.remove_path_prefix(subpath, root_path)
-    if was_removed then
-      root_path = U.remove_path_prefix(root_path, vim.env.HOME, "~/")
-      sections = F.concat(sections, { { root_path, "Yellow" } })
-    end
-  end
-  sections = F.concat(sections, {
-    { subpath, "Pink" },
-    { " ", "White" },
-    { string.format("%.0f%s", size.value, size.unit), size.color },
-    { " ", "White" },
-    { tostring(lines), "White" },
-  })
-  vim.api.nvim_echo(sections, false, {})
-end
-
-local function filepath()
-  print(vim.api.nvim_buf_get_name(0))
+local function current_color()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local id = vim.fn.synID(row, col, false)
+  D(vim.fn.synIDattr(id, "name"))
 end
 
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>qa<CR>", { desc = "quit neovim" })
@@ -60,8 +24,7 @@ vim.keymap.set("n", "db", "dvb", { desc = "delete word backwards" })
 vim.keymap.set("n", "dB", "dvB", { desc = "delete word backwards with punctuation" })
 vim.keymap.set("n", "cb", "cvb", { desc = "change word backwards" })
 vim.keymap.set("n", "cB", "cvB", { desc = "change word backwards with punctuation" })
-vim.keymap.set("n", "<C-g>", file_stats, { desc = "show information about buffer" })
-vim.keymap.set("n", "<space>ag", filepath, { desc = "show current file path" })
+vim.keymap.set({ "n" }, "<space>ah", current_color, { desc = "show the highlighting group under the cursor" })
 vim.keymap.set({ "n", "x" }, "gw", "<CMD>write<CR>", { desc = "write buffer changes" })
 vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "break line" })
 vim.keymap.set({ "n" }, "gqq", "gwl", { desc = "break line" })

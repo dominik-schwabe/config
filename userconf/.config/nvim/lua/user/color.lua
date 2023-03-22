@@ -70,6 +70,7 @@ local palette = {
   light_aqua = "#114444",
   light_yellow = "#444411",
   light_white = "#444444",
+  yank = "#770077",
 }
 
 local S = {
@@ -498,6 +499,7 @@ HL.other = {
   Blue = { fg = palette.fn },
   White = { fg = palette.white },
   Grey = { fg = palette.grey },
+  YankHighlight = { bg = palette.yank },
 }
 
 function M.setup()
