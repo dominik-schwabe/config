@@ -43,7 +43,11 @@ local function get_normal_windows()
 end
 
 local function is_consistent()
-  if not vim.api.nvim_win_is_valid(FS.win) or vim.api.nvim_win_get_buf(FS.win) ~= FS.buf then
+  if
+    not vim.api.nvim_win_is_valid(FS.win)
+    or vim.api.nvim_win_get_buf(FS.win) ~= FS.buf
+    or not is_floating(vim.api.nvim_get_current_win())
+  then
     return false
   end
   local normal_windows = get_normal_windows()
