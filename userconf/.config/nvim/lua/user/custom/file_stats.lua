@@ -1,6 +1,13 @@
 local U = require("user.utils")
 local F = require("user.functional")
 
+local NO_FILES = {
+  "nofile",
+  "quickfix",
+  "terminal",
+  "prompt",
+}
+
 local function file_stats()
   local win = vim.api.nvim_get_current_win()
   local buf = vim.api.nvim_get_current_buf()
@@ -13,8 +20,11 @@ local function file_stats()
     { tostring(win), "Blue" },
     { " ", "White" },
   }
-  local subpath = vim.fn.expand("%:p")
-  if U.exists(subpath) then
+  local subpath
+  if F.contains(NO_FILES, vim.bo[buf].buftype) then
+    subpath = vim.api.nvim_buf_get_name(buf)
+  else
+    subpath = U.simplify_path(vim.fn.expand("%:p"))
     local root_path = vim.loop.cwd()
     if root_path:sub(-1) ~= "/" then
       root_path = root_path .. "/"

@@ -16,15 +16,9 @@ local M = {}
 
 M.show_help = require("awful.hotkeys_popup").show_help
 
-local function cmd_shell(command)
-  return function()
-    awful.spawn.with_shell(command)
-  end
-end
-
 local function cmd(command)
   return function()
-    awful.spawn(command)
+    awful.spawn.with_shell(command)
   end
 end
 
@@ -591,19 +585,19 @@ M.dec_brightness_1 = cmd("brightnessctl set 1%-")
 M.inc_brightness_5 = cmd("brightnessctl set +5%")
 M.dec_brightness_5 = cmd("brightnessctl set 5%-")
 M.rofi = cmd("rofi -show drun")
-M.lock = cmd_shell("playerctl -a pause ; exec i3lock -c 000000")
+M.lock = cmd("playerctl -a pause ; exec i3lock -c 000000")
 M.reboot = cmd("reboot")
 M.toggle_audio = F.chain(cmd("pamixer --toggle-mute"), _volume_notify)
 M.toggle_mic_pci = F.chain(cmd("toggle_microphone_mute pci"), _volume_notify)
 M.toggle_mic_usb = F.chain(cmd("toggle_microphone_mute usb"), _volume_notify)
 M.inc_volume = F.chain(cmd("pamixer -i 5"), _volume_notify)
 M.dec_volume = F.chain(cmd("pamixer -d 5"), _volume_notify)
-M.audio_next = cmd_shell(playerctl .. " next &>/dev/null")
-M.audio_prev = cmd_shell(playerctl .. " previous &>/dev/null")
-M.toggle_audio_program = cmd_shell(playerctl .. " play-pause &>/dev/null")
-M.pause_audio_program = cmd_shell(playerctl .. " pause &>/dev/null")
+M.audio_next = cmd(playerctl .. " next &>/dev/null")
+M.audio_prev = cmd(playerctl .. " previous &>/dev/null")
+M.toggle_audio_program = cmd(playerctl .. " play-pause &>/dev/null")
+M.pause_audio_program = cmd(playerctl .. " pause &>/dev/null")
 M.toggle_lidswitch = cmd("~/.bin/nolidswitch")
-local ensure_webbrowser = cmd_shell("pgrep -u $UID " .. webbrowser .. " || " .. webbrowser .. " &>/dev/null")
+local ensure_webbrowser = cmd("pgrep -u $UID " .. webbrowser .. " || " .. webbrowser .. " &>/dev/null")
 local first_screen = M.tag_viewer(1)
 function M.to_webbrowser_screen()
   ensure_webbrowser()
@@ -612,10 +606,10 @@ end
 M.open_filebrowser = cmd(vars.guifilebrowser)
 M.screen_screenshot = cmd("screenshot -s")
 M.window_screenshot = cmd("screenshot -w")
-M.toggle_compositor = cmd_shell("pkill -u $UID " .. compositor .. " || " .. compositor .. " -b")
+M.toggle_compositor = cmd("pkill -u $UID " .. compositor .. " || " .. compositor .. " -b")
 M.toggle_auto_clicker = cmd("i3clicker")
 M.toggle_color_picker = cmd("i3colorselect")
-M.toggle_window_terminator = cmd_shell("pkill -u $UID xkill || xkill")
+M.toggle_window_terminator = cmd("pkill -u $UID xkill || xkill")
 
 local function focus(c)
   c:emit_signal("request::activate", "mouse_click", { raise = true })

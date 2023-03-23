@@ -23,16 +23,17 @@ require("repl").setup({
 
 local send = require("repl.send")
 local window = require("repl.window")
+local repls = F.keys(require("repl.repls").repls)
 
 local function mark_jump()
   vim.cmd("mark '")
 end
 
-vim.api.nvim_create_autocmd({ "BufNew" }, {
+vim.api.nvim_create_autocmd("FileType", {
   group = "user",
   callback = function(args)
     local bufopt = vim.bo[args.buf]
-    if bufopt.buflisted and bufopt.buftype == "" then
+    if F.contains(repls, bufopt.filetype) then
       vim.keymap.set(
         "n",
         "<C-space>",

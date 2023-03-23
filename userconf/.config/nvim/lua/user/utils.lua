@@ -305,4 +305,10 @@ function M.is_floating(win)
   return vim.api.nvim_win_get_config(win).zindex ~= nil
 end
 
+function M.simplify_path(path)
+  path = vim.fn.simplify(path)
+  path = path:gsub("/+", "/")
+  return path
+end
+
 return M

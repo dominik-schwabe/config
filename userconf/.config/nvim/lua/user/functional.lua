@@ -11,6 +11,26 @@ M.keys = vim.tbl_keys
 M.values = vim.tbl_values
 M.contains = vim.tbl_contains
 
+function M.iter(tbl)
+  local i, v = next(tbl, nil)
+  return function()
+    local prev = v
+    i, v = next(tbl, i)
+    return prev
+  end
+end
+
+function M.filter_map(list, cb)
+  local mapped = {}
+  for _, value in ipairs(list) do
+    local result = cb(value)
+    if result ~= nil then
+      mapped[#mapped + 1] = result
+    end
+  end
+  return mapped
+end
+
 function M.foreach(list, cb)
   for _, value in ipairs(list) do
     cb(value)
@@ -201,6 +221,46 @@ function M.sorted_find(tbl, el)
     end
   end
   return false, upper
+end
+
+function M.merge_sorted(tbl1, tbl2, opts)
+  opts = opts or {}
+  local unique = opts.unique
+  local new_tbl = {}
+  local tbl1_iter = M.iter(tbl1)
+  local tbl2_iter = M.iter(tbl2)
+  local e1 = tbl1_iter()
+  local e2 = tbl2_iter()
+  local last = nil
+  local function add_e1()
+    if not unique or e1 ~= last then
+      new_tbl[#new_tbl + 1] = e1
+    end
+    last = e1
+    e1 = tbl1_iter()
+  end
+  local function add_e2()
+    if not unique or e2 ~= last then
+      new_tbl[#new_tbl + 1] = e2
+    end
+    last = e2
+    e2 = tbl2_iter()
+  end
+  while e1 or e2 do
+    if e1 == nil then
+      add_e2()
+    elseif e2 == nil then
+      add_e1()
+    else
+      if e1 < e2 then
+        add_e1()
+      else
+        add_e2()
+      end
+    end
+    last = new_tbl[#new_tbl]
+  end
+  return new_tbl
 end
 
 return M

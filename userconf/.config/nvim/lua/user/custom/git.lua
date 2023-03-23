@@ -5,6 +5,26 @@ local Job = require("plenary.job")
 
 local M = {}
 
+local function track_buf(buf)
+  vim.bo[buf].buflisted = false
+  vim.bo[buf].bufhidden = "wipe"
+  local autocmd_ids = {}
+  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufWrite" }, {
+    buffer = buf,
+    callback = function()
+      F.foreach(autocmd_ids, vim.api.nvim_del_autocmd)
+      vim.bo[buf].buflisted = true
+      vim.bo[buf].bufhidden = ""
+    end,
+  })
+  autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufDelete" }, {
+    buffer = buf,
+    callback = function()
+      F.foreach(autocmd_ids, vim.api.nvim_del_autocmd)
+    end,
+  })
+end
+
 local function diff_on(win)
   vim.api.nvim_win_call(win, function()
     vim.cmd("diffthis")
@@ -135,9 +155,11 @@ local function get_git_path(base_path)
 end
 
 local function get_paths(buf)
-  local file_path = vim.api.nvim_buf_get_name(buf)
+  local file_path = vim.api.nvim_buf_call(buf, function()
+    return U.simplify_path(vim.fn.expand("%:p"))
+  end)
   local paths = {}
-  paths.file_path = U.exists(file_path) and file_path or nil
+  paths.file_path = file_path:sub(1, 1) == "/" and file_path or nil
   paths.git_dir = paths.file_path and get_git_path(paths.file_path)
   paths.project_path = paths.git_dir and vim.fs.dirname(paths.git_dir)
   paths.rel_path = paths.project_path and paths.file_path:sub(#paths.project_path + 2)
@@ -152,7 +174,7 @@ end
 
 local function are_paths_invalid(paths, silent)
   if not paths.file_path then
-    notify("invalid file", silent)
+    notify("not a file", silent)
     return true
   elseif not paths.git_dir then
     notify("not in a git project", silent)
@@ -171,9 +193,24 @@ local function git(args)
   return job.code == 0 and results or nil
 end
 
-local function get_changed_files(git_dir, commit)
+local function _get_diff_files(git_dir, commit)
+  return git({ "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "diff", "--name-only", commit })
+end
+
+local function _get_untracked_files(git_dir)
   return git_dir
-    and git({ "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "diff", "--name-only", commit })
+    and F.filter_map(
+      git({ "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "status", "--porcelain" }),
+      function(path)
+        if path:sub(1, 2) == "??" then
+          return path:sub(4)
+        end
+      end
+    )
+end
+
+local function get_changed_files(git_dir, commit)
+  return git_dir and F.merge_sorted(_get_diff_files(git_dir, commit), _get_untracked_files(git_dir), { unique = true })
 end
 
 local function commits(paths)
@@ -300,9 +337,7 @@ local function cycle(direction)
   end
   local project_path = vim.fs.dirname(git_dir)
   project_path = project_path .. "/"
-  local changed_files = F.filter(get_changed_files(git_dir, diff_opts.commit_hash or diff_opts.commit), function(path)
-    return U.exists(project_path .. "/" .. path)
-  end)
+  local changed_files = get_changed_files(git_dir, diff_opts.commit_hash or diff_opts.commit)
   local next_index = 1
   if #changed_files == 0 then
     notify("no changed files")
@@ -320,7 +355,11 @@ local function cycle(direction)
     end
   end
   local next_file = changed_files[next_index]
-  vim.cmd("e " .. project_path .. "/" .. next_file)
+  local path = project_path .. "/" .. next_file
+  vim.cmd("e " .. path)
+  if not U.exists(path) then
+    track_buf(vim.api.nvim_get_current_buf())
+  end
   _diffsplit(vim.api.nvim_get_current_win(), diff_opts)
   vim.api.nvim_echo({ { string.format("%d/%d %s", next_index, #changed_files, next_file) } }, false, {})
 end
