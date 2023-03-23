@@ -200,7 +200,7 @@ end
 local function _get_untracked_files(git_dir)
   return git_dir
     and F.filter_map(
-      git({ "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "status", "--porcelain" }),
+      git({ "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "status", "--porcelain", "--untracked-files" }),
       function(path)
         if path:sub(1, 2) == "??" then
           return path:sub(4)
