@@ -54,7 +54,6 @@ vim.api.nvim_create_autocmd("FileType", {
 F.load("colorizer", function(colorizer)
   colorizer.setup({
     user_default_options = {
-      names = false,
       rgb_fn = true,
       hsl_fn = true,
       tailwind = true,
