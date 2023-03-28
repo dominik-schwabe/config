@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import json
 import sys
 
@@ -36,7 +35,11 @@ except IndexError:
 
 url = f"http://{host}:{port}{route}"
 
-kwargs = {}
+kwargs = {
+    "headers": {
+        "origin": "http://localhost:3000",
+    }
+}
 if method != "GET":
     kwargs["json"] = data
 
@@ -52,3 +55,6 @@ try:
 except:
     result = r.text
 print(r.status_code, result)
+print()
+for name, value in r.headers.items():
+    print(name, ":", value)

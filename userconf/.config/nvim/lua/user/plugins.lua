@@ -153,6 +153,23 @@ local plugins = {
       { "rafamadriz/friendly-snippets" },
     },
   },
+  {
+    "stevearc/dressing.nvim",
+    opts = {
+      input = {
+        insert_only = false,
+        win_options = {
+          winblend = 0,
+          winhighlight = "",
+        },
+        override = function(conf)
+          conf.col = -1
+          conf.row = 0
+          return conf
+        end,
+      },
+    },
+  },
   { "kylechui/nvim-surround", config = true },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
@@ -169,7 +186,6 @@ local plugins = {
     keys = {
       { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" }, desc = "find files" },
       { "_", "<CMD>Telescope live_grep<CR>", mode = { "n", "x" }, desc = "live grep" },
-      { "<space>a-", "<CMD>Telescope grep_string<CR>", mode = { "n", "x" }, desc = "live grep" },
       { "z=", "<CMD>Telescope spell_suggest<CR><ESC>", desc = "spell suggest" },
       {
         "<space>/",
@@ -237,23 +253,6 @@ if not config.minimal then
       "johmsalas/text-case.nvim",
       config = l("text-case"),
       keys = { "<space>ac" },
-    },
-    {
-      "stevearc/dressing.nvim",
-      opts = {
-        input = {
-          insert_only = false,
-          win_options = {
-            winblend = 0,
-            winhighlight = "",
-          },
-          override = function(conf)
-            conf.col = -1
-            conf.row = 0
-            return conf
-          end,
-        },
-      },
     },
     {
       "nvim-lualine/lualine.nvim",
