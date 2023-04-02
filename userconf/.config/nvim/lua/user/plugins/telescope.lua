@@ -1,7 +1,7 @@
-local cmd = vim.cmd
+local config = require("user.config")
 
 local function stopinsert()
-  cmd("stopinsert")
+  vim.cmd("stopinsert")
 end
 
 require("telescope").setup({
@@ -30,6 +30,9 @@ require("telescope").setup({
       "--column",
       "--ignore-case",
       "--max-filesize=1M",
+    },
+    preview = {
+      filesize_limit = config.max_buffer_size / (1024 * 1024),
     },
     layout_config = { horizontal = { prompt_position = "top" } },
   },
