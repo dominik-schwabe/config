@@ -22,6 +22,15 @@ local function cmd(command)
   end
 end
 
+local function toggle_launched_cmd(command)
+  local grep_cmd = command:gmatch("[^ ]+")()
+  return cmd("pkill -u $UID " .. grep_cmd .. " || " .. command)
+end
+
+local function toggle_bash_launched_cmd(command)
+  return cmd("pkill -u $UID -f 'bash .*" .. command .. "$' || ( " .. command .. " )")
+end
+
 local function j(func, ...)
   local args = { ... }
   return function()
@@ -606,10 +615,10 @@ end
 M.open_filebrowser = cmd(vars.guifilebrowser)
 M.screen_screenshot = cmd("screenshot -s")
 M.window_screenshot = cmd("screenshot -w")
-M.toggle_compositor = cmd("pkill -u $UID " .. compositor .. " || " .. compositor .. " -b")
-M.toggle_auto_clicker = cmd("i3clicker")
-M.toggle_color_picker = cmd("i3colorselect")
-M.toggle_window_terminator = cmd("pkill -u $UID xkill || xkill")
+M.toggle_compositor = toggle_launched_cmd(compositor)
+M.toggle_auto_clicker = toggle_bash_launched_cmd("auto_clicker")
+M.toggle_color_picker = cmd("pick_color")
+M.toggle_window_terminator = toggle_launched_cmd("xkill")
 
 local function focus(c)
   c:emit_signal("request::activate", "mouse_click", { raise = true })

@@ -194,7 +194,11 @@ local function git(args)
 end
 
 local function _get_diff_files(git_dir, commit)
-  return git({ "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "diff", "--name-only", commit })
+  local args = { "--git-dir", git_dir, "--work-tree", vim.fs.dirname(git_dir), "diff", "--name-only" }
+  if commit ~= "index" then
+    args[#args + 1] = commit
+  end
+  return git(args)
 end
 
 local function _get_untracked_files(git_dir)
@@ -236,12 +240,19 @@ local function find_stats(opts)
 end
 
 local function resolve_commit_hash(git_dir, commit)
+  if commit == "index" then
+    return commit
+  end
   local commit_hash = git({ "--git-dir", git_dir, "--literal-pathspecs", "rev-parse", "--verify", commit, "--" })
   return commit_hash and commit_hash[1]
 end
 
 local function get_rel_lines(project_path, commit_hash, rel_path)
-  return git({ "-C", project_path, "--literal-pathspecs", "show", commit_hash .. ":" .. rel_path })
+  local _commit_hash = commit_hash
+  if commit_hash == "index" then
+    _commit_hash = ":0"
+  end
+  return git({ "-C", project_path, "--literal-pathspecs", "show", _commit_hash .. ":" .. rel_path })
 end
 
 local function reset_existing(opts)
@@ -289,7 +300,14 @@ local function _diffsplit(main_win, opts)
   vim.cmd("vsplit")
   local dependent_win = vim.api.nvim_get_current_win()
   vim.api.nvim_set_current_win(main_win)
-  vim.bo[dependent_buf].filetype = vim.bo[main_buf].filetype
+  local filetype = vim.bo[main_buf].filetype
+  if filetype ~= "" then
+    vim.bo[dependent_buf].filetype = filetype
+  else
+    vim.api.nvim_buf_call(dependent_buf, function()
+      vim.cmd("filetype detect")
+    end)
+  end
   vim.bo[dependent_buf].modifiable = false
   vim.bo[dependent_buf].swapfile = false
   vim.bo[dependent_buf].bufhidden = "wipe"
@@ -381,7 +399,7 @@ vim.keymap.set("n", "<space>gg", function()
 end, { desc = "select commit for diffsplit" })
 
 vim.keymap.set("n", "<space>gd", function()
-  diffsplit({ commit = "HEAD" })
+  diffsplit({ commit = "index" })
 end, { desc = "open diffsplit on HEAD commit" })
 
 function M.make_telescope_extension()

@@ -275,11 +275,15 @@ function M.convert(b)
   }
 end
 
-function M.remove_path_prefix(path, prefix, prepend)
-  prefix = vim.fs.normalize(prefix)
-  if prefix:sub(-1) ~= "/" then
-    prefix = prefix .. "/"
+function M.add_slash(path)
+  if path:sub(-1) ~= "/" then
+    path = path .. "/"
   end
+  return path
+end
+
+function M.remove_path_prefix(path, prefix, prepend)
+  prefix = M.add_slash(vim.fs.normalize(prefix))
   path = vim.fs.normalize(path)
   local starts_with_prefix = false
   if path:sub(1, #prefix) == prefix then

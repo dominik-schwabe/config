@@ -107,8 +107,8 @@ local S = {
   label = C.cool_green,
   method = C.green,
   method_call = C.green,
-  namespace = C.conditional,
-  none = C.yellow,
+  namespace = C.teal,
+  none = C.purple,
   number = C.purple,
   boolean = C.purple,
   operator = C.pink,
@@ -215,7 +215,7 @@ HL.treesitter = {
   ["@method"] = { fg = S.method },
   ["@method.call"] = { fg = S.method_call },
   ["@namespace"] = { fg = S.namespace },
-  ["@none"] = { fg = S.none },
+  ["@none"] = { fg = S.none, bold = true },
   ["@number"] = { fg = S.number },
   ["@operator"] = { fg = S.operator },
   ["@parameter"] = { fg = S.parameter },
@@ -236,14 +236,14 @@ HL.treesitter = {
   ["@tag.attribute"] = { fg = S.tag_attribute },
   ["@tag.delimiter"] = { fg = S.tag_delimiter },
   ["@text"] = { fg = S.text },
-  ["@text.reference"] = { fg = S.reference, underline = true },
+  ["@text.reference"] = { fg = S.reference, underline = false },
   ["@text.strong"] = { fg = S.text_strong, bold = true },
   ["@text.emphasis"] = { fg = S.text_emphasis, bold = true },
   ["@text.underline"] = { fg = S.text_underline, underline = true },
   ["@text.strike"] = { fg = S.text_strike, strikethrough = true },
   ["@text.title"] = { fg = S.text_title, bold = true },
   ["@text.literal"] = { fg = S.text_literal },
-  ["@text.uri"] = { fg = S.text_uri, bold = true },
+  ["@text.uri"] = { fg = C.neon_purple, bold = false },
   ["@text.math"] = { fg = S.text_math },
   ["@text.environment"] = { fg = S.text_environemnt },
   ["@text.environment.name"] = { fg = S.text_environemnt_name },
@@ -257,7 +257,6 @@ HL.treesitter = {
   ["@type.definition"] = { fg = S.type_definition },
   ["@variable"] = { fg = S.variable },
   ["@variable.builtin"] = { fg = S.variable_builtin },
-  markdownTSStringEscape = { bg = C.base6 },
 }
 
 HL.semantic = {
@@ -271,6 +270,27 @@ HL.semantic = {
   ["@lsp.type.function"] = { link = "@function", default = true },
   ["@lsp.mod.crateRoot"] = { link = "@variable.builtin", default = true },
   ["@lsp.typemod.variable.global"] = { fg = S.global },
+}
+
+HL.python = {
+  pythonNone = { link = "@none", default = true },
+  pythonBuiltinType = { link = "@type.builtin", default = true },
+}
+
+HL.lua = {
+  luaFuncKeyword = { link = "@keyword.function", default = true },
+  luaFuncCall = { link = "@function.call", default = true },
+  luaFuncArgName = { link = "@parameter", default = true },
+  luaTable = { link = "@property", default = true },
+  luaLocal = { link = "@keyword", default = true },
+  luaBraces = { link = "@keyword.function", default = true },
+  luaSpecialValue = { link = "@function.builtin", default = true },
+}
+
+HL.markdown = {
+  markdownTSStringEscape = { link = "@comment", default = true },
+  markdownUrl = { link = "@text.uri", default = true },
+  markdownLinkText = { link = "@text.reference", default = true },
 }
 
 HL.navic = {
@@ -478,7 +498,7 @@ HL.lsp = {
   LspReferenceRead = { link = "CursorLine" },
   LspReferenceText = { link = "CursorLine" },
   LspReferenceWrite = { link = "CursorLine" },
-  LspSignatureActiveParameter = { fg = C.orange },
+  LspSignatureActiveParameter = { fg = C.black, bg = C.orange },
 }
 
 HL.help = {

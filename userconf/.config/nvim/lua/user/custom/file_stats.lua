@@ -26,13 +26,10 @@ local function file_stats()
   else
     subpath = U.simplify_path(vim.fn.expand("%:p"))
     local root_path = vim.loop.cwd()
-    if root_path:sub(-1) ~= "/" then
-      root_path = root_path .. "/"
-    end
     local was_removed
     subpath, was_removed = U.remove_path_prefix(subpath, root_path)
     if was_removed then
-      root_path = U.remove_path_prefix(root_path, vim.env.HOME, "~/")
+      root_path = U.add_slash(U.remove_path_prefix(root_path, vim.env.HOME, "~/"))
       sections = F.concat(sections, { { root_path, "Yellow" } })
     end
   end
