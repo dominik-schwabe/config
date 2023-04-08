@@ -41,6 +41,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
       local buf_map_opt = { noremap = true, silent = true, buffer = args.bufnr }
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       local should_attach = not vim.b[args.buf].is_big_buffer or client.name == "null-ls"
+      -- client.server_capabilities.semanticTokensProvider = nil
       if should_attach then
         F.load("nvim-navic", function(navic)
           if client.server_capabilities.documentSymbolProvider then
@@ -72,8 +73,6 @@ F.load("mason-lspconfig", function(mason_lspconfig)
     log_level = vim.log.levels.ERROR,
   })
 
-  local mason_registry = require("mason-registry")
-
   F.load("mason-tool-installer", function(mti)
     mti.setup({
       ensure_installed = mason_ensure_installed,
@@ -103,7 +102,7 @@ F.load("mason-lspconfig", function(mason_lspconfig)
       opts.capabilities.offsetEncoding = { "utf-16" }
     end
     if server_name == "rust_analyzer" then
-      opts.cmd = { mason_registry.get_package("rust-analyzer"):get_install_path() .. "/rust-analyzer" }
+      opts.cmd = { vim.fn.stdpath("data") .. "/mason/bin/rust-analyzer" }
       opts.settings = {
         ["rust-analyzer"] = {
           checkOnSave = {

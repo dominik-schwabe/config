@@ -1,11 +1,14 @@
+vim.loader.enable()
+
 require("user.debug")
+
+vim.cmd("colorscheme monokai")
+
 require("user.options")
 require("user.plugins")
 require("user.custom")
 require("user.mappings")
 require("user.autocmds")
-
-vim.cmd("colorscheme monokai")
 
 local F = require("user.functional")
 local U = require("user.utils")

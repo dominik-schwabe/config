@@ -22,6 +22,14 @@ client.connect_signal("manage", function(c)
     -- Prevent clients from being unreachable after screen count changes.
     awful.placement.no_offscreen(c)
   end
+
+  if c.class == "Spotify" then
+    c:connect_signal("property::urgent", function()
+      if c.urgent then
+        c.urgent = false
+      end
+    end)
+  end
 end)
 
 client.connect_signal("property::maximized", function(c)

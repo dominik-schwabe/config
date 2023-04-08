@@ -27,7 +27,7 @@ F.load("lsp-progress", function(lsp_progress)
 end)
 
 local config = {
-  extensions = { "quickfix" },
+  extensions = { "quickfix", "nvim-tree", "lazy" },
   options = {
     section_separators = "",
     component_separators = { left = "|", right = "|" },

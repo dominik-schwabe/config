@@ -32,7 +32,7 @@ local palette = {
   grey = "#8F908A",
   black = "#000000",
   pink = "#f92672",
-  teal = "#00a1a1",
+  teal = "#00d1d1",
   amaranth = "#ff0077",
   alt_green = "#aadb00",
   green = "#87ff00",
@@ -74,6 +74,7 @@ local palette = {
 }
 
 local S = {
+  global = palette.purple,
   func = palette.green,
   func_call = palette.green,
   variable = palette.white,
@@ -95,8 +96,8 @@ local S = {
   exception = palette.pink,
   field = palette.base7,
   float = palette.purple,
-  func_builtin = palette.neon_purple,
-  func_macro = palette.green,
+  function_builtin = palette.neon_purple,
+  function_macro = palette.neon_purple,
   include = palette.pink,
   keyword = palette.pink,
   keyword_func = palette.fn,
@@ -105,7 +106,7 @@ local S = {
   label = palette.cool_green,
   method = palette.green,
   method_call = palette.green,
-  namespace = palette.purple,
+  namespace = palette.conditional,
   none = palette.yellow,
   number = palette.purple,
   boolean = palette.purple,
@@ -202,8 +203,8 @@ HL.treesitter = {
   ["@float"] = { fg = S.float },
   ["@function"] = { fg = S.func },
   ["@function.call"] = { fg = S.func_call },
-  ["@function.builtin"] = { fg = S.func_builtin },
-  ["@function.macro"] = { fg = S.func_macro },
+  ["@function.builtin"] = { fg = S.function_builtin },
+  ["@function.macro"] = { fg = S.function_macro },
   ["@include"] = { fg = S.include, bold = true },
   ["@keyword"] = { fg = S.keyword },
   ["@keyword.function"] = { fg = S.keyword_func, bold = true },
@@ -256,6 +257,19 @@ HL.treesitter = {
   ["@variable"] = { fg = S.variable },
   ["@variable.builtin"] = { fg = S.variable_builtin },
   markdownTSStringEscape = { bg = palette.base6 },
+}
+
+HL.semantic = {
+  ["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin", default = true },
+  ["@lsp.typemod.function.defaultLibrary"] = { link = "@function.builtin", default = true },
+  ["@lsp.type.property"] = { link = "@property", default = true },
+  ["@lsp.type.namespace"] = { link = "@namespace", default = true },
+  ["@lsp.type.parameter"] = {},
+  ["@lsp.type.variable"] = {},
+  ["@lsp.type.method"] = { link = "@method", default = true },
+  ["@lsp.type.function"] = { link = "@function", default = true },
+  ["@lsp.mod.crateRoot"] = { link = "@variable.builtin", default = true },
+  ["@lsp.typemod.variable.global"] = { fg = S.global },
 }
 
 HL.navic = {
@@ -396,6 +410,7 @@ HL.rainbow = {
 }
 
 HL.diagnostics = {
+  DiagnosticUnnecessary = { bg = S.light_hint },
   DiagnosticSignHint = { fg = S.hint },
   DiagnosticSignInfo = { fg = S.info },
   DiagnosticSignWarn = { fg = S.warning },

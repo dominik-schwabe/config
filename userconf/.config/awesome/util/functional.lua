@@ -173,11 +173,11 @@ function M.load(src, cb)
   return nil
 end
 
-function M.schedule(cb, timeout)
-  if not timeout then
+function M.schedule(cb, timeout_seconds)
+  if not timeout_seconds then
     require("gears.timer").delayed_call(cb)
   else
-    require("gears.timer").start_new(timeout, function()
+    require("gears.timer").start_new(timeout_seconds, function()
       cb()
       return false
     end)

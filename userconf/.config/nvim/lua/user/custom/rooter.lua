@@ -1,6 +1,13 @@
 local U = require("user.utils")
 local F = require("user.functional")
 
+local NO_FILES = {
+  "nofile",
+  "quickfix",
+  "terminal",
+  "prompt",
+}
+
 vim.opt.autochdir = false
 
 local base = {
@@ -63,11 +70,13 @@ local function find_root(base_path)
 end
 
 local function chdir(args)
-  if not F.contains({ "", "acwrite" }, vim.bo[args.buf].buftype) then
+  if F.contains(NO_FILES, vim.bo[args.buf].buftype) then
     return
   end
   local base_path = vim.fn.expand("%:p:h", true)
-  if not U.exists(base_path) then
+  base_path = vim.fs.normalize(base_path)
+  base_path = U.simplify_path(base_path)
+  if base_path:sub(0, 1) ~= "/" then
     return
   end
   local root = find_root(base_path) or base_path

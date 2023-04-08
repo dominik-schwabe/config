@@ -44,10 +44,7 @@ awful.rules.rules = {
       border_color = beautiful.border_normal,
       focus = function(c)
         local should_focus = awful.client.focus.filter(c)
-        return should_focus
-          and c.class ~= "TelegramDesktop"
-          and c.class ~= "thunderbird"
-          and (c.class or c.instance or c.name) -- Spotify
+        return should_focus and not F.contains({ "TelegramDesktop", "thunderbird", "Spotify" }, c.class)
       end,
       keys = clientkeys,
       buttons = clientbuttons,
