@@ -56,10 +56,12 @@ vim.api.nvim_create_autocmd("FileType", {
 
 F.load("colorizer", function(colorizer)
   colorizer.setup({
+    filetypes = { "*", "!cmp_menu" },
     user_default_options = {
       rgb_fn = true,
       hsl_fn = true,
       tailwind = true,
+      always_update = true,
     },
   })
 end)

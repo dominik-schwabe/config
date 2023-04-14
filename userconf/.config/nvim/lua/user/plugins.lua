@@ -308,7 +308,6 @@ if not config.minimal then
       },
       keys = { { "Y", creq("treesj").toggle(), mode = { "n", "x" }, desc = "toggle split join" } },
     },
-    { "nvim-treesitter/playground", cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" } },
     {
       "mfussenegger/nvim-dap",
       config = l("dap"),
@@ -352,6 +351,7 @@ if not config.minimal then
     { "nmac427/guess-indent.nvim", opts = {} },
     { "sheerun/vim-polyglot" },
     { "anuvyklack/hydra.nvim" },
+    { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>al", "<space>ö" } },
     {
       "iamcco/markdown-preview.nvim",
       build = "cd app && npm install",
@@ -405,7 +405,6 @@ require("lazy").setup(plugins, {
 
 -- local unused = {
 --   { "CRAG666/code_runner.nvim" },
---   { "mfussenegger/nvim-lint", config = l("lint") },
 --   { "Wansmer/sibling-swap.nvim", config = true },
 --   { "pwntester/octo.nvim" },
 --   { "NTBBloodbath/rest.nvim" },

@@ -119,23 +119,38 @@ function M.remove(list, e)
 end
 
 function M.concat(...)
-  local new_table = {}
+  local list = {}
   for _, t in ipairs({ ... }) do
     for _, value in ipairs(t) do
-      new_table[#new_table + 1] = value
+      list[#list + 1] = value
     end
   end
-  return new_table
+  return list
+end
+function M.concat_inplace(list, ...)
+  for _, t in ipairs({ ... }) do
+    for _, value in ipairs(t) do
+      list[#list + 1] = value
+    end
+  end
 end
 
-function M.extend(list, ...)
-  local new_table = list
-  for _, t in ipairs({ ... }) do
-    for _, value in ipairs(t) do
-      new_table[#new_table + 1] = value
+function M.extend(...)
+  local obj = {}
+  for _, t in pairs({ ... }) do
+    for key, value in pairs(t) do
+      obj[key] = value
     end
   end
-  return new_table
+  return obj
+end
+
+function M.extend_inplace(obj, ...)
+  for _, t in pairs({ ... }) do
+    for key, value in pairs(t) do
+      obj[key] = value
+    end
+  end
 end
 
 function M.reverse(list)
@@ -221,6 +236,14 @@ function M.sorted_find(tbl, el)
     end
   end
   return false, upper
+end
+
+function M.unique(list)
+  local unique_keys = {}
+  M.foreach(list, function(e)
+    unique_keys[e] = e
+  end)
+  return M.keys(unique_keys)
 end
 
 function M.merge_sorted(tbl1, tbl2, opts)

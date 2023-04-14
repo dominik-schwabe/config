@@ -26,8 +26,12 @@ opt.splitright = true
 opt.cmdheight = 1
 opt.laststatus = 3
 opt.ignorecase = true
+opt.smartcase = true
 opt.clipboard:append("unnamedplus")
+vim.scriptencoding = "utf-8"
 opt.encoding = "utf-8"
+opt.iskeyword:append("-")
+opt.fileencoding = "utf-8"
 opt.scrolloff = 8
 opt.hidden = true
 opt.updatetime = 300
@@ -39,6 +43,7 @@ opt.writebackup = false
 opt.ttyfast = true
 opt.termguicolors = true
 opt.timeout = false
+opt.belloff = "all"
 
 g.clever_f_across_no_line = 1
 g.clever_f_smart_case = 1

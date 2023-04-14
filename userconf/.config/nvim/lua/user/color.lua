@@ -23,7 +23,8 @@ local C = {
   base5 = "#4d5154",
   base6 = "#9ca0a4",
   base7 = "#b1b1b1",
-  base8 = "#e3e3e1",
+  base8 = "#c3c3c1",
+  base9 = "#e3e3e1",
   border = "#a1b5b1",
   brown = "#504945",
   white = "#f8f8f0",
@@ -64,8 +65,8 @@ local C = {
   note = "#d3d3d3",
   diff_add = "#224400",
   diff_remove = "#550000",
-  diff_change = "#222244",
-  diff_text = "#555599",
+  diff_change = "#333366",
+  diff_text = "#666699",
   visual = "#555555",
   light_red = "#441111",
   light_aqua = "#114444",
@@ -257,18 +258,27 @@ HL.treesitter = {
   ["@type.definition"] = { fg = S.type_definition },
   ["@variable"] = { fg = S.variable },
   ["@variable.builtin"] = { fg = S.variable_builtin },
+  ["@structure"] = { fg = S.struct },
 }
 
 HL.semantic = {
-  ["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin", default = true },
-  ["@lsp.typemod.function.defaultLibrary"] = { link = "@function.builtin", default = true },
-  ["@lsp.type.property"] = { link = "@property", default = true },
+  ["@lsp.mod.crateRoot"] = { link = "@variable.builtin", default = true },
+  ["@lsp.type.class"] = { link = "@type", default = true },
+  ["@lsp.type.decorator"] = { link = "@attribute", default = true },
+  ["@lsp.type.enum"] = { link = "@type", default = true },
+  ["@lsp.type.enumMember"] = { link = "@constant", default = true },
+  ["@lsp.type.function"] = { link = "@function", default = true },
+  ["@lsp.type.interface"] = { link = "@type", default = true },
+  ["@lsp.type.macro"] = { link = "@macro", default = true },
+  ["@lsp.type.method"] = { link = "@method", default = true },
   ["@lsp.type.namespace"] = { link = "@namespace", default = true },
   ["@lsp.type.parameter"] = {},
+  ["@lsp.type.property"] = { link = "@property", default = true },
+  ["@lsp.type.struct"] = { link = "@structure", default = true },
+  ["@lsp.type.type"] = { link = "@type", default = true },
   ["@lsp.type.variable"] = {},
-  ["@lsp.type.method"] = { link = "@method", default = true },
-  ["@lsp.type.function"] = { link = "@function", default = true },
-  ["@lsp.mod.crateRoot"] = { link = "@variable.builtin", default = true },
+  ["@lsp.typemod.function.defaultLibrary"] = { link = "@function.builtin", default = true },
+  ["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin", default = true },
   ["@lsp.typemod.variable.global"] = { fg = S.global },
 }
 
@@ -320,8 +330,8 @@ HL.navic = {
   NavicIconsEvent = { fg = S.event, bg = C.base3 },
   NavicIconsOperator = { fg = S.operator, bg = C.base3 },
   NavicIconsTypeParameter = { fg = S.parameter, bg = C.base3 },
-  -- NavicText = {fg = palette.base8, bg = palette.base3},
-  -- NavicSeparator = {fg = palette.base8, bg = palette.base3},
+  -- NavicText = {fg = palette.base9, bg = palette.base3},
+  -- NavicSeparator = {fg = palette.base9, bg = palette.base3},
 }
 
 HL.syntax = {
@@ -452,7 +462,7 @@ HL.nvim_tree = {
 
 HL.telescope = {
   TelescopeBorder = { fg = C.base7 },
-  TelescopeNormal = { fg = C.base8, bg = C.base0 },
+  TelescopeNormal = { fg = C.base9, bg = C.base0 },
   TelescopeSelection = { fg = C.white, bold = true },
   TelescopeSelectionCaret = { fg = C.green },
   TelescopeMultiSelection = { fg = C.pink },
@@ -492,6 +502,9 @@ HL.cmp = {
   CmpItemKindValue = { fg = C.orange },
   CmpItemKindVariable = { fg = S.variable },
   CmpItemMenu = { fg = C.base6 },
+  CmpItemKindYank = { fg = C.orange },
+  CmpItemKindPath = { fg = C.base8, bold=true },
+  CmpItemKindTmux = { fg = C.yellow },
 }
 
 HL.lsp = {

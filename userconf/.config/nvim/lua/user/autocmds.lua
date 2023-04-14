@@ -4,7 +4,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   group = "user",
   callback = function(opts)
     local bo = vim.bo[opts.buf]
-    if bo.filetype == "help" then
+    if bo.buftype == "help" then
       vim.keymap.set("n", "q", "<CMD>quit<CR>", { buffer = opts.buf, desc = "close the buffer" })
     end
     if bo.readonly then

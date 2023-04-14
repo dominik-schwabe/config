@@ -20,21 +20,18 @@ local function file_stats()
     { tostring(win), "Blue" },
     { " ", "White" },
   }
-  local subpath
-  if F.contains(NO_FILES, vim.bo[buf].buftype) then
-    subpath = vim.api.nvim_buf_get_name(buf)
+  local path = vim.fn.expand("%:p")
+  if F.contains(NO_FILES, vim.bo[buf].buftype) or path:sub(0, 1) ~= "/" then
+    local name = vim.api.nvim_buf_get_name(buf)
+    sections[#sections + 1] = { name, "Orange" }
   else
-    subpath = U.simplify_path(vim.fn.expand("%:p"))
-    local root_path = vim.loop.cwd()
-    local was_removed
-    subpath, was_removed = U.remove_path_prefix(subpath, root_path)
-    if was_removed then
-      root_path = U.add_slash(U.remove_path_prefix(root_path, vim.env.HOME, "~/"))
-      sections = F.concat(sections, { { root_path, "Yellow" } })
+    local cwd, subpath = U.split_cwd_path(path)
+    if cwd then
+      sections[#sections + 1] = { cwd, "Yellow" }
     end
+    sections[#sections + 1] = { subpath, "Pink" }
   end
   sections = F.concat(sections, {
-    { subpath, "Pink" },
     { " ", "White" },
     { string.format("%.0f%s", size.value, size.unit), size.color },
     { " ", "White" },

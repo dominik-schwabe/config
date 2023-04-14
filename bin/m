@@ -1,14 +1,34 @@
 #!/usr/bin/env bash
 
+RESOLUTION="high"
+while getopts "l" o &>/dev/null; do
+  case $o in
+    "l") RESOLUTION="low" ;;
+  esac
+done
+
+shift "$(($OPTIND - 1))"
 LINK=$1
+
+if [[ $RESOLUTION == "high" ]]; then
+  MPV_FORMAT="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]"
+  STREAM_LINK_FORMAT=720p60
+elif [[ $RESOLUTION == "low" ]]; then
+  MPV_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
+  STREAM_LINK_FORMAT=160p
+else
+  echo "missing resolution"
+  exit 1
+fi
+
 [[ -z $LINK ]] && {
   echo "link missing"
   exit 1
 }
 if [[ $LINK == "https://www.youtube.com/"* ]]; then
-  nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1" --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]" $1 &>/dev/null &
+  nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1" --ytdl-format=$MPV_FORMAT $1 &>/dev/null &
 else
-  nohup streamlink --player "/bin/mpv --input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $1' --geometry=50%" $1 720p60 &>/dev/null &
+  nohup streamlink --player "/bin/mpv --input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $1' --geometry=50%" $1 $STREAM_LINK_FORMAT &>/dev/null &
 fi
 
 exit 0

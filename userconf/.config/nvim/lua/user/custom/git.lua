@@ -362,8 +362,8 @@ local function cycle(direction)
     return
   end
   if prev_cycle_path then
-    prev_cycle_path = U.remove_path_prefix(prev_cycle_path, project_path)
-    local found, index = F.sorted_find(changed_files, prev_cycle_path)
+    local _, rel_path = U.remove_prefix(prev_cycle_path, project_path)
+    local found, index = F.sorted_find(changed_files, rel_path)
     if not found and direction > 0 then
       direction = direction - 1
     end

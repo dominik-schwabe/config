@@ -80,7 +80,7 @@ local function chdir(args)
     return
   end
   local root = find_root(base_path) or base_path
-  if root ~= vim.fn.getcwd() then
+  if root ~= vim.fn.getcwd() and U.exists(root) then
     vim.api.nvim_set_current_dir(root)
   end
 end

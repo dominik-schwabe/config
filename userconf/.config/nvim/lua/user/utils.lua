@@ -282,27 +282,18 @@ function M.add_slash(path)
   return path
 end
 
-function M.remove_path_prefix(path, prefix, prepend)
-  prefix = M.add_slash(vim.fs.normalize(prefix))
-  path = vim.fs.normalize(path)
-  local starts_with_prefix = false
+function M.remove_prefix(path, prefix)
   if path:sub(1, #prefix) == prefix then
-    path = path:sub(#prefix + 1)
-    starts_with_prefix = true
+    return prefix, path:sub(#prefix + 1)
   end
-  if starts_with_prefix and prepend then
-    path = prepend .. path
-  end
-  return path, starts_with_prefix
+  return nil, path
 end
 
-function M.remove_path_suffix(path, suffix)
-  suffix = vim.fs.normalize(suffix)
-  local ends_with_suffix = false
+function M.remove_suffix(path, suffix)
   if path:sub(-#suffix) == suffix then
-    path = path:sub(1, -#suffix - 1)
+    return path:sub(1, -#suffix - 1), suffix
   end
-  return path, ends_with_suffix
+  return path, nil
 end
 
 function M.is_floating(win)
@@ -313,6 +304,22 @@ function M.simplify_path(path)
   path = vim.fn.simplify(path)
   path = path:gsub("/+", "/")
   return path
+end
+
+function M.split_cwd_path(path)
+  local cwd = M.add_slash(vim.loop.cwd())
+  if path:sub(0, 1) ~= "/" then
+    path = cwd .. "/" .. path
+  end
+  path = M.simplify_path(path)
+  local prefix, suffix = M.remove_prefix(path, cwd)
+  if prefix then
+    local home, rest_prefix = M.remove_prefix(prefix, M.add_slash(vim.env.HOME))
+    if home then
+      prefix = "~/" .. rest_prefix
+    end
+  end
+  return prefix, suffix
 end
 
 return M

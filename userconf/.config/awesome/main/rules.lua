@@ -117,6 +117,13 @@ awful.rules.rules = {
   },
   {
     rule = {
+      class = "Steam",
+      name = "Friends List",
+    },
+    properties = float_properties,
+  },
+  {
+    rule = {
       instance = "Places",
       class = "firefox",
     },

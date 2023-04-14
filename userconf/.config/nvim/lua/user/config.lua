@@ -134,6 +134,15 @@ M.lsp_configs = {
       },
     },
   },
+  ltex = {
+    filetypes = { "tex" },
+    settings = {
+      ltex = {
+        checkFrequency = "save",
+        language = "en-US",
+      },
+    },
+  },
   yamlls = {
     settings = {
       yaml = {
@@ -155,6 +164,13 @@ M.lsp_configs = {
           useLibraryCodeForTypes = false,
           typeCheckingMode = "off",
         },
+      },
+    },
+  },
+  tailwindcss = {
+    settings = {
+      tailwindCSS = {
+        colorDecorators = false,
       },
     },
   },
@@ -204,7 +220,7 @@ M.treesitter = {
     "cpp",
     "css",
     "dockerfile",
-    "help",
+    "vimdoc",
     "html",
     "http",
     "java",
@@ -231,7 +247,7 @@ M.format_clients = {
 }
 M.linters = {
   text = { "languagetool" },
-  tex = { "chktex" },
+  tex = { "chktex", "lacheck", "vale" },
   cpp = { "cppcheck" },
   javascript = { "eslint" },
   markdown = { "markdownlint" },

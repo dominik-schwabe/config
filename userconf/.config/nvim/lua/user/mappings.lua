@@ -25,6 +25,23 @@ vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "break line" })
 vim.keymap.set({ "n" }, "gqq", "gwl", { desc = "break line" })
 vim.keymap.set({ "n", "x" }, "<space>tw", "<CMD>set wrap!<CR>", { desc = "toggle wrap" })
 vim.keymap.set({ "n" }, "<space>i", "<CMD>Inspect<CR>", { desc = "inspect current element" })
+
+local function movement(key)
+  return function()
+    local count = vim.v.count
+    if count == 0 then
+      vim.api.nvim_feedkeys("g" .. key, "n", false)
+    else
+      vim.cmd.normal({ "m'", bang = true })
+      vim.api.nvim_feedkeys(tostring(count) .. key, "n", false)
+    end
+  end
+end
+
+vim.keymap.set("n", "k", movement("k"), { silent = true })
+vim.keymap.set("n", "j", movement("j"), { silent = true })
+vim.keymap.set("n", "$", "g$", { silent = true })
+vim.keymap.set("n", "0", "g0", { silent = true })
 vim.keymap.set("n", "<space>cw", function()
   vim.cmd("cd %:p:h")
 end, { desc = "change directory to current file" })

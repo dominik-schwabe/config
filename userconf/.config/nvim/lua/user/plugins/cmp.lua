@@ -95,6 +95,37 @@ F.load("lspkind", function(lspkind)
   lspkind.init({
     mode = "symbol",
     presets = "mdi",
+    symbol_map = {
+      Text = "",
+      Method = "",
+      Function = "",
+      Constructor = "",
+      Field = "ﰠ",
+      Variable = "",
+      Class = "ﴯ",
+      Interface = "",
+      Module = "",
+      Property = "ﰠ",
+      Unit = "塞",
+      Value = "",
+      Enum = "",
+      Keyword = "",
+      Snippet = "",
+      Color = "",
+      File = "",
+      Reference = "",
+      Folder = "",
+      EnumMember = "",
+      Constant = "",
+      Struct = "פּ",
+      Event = "",
+      Operator = "",
+      TypeParameter = "",
+      Tailwind = "ﱢ", --  
+      Yank = "",
+      Path = "/",
+      Tmux = "ﴶ",
+    },
   })
 
   local cmp_formats = {
@@ -109,12 +140,57 @@ F.load("lspkind", function(lspkind)
     yank_history = "[yank]",
   }
 
+  local cmp_hl = {
+    yank_history = {
+      kind = "Yank",
+      kind_hl_group = "CmpItemKindYank",
+    },
+    path = {
+      kind = "Path",
+      kind_hl_group = "CmpItemKindPath",
+    },
+    tmux = {
+      kind = "Tmux",
+      kind_hl_group = "CmpItemKindTmux",
+    },
+  }
+
+  local function add_tailwind_kind(entry, vim_item)
+    if vim_item.kind == "Color" then -- Tailwind
+      local doc = entry.completion_item.documentation
+      if doc then
+        local _, _, r, g, b = string.find(doc, "^rgb%((%d+), (%d+), (%d+)")
+        if r then
+          local color = string.format("%02x%02x%02x", r, g, b)
+          local group = "tailwind_" .. color
+          if vim.fn.hlID(group) < 1 then
+            vim.api.nvim_set_hl(0, group, { fg = "#" .. color })
+          end
+          vim_item.kind = "Tailwind"
+          vim_item.kind_hl_group = group
+        end
+      end
+    end
+  end
+
+  local function map_source(entry, vim_item)
+    local name = entry.source.name
+    vim_item.menu = cmp_formats[name]
+    local hl = cmp_hl[name]
+    if hl then
+      F.extend_inplace(vim_item, hl)
+    end
+  end
+
   cmp_options.formatting = {
+    fields = { "kind", "abbr", "menu" },
     format = lspkind.cmp_format({
       with_text = false,
       maxwidth = 50,
+      ellipsis_char = "...",
       before = function(entry, vim_item)
-        vim_item.menu = cmp_formats[entry.source.name]
+        map_source(entry, vim_item)
+        add_tailwind_kind(entry, vim_item)
         return vim_item
       end,
     }),
@@ -122,9 +198,3 @@ F.load("lspkind", function(lspkind)
 end)
 
 cmp.setup(cmp_options)
-
-cmp.setup.filetype({ "tex", "plaintex" }, {
-  sources = {
-    { name = "lua-latex-symbols" },
-  },
-})

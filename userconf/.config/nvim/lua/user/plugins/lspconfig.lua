@@ -12,6 +12,12 @@ F.load("neodev", function(neodev)
   neodev.setup({})
 end)
 
+local function get_active_client_by_name(bufnr, servername)
+  return F.find(vim.lsp.get_active_clients({ bufnr = bufnr }), function(client)
+    return client.name == servername
+  end)
+end
+
 local map_opt = { noremap = true, silent = true }
 vim.keymap.set("n", "gD", lsp_buf.declaration, U.desc(map_opt, "go to declaration"))
 vim.keymap.set("n", "gd", lsp_buf.definition, U.desc(map_opt, "go to definition"))
