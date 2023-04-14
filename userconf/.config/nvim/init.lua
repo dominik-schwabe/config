@@ -61,7 +61,6 @@ F.load("colorizer", function(colorizer)
       rgb_fn = true,
       hsl_fn = true,
       tailwind = true,
-      always_update = true,
     },
   })
 end)

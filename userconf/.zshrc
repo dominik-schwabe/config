@@ -81,7 +81,7 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
                 echo " %F{3}$branch%f"
             fi
         else
-            [[ "$ref" = 'fatal: ref HEAD is not a symbolic ref' ]] && echo " %F{14}no branch%f"
+            [[ "$ref" == *'ref HEAD is not a symbolic ref' ]] && echo " %F{14}no branch%f"
         fi
     }
 
