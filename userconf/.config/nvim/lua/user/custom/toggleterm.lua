@@ -25,7 +25,7 @@ local function open_term(height, bottom)
     cmd("startinsert")
   end
   api.nvim_buf_set_name(term_buf, "term://toggleterm")
-  api.nvim_buf_set_option(term_buf, "buflisted", false)
+  vim.bo[term_buf].buflisted = false
 end
 
 local function has_neighbour(winid, direction)

@@ -195,7 +195,7 @@ end
 local function previewer()
   return require("telescope.previewers").new_buffer_previewer({
     define_preview = function(self, entry)
-      vim.api.nvim_buf_set_option(self.state.bufnr, "filetype", "nofile")
+      vim.bo[self.state.bufnr].filetype = "nofile"
       vim.lsp.util.stylize_markdown(self.state.bufnr, entry.value:markdown())
     end,
   })

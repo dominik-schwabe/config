@@ -30,8 +30,8 @@ opt.smartcase = true
 opt.clipboard:append("unnamedplus")
 vim.scriptencoding = "utf-8"
 opt.encoding = "utf-8"
-opt.iskeyword:append("-")
 opt.fileencoding = "utf-8"
+opt.iskeyword:append("-")
 opt.scrolloff = 8
 opt.hidden = true
 opt.updatetime = 300

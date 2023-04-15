@@ -199,13 +199,13 @@ M.null_ls = {
     "isort",
     "prettierd",
     "taplo",
+    "styler",
     latexindent = {
       extra_args = { "-y", [[defaultIndent: "  "]] },
     },
     shfmt = {
       extra_args = { "-i", "2", "-ci" },
     },
-    "styler",
     stylua = {
       extra_args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
     },

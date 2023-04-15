@@ -27,7 +27,11 @@ function D(arg, timeout)
 end
 
 function DK(list)
-  D(list ~= nil and F.keys(list) or nil)
+  if type(list) == "table" then
+    D(F.keys(list))
+  else
+    D("--- object is not a table ---")
+  end
 end
 
 function D0(arg)

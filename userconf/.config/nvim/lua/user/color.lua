@@ -474,7 +474,7 @@ HL.cmp = {
   CmpDocumentationBorder = { fg = C.white, bg = C.base1 },
   CmpItemAbbr = { fg = C.base6 },
   CmpItemAbbrMatch = { fg = C.white },
-  CmpItemAbbrMatchFuzzy = { fg = C.base6 },
+  CmpItemAbbrMatchFuzzy = { fg = C.white },
   CmpItemKindClass = { fg = S.class },
   CmpItemKindColor = { fg = C.orange },
   CmpItemKindConstant = { fg = S.constant },
@@ -503,7 +503,7 @@ HL.cmp = {
   CmpItemKindVariable = { fg = S.variable },
   CmpItemMenu = { fg = C.base6 },
   CmpItemKindYank = { fg = C.orange },
-  CmpItemKindPath = { fg = C.base8, bold=true },
+  CmpItemKindPath = { fg = C.base8, bold = true },
   CmpItemKindTmux = { fg = C.yellow },
 }
 

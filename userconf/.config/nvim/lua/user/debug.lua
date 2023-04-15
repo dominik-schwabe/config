@@ -1,14 +1,18 @@
 local F = require("user.functional")
 
-function Draw(...)
-  return F.map({ ... }, vim.inspect)
-end
-
 function D(...)
-  local tbl = Draw(...)
-  print(#tbl ~= 0 and unpack(tbl) or "--- empty ---")
+  local tbl = F.map({ ... }, vim.inspect)
+  if #tbl ~= 0 then
+    print(unpack(tbl))
+  else
+    print("--- empty ---")
+  end
 end
 
 function DK(list)
-  D(list ~= nil and F.keys(list) or nil)
+  if type(list) == "table" then
+    D(F.keys(list))
+  else
+    print("--- object is not a table ---")
+  end
 end
