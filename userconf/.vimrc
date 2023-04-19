@@ -9,112 +9,7 @@ syntax on
 
 set cmdheight=1
 
-if $MINIMAL_CONFIG == ""
-    function InstallPluginManager()
-      let l:directory = '$HOME/.vim/autoload/'
-      let l:path = l:directory . 'plug.vim'
-      if !empty(glob(l:path)) | return | endif
-      let l:url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      echom 'installing plugin manager'
-      silent call system('mkdir -p ' . l:directory)
-      if v:shell_error | echom 'failure creating directory for plugin manager'  | return | endif
-      silent call system('curl --create-dirs -fLo ' . l:path . ' ' . l:url)
-      if v:shell_error | silent call system('wget -O ' . l:path . ' ' . l:url) | endif
-      if v:shell_error | echom 'failure installing plugin manager' | return | endif
-      echom 'success installing plugin manager'
-      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-    endfunction
-
-    call InstallPluginManager()
-
-    call plug#begin('~/.vim/plugged')
-    "improve search
-    Plug 'haya14busa/vim-asterisk'
-    "toggle comment
-    Plug 'preservim/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
-    "buffer explorer
-    Plug 'jlanzarotta/bufexplorer'
-    "change root based on path patterns
-    Plug 'airblade/vim-rooter'
-    "substitute brackets with others
-    Plug 'tpope/vim-surround'
-    "better language behavior
-    Plug 'sheerun/vim-polyglot'
-    "explore directory
-    Plug 'preservim/nerdtree', { 'on': ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind'] }
-    "wrap function arguments
-    Plug 'foosoft/vim-argwrap', { 'on': 'ArgWrap' }
-    "textobj extension
-    Plug 'wellle/targets.vim'
-    call plug#end()
-
-
-    " ----------------------------------
-    " --- Begin Plugin Configuration ---
-    " ----------------------------------
-
-    "rooter
-    let g:rooter_change_directory_for_non_project_files = 'current'
-    let g:rooter_patterns = ['>nvim', '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', '>site-packages', 'package.json', 'package-lock.json']
-
-    "vim-asterisk
-    map *   <Plug>(asterisk-*)
-    map #   <Plug>(asterisk-#)
-    map g*  <Plug>(asterisk-g*)
-    map g#  <Plug>(asterisk-g#)
-    map z*  <Plug>(asterisk-z*)
-    map gz* <Plug>(asterisk-gz*)
-    map z#  <Plug>(asterisk-z#)
-    map gz# <Plug>(asterisk-gz#)
-
-    "NERDTree
-    let NERDTreeQuitOnOpen=1
-    let NERDTreeMinimalUI = 1
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | :wincmd h | endif
-    let g:NERDTreeIgnore = ['__pycache__']
-    nnoremap <silent> <F1> :NERDTreeToggle<CR>
-    inoremap <silent> <F1> <ESC>:NERDTreeToggle<CR>
-    tnoremap <silent> <F1> <C-\><C-n>:NERDTreeToggle<CR>
-    nnoremap <silent> gt :NERDTreeFind<CR>
-
-    "NERDCommenter
-    let g:NERDCreateDefaultMappings = 0
-    let g:NERDDefaultAlign='start'
-    let g:NERDSpaceDelims = 1
-    nmap gc <Plug>NERDCommenterToggle
-    vmap gc <Plug>NERDCommenterToggle\|gv
-
-    "bufexplorer
-    let g:bufExplorerDefaultHelp=0
-    let g:bufExplorerDetailedHelp=0
-    let g:bufExplorerFindActive=1
-    let g:bufExplorerShowDirectories=0
-    let g:bufExplorerShowNoName=0
-    let g:bufExplorerShowRelativePath=1
-    let g:bufExplorerShowTabBuffer=1
-    let g:bufExplorerShowUnlisted=0
-    let g:bufExplorerSortBy='mru'
-    let g:bufExplorerSplitBelow=1
-    let g:bufExplorerSplitRight=1
-    let g:bufExplorerDisableDefaultKeyMapping=1
-    nmap <silent> <F2> :ToggleBufExplorer<CR>
-    imap <silent> <F2> <ESC>:ToggleBufExplorer<CR>
-
-    "polyglot
-    let g:python_highlight_space_errors = 0
-
-    "argwrap
-    nnoremap Y :ArgWrap<CR>
-
-    " --------------------------------
-    " --- End Plugin Configuration ---
-    " --------------------------------
-
-
-    au FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 indentexpr=""
-endif
-
+filetype plugin indent on
 colorscheme industry " murphy habamax quiet delek
 hi clear Conceal
 hi EndOfBuffer  ctermbg=NONE guibg=NONE               cterm=NONE term=NONE
@@ -159,7 +54,6 @@ set ttyfast
 set incsearch
 set hlsearch
 set modeline
-set paste
 
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 

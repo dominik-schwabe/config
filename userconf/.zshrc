@@ -349,7 +349,7 @@ zle     -N            fzf-open-file-in-vim-widget
 bindkey -M vicmd '^F' fzf-open-file-in-vim-widget
 bindkey -M viins '^F' fzf-open-file-in-vim-widget
 
-zle     -N             fzf-cd-widget
+zle     -N            fzf-cd-widget
 bindkey -M vicmd '^P' fzf-cd-widget
 bindkey -M viins '^P' fzf-cd-widget
 #############################################
