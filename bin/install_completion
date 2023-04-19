@@ -66,4 +66,4 @@ git clone https://github.com/zsh-users/zsh-completions $TMP
 cp $TMP/src/* $HOME/.zsh-completions
 rm $TMP -rf
 
-rm $HOME/.zcompdump -rf
+rm $HOME/.zcompdump $HOME/.zcompdump2 -rf

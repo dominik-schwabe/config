@@ -87,7 +87,7 @@ bindkey -M vicmd "^I" expand-or-complete-with-dots
 fpath=($HOME/.zsh-completions $fpath)
 
 if autoload -Uz compinit bashcompinit; then
-    compinit
+    compinit -d $HOME/.zcompdump2
     bashcompinit
 fi
 
