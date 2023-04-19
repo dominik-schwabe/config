@@ -48,7 +48,7 @@ if [[ "$1" == "-r" ]]; then
   echo -n "removing nvim"
   rm -rf ~/.local/bin/nvim
   rm -rf ~/.local/lib/nvim
-  rm -rf ~/.local/share/runtime
+  rm -rf ~/.local/share/nvim/runtime
   rm -rf ~/.local/share/locale
   rm -rf ~/.local/share/man
   rm -rf ~/.local/share/icons

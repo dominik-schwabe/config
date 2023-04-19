@@ -1,11 +1,6 @@
 #!/usr/bin/env zsh
 
 ZSH_COMPLETIONS_DIR=$HOME/.zsh-completions
-if [ ! -r "$HOME/.zi/bin/zi.zsh" ]; then
-    echo "zi not installed"
-    return 1
-fi
-. "$HOME/.zi/bin/zi.zsh"
 [ -d $ZSH_COMPLETIONS_DIR ] || mkdir $ZSH_COMPLETIONS_DIR
 
 download_completion() {
@@ -54,11 +49,11 @@ set_alias() {
 download_completion 7z              https://raw.githubusercontent.com/AlexaraWu/zsh-completions/master/src/_7z
 download_completion asdf            https://raw.githubusercontent.com/asdf-vm/asdf/master/completions/_asdf
 download_completion fd              https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd
-download_completion pip             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/pip/_pip
 download_completion rustc           https://raw.githubusercontent.com/rust-lang/zsh-config/master/_rust
 download_completion youtube-dl      https://raw.githubusercontent.com/dominik-schwabe/zsh-completions/master/_youtube-dl
 download_completion cht.sh          https://cheat.sh/:zsh
 download_completion c               https://cheat.sh/:zsh
+download_completion docker-compose  https://raw.githubusercontent.com/docker/compose/1.26.0/contrib/completion/zsh/_docker-compose
 
 command_completion kubectl          kubectl completion zsh
 command_completion pdm              pdm completion
@@ -66,5 +61,9 @@ command_completion pipenv           _PIPENV_COMPLETE=zsh_source pipenv
 command_completion rustup           rustup completions zsh rustup
 command_completion cargo            cat '"$(rustc --print sysroot)"/share/zsh/site-functions/_cargo'
 
-zi creinstall $ZSH_COMPLETIONS_DIR
-zi cclear
+TMP=$(mktemp -d)
+git clone https://github.com/zsh-users/zsh-completions $TMP
+cp $TMP/src/* $HOME/.zsh-completions
+rm $TMP -rf
+
+rm $HOME/.zcompdump -rf

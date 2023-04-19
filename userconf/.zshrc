@@ -6,47 +6,102 @@
 
 export HISTFILE=~/.zsh_history
 
-echo -n "\e[6 q"
+#############################################
+################ completion #################
+#############################################
+COMPLETION_WAITING_DOTS=true
+zmodload -i zsh/complist
 
-local fzf_common="--hidden --no-ignore --color=always -E '.cache' -E '.asdf' -E '.local' -E '.thunderbird' -E '.rustup' -E '.cargo' -E '.npm' -E node_modules -E '.git' -E '__pycache__'"
-FZF_CTRL_T_COMMAND="fd $fzf_common --type file"
-FZF_ALT_C_COMMAND="fd $fzf_common --type directory"
-FZF_DEFAULT_OPTS="--ansi"
+WORDCHARS=''
 
-[[ -z $DISPLAY ]] && export ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=1
+unsetopt menu_complete   # do not autoselect the first completion entry
+unsetopt flowcontrol
+setopt auto_menu         # show completion menu on successive tab press
+# setopt complete_in_word
+setopt always_to_end
+
+# should this be in keybindings?
+bindkey -M menuselect '^o' accept-and-infer-next-history
+zstyle ':completion:*:*:*:*:*' menu select
+
+# case insensitive (all), partial-word and substring completion
+if [[ "$CASE_SENSITIVE" = true ]]; then
+  zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
+else
+  if [[ "$HYPHEN_INSENSITIVE" = true ]]; then
+    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
+  else
+    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+  fi
+fi
+unset CASE_SENSITIVE HYPHEN_INSENSITIVE
+
+# Complete . and .. special directories
+zstyle ':completion:*' special-dirs true
+
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+
+if [[ "$OSTYPE" = solaris* ]]; then
+  zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm"
+else
+  zstyle ':completion:*:*:*:*:processes' command "ps -u $USERNAME -o pid,user,comm -w -w"
+fi
+
+# disable named-directories autocompletion
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+
+# Use caching so that commands like apt and dpkg complete are useable
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
+
+# Don't complete uninteresting users
+zstyle ':completion:*:*:*:users' ignored-patterns \
+        adm amanda apache at avahi avahi-autoipd beaglidx bin cacti canna \
+        clamav daemon dbus distcache dnsmasq dovecot fax ftp games gdm \
+        gkrellmd gopher hacluster haldaemon halt hsqldb ident junkbust kdm \
+        ldap lp mail mailman mailnull man messagebus  mldonkey mysql nagios \
+        named netdump news nfsnobody nobody nscd ntp nut nx obsrun openvpn \
+        operator pcap polkitd postfix postgres privoxy pulse pvm quagga radvd \
+        rpc rpcuser rpm rtkit scard shutdown squid sshd statd svn sync tftp \
+        usbmux uucp vcsa wwwrun xfs '_*'
+
+# ... unless we really want to.
+zstyle '*' single-ignored show
+
+expand-or-complete-with-dots() {
+    COMPLETION_WAITING_DOTS="%F{red}…%f"
+    printf '\e[?7l%s\e[?7h' "${(%)COMPLETION_WAITING_DOTS}"
+    zle expand-or-complete
+    zle redisplay
+}
+zle -N expand-or-complete-with-dots
+# Set the function as the default tab completion widget
+bindkey -M emacs "^I" expand-or-complete-with-dots
+bindkey -M viins "^I" expand-or-complete-with-dots
+bindkey -M vicmd "^I" expand-or-complete-with-dots
+#############################################
+############## completion end ###############
+#############################################
+
+fpath=($HOME/.zsh-completions $fpath)
+
+if autoload -Uz compinit bashcompinit; then
+    compinit
+    bashcompinit
+fi
 
 # plugins
 if [[ -z "$MINIMAL_CONFIG" ]]; then
-    [[ -d ~/.zi/bin ]] || git clone https://github.com/z-shell/zi ~/.zi/bin
-    source ~/.zi/bin/zi.zsh
-    zi ice atinit'COMPLETION_WAITING_DOTS=true' atload'unsetopt complete_in_word'
-    zi snippet OMZL::completion.zsh
-    zi ice wait'0' lucid
-    zi light dominik-schwabe/vi-mode.zsh
-    zi ice wait'0' lucid
-    zi light greymd/docker-zsh-completion
-    zi ice wait'0' lucid
-    zi snippet OMZP::git
-    zi ice wait'0' lucid
-    zi snippet OMZP::pip
-    zi ice wait'0' lucid
-    zi light agkozak/zsh-z
-    zi ice wait'0' lucid
-    zi light t413/zsh-background-notify
-    zi ice wait'0' lucid
-    zi light zsh-users/zsh-history-substring-search
-    zi ice wait'0' lucid
-    zi light zsh-vi-more/vi-increment
-    zi ice wait'0' lucid
-    zi light zdharma-continuum/fast-syntax-highlighting
-    zi ice wait'0' lucid
-    zi light MichaelAquilina/zsh-you-should-use
-    zi ice wait'0' lucid silent atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true'
-    zi light kutsan/zsh-system-clipboard
-    zi ice wait'0' lucid atload'zicompinit'
-    zi light zsh-users/zsh-completions
-    zi snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
+    load_plugin() {
+        local URL=$1
+        local NAME=$(basename $URL)
+        local DEST=$HOME/.zsh-plugins/$NAME
+        [[ ! -d $DEST ]] && (( $+commands[git] )) && git clone $URL $DEST
+        [[ -d $DEST ]] && source $DEST/$NAME.plugin.zsh
+    }
 
+    load_plugin https://github.com/zdharma-continuum/fast-syntax-highlighting
 
     ls_on() {
         chpwd() {
@@ -117,9 +172,6 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
     bindkey -M menuselect 'l' vi-forward-char
     bindkey -M menuselect 'j' vi-down-line-or-history
 
-    bindkey -M vicmd 'k' history-substring-search-up
-    bindkey -M vicmd 'j' history-substring-search-down
-
     _yay_update() {
         LBUFFER="yay -Syu"
         RBUFFER=""
@@ -155,6 +207,13 @@ else
     export KEYTIMEOUT=10
 fi
 
+if (( $+commands[zoxide] )); then
+    eval "$(zoxide init zsh --no-cmd)"
+    function z() {
+        __zoxide_zi "$@"
+    }
+fi
+
 [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
@@ -176,11 +235,6 @@ zle -N exit_zsh
 bindkey -M viins '^D' exit_zsh
 bindkey -M vicmd '^D' exit_zsh
 
-autoload -Uz bracketed-paste-magic
-zle -N bracketed-paste bracketed-paste-magic
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
-
 expand-alias() { zle _expand_alias }
 zle -N expand-alias
 bindkey -M viins '^[OS' expand-alias
@@ -194,6 +248,90 @@ alias -g ......='../../../../..'
 bindkey -r -M vicmd '\ec'
 bindkey -r -M viins '\ec'
 
+#############################################
+################### fzf #####################
+#############################################
+if 'zmodload' 'zsh/parameter' 2>'/dev/null' && (( ${+options} )); then
+  __fzf_key_bindings_options="options=(${(j: :)${(kv)options[@]}})"
+else
+  () {
+    __fzf_key_bindings_options="setopt"
+    'local' '__fzf_opt'
+    for __fzf_opt in "${(@)${(@f)$(set -o)}%% *}"; do
+      if [[ -o "$__fzf_opt" ]]; then
+        __fzf_key_bindings_options+=" -o $__fzf_opt"
+      else
+        __fzf_key_bindings_options+=" +o $__fzf_opt"
+      fi
+    done
+  }
+fi
+
+'emulate' 'zsh' '-o' 'no_aliases'
+
+{
+
+[[ -o interactive ]] || return 0
+
+__fsel() {
+  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type f -print \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local item
+  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" $(__fzfcmd) -m "$@" | while read item; do
+    echo -n "${(q)item} "
+  done
+  local ret=$?
+  echo
+  return $ret
+}
+
+__fzfcmd() {
+  [ -n "${TMUX_PANE-}" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "${FZF_TMUX_OPTS-}" ]; } &&
+    echo "fzf-tmux ${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} -- " || echo "fzf"
+}
+
+fzf-cd-widget() {
+  local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
+    -o -type d -print 2> /dev/null | cut -b3-"}"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m)"
+  if [[ -z "$dir" ]]; then
+    zle redisplay
+    return 0
+  fi
+  zle push-line # Clear buffer. Auto-restored on next prompt.
+  BUFFER="builtin cd -- ${(q)dir}"
+  zle accept-line
+  local ret=$?
+  unset dir # ensure this doesn't end up appearing in prompt expansion
+  zle reset-prompt
+  return $ret
+}
+
+fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  selected=( $(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort,ctrl-z:ignore ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+
+} always {
+  eval $__fzf_key_bindings_options
+  'unset' '__fzf_key_bindings_options'
+}
+
 fzf-open-file-in-vim-widget() {
     local value=$(__fsel)
     zle reset-prompt
@@ -202,9 +340,119 @@ fzf-open-file-in-vim-widget() {
         zle accept-line
     fi
 }
+
+zle     -N            fzf-history-widget
+bindkey -M vicmd '^H' fzf-history-widget
+bindkey -M viins '^H' fzf-history-widget
+
 zle     -N            fzf-open-file-in-vim-widget
 bindkey -M vicmd '^F' fzf-open-file-in-vim-widget
 bindkey -M viins '^F' fzf-open-file-in-vim-widget
 
+zle     -N             fzf-cd-widget
 bindkey -M vicmd '^P' fzf-cd-widget
 bindkey -M viins '^P' fzf-cd-widget
+#############################################
+################# fzf end ###################
+#############################################
+
+#############################################
+############### vi mode begin ###############
+#############################################
+echo -n "\e[6 q"
+autoload -Uz add-zsh-hook
+autoload -Uz add-zle-hook-widget
+bindkey -v
+
+vi-precmd () {
+    echo -n "\e[6 q"
+}
+
+vi-line-pre-redraw () {
+    case "$KEYMAP" in
+        v*) echo -n "\e[2 q" ;;
+        *) echo -n "\e[6 q" ;;
+    esac
+}
+
+add-zsh-hook precmd vi-precmd
+add-zle-hook-widget line-pre-redraw vi-line-pre-redraw
+
+# Reduce esc delay
+export KEYTIMEOUT=${KEYTIMEOUT:-10}
+
+# fix backspace
+bindkey -M viins "^?" backward-delete-char
+
+# textobjects
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N change-surround surround
+zle -N add-surround surround
+bindkey -M vicmd ds delete-surround
+bindkey -M vicmd cs change-surround
+bindkey -M vicmd ys add-surround
+bindkey -M visual S add-surround
+
+autoload -U select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+    for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+        bindkey -M $m $c select-bracketed
+    done
+done
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+    for c in {a,i}{\',\",\`}; do
+        bindkey -M $m $c select-quoted
+    done
+done
+
+# omz sudo plugin bound to f1 instead of esc
+__sudo-replace-buffer() {
+    local old=$1 new=$2 space=${2:+ }
+    if [[ ${#LBUFFER} -le ${#old} ]]; then
+        RBUFFER="${space}${BUFFER#$old }"
+        LBUFFER="${new}"
+    else
+        LBUFFER="${new}${space}${LBUFFER#$old }"
+    fi
+}
+
+sudo-command-line() {
+    [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
+
+    # Save beginning space
+    local WHITESPACE=""
+    if [[ ${LBUFFER:0:1} = " " ]]; then
+        WHITESPACE=" "
+        LBUFFER="${LBUFFER:1}"
+    fi
+
+    if [[ $BUFFER = sudo\ * ]]; then
+        __sudo-replace-buffer "sudo" ""
+    else
+        LBUFFER="sudo $LBUFFER"
+    fi
+
+    # Preserve beginning space
+    LBUFFER="${WHITESPACE}${LBUFFER}"
+}
+
+zle -N sudo-command-line
+
+bindkey -M vicmd '^[OP' sudo-command-line
+bindkey -M viins '^[OP' sudo-command-line
+bindkey -M vicmd '^[[[A' sudo-command-line
+bindkey -M viins '^[[[A' sudo-command-line
+# sudo plugin end
+
+# some useless keybindings
+bindkey -M viins '^[[1;5C' forward-word
+bindkey -M vicmd '^[[1;5C' forward-word
+bindkey -M viins '^[[1;5D' backward-word
+bindkey -M vicmd '^[[1;5D' backward-word
+#############################################
+################ vi mode end ################
+#############################################

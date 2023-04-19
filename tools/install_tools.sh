@@ -15,6 +15,7 @@ declare -A TOOLS=(
   ["fzf"]="junegunn/fzf"
   ["fd"]="sharkdp/fd"
   ["jq"]="stedolan/jq"
+  ["zoxide"]="ajeetdsouza/zoxide"
 )
 
 extract() {
