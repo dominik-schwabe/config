@@ -103,18 +103,22 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
 
     load_plugin https://github.com/zdharma-continuum/fast-syntax-highlighting
 
-    ls_on() {
-        chpwd() {
-            emulate -L zsh
-            ls
-        }
+    auto_ls_toggle() {
+        if functions chpwd &>/dev/null; then
+            unset -f chpwd
+        else
+            chpwd() {
+                emulate -L zsh
+                ls
+            }
+        fi
     }
 
-    ls_off() {
-        chpwd() { }
-    }
+    auto_ls_toggle
 
-    ls_on
+    zle -N auto_ls_toggle
+    bindkey -M viins '^K' auto_ls_toggle
+    bindkey -M vicmd '^K' auto_ls_toggle
 
     unset correctall
 
