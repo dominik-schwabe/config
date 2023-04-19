@@ -6,9 +6,9 @@
 
 export HISTFILE=~/.zsh_history
 
-#############################################
-################ completion #################
-#############################################
+# +++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++ completion ++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++
 COMPLETION_WAITING_DOTS=true
 zmodload -i zsh/complist
 
@@ -80,181 +80,13 @@ zle -N expand-or-complete-with-dots
 bindkey -M emacs "^I" expand-or-complete-with-dots
 bindkey -M viins "^I" expand-or-complete-with-dots
 bindkey -M vicmd "^I" expand-or-complete-with-dots
-#############################################
-############## completion end ###############
-#############################################
+# -------------------------------------------
+# --------------- completion ----------------
+# -------------------------------------------
 
-fpath=($HOME/.zsh-completions $fpath)
-
-if autoload -Uz compinit bashcompinit; then
-    compinit -d $HOME/.zcompdump2
-    bashcompinit
-fi
-
-# plugins
-if [[ -z "$MINIMAL_CONFIG" ]]; then
-    load_plugin() {
-        local URL=$1
-        local NAME=$(basename $URL)
-        local DEST=$HOME/.zsh-plugins/$NAME
-        [[ ! -d $DEST ]] && (( $+commands[git] )) && git clone $URL $DEST
-        [[ -d $DEST ]] && source $DEST/$NAME.plugin.zsh
-    }
-
-    load_plugin https://github.com/zdharma-continuum/fast-syntax-highlighting
-
-    auto_ls_toggle() {
-        if functions chpwd &>/dev/null; then
-            unset -f chpwd
-        else
-            chpwd() {
-                emulate -L zsh
-                ls
-            }
-        fi
-    }
-
-    auto_ls_toggle
-
-    zle -N auto_ls_toggle
-    bindkey -M viins '^K' auto_ls_toggle
-    bindkey -M vicmd '^K' auto_ls_toggle
-
-    unset correctall
-
-    # theme
-    DEFAULT_COLOR="2"
-    ROOT_COLOR="161"
-    SSH_COLOR="214"
-
-    PROMPT_COLOR=${DEFAULT_COLOR:-green}
-    [[ "$UID" = "0" ]] && PROMPT_COLOR=${ROOT_COLOR:-red}
-    [[ "$SSH_TTY" ]] && PROMPT_COLOR=${SSH_COLOR:-blue}
-
-    git_prompt_info() {
-        if ref=$(git symbolic-ref HEAD 2>&1); then
-            branch=${ref#refs/heads/}
-            if [[ "$branch" = "master" || "$branch" = "main" ]]; then
-                echo " %F{1}$branch%f"
-            else
-                echo " %F{3}$branch%f"
-            fi
-        else
-            [[ "$ref" == *'ref HEAD is not a symbolic ref' ]] && echo " %F{14}no branch%f"
-        fi
-    }
-
-    declare -u _GET_ASDF_VERSION_VARIABLE_NAME
-    _get_asdf_versions_prompt() {
-        _GET_ASDF_VERSION_VARIABLE_NAME=ASDF_$1_VERSION
-        if DEFINED_NAME=$(export -p "$_GET_ASDF_VERSION_VARIABLE_NAME") 2>/dev/null && [[ "$DEFINED_NAME" = 'export'* ]]; then
-            eval "_VERSIONS=\$$_GET_ASDF_VERSION_VARIABLE_NAME"
-            [[ -n "$_VERSIONS" ]] && {
-                echo "$_VERSIONS"
-                return 0
-            }
-        fi
-        [[ -r ~/.tool-versions ]] || return 1
-        while read LINE; do
-            IFS=" " read _ASDF_PROG_NAME _ASDF_PROG_VERSION <<< $LINE;
-            if [[ "$_ASDF_PROG_NAME" = $1 ]]; then
-                echo "$_ASDF_PROG_VERSION"
-                return 0
-            fi
-        done < "$HOME/.tool-versions"
-        return 1
-    }
-
-    get_python_version() { _get_asdf_versions_prompt python || echo system }
-    get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
-    PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
-    RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
-
-    ## use the vi navigation keys in menu completion
-    bindkey -M menuselect 'h' vi-backward-char
-    bindkey -M menuselect 'k' vi-up-line-or-history
-    bindkey -M menuselect 'l' vi-forward-char
-    bindkey -M menuselect 'j' vi-down-line-or-history
-
-    _yay_update() {
-        LBUFFER="yay -Syu"
-        RBUFFER=""
-        zle accept-line
-    }
-
-    zle -N _yay_update
-    bindkey -M vicmd '^[[15~' _yay_update
-    bindkey -M viins '^[[15~' _yay_update
-else
-    PROMPT='%B%F{blue}%2~%f%b >>> '
-    RPS1=''
-
-    bindkey -v
-    bindkey -M viins "^?" backward-delete-char
-
-    autoload -Uz add-zsh-hook
-    autoload -Uz add-zle-hook-widget
-
-    vi-precmd () {
-        echo -n "\e[6 q"
-    }
-
-    vi-line-pre-redraw () {
-        case "$KEYMAP" in
-            v*) echo -n "\e[2 q" ;;
-            *) echo -n "\e[6 q" ;;
-        esac
-    }
-    add-zsh-hook precmd vi-precmd
-    add-zle-hook-widget line-pre-redraw vi-line-pre-redraw
-
-    export KEYTIMEOUT=10
-fi
-
-if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh --no-cmd)"
-    function z() {
-        __zoxide_zi "$@"
-    }
-fi
-
-[[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
-setopt extendedhistory
-setopt hist_ignore_dups
-setopt histignorealldups
-setopt hist_ignore_space
-setopt interactivecomments
-setopt sharehistory
-setopt auto_cd
-setopt multios
-setopt prompt_subst
-setopt auto_pushd
-setopt pushd_minus
-setopt cdable_vars
-
-exit_zsh() { exit }
-zle -N exit_zsh
-bindkey -M viins '^D' exit_zsh
-bindkey -M vicmd '^D' exit_zsh
-
-expand-alias() { zle _expand_alias }
-zle -N expand-alias
-bindkey -M viins '^[OS' expand-alias
-bindkey -M vicmd '^[OS' expand-alias
-
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
-
-bindkey -r -M vicmd '\ec'
-bindkey -r -M viins '\ec'
-
-#############################################
-################### fzf #####################
-#############################################
+# +++++++++++++++++++++++++++++++++++++++++++
+# ++++++++++++++++++ fzf ++++++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++
 if 'zmodload' 'zsh/parameter' 2>'/dev/null' && (( ${+options} )); then
   __fzf_key_bindings_options="options=(${(j: :)${(kv)options[@]}})"
 else
@@ -346,8 +178,8 @@ fzf-open-file-in-vim-widget() {
 }
 
 zle     -N            fzf-history-widget
-bindkey -M vicmd '^H' fzf-history-widget
-bindkey -M viins '^H' fzf-history-widget
+bindkey -M vicmd '^A' fzf-history-widget
+bindkey -M viins '^A' fzf-history-widget
 
 zle     -N            fzf-open-file-in-vim-widget
 bindkey -M vicmd '^F' fzf-open-file-in-vim-widget
@@ -356,13 +188,13 @@ bindkey -M viins '^F' fzf-open-file-in-vim-widget
 zle     -N            fzf-cd-widget
 bindkey -M vicmd '^P' fzf-cd-widget
 bindkey -M viins '^P' fzf-cd-widget
-#############################################
-################# fzf end ###################
-#############################################
+# -------------------------------------------
+# ------------------ fzf --------------------
+# -------------------------------------------
 
-#############################################
-############### vi mode begin ###############
-#############################################
+# +++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++++ vi mode +++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++
 echo -n "\e[6 q"
 autoload -Uz add-zsh-hook
 autoload -Uz add-zle-hook-widget
@@ -457,6 +289,179 @@ bindkey -M viins '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M viins '^[[1;5D' backward-word
 bindkey -M vicmd '^[[1;5D' backward-word
-#############################################
-################ vi mode end ################
-#############################################
+# -------------------------------------------
+# ------------------ vi mode ----------------
+# -------------------------------------------
+
+# +++++++++++++++++++++++++++++++++++++++++++
+# ++++++++++++++++++ zoxide +++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++
+if (( $+commands[zoxide] )); then
+    eval "$(zoxide init zsh --no-cmd)"
+    function z() {
+        __zoxide_zi "$@"
+    }
+fi
+# -------------------------------------------
+# ------------------ zoxide -----------------
+# -------------------------------------------
+
+auto_ls_toggle() {
+    if functions chpwd &>/dev/null; then
+        unset -f chpwd
+    else
+        chpwd() {
+            emulate -L zsh
+            ls
+        }
+    fi
+}
+
+zle -N auto_ls_toggle
+bindkey -M viins '^K' auto_ls_toggle
+bindkey -M vicmd '^K' auto_ls_toggle
+
+[[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+setopt extendedhistory
+setopt hist_ignore_dups
+setopt histignorealldups
+setopt hist_ignore_space
+setopt interactivecomments
+setopt sharehistory
+setopt auto_cd
+setopt multios
+setopt prompt_subst
+setopt auto_pushd
+setopt pushd_minus
+setopt cdable_vars
+
+exit_zsh() { exit }
+zle -N exit_zsh
+bindkey -M viins '^D' exit_zsh
+bindkey -M vicmd '^D' exit_zsh
+
+expand-alias() { zle _expand_alias }
+zle -N expand-alias
+bindkey -M viins '^[OS' expand-alias
+bindkey -M vicmd '^[OS' expand-alias
+
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+bindkey -r -M vicmd '\ec'
+bindkey -r -M viins '\ec'
+
+fpath=($HOME/.zsh-completions $fpath)
+
+if autoload -Uz compinit bashcompinit; then
+    compinit -d $HOME/.zcompdump2
+    bashcompinit
+fi
+
+if [[ -z "$MINIMAL_CONFIG" ]]; then
+    auto_ls_toggle
+
+    unset correctall
+
+    # theme
+    DEFAULT_COLOR="2"
+    ROOT_COLOR="161"
+    SSH_COLOR="214"
+
+    PROMPT_COLOR=${DEFAULT_COLOR:-green}
+    [[ "$UID" = "0" ]] && PROMPT_COLOR=${ROOT_COLOR:-red}
+    [[ "$SSH_TTY" ]] && PROMPT_COLOR=${SSH_COLOR:-blue}
+
+    git_prompt_info() {
+        if ref=$(git symbolic-ref HEAD 2>&1); then
+            branch=${ref#refs/heads/}
+            if [[ "$branch" = "master" || "$branch" = "main" ]]; then
+                echo " %F{1}$branch%f"
+            else
+                echo " %F{3}$branch%f"
+            fi
+        else
+            [[ "$ref" == *'ref HEAD is not a symbolic ref' ]] && echo " %F{14}no branch%f"
+        fi
+    }
+
+    declare -u _GET_ASDF_VERSION_VARIABLE_NAME
+    _get_asdf_versions_prompt() {
+        _GET_ASDF_VERSION_VARIABLE_NAME=ASDF_$1_VERSION
+        if DEFINED_NAME=$(export -p "$_GET_ASDF_VERSION_VARIABLE_NAME") 2>/dev/null && [[ "$DEFINED_NAME" = 'export'* ]]; then
+            eval "_VERSIONS=\$$_GET_ASDF_VERSION_VARIABLE_NAME"
+            [[ -n "$_VERSIONS" ]] && {
+                echo "$_VERSIONS"
+                return 0
+            }
+        fi
+        [[ -r ~/.tool-versions ]] || return 1
+        while read LINE; do
+            IFS=" " read _ASDF_PROG_NAME _ASDF_PROG_VERSION <<< $LINE;
+            if [[ "$_ASDF_PROG_NAME" = $1 ]]; then
+                echo "$_ASDF_PROG_VERSION"
+                return 0
+            fi
+        done < "$HOME/.tool-versions"
+        return 1
+    }
+
+    get_python_version() { _get_asdf_versions_prompt python || echo system }
+    get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
+    PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
+    RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
+
+    ## use the vi navigation keys in menu completion
+    bindkey -M menuselect 'h' vi-backward-char
+    bindkey -M menuselect 'k' vi-up-line-or-history
+    bindkey -M menuselect 'l' vi-forward-char
+    bindkey -M menuselect 'j' vi-down-line-or-history
+
+    _yay_update() {
+        LBUFFER="yay -Syu"
+        RBUFFER=""
+        zle accept-line
+    }
+
+    zle -N _yay_update
+    bindkey -M vicmd '^[[15~' _yay_update
+    bindkey -M viins '^[[15~' _yay_update
+
+    load_plugin() {
+        local URL=$1
+        local NAME=$(basename $URL)
+        local DEST=$HOME/.zsh-plugins/$NAME
+        [[ ! -d $DEST ]] && (( $+commands[git] )) && git clone $URL $DEST
+        [[ -d $DEST ]] && source $DEST/$NAME.plugin.zsh
+    }
+
+    load_plugin https://github.com/zdharma-continuum/fast-syntax-highlighting
+else
+    PROMPT='%B%F{blue}%2~%f%b >>> '
+    RPS1=''
+
+    bindkey -v
+    bindkey -M viins "^?" backward-delete-char
+
+    autoload -Uz add-zsh-hook
+    autoload -Uz add-zle-hook-widget
+
+    vi-precmd () {
+        echo -n "\e[6 q"
+    }
+
+    vi-line-pre-redraw () {
+        case "$KEYMAP" in
+            v*) echo -n "\e[2 q" ;;
+            *) echo -n "\e[6 q" ;;
+        esac
+    }
+    add-zsh-hook precmd vi-precmd
+    add-zle-hook-widget line-pre-redraw vi-line-pre-redraw
+
+    export KEYTIMEOUT=10
+fi

@@ -21,7 +21,9 @@ alias l='ls -lAthr'
 alias ll='ls -lAh'
 
 alias d='mkdir -p ~/.lucid && vim ~/.lucid/$(date -I).md'
-alias vim='nvim'
+if [[ -z $MINIMAL_ALIAS ]]; then
+  alias vim='nvim'
+fi
 alias novim='nvim -u NONE --noplugin --cmd "au VimEnter * windo set nowrap number norelativenumber signcolumn=no | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap gw <CMD>write<CR> | set clipboard+=unnamedplus"'
 alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'
 alias ovim='/bin/vim'
@@ -69,7 +71,6 @@ alias install_tldr='npm install -g tldr'
 alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path"
 alias te='translate de:en'
 alias td='translate en:de'
-alias rs='asdf reshim'
 alias e='extract'
 alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 alias ytdl='yt-dlp --extract-audio --audio-format m4a --format best'

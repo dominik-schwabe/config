@@ -87,8 +87,8 @@ if command -v fzf &>/dev/null && [[ $- =~ i ]]; then
   bind -m vi-command -x '"\C-f": fzf-file-widget'
   bind -m vi-insert -x '"\C-f": fzf-file-widget'
 
-  bind -m vi-command -x '"\C-r": __fzf_history__'
-  bind -m vi-insert -x '"\C-r": __fzf_history__'
+  bind -m vi-command -x '"\C-a": __fzf_history__'
+  bind -m vi-insert -x '"\C-a": __fzf_history__'
 
   bind -m vi-command -x '"\C-p": __fzf_cd__'
   bind -m vi-insert -x '"\C-p": __fzf_cd__'
