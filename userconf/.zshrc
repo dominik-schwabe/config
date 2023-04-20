@@ -150,8 +150,8 @@ fzf-history-widget() {
   local query selected num list results array
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
   list=$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }')
-  query=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "$LBUFFER")
-  results=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --print-query --bind=ctrl-a:toggle-sort,ctrl-z:ignore,esc:print-query ${FZF_CTRL_R_OPTS-} --query='$query' +m" fzf <<< "$list")
+  query=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "$LBUFFER$RBUFFER")
+  results=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --print-query --bind=ctrl-s:toggle-sort,ctrl-z:ignore,esc:print-query ${FZF_CTRL_R_OPTS-} --query='$query' +m" fzf <<< "$list")
   if [[ $? == 0 ]]; then
     IFS=$'\n' read -d '' -r -A array <<< "$results"
     if [[ $#array == 3 ]]; then
@@ -161,6 +161,7 @@ fzf-history-widget() {
     else
       query="${array[1]}"
       LBUFFER="${query}"
+      RBUFFER=""
     fi
   fi
   zle reset-prompt
