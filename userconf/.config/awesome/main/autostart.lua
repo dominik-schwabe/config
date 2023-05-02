@@ -5,7 +5,7 @@ local autostart_programs = {
   { 0, "brave &>/dev/null" },
   { 2, "easyeffects --gapplication-service" },
   { 3, "unclutter --timeout 0.7" },
-  { 4, "spotify-launcher &>/dev/null" },
+  { 5, "spotify-launcher &>/dev/null" },
   { 6, "flameshot" },
   { 8, "birdtray" },
   { 10, "launch_discord" },

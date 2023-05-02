@@ -8,6 +8,7 @@ FILE_PATH=$(realpath -m ${1-"."})
 read PROGRAM ROOT_PATH <<<$(python_project_root $1)
 
 [[ -n "$ROOT_PATH" ]] && cd $ROOT_PATH
+
 if [[ $PROGRAM == "pdm" ]]; then
   pdm add $PACKAGES && pdm add --dev $DEV_PACKAGES
 elif [[ $PROGRAM == "pipenv" ]]; then

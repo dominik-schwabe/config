@@ -7,9 +7,7 @@ CLONE_FOLDER=$HOME/.neovim_git_clone
 cd $CLONE_FOLDER
 git checkout stable
 
-if make CMAKE_INSTALL_PREFIX=$HOME/local/ CMAKE_BUILD_TYPE=Release install;
-then
-    cd ~
-    rm $CLONE_FOLDER -rf
+if make CMAKE_INSTALL_PREFIX=$HOME/local/ CMAKE_BUILD_TYPE=Release install; then
+  cd ~
+  rm $CLONE_FOLDER -rf
 fi
-

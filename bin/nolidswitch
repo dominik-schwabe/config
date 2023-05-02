@@ -2,9 +2,8 @@
 
 COMMAND="systemd-inhibit --what=handle-lid-switch:sleep:idle sleep infinity"
 if pkill -f "$COMMAND" &>/dev/null; then
-    notify-send -t 1000 -u low 'disable screen'
+  notify-send -t 1000 -u low 'disable screen'
 else
-    nohup $COMMAND &>/dev/null &
-    notify-send -t 1000 -u critical 'keep screen active'
+  nohup $COMMAND &>/dev/null &
+  notify-send -t 1000 -u critical 'keep screen active'
 fi
-

@@ -12,17 +12,17 @@ RESET="\e[0m"
 
 extract() {
   case "$1" in
-    *.tar.bz2|*.tbz2) tar xvjf "$1"    ;;
-    *.tar.xz)         tar xvJf "$1"    ;;
-    *.tar.gz|*.tgz)   tar xvzf "$1"    ;;
-    *.tar)            tar xvf "$1"     ;;
-    *.zip)            unzip "$1"       ;;
-    *)                return 1
+    *.tar.bz2 | *.tbz2) tar xvjf "$1" ;;
+    *.tar.xz) tar xvJf "$1" ;;
+    *.tar.gz | *.tgz) tar xvzf "$1" ;;
+    *.tar) tar xvf "$1" ;;
+    *.zip) unzip "$1" ;;
+    *) return 1 ;;
   esac
   return 0
 }
 
-download_tool() {(
+download_tool() {
   TOOL_NAME=$1
   REPO=$2
   ARCHIVE_URL=$(./tools/get_url.py $REPO) || return 1
@@ -42,7 +42,7 @@ download_tool() {(
   mkdir -p $LOCAL_PATH
   cp -r * "$LOCAL_PATH"
   return 0
-)}
+}
 
 if [[ "$1" == "-r" ]]; then
   echo -n "removing nvim"
@@ -55,11 +55,11 @@ if [[ "$1" == "-r" ]]; then
   rm -rf ~/.local/share/applications
   echo -e " ${GREEN}success${RESET}"
 else
-  mkdir -p $BIN && {
+  if mkdir -p $BIN; then
     TOOL_NAME="nvim"
     echo -n "installing $TOOL_NAME"
-    if [[ ( -e "$BIN/$TOOL_NAME" || -e "$LOCAL_PATH/bin/$TOOL_NAME" ) && "$1" != "-f" ]]; then
-        echo -e " ${BLUE}exists${RESET}"
+    if [[ (-e "$BIN/$TOOL_NAME" || -e "$LOCAL_PATH/bin/$TOOL_NAME") && "$1" != "-f" ]]; then
+      echo -e " ${BLUE}exists${RESET}"
     else
       if download_tool "$TOOL_NAME" "neovim/neovim" &>/dev/null; then
         echo -e " ${GREEN}success${RESET}"
@@ -67,5 +67,5 @@ else
         echo -e " ${RED}failure${RESET}"
       fi
     fi
-  }
+  fi
 fi

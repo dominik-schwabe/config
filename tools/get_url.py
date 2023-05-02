@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import sys
 import json
 import platform
+import sys
 from urllib.request import urlopen
 
 system = ["linux"]
@@ -14,10 +14,11 @@ compiler = ["gnu", "musl"]
 
 aspects = [system, architecture, compiler, archive]
 
+
 def score_asset(asset):
     name = asset["name"]
     discount = 1
-    score = 1/len(name)
+    score = 1 / len(name)
     for aspect in aspects:
         for word in aspect:
             if word in name:
@@ -25,6 +26,7 @@ def score_asset(asset):
                 break
         discount *= 0.8
     return score
+
 
 url = f"https://api.github.com/repos/{sys.argv[1]}/releases"
 with urlopen(url) as file:

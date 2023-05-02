@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 INPUT=$(cat -)
-NUMBERS=$(sed 's/[^0-9]*//g' <<< "$INPUT")
+NUMBERS=$(sed 's/[^0-9]*//g' <<<"$INPUT")
 paste -d ' ' <(echo "$NUMBERS") <(echo "$INPUT")

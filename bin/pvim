@@ -2,19 +2,19 @@
 
 FILE_PATH=$(realpath -m ${1-"."})
 
-read PROGRAM ROOT_PATH <<< $(python_project_root $1)
+read PROGRAM ROOT_PATH <<<$(python_project_root $1)
 ACTIVATE_PATH=$ROOT_PATH/.venv/bin/activate
 
 echo $ACTIVATE_PATH
 [[ -n "$ROOT_PATH" ]] && cd $ROOT_PATH
 if [[ -r $ACTIVATE_PATH ]]; then
-	echo "found venv"
-	. $ACTIVATE_PATH
-	$EDITOR $FILE_PATH
+  echo "found venv"
+  . $ACTIVATE_PATH
+  $EDITOR $FILE_PATH
 elif [[ $PROGRAM == "pdm" ]]; then
-	echo "found pdm"
-	pdm run $EDITOR $FILE_PATH
+  echo "found pdm"
+  pdm run $EDITOR $FILE_PATH
 elif [[ $PROGRAM == "pipenv" ]]; then
-	echo "found pipenv"
-	pipenv --venv >/dev/null && pipenv run $EDITOR $FILE_PATH
+  echo "found pipenv"
+  pipenv --venv >/dev/null && pipenv run $EDITOR $FILE_PATH
 fi

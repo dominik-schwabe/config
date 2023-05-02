@@ -91,10 +91,14 @@ parser.add_argument(
     type=parse_hours,
 )
 parser.add_argument(
-    "--start-date", help=f"start of the tracked task '{DATE_FMT.replace('%', '%%')}'", type=parse_date
+    "--start-date",
+    help=f"start of the tracked task '{DATE_FMT.replace('%', '%%')}'",
+    type=parse_date,
 )
 parser.add_argument(
-    "--end-date", help=f"end of the tracked task in '{DATE_FMT.replace('%', '%%')}'", type=parse_date
+    "--end-date",
+    help=f"end of the tracked task in '{DATE_FMT.replace('%', '%%')}'",
+    type=parse_date,
 )
 parser.add_argument(
     "--hours", help="hours that should be invested until the task is finished", type=int

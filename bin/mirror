@@ -11,6 +11,7 @@ HELP='mirror your primary monitor with an external monitor
   -d make only your primary screen active (e.g. reset mirroring)
   -p take maximal resolution from primary instead of external monitor
   -k disable primary screen'
+
 TYPE="mirror"
 while getopts "s:o:adptblrk" o &>/dev/null; do
   case $o in

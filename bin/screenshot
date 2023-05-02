@@ -7,15 +7,15 @@ while getopts "ws" o &>/dev/null; do
   esac
 done
 
-command -v scrot &>/dev/null || {
+if ! command -v scrot &>/dev/null; then
   notify-send -t 600 "scrot not found"
   exit 1
-}
+fi
 
-[[ -z $MODE ]] && {
+if [[ -z $MODE ]]; then
   notify-send -t 600 "unknown MODE '$MODE'"
   exit 1
-}
+fi
 
 mkdir -p ~/Pictures
 

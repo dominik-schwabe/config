@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
-[ -z "$1" ] && {
-    echo "no filename given"
-    exit 1
-}
+
+if [[ -z "$1" ]]; then
+  echo "no filename given"
+  exit 1
+fi
+
 MIMETYPE=$(xclip -selection clipboard -o | file -b --mime-type -)
 DIRTYPE=$(dirname $MIMETYPE)
 BASETYPE=$(basename $MIMETYPE)
-[[ $DIRTYPE == "image" ]] || {
-    echo "clipboard in not image"
-    exit  1
-}
-xclip -selection clipboard -o > "$1.$BASETYPE"
+
+if [[ $DIRTYPE == "image" ]]; then
+  echo "clipboard in not image"
+  exit 1
+fi
+
+xclip -selection clipboard -o >"$1.$BASETYPE"

@@ -25,10 +25,11 @@ else
   exit 1
 fi
 
-[[ -z $LINK ]] && {
+if [[ -z $LINK ]]; then
   echo "link missing"
   exit 1
-}
+fi
+
 if [[ $LINK == "https://www.youtube.com/"* ]]; then
   nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1 $RESOLUTION" --ytdl-format=$MPV_FORMAT $1 &>/dev/null &
 else

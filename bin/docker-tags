@@ -8,15 +8,15 @@ MAX_PAGE_SIZE=100
 
 PAGE_SIZE=$(($PAGE_SIZE > $MAX_PAGE_SIZE ? $MAX_PAGE_SIZE : $PAGE_SIZE))
 
-[[ $PAGES == "all" ]] && {
+if [[ $PAGES == "all" ]]; then
   ALL="true"
   PAGE_SIZE=$MAX_PAGE_SIZE
-}
+fi
 
-[[ -z "$1" ]] && {
+if [[ -z "$1" ]]; then
   echo "no tag given" >&2
   exit 1
-}
+fi
 
 PAGE_COUNT=0
 while [[ $ALL || $PAGE_COUNT -lt $PAGES ]]; do
@@ -30,10 +30,10 @@ while [[ $ALL || $PAGE_COUNT -lt $PAGES ]]; do
   case "$STATUS" in
     0) ;;
     22)
-      [[ $PAGE_COUNT == 0 || ! $ALL ]] && {
+      if [[ $PAGE_COUNT == 0 || ! $ALL ]]; then
         echo "repository \"$REPOSITORY\" not found or list exhausted" >&2
         exit 2
-      }
+      fi
       exit 0
       ;;
     *)
@@ -43,6 +43,6 @@ while [[ $ALL || $PAGE_COUNT -lt $PAGES ]]; do
   esac
   TAGS=$(jq -r '."results"[]["name"]' <<<"$TAGS")
   echo "$TAGS"
-  [[ $(wc -l <<< "$TAGS") -lt $PAGE_SIZE ]] && exit 0
+  [[ $(wc -l <<<"$TAGS") -lt $PAGE_SIZE ]] && exit 0
   ((PAGE_COUNT += 1))
 done

@@ -20,17 +20,17 @@ declare -A TOOLS=(
 
 extract() {
   case "$1" in
-    *.tar.bz2|*.tbz2) tar xvjf "$1"    ;;
-    *.tar.xz)         tar xvJf "$1"    ;;
-    *.tar.gz|*.tgz)   tar xvzf "$1"    ;;
-    *.tar)            tar xvf "$1"     ;;
-    *.zip)            unzip "$1"       ;;
-    *)                return 1
+    *.tar.bz2 | *.tbz2) tar xvjf "$1" ;;
+    *.tar.xz) tar xvJf "$1" ;;
+    *.tar.gz | *.tgz) tar xvzf "$1" ;;
+    *.tar) tar xvf "$1" ;;
+    *.zip) unzip "$1" ;;
+    *) return 1 ;;
   esac
   return 0
 }
 
-download_tool() {(
+download_tool() {
   TOOL_NAME=$1
   REPO=$2
   ARCHIVE_URL=$(./get_url.py $REPO) || return 1
@@ -51,19 +51,19 @@ download_tool() {(
   mv $TOOL_NAME $BIN || return 1
   rm -rf $TEMP_FOLDER || return 1
   return 0
-)}
+}
 
 mkdir -p $BIN && {
   for TOOL_NAME in ${!TOOLS[@]}; do
-      echo -n "installing $TOOL_NAME"
-      if [[ ( -e "$BIN/$TOOL_NAME" || -e "$LOCAL_PATH/bin/$TOOL_NAME" ) && "$1" != "-f" ]]; then
-          echo -e " ${BLUE}exists${RESET}"
+    echo -n "installing $TOOL_NAME"
+    if [[ (-e "$BIN/$TOOL_NAME" || -e "$LOCAL_PATH/bin/$TOOL_NAME") && "$1" != "-f" ]]; then
+      echo -e " ${BLUE}exists${RESET}"
+    else
+      if download_tool "$TOOL_NAME" "${TOOLS[$TOOL_NAME]}" &>/dev/null; then
+        echo -e " ${GREEN}success${RESET}"
       else
-        if download_tool "$TOOL_NAME" "${TOOLS[$TOOL_NAME]}" &>/dev/null; then
-          echo -e " ${GREEN}success${RESET}"
-        else
-          echo -e " ${RED}failure${RESET}"
-        fi
+        echo -e " ${RED}failure${RESET}"
       fi
+    fi
   done
 }

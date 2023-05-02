@@ -359,6 +359,22 @@ alias -g ......='../../../../..'
 bindkey -r -M vicmd '\ec'
 bindkey -r -M viins '\ec'
 
+## use the vi navigation keys in menu completion
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
+_yay_update() {
+    LBUFFER="yay -Syu"
+    RBUFFER=""
+    zle accept-line
+}
+
+zle -N _yay_update
+bindkey -M vicmd '^[[15~' _yay_update
+bindkey -M viins '^[[15~' _yay_update
+
 fpath=($HOME/.zsh-completions $fpath)
 
 if autoload -Uz compinit bashcompinit; then
@@ -418,22 +434,6 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
     get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
     PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
     RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
-
-    ## use the vi navigation keys in menu completion
-    bindkey -M menuselect 'h' vi-backward-char
-    bindkey -M menuselect 'k' vi-up-line-or-history
-    bindkey -M menuselect 'l' vi-forward-char
-    bindkey -M menuselect 'j' vi-down-line-or-history
-
-    _yay_update() {
-        LBUFFER="yay -Syu"
-        RBUFFER=""
-        zle accept-line
-    }
-
-    zle -N _yay_update
-    bindkey -M vicmd '^[[15~' _yay_update
-    bindkey -M viins '^[[15~' _yay_update
 
     load_plugin() {
         local URL=$1

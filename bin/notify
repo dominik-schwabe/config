@@ -1,46 +1,46 @@
 #!/usr/bin/env bash
 
-show_time () {
-    num=$1
-    min=0
-    hour=0
-    day=0
-    if ((num>59)); then
-        ((sec=num%60))
-        ((num=num/60))
-        if ((num>59)); then
-            ((min=num%60))
-            ((num=num/60))
-            if ((num>23)); then
-                ((hour=num%24))
-                ((day=num/24))
-            else
-                ((hour=num))
-            fi
-        else
-            ((min=num))
-        fi
+show_time() {
+  num=$1
+  min=0
+  hour=0
+  day=0
+  if ((num > 59)); then
+    ((sec = num % 60))
+    ((num = num / 60))
+    if ((num > 59)); then
+      ((min = num % 60))
+      ((num = num / 60))
+      if ((num > 23)); then
+        ((hour = num % 24))
+        ((day = num / 24))
+      else
+        ((hour = num))
+      fi
     else
-        ((sec=num))
+      ((min = num))
     fi
-    RET=""
-    LAST=0
-    [ $sec != 0 ] && LAST=1
-    [ $min != 0 ] && LAST=2
-    [ $hour != 0 ] && LAST=3
-    [ $day != 0 ] && LAST=4
-    [ $LAST -ge 4 ] && RET="${RET}${day}days "
-    [ $LAST -ge 3 ] && RET="${RET}${hour}h:"
-    [ $LAST -ge 2 ] && RET="${RET}${min}m:"
-    [ $LAST -ge 1 ] && RET="${RET}${sec}s"
-    echo $RET
+  else
+    ((sec = num))
+  fi
+  RET=""
+  LAST=0
+  [[ $sec != 0 ]] && LAST=1
+  [[ $min != 0 ]] && LAST=2
+  [[ $hour != 0 ]] && LAST=3
+  [[ $day != 0 ]] && LAST=4
+  [[ $LAST -ge 4 ]] && RET="${RET}${day}days "
+  [[ $LAST -ge 3 ]] && RET="${RET}${hour}h:"
+  [[ $LAST -ge 2 ]] && RET="${RET}${min}m:"
+  [[ $LAST -ge 1 ]] && RET="${RET}${sec}s"
+  echo $RET
 }
 
 STARTTIME=$(date +"%d.%m.%Y %H:%M")
 SECONDSSTART=$(date +"%s")
 if ! telegram-send; then
-    echo "telegram-send is not configured"
-    exit 1
+  echo "telegram-send is not configured"
+  exit 1
 fi
 
 # execute command
@@ -50,12 +50,12 @@ RET=$?
 SECONDSEND=$(date +"%s")
 ENDTIME=$(date +"%d.%m.%Y %H:%M")
 
-[ "$RET" = "0" ] && STATUS=$(printf '\u2713') || STATUS=$(printf '\u2718')
+[[ "$RET" = "0" ]] && STATUS=$(printf '\u2713') || STATUS=$(printf '\u2718')
 
-SECONDS=$(( $SECONDSEND-$SECONDSSTART ))
+SECONDS=$(($SECONDSEND - $SECONDSSTART))
 
 if [[ $SECONDS -gt 5 ]]; then
-telegram-send --format markdown "
+  telegram-send --format markdown "
 exit code: \`$RET\` $STATUS
 command: \`$*\`
 user: \`$(id -un)\`
