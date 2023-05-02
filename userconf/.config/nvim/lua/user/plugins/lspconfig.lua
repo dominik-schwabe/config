@@ -49,11 +49,11 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
       local should_attach = not vim.b[args.buf].is_big_buffer or client.name == "null-ls"
       -- client.server_capabilities.semanticTokensProvider = nil
       if should_attach then
-        F.load("nvim-navic", function(navic)
-          if client.server_capabilities.documentSymbolProvider then
-            navic.attach(client, args.buf)
-          end
-        end)
+        -- F.load("nvim-navic", function(navic)
+        --   if client.server_capabilities.documentSymbolProvider then
+        --     navic.attach(client, args.buf)
+        --   end
+        -- end)
 
         if client.name == "rust_analyzer" then
           F.load("rust-tools", function(rt)
@@ -133,9 +133,9 @@ F.load("mason-lspconfig", function(mason_lspconfig)
   end
 end)
 
-for type, icon in pairs(config.lsp_signs) do
+for type, icon in pairs(F.subset(config.icons, { "Error", "Warning", "Hint", "Information" })) do
   local hl = "LspDiagnosticsSign" .. type
-  fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  fn.sign_define(hl, { text = icon .. " ", texthl = hl, numhl = "" })
 end
 
 vim.api.nvim_create_augroup("UserLsp", {})

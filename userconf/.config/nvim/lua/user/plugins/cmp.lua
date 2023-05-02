@@ -1,11 +1,13 @@
 local F = require("user.functional")
 local U = require("user.utils")
 
+local config = require("user.config")
+
 require("user.completions")
 
 local cmp = require("cmp")
 
-local max_buffer_size = 100 * 1024
+local max_buffer_size = config.max_buffer_size
 
 local cmp_options = {
   enabled = function()
@@ -95,37 +97,7 @@ F.load("lspkind", function(lspkind)
   lspkind.init({
     mode = "symbol",
     presets = "mdi",
-    symbol_map = {
-      Text = "",
-      Method = "",
-      Function = "",
-      Constructor = "",
-      Field = "ﰠ",
-      Variable = "",
-      Class = "ﴯ",
-      Interface = "",
-      Module = "",
-      Property = "ﰠ",
-      Unit = "塞",
-      Value = "",
-      Enum = "",
-      Keyword = "",
-      Snippet = "",
-      Color = "",
-      File = "",
-      Reference = "",
-      Folder = "",
-      EnumMember = "",
-      Constant = "",
-      Struct = "פּ",
-      Event = "",
-      Operator = "",
-      TypeParameter = "",
-      Tailwind = "ﱢ", --  
-      Yank = "",
-      Path = "/",
-      Tmux = "ﴶ",
-    },
+    symbol_map = config.icons,
   })
 
   local cmp_formats = {

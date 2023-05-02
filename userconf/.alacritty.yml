@@ -6,15 +6,15 @@ font:
   bold:
     family: Fira Code Nerd Font
     style: Bold
-  italic:
-    family: Fira Code Nerd Font
-    style: Bold Italic
-  bold_italic:
-    family: Fira Code Nerd Font
-    style: Bold Italic
-  offset:
-    x: 0
-    # y: 3
+  # italic:
+  #   family: Fira Code Nerd Font
+  #   style: Bold Italic
+  # bold_italic:
+  #   family: Fira Code Nerd Font
+  #   style: Bold Italic
+  # offset:
+  #   x: 0
+  #   y: 3
 
 tabspaces: 2
 

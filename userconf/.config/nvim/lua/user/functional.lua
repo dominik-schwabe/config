@@ -96,6 +96,14 @@ function M.min(list)
   return nil
 end
 
+function M.subset(obj, values)
+  local new_obj = {}
+  M.foreach(values, function(value)
+    new_obj[value] = obj[value]
+  end)
+  return new_obj
+end
+
 function M.f(func, ...)
   local tbl = { ... }
   return function()

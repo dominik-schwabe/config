@@ -2,16 +2,55 @@ local F = require("user.functional")
 
 local lualine = require("lualine")
 
-local navic_section = nil
+local config = require("user.config")
+
+local navic_icons = {}
+for _, type in ipairs({
+  "File",
+  "Module",
+  "Namespace",
+  "Package",
+  "Class",
+  "Method",
+  "Property",
+  "Field",
+  "Constructor",
+  "Enum",
+  "Interface",
+  "Function",
+  "Variable",
+  "Constant",
+  "String",
+  "Number",
+  "Boolean",
+  "Array",
+  "Object",
+  "Key",
+  "Null",
+  "EnumMember",
+  "Struct",
+  "Event",
+  "Operator",
+  "TypeParameter",
+}) do
+  navic_icons[type] = config.icons[type] .. " "
+end
+
+local separator = "󰐊"
+
+local lualine_c = { { "filename", separator = separator } }
+
 F.load("nvim-navic", function(navic)
   navic.setup({
-    icons = require("user.config").navic_icons,
+    icons = navic_icons,
     highlight = true,
-    separator = " > ",
-    depth_limit = 0,
-    depth_limit_indicator = "..",
+    depth_limit = 2,
+    depth_limit_indicator = "",
+    separator = " " .. separator .. " ",
+    safe_output = true,
+    lsp = { auto_attach = true },
   })
-  navic_section = { navic.get_location, cond = navic.is_available }
+  lualine_c[#lualine_c + 1] = { "navic" }
 end)
 
 local lualine_x = { "filetype" }
@@ -26,20 +65,19 @@ F.load("lsp-progress", function(lsp_progress)
   table.insert(lualine_x, 1, progress)
 end)
 
-local config = {
+local lualine_config = {
   extensions = { "quickfix", "nvim-tree", "lazy" },
   options = {
     section_separators = "",
     component_separators = { left = "|", right = "|" },
-    -- component_separators = "",
   },
   sections = {
     lualine_a = { "mode" },
     lualine_b = { "branch", "diff", "diagnostics" },
-    lualine_c = { "filename", navic_section },
+    lualine_c = lualine_c,
     lualine_x = lualine_x,
     lualine_y = { "%3p%%" },
     lualine_z = { "location" },
   },
 }
-lualine.setup(config)
+lualine.setup(lualine_config)
