@@ -1,5 +1,7 @@
 local nvim_tree = require("nvim-tree")
 
+local config = require("user.config")
+
 local function on_attach(bufnr)
   local api = require("nvim-tree.api")
 
@@ -69,6 +71,14 @@ nvim_tree.setup({
   git = {
     ignore = true,
     timeout = 500,
+  },
+  diagnostics = {
+    icons = {
+      hint = config.icons.Hint,
+      info = config.icons.Info,
+      warning = config.icons.Warn,
+      error = config.icons.Error,
+    },
   },
   actions = {
     open_file = {

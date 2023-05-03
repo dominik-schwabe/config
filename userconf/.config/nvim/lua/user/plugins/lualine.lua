@@ -73,7 +73,19 @@ local lualine_config = {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_b = {
+      { "branch", icon = config.icons.Branch },
+      "diff",
+      {
+        "diagnostics",
+        symbols = {
+          error = config.icons.ErrorAlt .. " ",
+          warn = config.icons.WarnAlt .. " ",
+          info = config.icons.InfoAlt .. " ",
+          hint = config.icons.HintAlt .. " ",
+        },
+      },
+    },
     lualine_c = lualine_c,
     lualine_x = lualine_x,
     lualine_y = { "%3p%%" },

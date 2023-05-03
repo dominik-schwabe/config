@@ -73,6 +73,7 @@ end
 
 local lspconfig = with_dependencies({
   "neovim/nvim-lspconfig",
+  event = { "BufReadPre", "BufNewFile" },
   config = l("lspconfig"),
   dependencies = {
     { "williamboman/mason.nvim", config = true },
@@ -95,16 +96,30 @@ local lspconfig = with_dependencies({
   -- { "folke/neodev.nvim" },
 })
 
+local luasnip = {
+  "L3MON4D3/LuaSnip",
+  config = l("luasnip"),
+  dependencies = {
+    { "rafamadriz/friendly-snippets" },
+  },
+}
+
+if not config.minimal then
+  luasnip.build = "make install_jsregexp"
+end
+
 local cmp = with_dependencies({
   "hrsh7th/nvim-cmp",
+  event = "InsertEnter",
   config = l("cmp"),
   dependencies = {
     { "saadparwaiz1/cmp_luasnip" },
-    { "onsails/lspkind.nvim" },
     { "hrsh7th/cmp-nvim-lsp" },
-    { "hrsh7th/cmp-buffer" },
+    luasnip,
   },
 }, {
+  { "onsails/lspkind.nvim" },
+  { "hrsh7th/cmp-buffer" },
   { "hrsh7th/cmp-path" },
   { "hrsh7th/cmp-nvim-lua" },
   { "andersevenrud/cmp-tmux" },
@@ -147,15 +162,8 @@ local plugins = {
   cmp,
   comment,
   {
-    "L3MON4D3/LuaSnip",
-    build = "make install_jsregexp",
-    config = l("luasnip"),
-    dependencies = {
-      { "rafamadriz/friendly-snippets" },
-    },
-  },
-  {
     "stevearc/dressing.nvim",
+    event = "VeryLazy",
     opts = {
       input = {
         insert_only = false,
@@ -171,18 +179,21 @@ local plugins = {
       },
     },
   },
-  { "kylechui/nvim-surround", config = true },
+  {
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
+    config = true,
+  },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
-  { "jose-elias-alvarez/null-ls.nvim", config = l("null-ls") },
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = l("null-ls"),
+  },
   {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
-    dependencies = {
-      { "mbbill/undotree", keys = {
-        { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" },
-      } },
-    },
     cmd = "Telescope",
     keys = {
       { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" }, desc = "find files" },
@@ -245,7 +256,11 @@ local plugins = {
     dependencies = { { "nvim-tree/nvim-web-devicons" } },
     keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
   },
-  { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
+  {
+    "mg979/vim-visual-multi",
+    keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } },
+  },
+  { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
 }
 
 if not config.minimal then
@@ -282,12 +297,13 @@ if not config.minimal then
         { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x", desc = "decrement additional" },
       },
     },
-    { "rhysd/clever-f.vim" },
+    { "rhysd/clever-f.vim", event = "VeryLazy" },
     { "windwp/nvim-autopairs", config = true, event = "InsertEnter" },
     { "NvChad/nvim-colorizer.lua" },
     { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },
     {
       "nvim-treesitter/nvim-treesitter",
+      event = { "BufReadPost", "BufNewFile" },
       config = l("treesitter"),
       dependencies = {
         { "mrjones2014/nvim-ts-rainbow" },
@@ -311,6 +327,7 @@ if not config.minimal then
     },
     {
       "mfussenegger/nvim-dap",
+      event = "VeryLazy",
       config = l("dap"),
       dependencies = {
         { "rcarriga/nvim-dap-ui" },
@@ -324,10 +341,24 @@ if not config.minimal then
       keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
     { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
-    { url = "https://gitlab.com/yorickpeterse/nvim-pqf", config = true },
+    {
+      url = "https://gitlab.com/yorickpeterse/nvim-pqf",
+      event = "VeryLazy",
+      config = true,
+    },
     {
       "folke/todo-comments.nvim",
+      event = { "BufReadPost", "BufNewFile" },
       opts = {
+        keywords = {
+          FIX = { icon = config.icons.Fix, color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+          TODO = { icon = config.icons.Todo, color = "info" },
+          HACK = { icon = config.icons.Hack, color = "warning" },
+          WARN = { icon = config.icons.Warn, color = "warning", alt = { "WARNING", "XXX" } },
+          PERF = { icon = config.icons.Perf, color = "warning", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+          NOTE = { icon = config.icons.Note, color = "hint", alt = { "INFO" } },
+          TEST = { icon = config.icons.Test, color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+        },
         search = {
           command = "rg",
           args = {
@@ -340,7 +371,6 @@ if not config.minimal then
           },
         },
       },
-      lazy = false,
       keys = { { "<space>at", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
     },
     {
@@ -351,12 +381,12 @@ if not config.minimal then
     { "ggandor/leap.nvim", config = creq("leap").set_default_keymaps(), keys = { "s", "S" } },
     { "nmac427/guess-indent.nvim", opts = {} },
     { "sheerun/vim-polyglot" },
-    { "anuvyklack/hydra.nvim" },
+    { "anuvyklack/hydra.nvim", lazy = true },
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>al", "<space>ö" } },
     {
       "iamcco/markdown-preview.nvim",
+      event = { "BufReadPost", "BufNewFile" },
       build = "cd app && npm install",
-      lazy = false,
       config = function()
         vim.cmd([[
           function OpenMarkdown(url)
