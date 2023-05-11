@@ -79,7 +79,7 @@ alias my='mpv --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[h
 alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'
 
-alias pip='noglob pip'
+alias pip='pip'
 alias pipi='pip install'
 alias pipu='pip install -U --upgrade-strategy eager'
 
