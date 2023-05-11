@@ -322,4 +322,14 @@ function M.split_cwd_path(path)
   return prefix, suffix
 end
 
+function M.quickfix(lines, title)
+  if type(lines[1]) == "table" then
+    vim.fn.setqflist(lines, " ")
+    vim.fn.setqflist({}, "a", { title = title })
+  else
+    vim.fn.setqflist({}, "r", { title = title, lines = lines })
+  end
+  vim.api.nvim_command("botright copen")
+end
+
 return M

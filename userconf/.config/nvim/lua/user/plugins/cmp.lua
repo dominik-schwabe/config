@@ -43,7 +43,10 @@ local cmp_options = {
     { name = "luasnip", max_item_count = 3 },
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
-    { name = "yank_history" },
+    {
+      name = "yank_history",
+      max_item_count = 3,
+    },
     { name = "path" },
     { name = "crates" },
     {

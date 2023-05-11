@@ -32,7 +32,7 @@ local function hide_lint()
       return entry[2]
     end
   )
-  F.foreach(lint_namespaces, vim.diagnostic.hide)
+  F.foreach(lint_namespaces, vim.diagnostic.reset)
 end
 
 vim.api.nvim_create_user_command("Lint", lint_buffer, {})

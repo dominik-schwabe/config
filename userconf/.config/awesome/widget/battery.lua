@@ -4,7 +4,7 @@ local color = require("util.color")
 
 local M = {}
 
-local glyphs = { "", "", "", "", "", "", "", "", "", "", "" }
+local glyphs = { "󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹" }
 
 function M.create(lain)
   local last_was_highlighted = false
@@ -27,7 +27,7 @@ function M.create(lain)
           text = string.format("%2d", bat_now.perc)
           local glyph
           if bat_now.status == "Charging" then
-            glyph = color.color("#DEED12", bg, "")
+            glyph = color.color("#DEED12", bg, "󰂄")
           else
             glyph = glyphs[math.ceil(bat_now.perc / (100 / #glyphs))]
           end

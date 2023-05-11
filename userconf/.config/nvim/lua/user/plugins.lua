@@ -73,7 +73,6 @@ end
 
 local lspconfig = with_dependencies({
   "neovim/nvim-lspconfig",
-  event = { "BufReadPre", "BufNewFile" },
   config = l("lspconfig"),
   dependencies = {
     { "williamboman/mason.nvim", config = true },
@@ -376,7 +375,7 @@ if not config.minimal then
     {
       "ziontee113/icon-picker.nvim",
       config = true,
-      keys = { { "<space>ai", "<CMD>PickIcons<CR>", desc = "open icon picker" } },
+      keys = { { "<space>ai", "<CMD>IconPickerYank emoji nerd_font_v3<CR>", desc = "open icon picker" } },
     },
     { "ggandor/leap.nvim", config = creq("leap").set_default_keymaps(), keys = { "s", "S" } },
     { "nmac427/guess-indent.nvim", opts = {} },

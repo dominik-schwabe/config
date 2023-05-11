@@ -10,9 +10,7 @@ local function show_diagnostics(only_buffer)
     end)
   end
   diagnostics = vim.diagnostic.toqflist(diagnostics)
-  vim.fn.setqflist(diagnostics, "r")
-  vim.fn.setqflist({}, "a", { title = "Diagnostics" })
-  vim.api.nvim_command("botright copen")
+  U.quickfix(diagnostics, "Diagnostics")
 end
 
 vim.keymap.set("n", "<space>d", function()

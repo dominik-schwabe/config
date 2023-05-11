@@ -544,7 +544,7 @@ HL.other = {
   IlluminatedWordText = { link = "CursorLine" },
   IlluminatedWordRead = { link = "CursorLine" },
   IlluminatedWordWrite = { link = "CursorLine" },
-  MarkSignHL = { fg = C.purple },
+  MarkSignHL = { fg = C.purple, bold = true },
   HydraRed = { fg = C.red },
   HydraBlue = { fg = C.cool_blue1 },
   HydraPink = { fg = C.pink },

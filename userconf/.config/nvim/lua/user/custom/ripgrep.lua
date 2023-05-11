@@ -1,5 +1,4 @@
 local fn = vim.fn
-local api = vim.api
 
 local U = require("user.utils")
 local F = require("user.functional")
@@ -60,8 +59,7 @@ local function rg(string, opt)
           if #lines == 0 then
             vim.notify("nothing found")
           else
-            vim.fn.setqflist({}, "r", { title = command, lines = lines })
-            api.nvim_command("botright copen")
+            U.quickfix(lines, command)
           end
         end)()
       else

@@ -38,19 +38,19 @@ end
 
 local separator = "󰐊"
 
-local lualine_c = { { "filename", separator = separator } }
+local lualine_c = {}
 
 F.load("nvim-navic", function(navic)
   navic.setup({
     icons = navic_icons,
     highlight = true,
-    depth_limit = 2,
+    depth_limit = 0,
     depth_limit_indicator = "",
     separator = " " .. separator .. " ",
     safe_output = true,
     lsp = { auto_attach = true },
   })
-  lualine_c[#lualine_c + 1] = { "navic" }
+  lualine_c[#lualine_c + 1] = "navic"
 end)
 
 local lualine_x = { "filetype" }
@@ -83,6 +83,15 @@ local lualine_config = {
           warn = config.icons.WarnAlt .. " ",
           info = config.icons.InfoAlt .. " ",
           hint = config.icons.HintAlt .. " ",
+        },
+      },
+      {
+        "filename",
+        symbols = {
+          modified = config.icons.Modified,
+          readonly = config.icons.Readonly,
+          unnamed = "[No Name]",
+          newfile = "[New]",
         },
       },
     },

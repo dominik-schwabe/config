@@ -11,4 +11,4 @@ local function reload_config()
 end
 
 vim.api.nvim_create_user_command("ReloadConfig", reload_config, {})
-vim.keymap.set({ "n", "x" }, "<space>ar", reload_config, { desc = "reload config" })
+-- vim.keymap.set({ "n", "x" }, "<space>ar", reload_config, { desc = "reload config" })

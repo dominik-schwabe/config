@@ -58,6 +58,8 @@ M.icons = {
   Yank = "󰏢",
   Path = "/",
   Tmux = "󰓫",
+  Modified = "󰏫",
+  Readonly = "",
 }
 M.rooter = {
   ends_with = {
@@ -222,7 +224,7 @@ M.null_ls = {
     "taplo",
     "styler",
     latexindent = {
-      extra_args = { "-y", [[defaultIndent: "  "]] },
+      extra_args = { "-y", 'defaultIndent:"  "', "-y", "verbatimEnvironments:Verbatim:1;pre:1" },
     },
     shfmt = {
       extra_args = { "-i", "2", "-ci" },
