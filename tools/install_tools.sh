@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd $(dirname $0)
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 BIN=$HOME/bin
 LOCAL_PATH=$HOME/.local
@@ -33,7 +33,7 @@ extract() {
 download_tool() {
   TOOL_NAME=$1
   REPO=$2
-  ARCHIVE_URL=$(./get_url.py $REPO) || return 1
+  ARCHIVE_URL=$($SCRIPT_DIR/get_url.py $REPO) || return 1
   TEMP_FOLDER=$(mktemp -d)
   cd $TEMP_FOLDER
   curl -fsSLO "$ARCHIVE_URL" -o $TEMP_FOLDER || return 1
