@@ -152,8 +152,10 @@ fzf-history-widget() {
   list=$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }')
   query=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "$LBUFFER$RBUFFER")
   results=$(FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} ${FZF_DEFAULT_OPTS-} -n2..,.. --scheme=history --print-query --bind=ctrl-s:toggle-sort,ctrl-z:ignore,esc:print-query ${FZF_CTRL_R_OPTS-} --query='$query' +m" fzf <<< "$list")
+  results=a$results # empty string can fail the split on \n
   if [[ $? == 0 ]]; then
     IFS=$'\n' read -d '' -r -A array <<< "$results"
+    array[1]=${array[1]:1} # remove "a"
     if [[ $#array == 3 ]]; then
       selected=($(echo "${array[2]}"))
       num=$selected[1]
