@@ -1,32 +1,56 @@
 #!/usr/bin/env bash
 
-if [ -z "$1" ]; then
-  echo "no file given"
+SILENT=false
+while getopts "s" o &>/dev/null; do
+  case $o in
+    "s") SILENT=true ;;
+  esac
+done
+
+error() {
+  [[ "$SILENT" == true ]] || echo "$1" >/dev/stderr
   exit 1
+}
+
+shift "$(($OPTIND - 1))"
+FILE=$1
+
+if [ -z "$FILE" ]; then
+  error "no file given"
+elif ! [ -f "$FILE" ]; then
+  error "'$FILE' is not a valid file!"
 fi
 
-if [ -f "$1" ]; then
-  case "$1" in
-    *.tar.bz2 | *.tbz2) tar xvjf "$1" ;;
-    *.tar.xz) tar xvJf "$1" ;;
-    *.tar.gz | *.tgz) tar xvzf "$1" ;;
-    *.tar.zst) tar --use-compress-program=unzstd -xvf "$1" ;;
-    *.zst) unzstd "$1" ;;
-    *.bz2) bunzip2 "$1" ;;
-    *.rar) unrar x "$1" ;;
-    *.gz) gunzip "$1" ;;
-    *.tar) tar xvf "$1" ;;
-    *.zip) unzip "$1" ;;
-    *.xz) unxz "$1" ;;
-    *.lzma) lzma -d <"$1" >"${1%.lzma}" ;;
-    *.Z) uncompress "$1" ;;
-    *.7z) 7z x "$1" ;;
-    *)
-      echo "don't know how to extract '$1'..."
-      exit 1
-      ;;
-  esac
-else
-  echo "'$1' is not a valid file!"
-  exit 1
-fi
+extract_lzma() {
+  echo "lzma -d <'$1\' >'${1%.lzma}'"
+  lzma -d <"$1" >"${1%.lzma}"
+}
+
+run() {
+  PROGRAMM="$1"
+  FILE="$2"
+  echo $PROGRAMM "'$FILE'"
+  $PROGRAMM "$FILE"
+}
+
+case "$FILE" in
+  *.tar.bz2 | *.tbz2) run "tar xvjf" "$FILE" ;;
+  *.tar.xz) run "tar xvJf" "$FILE" ;;
+  *.tar.gz | *.tgz) run "tar xvzf" "$FILE" ;;
+  *.tar.zst) run "tar --use-compress-program=unzstd -xvf" "$FILE" ;;
+  *.zst) run "unzstd" "$FILE" ;;
+  *.bz2) run "bunzip2" "$FILE" ;;
+  *.rar) run "unrar x" "$FILE" ;;
+  *.gz) run "gunzip" "$FILE" ;;
+  *.tar) run "tar xvf" "$FILE" ;;
+  *.zip) run "unzip" "$FILE" ;;
+  *.xz) run "unxz" "$FILE" ;;
+  *.lzma) extract_lzma "$FILE" ;;
+  *.Z) run "uncompress" "$FILE" ;;
+  *.7z) run "7z x" "$FILE" ;;
+  *)
+    error "don't know how to extract '$FILE'..."
+    ;;
+esac
+
+exit 0

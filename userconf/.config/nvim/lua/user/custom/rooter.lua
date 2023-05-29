@@ -26,22 +26,16 @@ local function list_parents(path)
   return new_table
 end
 
-local function has(dir, content)
-  for _, c in ipairs(content) do
-    if U.exists(dir .. "/" .. c) then
-      return true
-    end
-  end
-  return false
+local function has(dir, contents)
+  return F.any(contents, function(content)
+    return U.exists(dir .. "/" .. content)
+  end)
 end
 
 local function ends_with(dir, suffixes)
-  for _, suffix in ipairs(suffixes) do
-    if dir:sub(-string.len(suffix)) == suffix then
-      return true
-    end
-  end
-  return false
+  return F.any(suffixes, function(suffix)
+    return U.has_suffix(dir, suffix)
+  end)
 end
 
 local function parent_ends_with(dir, suffixes)

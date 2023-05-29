@@ -174,12 +174,12 @@ fzf-history-widget() {
   'unset' '__fzf_key_bindings_options'
 }
 
-fzf-open-file-in-vim-widget() {
+fzf-open-file() {
     local value=$(__fsel)
     zle reset-prompt
     if [[ -n $value ]]; then
-        LBUFFER="vim $value"
-        zle accept-line
+      LBUFFER="o $value"
+      zle accept-line
     fi
 }
 
@@ -187,9 +187,9 @@ zle     -N            fzf-history-widget
 bindkey -M vicmd '^A' fzf-history-widget
 bindkey -M viins '^A' fzf-history-widget
 
-zle     -N            fzf-open-file-in-vim-widget
-bindkey -M vicmd '^F' fzf-open-file-in-vim-widget
-bindkey -M viins '^F' fzf-open-file-in-vim-widget
+zle     -N            fzf-open-file
+bindkey -M vicmd '^F' fzf-open-file
+bindkey -M viins '^F' fzf-open-file
 
 zle     -N            fzf-cd-widget
 bindkey -M vicmd '^P' fzf-cd-widget

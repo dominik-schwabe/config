@@ -35,7 +35,7 @@ local function file_stats()
     { " ", "White" },
     { string.format("%.0f%s", size.value, size.unit), size.color },
     { " ", "White" },
-    { tostring(lines), "White" },
+    { tostring(lines) .. "L", "White" },
   })
   vim.api.nvim_echo(sections, false, {})
 end

@@ -113,7 +113,7 @@ local globalkeys = gears.table.join(
 
   bindkey("dropdown", mod, "asciicircum", dropdown_terminal_toggle, "toggle the dropdown terminal"),
   bindkey("dropdown", mod, "F1", sxiv_toggle, "toggle picture viewer"),
-  bindkey("dropdown", mod, "F12", todo_toggle, "toggle the todo scratchpad"),
+  bindkey("dropdown", mod_shift, "t", todo_toggle, "toggle the todo scratchpad"),
   bindkey("dropdown", mod, "adiaeresis", thunderbird_toggle, "toggle thunderbird"),
   bindkey("dropdown", mod_shift, "x", blanket_toggle, "toggle blanket"),
   bindkey("dropdown", mod_shift, "y", cmus_toggle, "toggle cmus"),

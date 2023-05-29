@@ -282,15 +282,23 @@ function M.add_slash(path)
   return path
 end
 
+function M.has_prefix(str, prefix)
+  return str:sub(1, #prefix) == prefix
+end
+
+function M.has_suffix(str, suffix)
+  return str:sub(-#suffix) == suffix
+end
+
 function M.remove_prefix(path, prefix)
-  if path:sub(1, #prefix) == prefix then
+  if M.has_prefix(path, prefix) then
     return prefix, path:sub(#prefix + 1)
   end
   return nil, path
 end
 
 function M.remove_suffix(path, suffix)
-  if path:sub(-#suffix) == suffix then
+  if M.has_suffix(path, suffix) then
     return path:sub(1, -#suffix - 1), suffix
   end
   return path, nil

@@ -1,6 +1,99 @@
 #!/usr/bin/env bash
 
-for ARG in "$@"; do
-  nohup xdg-open "$ARG" &>/dev/null &
+if [[ "$UID" = "0" ]] || [[ "$SSH_TTY" ]]; then
+  $EDITOR "$1"
+  exit 0
+fi
+
+RESOLUTION="medium"
+while getopts "elh" o &>/dev/null; do
+  case $o in
+    "e") ECHO=true ;;
+    "l") RESOLUTION="low" ;;
+    "h") RESOLUTION="high" ;;
+  esac
 done
+
+shift "$(($OPTIND - 1))"
+ARGUMENT=$1
+
+error() {
+  echo "$1" >/dev/stderr
+  exit 1
+}
+
+if [[ $RESOLUTION == "high" ]]; then
+  YTDL_FORMAT="ytdl-format=bestvideo[height<=1080]+bestaudio/best[height<=1080]"
+  STREAM_LINK_FORMAT=1080p60
+elif [[ $RESOLUTION == "medium" ]]; then
+  YTDL_FORMAT="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]"
+  STREAM_LINK_FORMAT=720p60
+elif [[ $RESOLUTION == "low" ]]; then
+  YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
+  STREAM_LINK_FORMAT=worst
+else
+  error "missing resolution"
+fi
+
+[[ -z $ARGUMENT ]] && error "missing argument"
+
+if [[ "$ARGUMENT" == "https://www.youtube.com/"* ]]; then
+  if command -v yt-dlp &>/dev/null; then
+    nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1 $RESOLUTION" --ytdl-format=$YTDL_FORMAT $1 &>/dev/null &
+  else
+    error "yt-dlp not installed"
+  fi
+elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
+  if command -v streamlink &>/dev/null; then
+    nohup streamlink --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $1 $RESOLUTION' --geometry=50%" $1 $STREAM_LINK_FORMAT &>/dev/null &
+  else
+    error "streamlink not installed"
+  fi
+else
+  [[ -e "$ARGUMENT" ]] || error "file does not exist"
+  mimetype=$(file -b --mime-type "$ARGUMENT")
+  if [[ "$mimetype" == "text/"* || "$mimetype" == "inode/"* ]]; then
+    [[ "$ECHO" == true ]] && echo "$EDITOR" "$mimetype"
+    $EDITOR "$ARGUMENT"
+    exit 0
+  elif [[ "$mimetype" == "application/x-"*"executable" ]]; then
+    [[ "$ECHO" == true ]] && echo "$mimetype"
+    ./$ARGUMENT
+    exit 0
+  fi
+  extract -s "$ARGUMENT" && exit 0
+  mimetype=$(xdg-mime query filetype "$ARGUMENT" 2>/dev/null)
+  case "$?" in
+    0)
+      default_app=$(xdg-mime query default "$mimetype")
+      default_app=${default_app%".desktop"}
+      [[ "$ECHO" == true ]] && echo "$default_app" "$mimetype"
+      if [[ "$default_app" == "$EDITOR" ]] || [[ -z "$default_app" ]]; then
+        $EDITOR "$ARGUMENT"
+      else
+        nohup xdg-open "$ARGUMENT" &>/dev/null &
+      fi
+      exit 0
+      ;;
+    1)
+      error "error in command line syntax"
+      ;;
+    2)
+      error "one of the files passed on the command line did not exist"
+      ;;
+    3)
+      error "a required tool could not be found"
+      ;;
+    4)
+      error "the action failed"
+      ;;
+    5)
+      error "no permission to read one of the files passed on the command line"
+      ;;
+    *)
+      error "unknown error"
+      ;;
+  esac
+fi
+
 exit 0

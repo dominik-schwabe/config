@@ -21,11 +21,11 @@ alias l='ls -lAthr'
 alias ll='ls -lAh'
 
 alias d='mkdir -p ~/.lucid && vim ~/.lucid/$(date -I).md'
-if [[ -z $MINIMAL_ALIAS ]]; then
+if [[ $EDITOR == "nvim" ]]; then
   alias vim='nvim'
 fi
-alias novim='nvim -u NONE --noplugin --cmd "au VimEnter * windo set nowrap number norelativenumber signcolumn=no | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap gw <CMD>write<CR> | set clipboard+=unnamedplus"'
-alias prvim='vim --cmd "au VimEnter * windo set scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>" -O'
+alias novim='nvim -u NONE --noplugin --cmd "au VimEnter * windo set nowrap number norelativenumber signcolumn=no clipboard+=unnamedplus tabstop=2 shiftwidth=2 softtabstop=2 | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap gw <CMD>write<CR>"'
+alias prvim='vim -u NONE --cmd "au VimEnter * windo set nowrap scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap <C-h> <ESC>:wincmd h<CR> | noremap <C-j> <ESC>:wincmd j<CR> | noremap <C-k> <ESC>:wincmd k<CR> | noremap <C-l> <ESC>:wincmd l<CR>" -O'
 alias ovim='/bin/vim'
 alias benchmark-nvim='rm -f /tmp/nvim-startuptime && nvim --startuptime /tmp/nvim-startuptime -c ":e /tmp/nvim-startuptime"'
 
@@ -54,7 +54,7 @@ alias ssh='TERM=xterm-256color ssh -CA'
 alias xssh='ssh -XCA'
 alias lssh='ssh -Aq -L 3000:localhost:3000 -L 5000:localhost:5000'
 
-alias uk='sudo pacman --noconfirm -S linux-zen linux-zen-headers'
+alias uk='sudo pacman --noconfirm --needed -S linux-zen linux-zen-headers'
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 
@@ -74,7 +74,6 @@ alias td='translate en:de'
 alias e='extract'
 alias pr='pr -i" " -n -c -m -t -S" | " -w $(($(tput cols) - 2))'
 alias ytdl='yt-dlp --extract-audio --audio-format m4a --format best'
-alias my='mpv --ytdl-format="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]" &>/dev/null'
 
 alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'
