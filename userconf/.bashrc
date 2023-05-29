@@ -41,11 +41,12 @@ if command -v fzf &>/dev/null && [[ $- =~ i ]]; then
     -o -type d -print \
     -o -type l -print 2> /dev/null | cut -b3-"}"
     opts="--height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore --reverse ${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} -m"
-    eval "$cmd" |
-      FZF_DEFAULT_OPTS="$opts" $(__fzfcmd) "$@" |
-      while read -r item; do
-        printf '%q ' "$item" # escape special chars
-      done
+    result=$(eval "$cmd" | FZF_DEFAULT_OPTS="$opts" $(__fzfcmd) "$@")
+    ret=$?
+    while read -r item; do
+      printf '%q ' "$item" # escape special chars
+    done <<<"$result"
+    return $ret
   }
 
   __fzfcmd() {
@@ -54,9 +55,12 @@ if command -v fzf &>/dev/null && [[ $- =~ i ]]; then
   }
 
   fzf-file-widget() {
-    local selected="o $(__fzf_select__ "$@")"
-    READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT}$selected${READLINE_LINE:$READLINE_POINT}"
-    READLINE_POINT=$((READLINE_POINT + ${#selected}))
+    result=$(__fzf_select__ "$@")
+    if [[ $? == 0 ]]; then
+      local selected="o $result"
+      READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT}$selected${READLINE_LINE:$READLINE_POINT}"
+      READLINE_POINT=$((READLINE_POINT + ${#selected}))
+    fi
   }
 
   __fzf_cd__() {
