@@ -15,7 +15,7 @@ while getopts "elh" o &>/dev/null; do
 done
 
 shift "$(($OPTIND - 1))"
-ARGUMENT=$1
+ARGUMENT="$1"
 
 error() {
   echo "$1" >/dev/stderr
@@ -35,7 +35,7 @@ else
   error "missing resolution"
 fi
 
-[[ -z $ARGUMENT ]] && error "missing argument"
+[[ -z "$ARGUMENT" ]] && error "missing argument"
 
 if [[ "$ARGUMENT" == "https://www.youtube.com/"* ]]; then
   if command -v yt-dlp &>/dev/null; then
@@ -56,9 +56,17 @@ else
     [[ "$ECHO" == true ]] && echo "$EDITOR" "$mimetype"
     $EDITOR "$ARGUMENT"
     exit 0
+  elif [[ "$mimetype" == "audio/"* ]]; then
+    [[ "$ECHO" == true ]] && echo mpv "$mimetype"
+    mpv "$ARGUMENT"
+    exit 0
+  elif [[ "$mimetype" == "video/"* ]]; then
+    [[ "$ECHO" == true ]] && echo mpv "$mimetype"
+    nohup mpv "$ARGUMENT" &>/dev/null &
+    exit 0
   elif [[ "$mimetype" == "application/x-"*"executable" ]]; then
     [[ "$ECHO" == true ]] && echo "$mimetype"
-    ./$ARGUMENT
+    ./"$ARGUMENT"
     exit 0
   fi
   extract -s "$ARGUMENT" && exit 0
