@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-if [[ "$UID" = "0" ]] || [[ "$SSH_TTY" ]]; then
-  $EDITOR "$1"
-  exit 0
-fi
+error() {
+  echo "$1" >/dev/stderr
+  exit 1
+}
 
 RESOLUTION="medium"
 while getopts "elh" o &>/dev/null; do
@@ -17,59 +17,76 @@ done
 shift "$(($OPTIND - 1))"
 ARGUMENT="$1"
 
-error() {
-  echo "$1" >/dev/stderr
-  exit 1
-}
-
-if [[ $RESOLUTION == "high" ]]; then
-  YTDL_FORMAT="ytdl-format=bestvideo[height<=1080]+bestaudio/best[height<=1080]"
-  STREAM_LINK_FORMAT=1080p60
-elif [[ $RESOLUTION == "medium" ]]; then
-  YTDL_FORMAT="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]"
-  STREAM_LINK_FORMAT=720p60
-elif [[ $RESOLUTION == "low" ]]; then
-  YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
-  STREAM_LINK_FORMAT=worst
-else
-  error "missing resolution"
-fi
-
 [[ -z "$ARGUMENT" ]] && error "missing argument"
 
-if [[ "$ARGUMENT" == "https://www.youtube.com/"* ]]; then
-  if command -v yt-dlp &>/dev/null; then
-    nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1 $RESOLUTION" --ytdl-format=$YTDL_FORMAT $1 &>/dev/null &
-  else
-    error "yt-dlp not installed"
-  fi
-elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
-  if command -v streamlink &>/dev/null; then
-    nohup streamlink --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $1 $RESOLUTION' --geometry=50%" $1 $STREAM_LINK_FORMAT &>/dev/null &
-  else
-    error "streamlink not installed"
-  fi
-else
+custom_application() {
+  TEXT_ONLY=$1
   [[ -e "$ARGUMENT" ]] || error "file does not exist"
   mimetype=$(file -b --mime-type "$ARGUMENT")
   if [[ "$mimetype" == "text/"* || "$mimetype" == "inode/"* ]]; then
     [[ "$ECHO" == true ]] && echo "$EDITOR" "$mimetype"
     $EDITOR "$ARGUMENT"
     exit 0
-  elif [[ "$mimetype" == "audio/"* ]]; then
-    [[ "$ECHO" == true ]] && echo mpv "$mimetype"
-    mpv "$ARGUMENT"
-    exit 0
-  elif [[ "$mimetype" == "video/"* ]]; then
-    [[ "$ECHO" == true ]] && echo mpv "$mimetype"
-    nohup mpv "$ARGUMENT" &>/dev/null &
-    exit 0
   elif [[ "$mimetype" == "application/x-"*"executable" ]]; then
     [[ "$ECHO" == true ]] && echo "$mimetype"
     ./"$ARGUMENT"
     exit 0
+  else
+    if [[ "$TEXT_ONLY" != true ]]; then
+      if [[ "$mimetype" == "audio/"* ]]; then
+        [[ "$ECHO" == true ]] && echo mpv "$mimetype"
+        mpv "$ARGUMENT"
+        exit 0
+      elif [[ "$mimetype" == "video/"* ]]; then
+        [[ "$ECHO" == true ]] && echo mpv "$mimetype"
+        nohup mpv "$ARGUMENT" &>/dev/null &
+        exit 0
+      fi
+    fi
   fi
   extract -s "$ARGUMENT" && exit 0
+}
+
+if [[ "$UID" = "0" ]] || [[ "$SSH_TTY" ]]; then
+  custom_application true
+  $EDITOR "$1"
+  exit 0
+fi
+
+stream_application() {
+  if [[ $RESOLUTION == "high" ]]; then
+    YTDL_FORMAT="ytdl-format=bestvideo[height<=1080]+bestaudio/best[height<=1080]"
+    STREAM_LINK_FORMAT=1080p60
+  elif [[ $RESOLUTION == "medium" ]]; then
+    YTDL_FORMAT="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]"
+    STREAM_LINK_FORMAT=720p60
+  elif [[ $RESOLUTION == "low" ]]; then
+    YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
+    STREAM_LINK_FORMAT=worst
+  else
+    error "missing resolution"
+  fi
+
+  if [[ "$ARGUMENT" == "https://www.youtube.com/"* ]]; then
+    if command -v yt-dlp &>/dev/null; then
+      [[ "$ECHO" == true ]] && echo "youtube"
+      nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1 $RESOLUTION" --ytdl-format=$YTDL_FORMAT $1 &>/dev/null &
+      exit 0
+    else
+      error "yt-dlp not installed"
+    fi
+  elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
+    if command -v streamlink &>/dev/null; then
+      [[ "$ECHO" == true ]] && echo "streamlink twitch"
+      nohup streamlink --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $1 $RESOLUTION' --geometry=50%" $1 $STREAM_LINK_FORMAT &>/dev/null &
+      exit 0
+    else
+      error "streamlink not installed"
+    fi
+  fi
+}
+
+default_application() {
   mimetype=$(xdg-mime query filetype "$ARGUMENT" 2>/dev/null)
   case "$?" in
     0)
@@ -102,6 +119,10 @@ else
       error "unknown error"
       ;;
   esac
-fi
+}
+
+stream_application
+custom_application
+default_application
 
 exit 0
