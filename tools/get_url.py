@@ -3,28 +3,29 @@ import json
 import platform
 import sys
 from urllib.request import urlopen
+import re
 
-system = ["linux"]
-if platform.machine() == "x86_64":
+system = [platform.system().lower()]
+machine = platform.machine().lower()
+if machine == "x86_64":
     architecture = ["x86_64", "amd64", "linux64"]
+    specific_architecture = []
 else:
     architecture = ["arm"]
+    specific_architecture = re.findall("armv[0-9]", machine)
 archive = ["tar"]
 compiler = ["gnu", "musl"]
 
-aspects = [system, architecture, compiler, archive]
+aspects = [system, specific_architecture, architecture, compiler, archive]
 
 
 def score_asset(asset):
-    name = asset["name"]
-    discount = 1
-    score = 1 / len(name)
-    for aspect in aspects:
-        for word in aspect:
-            if word in name:
-                score += 1 * discount
-                break
-        discount *= 0.8
+    name = asset["name"].lower()
+    discount = 0.8
+    score = sum(
+        any(word in name for word in aspect) * discount**i
+        for i, aspect in enumerate(aspects)
+    )
     return score
 
 
