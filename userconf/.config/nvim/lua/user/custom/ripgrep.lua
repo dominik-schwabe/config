@@ -1,5 +1,3 @@
-local fn = vim.fn
-
 local U = require("user.utils")
 local F = require("user.functional")
 
@@ -39,10 +37,10 @@ local function rg(string, opt)
   args[#args + 1] = string
   local root
   if here then
-    root = fn.expand("%:p:h")
+    root = vim.fn.expand("%:p:h")
     vim.cmd("cd " .. root)
   else
-    root = fn.getcwd()
+    root = vim.fn.getcwd()
   end
   curr_rg_job = require("plenary.job"):new({
     command = "rg",

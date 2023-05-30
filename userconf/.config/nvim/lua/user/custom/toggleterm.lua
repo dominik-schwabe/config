@@ -1,7 +1,3 @@
-local cmd = vim.cmd
-local api = vim.api
-local fn = vim.fn
-
 local F = require("user.functional")
 local U = require("user.utils")
 
@@ -10,21 +6,22 @@ local term_win
 local jobnr
 local function open_term(height, bottom)
   if bottom then
-    cmd("botright split")
-    api.nvim_win_set_height(0, height)
+    vim.cmd("botright split")
+    vim.api.nvim_win_set_height(0, height)
   else
-    cmd("vertical botright split")
+    vim.cmd("vertical botright split")
   end
-  term_win = api.nvim_get_current_win()
-  if term_buf ~= nil and api.nvim_buf_is_loaded(term_buf) then
-    api.nvim_win_set_buf(term_win, term_buf)
+  term_win = vim.api.nvim_get_current_win()
+  vim.wo[term_win].winfixheight = true
+  if term_buf ~= nil and vim.api.nvim_buf_is_loaded(term_buf) then
+    vim.api.nvim_win_set_buf(term_win, term_buf)
   else
-    term_buf = api.nvim_create_buf(false, false)
-    api.nvim_win_set_buf(term_win, term_buf)
-    jobnr = fn.termopen(os.getenv("SHELL"), { detach = 0 })
-    cmd("startinsert")
+    term_buf = vim.api.nvim_create_buf(false, false)
+    vim.api.nvim_win_set_buf(term_win, term_buf)
+    jobnr = vim.fn.termopen(os.getenv("SHELL"), { detach = 0 })
+    vim.cmd("startinsert")
   end
-  api.nvim_buf_set_name(term_buf, "term://toggleterm")
+  vim.api.nvim_buf_set_name(term_buf, "term://toggleterm")
   vim.bo[term_buf].buflisted = false
 end
 
@@ -38,16 +35,16 @@ local function has_neighbour(winid, direction)
     return x ~= 0
   end
 
-  local winnr = fn.winnr("$")
+  local winnr = vim.fn.winnr("$")
 
   while winnr > 0 do
-    local id = fn.win_getid(winnr)
-    local this_y, this_x = unpack(api.nvim_win_get_position(id))
+    local id = vim.fn.win_getid(winnr)
+    local this_y, this_x = unpack(vim.api.nvim_win_get_position(id))
     winnr = winnr - 1
-    if api.nvim_win_get_config(id) == "" then
-      if direction == "right" and (x + api.nvim_win_get_width(id)) < this_x then
+    if vim.api.nvim_win_get_config(id) == "" then
+      if direction == "right" and (x + vim.api.nvim_win_get_width(id)) < this_x then
         return true
-      elseif direction == "bottom" and (y + api.nvim_win_get_height(id)) < this_y then
+      elseif direction == "bottom" and (y + vim.api.nvim_win_get_height(id)) < this_y then
         return true
       end
     end
@@ -59,12 +56,12 @@ local function toggle_term(opts)
   opts = opts or {}
   local height = opts.height or 10
   local bottom = vim.F.if_nil(opts.bottom, true)
-  if term_win ~= nil and api.nvim_win_is_valid(term_win) then
+  if term_win ~= nil and vim.api.nvim_win_is_valid(term_win) then
     if not opts.only_open then
       local is_bottom = F.all({ "left", "bottom", "right" }, function(direction)
         return not has_neighbour(term_win, direction)
       end)
-      api.nvim_win_close(term_win, true)
+      vim.api.nvim_win_close(term_win, true)
       if is_bottom ~= bottom then
         open_term(height, bottom)
       end
@@ -90,7 +87,7 @@ local function open_term_cd()
     path = vim.fs.normalize(path)
     local name = vim.fs.basename(path)
     path = vim.fs.dirname(path)
-    fn.chansend(jobnr, "i\23cd " .. path .. " # " .. name .. "\r")
+    vim.fn.chansend(jobnr, "i\23cd " .. path .. " # " .. name .. "\r")
   end
 end
 

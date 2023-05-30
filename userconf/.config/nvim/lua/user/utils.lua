@@ -1,7 +1,3 @@
-local api = vim.api
-local fn = vim.fn
-local o = vim.o
-
 local F = require("user.functional")
 local config = require("user.config")
 
@@ -15,7 +11,7 @@ function M.reverse_replace_termcodes(str)
 end
 
 function M.replace_termcodes(str)
-  return api.nvim_replace_termcodes(str, true, true, true)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 function M.feedkeys(key, mode, need_escape)
@@ -26,23 +22,23 @@ function M.feedkeys(key, mode, need_escape)
   if need_escape then
     key = M.replace_termcodes(key)
   end
-  api.nvim_feedkeys(key, mode, need_escape)
+  vim.api.nvim_feedkeys(key, mode, need_escape)
 end
 
 local esc = M.replace_termcodes("<Esc>")
 local ctrl_v = M.replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
-  local to_end = fn.winsaveview().curswant == 2147483647
+  local to_end = vim.fn.winsaveview().curswant == 2147483647
   M.feedkeys(esc, "nx", false)
-  local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))
-  local line_end, column_end = unpack(api.nvim_buf_get_mark(buffer, ">"))
-  local lines = api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
+  local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(buffer, "<"))
+  local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(buffer, ">"))
+  local lines = vim.api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
   column_start = column_start + 1
-  if o.selection == "inclusive" then
+  if vim.o.selection == "inclusive" then
     column_end = column_end + 1
   end
-  if fn.visualmode() == ctrl_v then
+  if vim.fn.visualmode() == ctrl_v then
     if column_start > column_end then
       column_start, column_end = column_end, column_start
     end
@@ -62,10 +58,10 @@ function M.get_visual_selection(buffer)
 end
 
 function M.get_motion(motion_type)
-  local line_start, column_start = unpack(api.nvim_buf_get_mark(0, "["))
-  local line_end, column_end = unpack(api.nvim_buf_get_mark(0, "]"))
+  local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(0, "["))
+  local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(0, "]"))
 
-  local lines = api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
+  local lines = vim.api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
 
   if motion_type ~= "line" then
     lines[#lines] = lines[#lines]:sub(0, column_end + 1)
@@ -88,7 +84,7 @@ end
 
 function M.buf_options_set(bufnr, options)
   return F.all(options, function(option)
-    return api.nvim_buf_get_option(bufnr, option)
+    return vim.api.nvim_buf_get_option(bufnr, option)
   end)
 end
 
@@ -108,12 +104,12 @@ function M.tbl_merge(t1, t2)
 end
 
 function M.load_neighbor_modules(this_file, module_path)
-  local this_folder = fn.fnamemodify(this_file, ":h")
-  local this_file_end = fn.fnamemodify(this_file, ":t")
-  local files = fn.readdir(this_folder)
+  local this_folder = vim.fn.fnamemodify(this_file, ":h")
+  local this_file_end = vim.fn.fnamemodify(this_file, ":t")
+  local files = vim.fn.readdir(this_folder)
   for _, file in ipairs(files) do
     if file ~= this_file_end then
-      require(module_path .. "." .. fn.fnamemodify(file, ":r"))
+      require(module_path .. "." .. vim.fn.fnamemodify(file, ":r"))
     end
   end
 end
@@ -126,11 +122,11 @@ function M.esc_wrap(func)
 end
 
 function M.exists(path)
-  return fn.empty(fn.glob(path)) == 0
+  return vim.fn.empty(vim.fn.glob(path)) == 0
 end
 
 function M.mru_buffers()
-  local buffers = api.nvim_exec(":ls t", true)
+  local buffers = vim.api.nvim_exec(":ls t", true)
   buffers = vim.split(buffers, "\n")
   buffers = F.map(buffers, function(e)
     return tonumber(e:match("^%s*(%d+)"))
@@ -141,10 +137,10 @@ end
 function M.last_regular_buffer()
   local buffers = M.mru_buffers()
   return F.find(buffers, function(bufnr)
-    local buftype = api.nvim_buf_get_option(bufnr, "buftype")
+    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
     return not F.contains({ "terminal", "quickfix", "nofile" }, buftype)
       and M.buf_options_set(bufnr, { "modifiable" })
-      and M.exists(api.nvim_buf_get_name(bufnr))
+      and M.exists(vim.api.nvim_buf_get_name(bufnr))
   end)
 end
 

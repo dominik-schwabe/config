@@ -1,8 +1,3 @@
-local g = vim.g
-local o = vim.o
-local cmd = vim.cmd
-local fn = vim.fn
-
 local M = {}
 
 M.rainbow = {
@@ -563,20 +558,20 @@ HL.other = {
 }
 
 function M.setup()
-  cmd("hi clear")
-  if fn.exists("syntax_on") then
-    cmd("syntax reset")
+  vim.cmd("hi clear")
+  if vim.fn.exists("syntax_on") then
+    vim.cmd("syntax reset")
   end
-  o.background = "dark"
-  o.termguicolors = true
-  g.colors_name = "monokai"
+  vim.o.background = "dark"
+  vim.o.termguicolors = true
+  vim.g.colors_name = "monokai"
   for _, group in pairs(HL) do
     for hl_group, colors in pairs(group) do
       vim.api.nvim_set_hl(0, hl_group, colors)
     end
   end
 
-  g.VM_theme_set_by_colorscheme = true
+  vim.g.VM_theme_set_by_colorscheme = true
 end
 
 return M

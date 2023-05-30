@@ -1,23 +1,18 @@
-local b = vim.b
-local wo = vim.wo
-local api = vim.api
-local cmd = vim.cmd
-
 local U = require("user.utils")
 local F = require("user.functional")
 
 local config = require("user.config")
 
 local function leave_term()
-  b.term_was_normal = true
-  api.nvim_feedkeys(api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "t", true)
+  vim.b.term_was_normal = true
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "t", true)
 end
 
 vim.keymap.set("t", "<C-e>", leave_term, { desc = "leave terminal mode" })
 
 local function delete_term(args)
-  if api.nvim_buf_is_loaded(args.buf) then
-    api.nvim_buf_delete(args.buf, { force = true })
+  if vim.api.nvim_buf_is_loaded(args.buf) then
+    vim.api.nvim_buf_delete(args.buf, { force = true })
   end
 end
 
@@ -25,14 +20,14 @@ local function set_term_options(args)
   local bufnr = args.buf
   local buftype = vim.bo[bufnr].buftype
   if buftype == "terminal" then
-    wo.spell = false
-    wo.number = false
-    wo.relativenumber = false
-    wo.signcolumn = "no"
-  elseif not F.contains({ "quickfix", "nofile" }, buftype) and U.exists(api.nvim_buf_get_name(bufnr)) then
-    wo.number = true
-    wo.relativenumber = true
-    wo.signcolumn = "yes:2"
+    vim.wo.spell = false
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+    vim.wo.signcolumn = "no"
+  elseif not F.contains({ "quickfix", "nofile" }, buftype) and U.exists(vim.api.nvim_buf_get_name(bufnr)) then
+    vim.wo.number = true
+    vim.wo.relativenumber = true
+    vim.wo.signcolumn = "yes:2"
   end
 end
 
@@ -45,8 +40,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
       group = "UserTerm",
       buffer = args.buf,
       callback = function()
-        if not b.term_was_normal then
-          cmd("startinsert")
+        if not vim.b.term_was_normal then
+          vim.cmd("startinsert")
         end
       end,
     })
@@ -56,7 +51,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
 vim.api.nvim_create_autocmd("TermEnter", {
   group = "UserTerm",
   callback = function()
-    b.term_was_normal = false
+    vim.b.term_was_normal = false
   end,
 })
 

@@ -1,10 +1,3 @@
-local b = vim.b
-local w = vim.w
-local bo = vim.bo
-local fn = vim.fn
-local api = vim.api
-
-local U = require("user.utils")
 local config = require("user.config")
 
 local F = require("user.functional")
@@ -17,36 +10,38 @@ local trailing_patterns = {
 }
 
 local function trailing_highlight(mode)
-  mode = mode or fn.mode()
-  local current_window = api.nvim_get_current_win()
-  F.foreach(api.nvim_list_wins(), function(window)
+  mode = mode or vim.fn.mode()
+  local current_window = vim.api.nvim_get_current_win()
+  F.foreach(vim.api.nvim_list_wins(), function(window)
     local new_win_mode = nil
-    local buf = api.nvim_win_get_buf(window)
-    if not b[buf].disable_trailing and window == current_window then
+    local buf = vim.api.nvim_win_get_buf(window)
+    if not vim.b[buf].disable_trailing and window == current_window then
       new_win_mode = mode
     end
-    local trailing_state = w[window].trailing_state or {}
+    local trailing_state = vim.w[window].trailing_state or {}
     if trailing_state.mode ~= new_win_mode then
       if trailing_state.id ~= nil then
-        fn.matchdelete(trailing_state.id, window)
+        vim.fn.matchdelete(trailing_state.id, window)
       end
       local new_win_state = nil
       local pattern = trailing_patterns[new_win_mode]
       if pattern ~= nil then
         new_win_state = {
-          id = fn.matchadd("TrailingWhitespace", pattern, 10, -1, { window = window }),
+          id = vim.fn.matchadd("TrailingWhitespace", pattern, 10, -1, { window = window }),
           mode = new_win_mode,
         }
       end
-      w[window].trailing_state = new_win_state
+      vim.w[window].trailing_state = new_win_state
     end
   end)
 end
 
 local function update_trailing_highlight(opts)
   local buf = opts.buf
-  local filetype = bo[buf].filetype
-  b[buf].disable_trailing = b[buf].is_big_buffer or F.contains(whitespace_blacklist, filetype) or not bo[buf].modifiable
+  local filetype = vim.bo[buf].filetype
+  vim.b[buf].disable_trailing = vim.b[buf].is_big_buffer
+    or F.contains(whitespace_blacklist, filetype)
+    or not vim.bo[buf].modifiable
   trailing_highlight()
 end
 

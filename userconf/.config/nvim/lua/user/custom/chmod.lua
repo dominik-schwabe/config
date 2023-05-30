@@ -1,10 +1,8 @@
-local fn = vim.fn
-
 local F = require("user.functional")
 
 local function chmod_current(x)
-  local path = fn.expand("%:p")
-  if fn.empty(fn.glob(path)) == 1 then
+  local path = vim.fn.expand("%:p")
+  if vim.fn.empty(vim.fn.glob(path)) == 1 then
     vim.notify("this file does not exist")
     return
   end

@@ -1,27 +1,23 @@
-local api = vim.api
-local fn = vim.fn
-local o = vim.o
-
 local M = {}
 
 local function replace_termcodes(str)
-  return api.nvim_replace_termcodes(str, false, true, true)
+  return vim.api.nvim_replace_termcodes(str, false, true, true)
 end
 
 local esc = replace_termcodes("<Esc>")
 local ctrl_v = replace_termcodes("<c-v>")
 
 function M.get_visual_selection(buffer)
-  local to_end = fn.winsaveview().curswant == 2147483647
-  api.nvim_feedkeys(esc, "nx", false)
-  local line_start, column_start = unpack(api.nvim_buf_get_mark(buffer, "<"))
-  local line_end, column_end = unpack(api.nvim_buf_get_mark(buffer, ">"))
-  local lines = api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
+  local to_end = vim.fn.winsaveview().curswant == 2147483647
+  vim.api.nvim_feedkeys(esc, "nx", false)
+  local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(buffer, "<"))
+  local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(buffer, ">"))
+  local lines = vim.api.nvim_buf_get_lines(buffer, line_start - 1, line_end, false)
   column_start = column_start + 1
-  if o.selection == "inclusive" then
+  if vim.o.selection == "inclusive" then
     column_end = column_end + 1
   end
-  if fn.visualmode() == ctrl_v then
+  if vim.fn.visualmode() == ctrl_v then
     if column_start > column_end then
       column_start, column_end = column_end, column_start
     end
@@ -43,10 +39,10 @@ function M.get_visual_selection(buffer)
 end
 
 function M.get_motion(motion_type)
-  local line_start, column_start = unpack(api.nvim_buf_get_mark(0, "["))
-  local line_end, column_end = unpack(api.nvim_buf_get_mark(0, "]"))
+  local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(0, "["))
+  local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(0, "]"))
 
-  local lines = api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
+  local lines = vim.api.nvim_buf_get_lines(0, line_start - 1, line_end, 0)
 
   if motion_type ~= "line" then
     lines[#lines] = lines[#lines]:sub(0, column_end + 1)
@@ -57,7 +53,7 @@ function M.get_motion(motion_type)
 end
 
 function M.path_exists(path)
-  return fn.empty(fn.glob(path)) == 1
+  return vim.fn.empty(vim.fn.glob(path)) == 1
 end
 
 function M.extend(tbl)

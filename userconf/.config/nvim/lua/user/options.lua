@@ -1,6 +1,5 @@
 local opt = vim.opt
 local g = vim.g
-local fn = vim.fn
 
 opt.foldenable = false
 opt.tabstop = 2
@@ -60,10 +59,10 @@ g.python3_host_prog = "/usr/bin/python3"
 local PYTHON_VERSION = os.getenv("PYTHON_VERSION")
 local ASDF_DIR = os.getenv("ASDF_DIR")
 if PYTHON_VERSION and ASDF_DIR then
-  ASDF_DIR = fn.glob(ASDF_DIR)
+  ASDF_DIR = vim.fn.glob(ASDF_DIR)
   local version = string.match(PYTHON_VERSION, "[^%s]+")
   local python_interpreter = ASDF_DIR .. "/installs/python/" .. version .. "/bin/python"
-  if fn.executable(python_interpreter) ~= 0 then
+  if vim.fn.executable(python_interpreter) ~= 0 then
     g.python3_host_prog = python_interpreter
   end
 end

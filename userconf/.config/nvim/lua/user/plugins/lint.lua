@@ -1,6 +1,3 @@
-local cmd = vim.cmd
-local bo = vim.bo
-
 local F = require("user.functional")
 
 local lint = require("lint")
@@ -11,9 +8,9 @@ lint.linters_by_ft = linters
 lint.linters.chktex.ignore_exitcode = true
 
 local function lint_buffer()
-  cmd("silent write")
+  vim.cmd("silent write")
   lint.try_lint()
-  local filetype = bo.filetype
+  local filetype = vim.bo.filetype
   local ft_linters = linters[filetype]
   if ft_linters then
     vim.notify("try lint with [" .. table.concat(ft_linters, ", ") .. "] ...")

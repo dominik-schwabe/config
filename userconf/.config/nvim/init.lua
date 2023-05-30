@@ -11,7 +11,6 @@ require("user.mappings")
 require("user.autocmds")
 
 local F = require("user.functional")
-local U = require("user.utils")
 
 require("repl").setup({
   preferred = {

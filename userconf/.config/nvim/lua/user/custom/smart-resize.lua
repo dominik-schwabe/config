@@ -1,20 +1,17 @@
-local api = vim.api
-local fn = vim.fn
-
 local F = require("user.functional")
 
 local function resize_height(val)
-  api.nvim_win_set_height(0, api.nvim_win_get_height(0) + val)
+  vim.api.nvim_win_set_height(0, vim.api.nvim_win_get_height(0) + val)
 end
 local function resize_width(val)
-  api.nvim_win_set_width(0, api.nvim_win_get_width(0) + val)
+  vim.api.nvim_win_set_width(0, vim.api.nvim_win_get_width(0) + val)
 end
 
 local function smart_resize(dir)
-  local hwin = fn.winnr("h")
-  local kwin = fn.winnr("k")
-  local lwin = fn.winnr("l")
-  local jwin = fn.winnr("j")
+  local hwin = vim.fn.winnr("h")
+  local kwin = vim.fn.winnr("k")
+  local lwin = vim.fn.winnr("l")
+  local jwin = vim.fn.winnr("j")
 
   if hwin ~= lwin then
     if dir == 0 then

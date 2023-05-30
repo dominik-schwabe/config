@@ -49,7 +49,7 @@ custom_application() {
 
 if [[ "$UID" = "0" ]] || [[ "$SSH_TTY" ]]; then
   custom_application true
-  $EDITOR "$1"
+  $EDITOR "$ARGUMENT"
   exit 0
 fi
 
@@ -70,7 +70,7 @@ stream_application() {
   if [[ "$ARGUMENT" == "https://www.youtube.com/"* ]]; then
     if command -v yt-dlp &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "youtube"
-      nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $1 $RESOLUTION" --ytdl-format=$YTDL_FORMAT $1 &>/dev/null &
+      nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $ARGUMENT $RESOLUTION" --ytdl-format=$YTDL_FORMAT $ARGUMENT &>/dev/null &
       exit 0
     else
       error "yt-dlp not installed"
@@ -78,7 +78,7 @@ stream_application() {
   elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
     if command -v streamlink &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "streamlink twitch"
-      nohup streamlink --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $1 $RESOLUTION' --geometry=50%" $1 $STREAM_LINK_FORMAT &>/dev/null &
+      nohup streamlink --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $ARGUMENT $RESOLUTION' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT &>/dev/null &
       exit 0
     else
       error "streamlink not installed"

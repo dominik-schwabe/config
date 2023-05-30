@@ -1,5 +1,3 @@
-local fn = vim.fn
-
 local F = require("user.functional")
 local U = require("user.utils")
 local preview = require("user.preview")
@@ -9,17 +7,17 @@ local slot = 1
 local toggle_key = "q"
 
 local function is_recording()
-  return fn.reg_recording() ~= ""
+  return vim.fn.reg_recording() ~= ""
 end
 
 local function get_macro(s)
   s = s or slot
-  return U.reverse_replace_termcodes(fn.getreg(macro_regs[s]))
+  return U.reverse_replace_termcodes(vim.fn.getreg(macro_regs[s]))
 end
 
 local function set_macro(str, s)
   s = s or slot
-  fn.setreg(macro_regs[s], U.replace_termcodes(str))
+  vim.fn.setreg(macro_regs[s], U.replace_termcodes(str))
 end
 
 local function start_macro()
@@ -129,7 +127,7 @@ vim.keymap.set("n", "Ü", function()
 end, { desc = "select previous macro from history" })
 
 F.foreach(macro_regs, function(reg)
-  fn.setreg(reg, "")
+  vim.fn.setreg(reg, "")
 end)
 
 vim.keymap.set("n", toggle_key, toggle_recording, { desc = "toggle macro recording" })

@@ -1,8 +1,3 @@
-local fn = vim.fn
-local lsp = vim.lsp
-local lsp_buf = lsp.buf
-local diagnostic = vim.diagnostic
-
 local def_opt = { silent = true }
 
 local F = require("user.functional")
@@ -19,27 +14,27 @@ local function get_active_client_by_name(bufnr, servername)
 end
 
 local map_opt = { noremap = true, silent = true }
-vim.keymap.set("n", "gD", lsp_buf.declaration, U.desc(map_opt, "go to declaration"))
-vim.keymap.set("n", "gd", lsp_buf.definition, U.desc(map_opt, "go to definition"))
-vim.keymap.set("n", "gt", lsp_buf.type_definition, U.desc(map_opt, "go to type definition"))
-vim.keymap.set("n", "gr", lsp_buf.references, U.desc(map_opt, "go to reference"))
-vim.keymap.set("n", "gi", lsp_buf.implementation, U.desc(map_opt, "go to implementation"))
-vim.keymap.set("n", "gs", lsp_buf.signature_help, U.desc(map_opt, "show signature help"))
-vim.keymap.set("n", "gh", lsp_buf.hover, U.desc(map_opt, "show hover info"))
-vim.keymap.set("n", "gm", diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
-vim.keymap.set("n", "gn", diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))
-vim.keymap.set("n", "gp", diagnostic.goto_prev, U.desc(map_opt, "go to previous diagnostic"))
-vim.keymap.set("n", "gll", lsp.codelens.refresh, U.desc(map_opt, "refresh codelens"))
-vim.keymap.set("n", "glr", lsp.codelens.run, U.desc(map_opt, "run codelens"))
-vim.keymap.set("n", "gli", lsp_buf.incoming_calls, U.desc(map_opt, "show incoming calls"))
-vim.keymap.set("n", "glo", lsp_buf.outgoing_calls, U.desc(map_opt, "show outgoing calls"))
-vim.keymap.set("n", "<space>awa", lsp_buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
-vim.keymap.set("n", "<space>awr", lsp_buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, U.desc(map_opt, "go to declaration"))
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, U.desc(map_opt, "go to definition"))
+vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, U.desc(map_opt, "go to type definition"))
+vim.keymap.set("n", "gr", vim.lsp.buf.references, U.desc(map_opt, "go to reference"))
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, U.desc(map_opt, "go to implementation"))
+vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, U.desc(map_opt, "show signature help"))
+vim.keymap.set("n", "gh", vim.lsp.buf.hover, U.desc(map_opt, "show hover info"))
+vim.keymap.set("n", "gm", vim.diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
+vim.keymap.set("n", "gn", vim.diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))
+vim.keymap.set("n", "gp", vim.diagnostic.goto_prev, U.desc(map_opt, "go to previous diagnostic"))
+vim.keymap.set("n", "gll", vim.lsp.codelens.refresh, U.desc(map_opt, "refresh codelens"))
+vim.keymap.set("n", "glr", vim.lsp.codelens.run, U.desc(map_opt, "run codelens"))
+vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, U.desc(map_opt, "show incoming calls"))
+vim.keymap.set("n", "glo", vim.lsp.buf.outgoing_calls, U.desc(map_opt, "show outgoing calls"))
+vim.keymap.set("n", "<space>awa", vim.lsp.buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
+vim.keymap.set("n", "<space>awr", vim.lsp.buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
 vim.keymap.set("n", "<space>awl", function()
-  print(vim.inspect(lsp_buf.list_workspace_folders()))
+  print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, U.desc(map_opt, "list loaded workspaces"))
-vim.keymap.set("n", "<space>rn", lsp_buf.rename, U.desc(map_opt, "rename variable"))
-vim.keymap.set("n", "<space>ca", lsp_buf.code_action, U.desc(map_opt, "select code action"))
+vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, U.desc(map_opt, "rename variable"))
+vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, U.desc(map_opt, "select code action"))
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
   callback = function(args)
@@ -129,7 +124,7 @@ end)
 
 for type, icon in pairs(F.subset(config.icons, { "Error", "Warn", "Hint", "Info" })) do
   local hl = "DiagnosticSign" .. type
-  fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
 vim.api.nvim_create_augroup("UserLsp", {})

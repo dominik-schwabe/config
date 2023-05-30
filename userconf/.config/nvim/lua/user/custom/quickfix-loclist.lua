@@ -1,11 +1,8 @@
-local fn = vim.fn
-local cmd = vim.cmd
-
 local F = require("user.functional")
 
 local function window_exists(cb)
   return function()
-    return F.any(fn.getwininfo(), cb)
+    return F.any(vim.fn.getwininfo(), cb)
   end
 end
 
@@ -21,9 +18,9 @@ local loclist_exists = window_exists(is_loclist)
 
 local function loclist_toggle()
   if loclist_exists() then
-    cmd("lclose")
+    vim.cmd("lclose")
   else
-    if not pcall(cmd, "lopen") then
+    if not pcall(vim.cmd, "lopen") then
       vim.notify("Loclist ist empty")
     end
   end
@@ -31,9 +28,9 @@ end
 
 local function quickfix_toggle()
   if quickfix_exists() then
-    cmd("cclose")
+    vim.cmd("cclose")
   else
-    cmd("botright copen")
+    vim.cmd("botright copen")
   end
 end
 
