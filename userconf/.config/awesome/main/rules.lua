@@ -177,6 +177,10 @@ awful.rules.rules = {
     properties = assign("7"),
   },
   {
+    rule = { class = "Skype" },
+    properties = assign("7"),
+  },
+  {
     rule_any = { class = { "Slay the Spire" } },
     properties = {
       size_hints_honor = false,

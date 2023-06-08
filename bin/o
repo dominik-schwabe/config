@@ -95,6 +95,8 @@ default_application() {
       [[ "$ECHO" == true ]] && echo "$default_app" "$mimetype"
       if [[ "$default_app" == "$EDITOR" ]] || [[ -z "$default_app" ]]; then
         $EDITOR "$ARGUMENT"
+      elif [[ "$mimetype" == "image/svg+xml" ]] && command -v inkview &>/dev/null; then
+        nohup inkview "$ARGUMENT" &>/dev/null &
       else
         nohup xdg-open "$ARGUMENT" &>/dev/null &
       fi

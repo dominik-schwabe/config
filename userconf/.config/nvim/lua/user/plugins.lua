@@ -305,8 +305,7 @@ if not config.minimal then
       event = { "BufReadPost", "BufNewFile" },
       config = l("treesitter"),
       dependencies = {
-        { "mrjones2014/nvim-ts-rainbow" },
-        -- { "HiPhish/nvim-ts-rainbow2" },
+        { "HiPhish/nvim-ts-rainbow2" },
         { "m-demare/hlargs.nvim" },
         { "nvim-treesitter/nvim-treesitter-textobjects" },
         { "nvim-treesitter/nvim-treesitter-context" },

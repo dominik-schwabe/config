@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-(($(date +%u) < 6)) && (($(date +%H) > 7)) && (($(date +%H) < 18)) && discord --start-minimized

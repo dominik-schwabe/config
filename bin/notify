@@ -43,8 +43,7 @@ if ! telegram-send; then
   exit 1
 fi
 
-# execute command
-$1 "${@:2}"
+"$@"
 
 RET=$?
 SECONDSEND=$(date +"%s")

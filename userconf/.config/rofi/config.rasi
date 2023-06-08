@@ -2,7 +2,7 @@ configuration {
   terminal: "alacritty";
   window-format: "{w}    {c}   {t}";
   modi: "drun,window";
-  display-drun: "Launch: ";
+  display-drun: "Launch";
   drun-display-format: " <span weight='bold'>{name}</span> [<span weight='light' size='small'><i>({generic})</i></span>]";
   font: "Fira Code Nerd Font 11";
   dpi: 110;

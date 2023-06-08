@@ -7,9 +7,13 @@ local function trim_whitespace()
     return
   end
   local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
-  lines = F.map(lines, function(line)
-    return line:gsub("%s+$", "")
-  end)
+  if vim.bo[buffer].filetype ~= "markdown" then
+    lines = F.map(lines, function(line)
+      return line:gsub("%s+$", "")
+    end)
+  else
+    vim.notify("skip trimming for markdown")
+  end
   local end_index = #lines
   while end_index > 0 and lines[end_index] == "" do
     lines[end_index] = nil

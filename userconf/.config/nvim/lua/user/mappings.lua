@@ -41,7 +41,7 @@ local function movement(key)
   end
 end
 
-vim.keymap.set("n", "k", movement("k"), { silent = true })
-vim.keymap.set("n", "j", movement("j"), { silent = true })
+vim.keymap.set({ "n", "x" }, "k", movement("k"), { silent = true })
+vim.keymap.set({ "n", "x" }, "j", movement("j"), { silent = true })
 vim.keymap.set("n", "<", "<<")
 vim.keymap.set("n", ">", ">>")

@@ -1,6 +1,5 @@
 local config = require("user.config")
 local treesitter_config = config.treesitter
-local rainbow = require("user.color").rainbow
 
 local U = require("user.utils")
 local F = require("user.functional")
@@ -68,29 +67,23 @@ F.load("nvim-treesitter.configs", function(tc)
       disable = disable_func,
     },
     rainbow = {
-      colors = rainbow,
       enable = true,
-      disable = disable_func,
-      extended_mode = true,
+      strategy = {
+        function()
+          local rb = F.load("ts-rainbow")
+          if rb then
+            local num_lines = vim.fn.line("$")
+            if num_lines > 10000 then
+              return nil
+            elseif num_lines > 1000 then
+              return rb.strategy["local"]
+            end
+            return rb.strategy["global"]
+          end
+          return nil
+        end,
+      },
     },
-    -- rainbow = {
-    --   enable = true,
-    --   strategy = {
-    --     function()
-    --       local rainbow = F.load("ts-rainbow")
-    --       if rainbow then
-    --         local num_lines = vim.fn.line("$")
-    --         if num_lines > 10000 then
-    --           return nil
-    --         elseif num_lines > 1000 then
-    --           return rainbow.strategy["local"]
-    --         end
-    --         return rainbow.strategy["global"]
-    --       end
-    --       return nil
-    --     end,
-    --   },
-    -- },
     textobjects = {
       select = {
         enable = true,
