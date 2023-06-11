@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+ARG=$1
+
+if [[ "$ARG" != "http"* ]]; then
+  ARG="ytsearch:$ARG"
+fi
+
+yt-dlp --extract-audio --audio-format m4a "$ARG"

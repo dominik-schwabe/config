@@ -72,7 +72,6 @@ alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | 
 alias te='translate de:en'
 alias td='translate en:de'
 alias e='extract'
-alias ytdl='yt-dlp --extract-audio --audio-format m4a --format best'
 
 alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'

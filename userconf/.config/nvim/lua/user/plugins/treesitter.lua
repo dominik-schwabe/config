@@ -73,10 +73,10 @@ F.load("nvim-treesitter.configs", function(tc)
           local rb = F.load("ts-rainbow")
           if rb then
             local num_lines = vim.fn.line("$")
-            if num_lines > 10000 then
-              return nil
-            elseif num_lines > 1000 then
-              return rb.strategy["local"]
+            if num_lines > 1000 then
+              return rb.strategy["noop"]
+              -- elseif num_lines > 1000 then
+              --   return rb.strategy["global"]
             end
             return rb.strategy["global"]
           end

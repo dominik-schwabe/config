@@ -1,0 +1,233 @@
+#!/usr/bin/env python
+
+import re
+import subprocess
+from pathlib import Path
+from sys import argv
+
+emoji_pattern = re.compile(
+    "["
+    "\U0001F600-\U0001F64F"  # emoticons
+    "\U0001F300-\U0001F5FF"  # symbols & pictographs
+    "\U0001F680-\U0001F6FF"  # transport & map symbols
+    "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+    "]+",
+    flags=re.UNICODE,
+)
+
+filename_re = re.compile(r"^.*\.(mp3|m4a|wav)$")
+namesplit_re = re.compile(r" X | & |,| vs\.? ")
+space_re = re.compile("\s+")
+
+try:
+    path = Path(argv[1]).resolve()
+except IndexError:
+    print("argument 1 (path) is missing")
+    exit(1)
+
+try:
+    genre = argv[2]
+    extra_tags = {"album_artist": genre, "genre": genre, "album": genre}
+except IndexError:
+    extra_tags = {}
+
+if not path.exists():
+    print("path does not exist")
+    exit(1)
+
+if path.is_file():
+    if not filename_re.match(path.name):
+        raise ValueError("invalid suffix")
+    files = [path]
+else:
+    files = [e for e in path.glob("**/*") if e.is_file() and filename_re.match(e.name)]
+
+remix = ["remix", "bootleg", "mashup", "rework", "re\-edit", "edit", "cover"]
+special = {
+    "slowed": ["slowed"],
+    "reverb": ["reverb"],
+}
+feat = ["ft", "feat", "featuring"]
+feat = [e for ft in feat for e in [f"{ft}\s", f"{ft}\."]]
+breaked_feat = ["with ", *feat]
+
+
+def ordered_unique(elements):
+    taken = []
+    for e in elements:
+        if e not in taken:
+            taken.append(e)
+    return taken
+
+
+def compress_spaces(text):
+    return space_re.sub(" ", text).strip()
+
+
+def split_names(text):
+    result = namesplit_re.split(text)
+    result = [compress_spaces(e) for e in result]
+    return result
+
+
+def find_replace(regex, text):
+    regex = re.compile(regex, flags=re.IGNORECASE)
+    found = regex.findall(text)
+    text = regex.sub("", text)
+    found = [compress_spaces(e) for e in found]
+    found = [e for e in found if e]
+    return text, found
+
+
+def find_breaked_featuring(text):
+    features = []
+    for re_text in breaked_feat:
+        regex = f"\(\s*{re_text}\s*([^()]*)\)"
+        text, found = find_replace(regex, text)
+        features.extend(found)
+    return text, features
+
+
+def find_featuring(text):
+    features = []
+    for re_text in feat:
+        regex = f"{re_text}\s*(.*)"
+        text, found = find_replace(regex, text)
+        features.extend(found)
+    return text, features
+
+
+def find_re_pattern(text, patterns):
+    features = []
+    for re_text in patterns:
+        regex = f"\(([^()]*)\s+{re_text}\)"
+        text, found = find_replace(regex, text)
+        features.extend(found)
+    return text, features
+
+
+repls = {
+    "–": "-",
+    "[": "(",
+    "]": ")",
+}
+
+
+def remove_unused(text):
+    text, found = find_replace("\(([^()]*)\)", text)
+    found = [compress_spaces(e) for e in found]
+    return text, found
+
+
+def remove_emojies(text):
+    return emoji_pattern.sub(r"", text)
+
+
+def extract_patterns(title, artist, find_func, split=False):
+    extracted = []
+    artist, extr = find_func(artist)
+    extracted.extend(extr)
+    title, extr = find_func(title)
+    extracted.extend(extr)
+    if split:
+        extracted = [e for name in extracted for e in split_names(name)]
+    return title, artist, extracted
+
+
+def parse_name(file_name):
+    for old, new in repls.items():
+        file_name = file_name.replace(old, new)
+    file_name = remove_emojies(file_name)
+    artist, title = file_name.split(" - ")
+
+    title, artist, all_features = extract_patterns(
+        title, artist, find_breaked_featuring, split=True
+    )
+    title, artist, all_remixes = extract_patterns(
+        title, artist, lambda x: find_re_pattern(x, remix), split=True
+    )
+    title, artist, unused = extract_patterns(title, artist, remove_unused)
+    title, artist, extra_features = extract_patterns(
+        title, artist, find_featuring, split=True
+    )
+    all_features.extend(extra_features)
+
+    flags = {
+        key: any(v in e.lower() for e in unused for v in values)
+        for key, values in special.items()
+    }
+
+    for char in ["(", ")"]:
+        artist = artist.replace(char, " ")
+        title = title.replace(char, " ")
+
+    artists = split_names(artist)
+    title = compress_spaces(title)
+    artists = [e for e in artists if e not in all_features]
+
+    artists = ordered_unique(artists)
+    all_features = ordered_unique(all_features)
+    all_remixes = ordered_unique(all_remixes)
+
+    artist_line = ", ".join(artists)
+    title_line = title
+    if all_features:
+        features = ", ".join(all_features)
+        title_line = f"{title_line} (feat. {features})"
+    if all_remixes:
+        remixes = ", ".join(all_remixes)
+        title_line = f"{title_line} ({remixes} Remix)"
+    flag_string = ", ".join(sorted([key for key, is_set in flags.items() if is_set]))
+    if flag_string:
+        title_line = f"{title_line} ({flag_string})"
+
+    normalized = f"{artist_line} - {title_line}"
+
+    return {
+        "original": file_name,
+        "artists": artists,
+        "title": title,
+        "features": all_features,
+        "unused": unused,
+        "flags": flags,
+        "remixes": all_remixes,
+        "normalized": {"title": title_line, "artist": artist_line, "full": normalized},
+    }
+
+
+def kid3(commands, file):
+    if not commands:
+        raise ValueError("commands is empty")
+    args = ["kid3-cli"]
+    for command in commands:
+        args.append("-c")
+        args.append(command)
+    args.append(file)
+    result = subprocess.run(args)
+    if result.returncode != 0:
+        raise ValueError(
+            f"subprocess returned non-zero exit status {result.returncode}"
+        )
+
+
+def tag(file, **kwargs):
+    print(f"tagging {new_file}")
+    commands = []
+    for key, value in kwargs.items():
+        key = key.replace("_", " ")
+        print(f"  {key}={value}")
+        value = value.replace("'", "\\'")
+        commands.append(f"set '{key}' '{value}'")
+    kid3(commands, file)
+
+
+for file in files:
+    parsed = parse_name(file.stem)
+    normalized = parsed["normalized"]
+    artist = normalized["artist"]
+    title = normalized["title"]
+    new_file = file.with_stem(normalized["full"])
+    if file != new_file:
+        print(f"renaming '{file.stem}' -> '{new_file.stem}'")
+        file.rename(new_file)
+    tag(new_file, artist=normalized["artist"], title=normalized["title"], **extra_tags)
