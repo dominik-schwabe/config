@@ -68,6 +68,7 @@ awful.rules.rules = {
         "Gpick",
         "Kruler",
         "MessageWin", -- kalarm.
+        "Nsxiv",
         "Sxiv",
         "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
         "Wpa_gui",

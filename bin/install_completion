@@ -54,6 +54,7 @@ download_completion youtube-dl      https://raw.githubusercontent.com/dominik-sc
 download_completion cht.sh          https://cheat.sh/:zsh
 download_completion c               https://cheat.sh/:zsh
 download_completion docker-compose  https://raw.githubusercontent.com/docker/compose/1.26.0/contrib/completion/zsh/_docker-compose
+download_completion rg              https://raw.githubusercontent.com/BurntSushi/ripgrep/master/complete/_rg
 
 command_completion kubectl          kubectl completion zsh
 command_completion pdm              pdm completion

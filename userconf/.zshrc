@@ -5,6 +5,7 @@
 [[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
 
 export HISTFILE=~/.zsh_history
+export HISTORY_IGNORE="(ls|mv|cp|rm|cd|cat|pwd|td|te|o|vim|ovim|novim|rg|fd|ga|gco|ytdl|file|whereis) *"
 
 # +++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++ completion ++++++++++++++++
@@ -183,6 +184,19 @@ fzf-open-file() {
     fi
 }
 
+fzf-media() {
+  local cmd="cat ~/.media 2>/dev/null"
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local media="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m)"
+  if [[ -z "$media" ]]; then
+    zle redisplay
+  else
+    zle reset-prompt
+    LBUFFER="o $media"
+    zle accept-line
+  fi
+}
+
 zle     -N            fzf-history-widget
 bindkey -M vicmd '^A' fzf-history-widget
 bindkey -M viins '^A' fzf-history-widget
@@ -190,6 +204,10 @@ bindkey -M viins '^A' fzf-history-widget
 zle     -N            fzf-open-file
 bindkey -M vicmd '^F' fzf-open-file
 bindkey -M viins '^F' fzf-open-file
+
+zle     -N            fzf-media
+bindkey -M vicmd '^O' fzf-media
+bindkey -M viins '^O' fzf-media
 
 zle     -N            fzf-cd-widget
 bindkey -M vicmd '^P' fzf-cd-widget

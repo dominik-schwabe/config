@@ -78,8 +78,8 @@ end
 
 bind_paste_func("p")
 bind_paste_func("P")
-bind_paste_func("gp")
-bind_paste_func("gP")
+-- bind_paste_func("gp")
+-- bind_paste_func("gP")
 
 F.load("cmp", function(cmp)
   cmp.register_source("yank_history", history:make_completion_source():new())

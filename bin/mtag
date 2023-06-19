@@ -42,14 +42,16 @@ if path.is_file():
 else:
     files = [e for e in path.glob("**/*") if e.is_file() and filename_re.match(e.name)]
 
-remix = ["remix", "bootleg", "mashup", "rework", "re\-edit", "edit", "cover"]
+remix = ["remix", "bootleg", "mashup", "rework", "re\-edit", "edit", "cover", "mix"]
 special = {
     "slowed": ["slowed"],
     "reverb": ["reverb"],
+    "arabic": ["arabic"],
+    "VIP": ["vip"],
 }
-feat = ["ft", "feat", "featuring"]
-feat = [e for ft in feat for e in [f"{ft}\s", f"{ft}\."]]
-breaked_feat = ["with ", *feat]
+feat = ["featuring", "feat", "ft"]
+feat = [e for ft in feat for e in [f"{ft}\.", f"{ft}\\b"]]
+breaked_feat = ["with\\b", *feat]
 
 
 def ordered_unique(elements):
@@ -82,7 +84,7 @@ def find_replace(regex, text):
 def find_breaked_featuring(text):
     features = []
     for re_text in breaked_feat:
-        regex = f"\(\s*{re_text}\s*([^()]*)\)"
+        regex = f"\(\s*{re_text}([^()]*)\)"
         text, found = find_replace(regex, text)
         features.extend(found)
     return text, features
@@ -91,7 +93,7 @@ def find_breaked_featuring(text):
 def find_featuring(text):
     features = []
     for re_text in feat:
-        regex = f"{re_text}\s*(.*)"
+        regex = f"\\b{re_text}\s*(.*)"
         text, found = find_replace(regex, text)
         features.extend(found)
     return text, features
@@ -110,6 +112,8 @@ repls = {
     "–": "-",
     "[": "(",
     "]": ")",
+    "{": "(",
+    "}": ")",
 }
 
 
@@ -163,7 +167,7 @@ def parse_name(file_name):
 
     artists = split_names(artist)
     title = compress_spaces(title)
-    artists = [e for e in artists if e not in all_features]
+    artists = [e for e in artists if e not in all_features and e not in all_remixes]
 
     artists = ordered_unique(artists)
     all_features = ordered_unique(all_features)

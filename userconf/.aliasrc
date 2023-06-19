@@ -24,8 +24,8 @@ alias d='mkdir -p ~/.lucid && vim ~/.lucid/$(date -I).md'
 if [[ "$EDITOR" == "nvim" ]]; then
   alias vim='nvim'
 fi
-alias novim='nvim -u NONE --noplugin --cmd "au VimEnter * windo set termguicolors cursorline nowrap number norelativenumber signcolumn=no clipboard+=unnamedplus tabstop=2 shiftwidth=2 softtabstop=2 | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap <space>tw <CMD>set wrap!<CR> | noremap gw <CMD>write<CR> | hi CursorLine guibg=#303030"'
-alias prvim='vim -u NONE --cmd "au VimEnter * windo set termguicolors cursorline nowrap scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap <C-h> <ESC>:wincmd h<CR> | noremap <C-j> <ESC>:wincmd j<CR> | noremap <C-k> <ESC>:wincmd k<CR> | noremap <C-l> <ESC>:wincmd l<CR> | noremap <space>tw <CMD>windo set wrap!<CR> | hi CursorLine guibg=#303030" -O'
+alias novim='nvim -u NONE --noplugin --cmd "au VimEnter * windo set mouse= termguicolors cursorline nowrap number norelativenumber signcolumn=no clipboard+=unnamedplus tabstop=2 shiftwidth=2 softtabstop=2 | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap <space>tw <CMD>set wrap!<CR> | noremap gw <CMD>write<CR> | hi CursorLine guibg=#303030"'
+alias prvim='vim -u NONE --cmd "au VimEnter * windo set mouse= termguicolors cursorline nowrap scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr> | noremap ö :noh<cr> | noremap <C-h> <ESC>:wincmd h<CR> | noremap <C-j> <ESC>:wincmd j<CR> | noremap <C-k> <ESC>:wincmd k<CR> | noremap <C-l> <ESC>:wincmd l<CR> | noremap <space>tw <CMD>windo set wrap!<CR> | hi CursorLine guibg=#303030" -O'
 alias ovim='/bin/vim'
 alias benchmark-nvim='rm -f /tmp/nvim-startuptime && nvim --startuptime /tmp/nvim-startuptime -c ":e /tmp/nvim-startuptime"'
 

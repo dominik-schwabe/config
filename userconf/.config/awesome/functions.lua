@@ -46,10 +46,12 @@ end
 
 local function build_resizer(x, y, width, height)
   return function(c)
-    c.x = c.x + x
-    c.y = c.y + y
-    c.width = c.width + width
-    c.height = c.height + height
+    if not c.fullscreen then
+      c.x = c.x + x
+      c.y = c.y + y
+      c.width = c.width + width
+      c.height = c.height + height
+    end
   end
 end
 
@@ -508,6 +510,9 @@ end
 local shrink_pixels = dpi(40)
 local grow_pixels = dpi(20)
 M.resize_grow = function(c)
+  if c.fullscreen then
+    return
+  end
   if c.floating then
     local ratio = screen_ratio(c.screen)
     local x = shrink_pixels
@@ -521,6 +526,9 @@ end
 
 local snap_offset = 20
 M.resize_shrink = function(c)
+  if c.fullscreen then
+    return
+  end
   if c.floating then
     local align_x
     local align_y
@@ -553,12 +561,12 @@ M.resize_shrink = function(c)
   end
 end
 M.resize_grow_x = function(c)
-  if c.floating then
+  if c.floating and not c.fullscreen then
     resize_float(c, grow_pixels, 0)
   end
 end
 M.resize_shrink_x = function(c)
-  if c.floating then
+  if c.floating and not c.fullscreen then
     resize_float(c, -grow_pixels, 0)
   end
 end

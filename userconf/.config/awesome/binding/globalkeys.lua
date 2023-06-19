@@ -29,7 +29,7 @@ local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
 local todo_toggle = dropdown.build_toggle_dropdown({
   cmd = "alacritty -t ___todo___ -o font.size=10 -e nvim -u NONE "
     .. vars.home
-    .. '/.todo --cmd "set clipboard=unnamedplus nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase" --cmd "au TextChanged * write" --cmd "au VimLeavePre * write" --cmd "noremap Q :xa<cr>"',
+    .. '/.todo --cmd "set clipboard=unnamedplus mouse= nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase" --cmd "au TextChanged * write" --cmd "au VimLeavePre * write" --cmd "noremap Q :xa<cr> | noremap ö :noh<cr>"',
   name = "___todo___",
   border_width = 3,
   overlap = false,

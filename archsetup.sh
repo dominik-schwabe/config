@@ -13,7 +13,6 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 BASE="
 $UCODE
 reflector
-alsa
 alsa-tools
 alsa-utils
 arch-install-scripts
@@ -81,8 +80,6 @@ zip
 zsh
 "
 
-echo $BASE
-
 GRAPHIC="
 brightnessctl
 accountsservice
@@ -93,7 +90,6 @@ arc-gtk-theme
 autorandr
 awesome
 discord
-dunst
 evince
 feh
 firefox
@@ -103,7 +99,6 @@ lightdm
 lightdm-gtk-greeter
 mpv
 nm-connection-editor
-nomacs
 noto-fonts-emoji
 pavucontrol
 perl-file-mimeinfo
@@ -113,7 +108,7 @@ redshift
 rofi
 scrot
 spotify-launcher
-sxiv
+nsxiv
 system-config-printer
 telegram-desktop
 thunar
@@ -139,14 +134,13 @@ xorg-apps
 xorg-drivers
 xorg-fonts
 xorg-xinit
-yt-dlp
 zathura
 zathura-pdf-poppler
 "
 
 LATEX="
 texlive-lang
-texlive-most
+texlive
 "
 
 AURPKG="
