@@ -7,10 +7,10 @@ local autostart_programs = {
   { 3, "unclutter --timeout 0.7" },
   { 4, "flameshot" },
   { 7, "spotify-launcher &>/dev/null" },
-  { 8, "birdtray" },
-  { 10, "telegram-desktop -startintray" },
-  { 12, "is_work_time && discord --start-minimized" },
-  { 15, "is_work_time && skypeforlinux" },
+  { 8, "is_productive_system && birdtray" },
+  { 10, "is_productive_system && telegram-desktop -startintray" },
+  { 12, "is_productive_system && is_work_time && discord --start-minimized" },
+  { 15, "is_productive_system && is_work_time && skypeforlinux" },
 }
 
 awful.spawn.easy_async_with_shell("xrdb -query | grep -q '^awesome\\.started:\\s*true$'", function(_, _, _, exit_code)

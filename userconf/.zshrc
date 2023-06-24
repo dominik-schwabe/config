@@ -5,7 +5,7 @@
 [[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
 
 export HISTFILE=~/.zsh_history
-export HISTORY_IGNORE="(ls|mv|cp|rm|cd|cat|pwd|td|te|o|vim|ovim|novim|rg|fd|ga|gco|ytdl|file|whereis) *"
+export HISTORY_IGNORE="(ls|mv|cp|rm|cd|z|cat|pwd|td|te|o|vim|ovim|novim|rg|fd|ga|gco|ytdl|file|whereis) *"
 
 # +++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++ completion ++++++++++++++++

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+MEDIA_FILE="$HOME/.media"
+[[ -f "$MEDIA_FILE" ]] && ALL=$(<"$MEDIA_FILE")
+echo -e "$ALL\n$1" | sed '/^\s*$/d' | sed 's/\s\+/ /g' | sed 's/^\s*//' |  sed 's/\s*$//' | sort | uniq >$MEDIA_FILE

@@ -44,6 +44,7 @@ else:
 
 remix = ["remix", "bootleg", "mashup", "rework", "re\-edit", "edit", "cover", "mix"]
 special = {
+    "instrumental": ["instrumental"],
     "slowed": ["slowed"],
     "reverb": ["reverb"],
     "arabic": ["arabic"],
