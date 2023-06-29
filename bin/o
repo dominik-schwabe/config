@@ -25,7 +25,8 @@ custom_application() {
   mimetype=$(file -b --mime-type "$ARGUMENT")
   if [[ "$mimetype" == "text/"* || "$mimetype" == "inode/"* ]]; then
     [[ "$ECHO" == true ]] && echo "$EDITOR" "$mimetype"
-    $EDITOR "$ARGUMENT"
+    [[ "$ARGUMENT" = *".log" ]] && ARGS="+"
+    $EDITOR $ARGS "$ARGUMENT"
     exit 0
   elif [[ "$mimetype" == "application/x-"*"executable" ]]; then
     [[ "$ECHO" == true ]] && echo "$mimetype"
