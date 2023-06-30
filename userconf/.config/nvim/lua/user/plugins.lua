@@ -302,6 +302,7 @@ if not config.minimal then
     { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },
     {
       "nvim-treesitter/nvim-treesitter",
+      build = "TSUpdate",
       event = { "BufReadPost", "BufNewFile" },
       config = l("treesitter"),
       dependencies = {
