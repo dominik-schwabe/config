@@ -184,7 +184,7 @@ M.lsp_configs = {
       python = {
         analysis = {
           diagnosticMode = "openFilesOnly",
-          useLibraryCodeForTypes = false,
+          useLibraryCodeForTypes = true,
           typeCheckingMode = "off",
         },
       },
@@ -224,7 +224,7 @@ M.null_ls = {
     "taplo",
     "styler",
     latexindent = {
-      extra_args = { "-y", 'defaultIndent:"  "', "-y", "verbatimEnvironments:Verbatim:1;pre:1" },
+      extra_args = { "-y", 'defaultIndent:"  "', "-y", "verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1" },
     },
     shfmt = {
       extra_args = { "-i", "2", "-ci" },

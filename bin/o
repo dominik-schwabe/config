@@ -68,7 +68,7 @@ stream_application() {
     error "missing resolution"
   fi
 
-  if [[ "$ARGUMENT" == "https://www.youtube.com/"* ]]; then
+  if [[ "$ARGUMENT" == "https://www.youtube.com/"* || "$ARGUMENT" == "https://youtu.be/"* ]]; then
     if command -v yt-dlp &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "youtube"
       nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $ARGUMENT $RESOLUTION" --ytdl-format=$YTDL_FORMAT $ARGUMENT &>/dev/null &

@@ -426,13 +426,13 @@ HL.syntax = {
 }
 
 HL.rainbow = {
-  TSRainbowRed = { fg = "#ee4444" },
-  TSRainbowYellow = { fg = "#dddd00" },
-  TSRainbowBlue = { fg = "#5eaeee" },
-  TSRainbowOrange = { fg = "#ddad00" },
-  TSRainbowGreen = { fg = "#00cc00" },
-  TSRainbowViolet = { fg = "#dd5ddd" },
-  TSRainbowCyan = { fg = "#00dddd" },
+  RainbowDelimiterRed = { fg = "#ee4444" },
+  RainbowDelimiterYellow = { fg = "#dddd00" },
+  RainbowDelimiterBlue = { fg = "#5eaeee" },
+  RainbowDelimiterOrange = { fg = "#ddad00" },
+  RainbowDelimiterGreen = { fg = "#00cc00" },
+  RainbowDelimiterViolet = { fg = "#dd5ddd" },
+  RainbowDelimiterCyan = { fg = "#00dddd" },
 }
 
 HL.diagnostics = {

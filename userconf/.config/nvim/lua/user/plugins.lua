@@ -306,7 +306,19 @@ if not config.minimal then
       event = { "BufReadPost", "BufNewFile" },
       config = l("treesitter"),
       dependencies = {
-        { "HiPhish/nvim-ts-rainbow2" },
+        {
+          "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+          config = function()
+            vim.g.rainbow_delimiters = {
+              strategy = {
+                [""] = function()
+                  local rb = require("rainbow-delimiters")
+                  return vim.fn.line("$") > 1000 and rb.strategy["noop"] or rb.strategy["global"]
+                end,
+              },
+            }
+          end,
+        },
         { "m-demare/hlargs.nvim" },
         { "nvim-treesitter/nvim-treesitter-textobjects" },
         { "nvim-treesitter/nvim-treesitter-context" },

@@ -66,24 +66,6 @@ F.load("nvim-treesitter.configs", function(tc)
       enable = false,
       disable = disable_func,
     },
-    rainbow = {
-      enable = true,
-      strategy = {
-        function()
-          local rb = F.load("ts-rainbow")
-          if rb then
-            local num_lines = vim.fn.line("$")
-            if num_lines > 1000 then
-              return rb.strategy["noop"]
-              -- elseif num_lines > 1000 then
-              --   return rb.strategy["global"]
-            end
-            return rb.strategy["global"]
-          end
-          return nil
-        end,
-      },
-    },
     textobjects = {
       select = {
         enable = true,
