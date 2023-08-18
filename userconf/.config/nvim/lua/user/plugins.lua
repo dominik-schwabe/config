@@ -354,6 +354,7 @@ if not config.minimal then
     { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
     {
       url = "https://gitlab.com/yorickpeterse/nvim-pqf",
+      -- "ashfinal/qfview.nvim",
       event = "VeryLazy",
       config = true,
     },
@@ -389,7 +390,61 @@ if not config.minimal then
       config = true,
       keys = { { "<space>ai", "<CMD>IconPickerYank emoji nerd_font_v3<CR>", desc = "open icon picker" } },
     },
-    { "ggandor/leap.nvim", config = creq("leap").set_default_keymaps(), keys = { "s", "S" } },
+    {
+      "folke/flash.nvim",
+      event = "VeryLazy",
+      opts = {
+        highlight = {
+          priority = 9999,
+        },
+        modes = {
+          char = { enabled = false },
+          search = { enabled = false },
+        },
+      },
+      keys = {
+        {
+          "s",
+          mode = { "n", "x", "o" },
+          function()
+            require("flash").jump()
+          end,
+          desc = "Flash",
+        },
+        {
+          "S",
+          mode = { "n", "o", "x" },
+          function()
+            require("flash").treesitter()
+          end,
+          desc = "Flash Treesitter",
+        },
+        {
+          "r",
+          mode = "o",
+          function()
+            require("flash").remote()
+          end,
+          desc = "Remote Flash",
+        },
+        {
+          "R",
+          mode = { "o", "x" },
+          function()
+            require("flash").treesitter_search()
+          end,
+          desc = "Treesitter Search",
+        },
+        {
+          "<c-s>",
+          mode = { "c" },
+          function()
+            require("flash").toggle()
+          end,
+          desc = "Toggle Flash Search",
+        },
+      },
+    },
     { "nmac427/guess-indent.nvim", opts = {} },
     { "sheerun/vim-polyglot" },
     { "anuvyklack/hydra.nvim", lazy = true },

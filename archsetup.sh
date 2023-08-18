@@ -66,7 +66,6 @@ pipewire-alsa
 pulsemixer
 python
 python-pynvim
-python-pip
 rsync
 sshfs
 sudo

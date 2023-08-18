@@ -555,6 +555,7 @@ HL.other = {
   White = { fg = C.white },
   Grey = { fg = C.grey },
   YankHighlight = { bg = C.yank },
+  FlashLabel = { fg = C.link, bold = true },
 }
 
 function M.setup()

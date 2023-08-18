@@ -2,5 +2,6 @@
 
 SAVE_PATH=$HOME/bin/kubectl
 VERSION=$1
-[[ -z VERSION ]] && VERSION=$(curl -Ls https://dl.k8s.io/release/stable.txt)
-curl -LsSfo $HOME/bin/kubectl "https://dl.k8s.io/release/$VERSION/bin/linux/amd64/kubectl" && chmod 755 $SAVE_PATH
+[[ -z $VERSION ]] && VERSION=$(curl -Ls https://dl.k8s.io/release/stable.txt)
+curl -LsSfo $HOME/bin/kubectl "https://dl.k8s.io/release/$VERSION/bin/linux/amd64/kubectl" && chmod 755 $SAVE_PATH || exit 1
+kubectl version --client --output=json

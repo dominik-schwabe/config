@@ -81,7 +81,6 @@ alias e='extract'
 alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'
 
-alias pip='pip'
 alias pipi='pip install'
 alias pipu='pip install -U --upgrade-strategy eager'
 

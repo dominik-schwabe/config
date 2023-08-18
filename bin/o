@@ -6,11 +6,12 @@ error() {
 }
 
 RESOLUTION="medium"
-while getopts "elh" o &>/dev/null; do
+while getopts "elhw" o &>/dev/null; do
   case $o in
     "e") ECHO=true ;;
     "l") RESOLUTION="low" ;;
     "h") RESOLUTION="high" ;;
+    "w") RESOLUTION="worst" ;;
   esac
 done
 
@@ -62,6 +63,9 @@ stream_application() {
     YTDL_FORMAT="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]"
     STREAM_LINK_FORMAT=720p,720p60,480p,360p
   elif [[ $RESOLUTION == "low" ]]; then
+    YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
+    STREAM_LINK_FORMAT=360p,worst
+  elif [[ $RESOLUTION == "worst" ]]; then
     YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
     STREAM_LINK_FORMAT=worst
   else
