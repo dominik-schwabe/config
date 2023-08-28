@@ -1,3 +1,5 @@
+local config = require("user.config")
+
 local U = require("user.utils")
 local F = require("user.functional")
 
@@ -49,26 +51,31 @@ local function rg(string, opt)
     cwd = root,
     maximum_results = maximum,
     on_exit = function(j, return_val)
-      if return_val == 0 then
-        vim.schedule_wrap(function()
+      if return_val == 0 or return_val == nil then
+        vim.schedule(function()
           args[#args] = '"' .. vim.fn.escape(args[#args], '"') .. '"'
           local command = "rg " .. table.concat(args, " ")
           local lines = j:result()
-          if #lines == 0 then
+          if return_val == nil then
+            vim.schedule(function()
+              vim.notify(string.format("limit reached (%d)", opt.maximum), vim.log.levels.WARN)
+            end)
+          elseif #lines == 0 then
             vim.notify("nothing found")
-          else
+          end
+          if #lines ~= 0 then
             U.quickfix(lines, command)
           end
-        end)()
+        end)
       else
-        vim.schedule_wrap(function()
+        vim.schedule(function()
           local lines = j:stderr_result()
           if #lines == 0 then
-            vim.notify("nothing was returned")
+            vim.notify("job failed without output", vim.log.levels.ERROR)
           else
             vim.notify(table.concat(lines, "\n"), vim.log.levels.ERROR)
           end
-        end)()
+        end)
       end
     end,
   })
@@ -76,7 +83,7 @@ local function rg(string, opt)
 end
 
 local function _rg_word(here)
-  rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, here = here })
+  rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, here = here, maximum = config.rg_maximum_lines })
 end
 
 local function _rg_visual(here)
@@ -85,7 +92,7 @@ local function _rg_visual(here)
     vim.notify("empty selection")
     return
   end
-  rg(table.concat(selection, ""), { raw = true, here = here })
+  rg(table.concat(selection, ""), { raw = true, here = here, maximum = config.rg_maximum_lines })
 end
 
 vim.keymap.set("n", "<space>-", F.f(_rg_word, false), { desc = "search for word in files" })

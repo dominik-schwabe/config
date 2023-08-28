@@ -323,6 +323,15 @@ if not config.minimal then
         { "nvim-treesitter/nvim-treesitter-textobjects" },
         { "nvim-treesitter/nvim-treesitter-context" },
         { "windwp/nvim-ts-autotag" },
+        {
+          "Wansmer/sibling-swap.nvim",
+          config = function()
+            local sibling_swap = require("sibling-swap")
+            sibling_swap.setup({ use_default_keymaps = false })
+            vim.keymap.set('n', "R", sibling_swap.swap_with_left)
+            vim.keymap.set('n', "U", sibling_swap.swap_with_right)
+          end,
+        },
       },
     },
     {
@@ -352,12 +361,6 @@ if not config.minimal then
       keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
     { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
-    {
-      url = "https://gitlab.com/yorickpeterse/nvim-pqf",
-      -- "ashfinal/qfview.nvim",
-      event = "VeryLazy",
-      config = true,
-    },
     {
       "folke/todo-comments.nvim",
       event = { "BufReadPost", "BufNewFile" },
@@ -471,6 +474,10 @@ if not config.minimal then
       end,
       keys = { { "<space>am", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
     },
+    {
+      "FabijanZulj/blame.nvim",
+      keys = { { "<space>gb", "<CMD>ToggleBlame window<CR>", desc = "toggle blamer" } },
+    },
   })
 end
 
@@ -524,25 +531,8 @@ require("lazy").setup(plugins, {
 
 -- local unused = {
 --   { "CRAG666/code_runner.nvim" },
---   { "Wansmer/sibling-swap.nvim", config = true },
 --   { "pwntester/octo.nvim" },
 --   { "NTBBloodbath/rest.nvim" },
---   {
---     "AckslD/swenv.nvim",
---     config = function()
---       require("swenv").setup({
---         get_venvs = function(venvs_path)
---           return require("swenv.api").get_venvs(venvs_path)
---         end,
---         venvs_path = vim.fn.expand("~/.local/share/virtualenvs"),
---         post_set_venv = nil,
---       })
---     end,
---   },
---   { "David-Kunz/markid" },
---   { "tpope/vim-repeat" },
---   { "akinsho/toggleterm.nvim", config = l("toggleterm") },
---   { "kosayoda/nvim-lightbulb" },
 -- }
 
 vim.keymap.set("n", "<space>ps", "<ESC>:Lazy sync<CR>", { desc = "install, clean, and update plugins" })

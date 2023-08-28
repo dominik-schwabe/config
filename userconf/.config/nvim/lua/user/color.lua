@@ -384,7 +384,7 @@ HL.syntax = {
   PreCondit = { fg = C.pink },
   PreProc = { fg = C.pink, bold = true },
   Question = { fg = C.yellow, bold = true },
-  QuickFixLine = { fg = C.purple, bold = true },
+  QuickFixLine = { fg = C.yellow, bold = true },
   Repeat = { fg = S.loop, bold = true },
   Search = { fg = C.base2, bg = C.gold },
   SignColumn = { bg = "none" },
@@ -556,6 +556,11 @@ HL.other = {
   Grey = { fg = C.grey },
   YankHighlight = { bg = C.yank },
   FlashLabel = { fg = C.link, bold = true },
+  qfFileName = { fg = C.directory, bold = true },
+  qfSeparatorLeft = { fg = C.yellow },
+  qfSeparatorRight = { fg = C.yellow },
+  qfLineNr = { fg = C.purple, bold = false },
+  qfError = { fg = C.error, bold = true },
 }
 
 function M.setup()

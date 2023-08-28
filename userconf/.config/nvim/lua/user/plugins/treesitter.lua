@@ -115,15 +115,15 @@ F.load("nvim-treesitter.configs", function(tc)
         --   ["[]"] = "@class.outer",
         -- },
       },
-      swap = {
-        enable = true,
-        swap_next = {
-          ["U"] = "@parameter.inner",
-        },
-        swap_previous = {
-          ["R"] = "@parameter.inner",
-        },
-      },
+      -- swap = {
+      --   enable = true,
+      --   swap_next = {
+      --     ["U"] = "@parameter.inner",
+      --   },
+      --   swap_previous = {
+      --     ["R"] = "@parameter.inner",
+      --   },
+      -- },
     },
     autotag = {
       enable = true,
