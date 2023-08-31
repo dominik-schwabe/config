@@ -561,6 +561,8 @@ HL.other = {
   qfSeparatorRight = { fg = C.yellow },
   qfLineNr = { fg = C.purple, bold = false },
   qfError = { fg = C.error, bold = true },
+  helpSectionDelim = { fg = C.purple, bold = true },
+  helpHeader = { fg = C.link, bold = true },
 }
 
 function M.setup()

@@ -5,7 +5,7 @@
 # export MINIMAL_CONFIG=true
 # export SYSTEM_PURPOSE="productive"
 # export ASDF_ENABLED="true"
-# export PYTHON_VERSION="3.10.0"
+# export PYTHON_VERSION="3.11.5"
 # export NODEJS_VERSION="19.9.0"
 # export ASDF_ENABLED_PLUGINS=(nodejs python)
 # export ASDF_TURBO="true"

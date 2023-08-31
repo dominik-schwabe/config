@@ -19,16 +19,25 @@ end
 local function set_term_options(args)
   local bufnr = args.buf
   local buftype = vim.bo[bufnr].buftype
-  if buftype == "terminal" then
-    vim.wo.spell = false
-    vim.wo.number = false
-    vim.wo.relativenumber = false
-    vim.wo.signcolumn = "no"
-  elseif not F.contains({ "quickfix", "nofile" }, buftype) and U.exists(vim.api.nvim_buf_get_name(bufnr)) then
-    vim.wo.number = true
-    vim.wo.relativenumber = true
-    vim.wo.signcolumn = "yes:2"
-  end
+  F.foreach(vim.api.nvim_list_wins(), function(win)
+    if vim.api.nvim_win_get_buf(win) == bufnr then
+      local wo = vim.wo[win]
+      if buftype == "terminal" then
+        wo.spell = false
+        wo.number = false
+        wo.relativenumber = false
+        wo.signcolumn = "no"
+      elseif buftype == "quickfix" then
+        wo.signcolumn = "yes"
+        wo.number = true
+        wo.relativenumber = false
+      elseif buftype ~= "nofile" and U.exists(vim.api.nvim_buf_get_name(bufnr)) then
+        wo.signcolumn = "yes:2"
+        wo.number = true
+        wo.relativenumber = true
+      end
+    end
+  end)
 end
 
 vim.api.nvim_create_augroup("UserTerm", {})
@@ -55,7 +64,7 @@ vim.api.nvim_create_autocmd("TermEnter", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("BufWinEnter", {
   group = "UserTerm",
   callback = set_term_options,
 })

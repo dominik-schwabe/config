@@ -12,6 +12,7 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 
 BASE="
 $UCODE
+terminus-font
 reflector
 alsa-tools
 alsa-utils
@@ -46,6 +47,7 @@ jq
 keychain
 linux-firmware
 linux-zen
+linux-zen-headers
 lua
 luajit
 luarocks
@@ -63,6 +65,7 @@ wireplumber
 pipewire
 pipewire-pulse
 pipewire-alsa
+pipewire-jack
 pulsemixer
 python
 python-pynvim
