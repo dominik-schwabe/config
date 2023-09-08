@@ -14,7 +14,7 @@ local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
 local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -qq -t ___dropdownterminal___ -o font.size=9.5 -e bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
+  cmd = "alacritty -qq -t ___dropdownterminal___ -o font.size=11.5 -e bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
   name = "___dropdownterminal___",
   border_width = 3,
   overlap = false,
@@ -84,9 +84,9 @@ local blanket_toggle = dropdown.build_toggle_dropdown({
 })
 
 local sxiv_toggle = dropdown.build_toggle_dropdown({
-  cmd = "find $HOME/Pictures -maxdepth 1 -type f -printf '%T@ %p\n' | sort -nr | cut -d ' ' -f 2- | xargs -d '\n' sxiv -N ___dropdown_images___",
+  cmd = "find $HOME/Pictures -maxdepth 1 -type f -printf '%T@ %p\n' | sort -nr | cut -d ' ' -f 2- | xargs -d '\n' nsxiv -N ___dropdown_images___",
   instance = "___dropdown_images___",
-  class = "Sxiv",
+  class = "Nsxiv",
   border_width = 3,
   overlap = false,
   width = dpi(900),
@@ -139,8 +139,8 @@ local globalkeys = gears.table.join(
   -- Menubar
   -- bindkey("launcher", mod, "p", f.show_menubar, "show the menubar"),
 
-  bindkey("backlight", mod, "Home", f.inc_brightness_1, "increase the screen brightness by 1%"),
-  bindkey("backlight", mod, "End", f.dec_brightness_1, "decrease the screen brightness by 1%"),
+  bindkey("backlight", mod, "F2", f.dec_brightness_1, "decrease the screen brightness by 1%"),
+  bindkey("backlight", mod, "F3", f.inc_brightness_1, "increase the screen brightness by 1%"),
   bindkey("backlight", {}, "XF86MonBrightnessUp", f.inc_brightness_5, "increase the screen brightness by 5%"),
   bindkey("backlight", {}, "XF86MonBrightnessDown", f.dec_brightness_5, "decrease the screen brightness by 5%"),
   bindkey("awesome", {}, "XF86ScreenSaver", f.lock, "lock the screen"),

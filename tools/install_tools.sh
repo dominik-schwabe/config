@@ -14,7 +14,7 @@ declare -A TOOLS=(
   ["rg"]="BurntSushi/ripgrep"
   ["fzf"]="junegunn/fzf"
   ["fd"]="sharkdp/fd"
-  ["jq"]="stedolan/jq"
+  ["jq"]="jqlang/jq"
   ["zoxide"]="ajeetdsouza/zoxide"
 )
 

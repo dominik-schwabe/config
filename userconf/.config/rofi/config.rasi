@@ -148,3 +148,5 @@ configuration {
 }
 
 @theme "/usr/share/rofi/themes/gruvbox-light.rasi"
+
+element-icon { size: 1.95ch; }

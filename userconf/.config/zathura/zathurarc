@@ -9,3 +9,4 @@ set highlight-active-color "#00AA00"
 set highlight-transparency 0.5
 set synctex true
 set synctex-editor-command "code -g %{input}:%{line}"
+set scroll-step 150

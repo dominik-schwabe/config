@@ -13,6 +13,9 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 BASE="
 $UCODE
 terminus-font
+p7zip
+tree-sitter
+tree-sitter-cli
 reflector
 alsa-tools
 alsa-utils
@@ -141,6 +144,12 @@ zathura-pdf-poppler
 "
 
 LATEX="
+libxcrypt-compat
+perl-file-homedir
+perl-yaml-tiny
+perl-unicode-linebreak
+inkscape
+biber
 texlive-lang
 texlive
 "
