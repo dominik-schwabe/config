@@ -9,6 +9,11 @@ opt.autoindent = true
 opt.smartindent = true
 opt.expandtab = true
 opt.cmdwinheight = 1
+opt.breakindent = true
+opt.virtualedit = "block"
+opt.splitkeep = "screen"
+opt.listchars = "extends:>,precedes:<,nbsp:␣,tab:>-,trail:_,nbsp:+"
+opt.list = true
 
 opt.number = true
 opt.relativenumber = true

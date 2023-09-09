@@ -15,7 +15,7 @@ local function trailing_highlight(mode)
   F.foreach(vim.api.nvim_list_wins(), function(window)
     local new_win_mode = nil
     local buf = vim.api.nvim_win_get_buf(window)
-    if not vim.b[buf].disable_trailing and window == current_window then
+    if window == current_window and not vim.b[buf].disable_trailing then
       new_win_mode = mode
     end
     local trailing_state = vim.w[window].trailing_state or {}
@@ -56,6 +56,11 @@ vim.api.nvim_create_autocmd("OptionSet", {
   group = "UserTrailingWhitespace",
   pattern = "modifiable",
   callback = update_trailing_highlight,
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+  group = "UserTrailingWhitespace",
+  callback = F.f(trailing_highlight, nil),
 })
 
 vim.api.nvim_create_autocmd({ "InsertLeave" }, {

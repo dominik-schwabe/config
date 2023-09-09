@@ -1,13 +1,14 @@
 local F = require("user.functional")
 
 local function trim_whitespace()
-  local buffer = vim.api.nvim_buf_get_number(0)
-  if not vim.api.nvim_buf_get_option(buffer, "modifiable") then
+  local buf = vim.api.nvim_get_current_buf()
+  local bo = vim.bo[buf]
+  if not bo.modifiable then
     vim.notify("not modifiable")
     return
   end
-  local lines = vim.api.nvim_buf_get_lines(buffer, 0, -1, false)
-  if vim.bo[buffer].filetype ~= "markdown" then
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  if bo.filetype ~= "markdown" then
     lines = F.map(lines, function(line)
       return line:gsub("%s+$", "")
     end)
@@ -19,7 +20,7 @@ local function trim_whitespace()
     lines[end_index] = nil
     end_index = end_index - 1
   end
-  vim.api.nvim_buf_set_lines(buffer, 0, -1, false, lines)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 end
 
 vim.api.nvim_create_user_command("TrimWhitespace", trim_whitespace, {})

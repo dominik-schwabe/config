@@ -89,6 +89,13 @@ function M.entries(obj)
   return entries
 end
 
+function M.max(list)
+  if #list > 0 then
+    return math.max(unpack(list))
+  end
+  return nil
+end
+
 function M.min(list)
   if #list > 0 then
     return math.min(unpack(list))
@@ -224,7 +231,7 @@ function M.load(src, cb, silent)
       end
     else
       command = command .. "\n" .. pkg
-      vim.notify(command, config.log_level)
+      vim.notify(command, vim.log.levels.WARN)
     end
   end
   return nil

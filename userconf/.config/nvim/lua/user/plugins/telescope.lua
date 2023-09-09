@@ -4,21 +4,29 @@ local function stopinsert()
   vim.cmd("stopinsert")
 end
 
+local actions = require("telescope.actions")
+local noop = function() end
+
 require("telescope").setup({
   defaults = {
     sorting_strategy = "ascending",
     mappings = {
       i = {
-        ["<C-p>"] = require("telescope.actions").close,
-        ["<C-k>"] = require("telescope.actions").move_selection_previous,
-        ["<C-j>"] = require("telescope.actions").move_selection_next,
+        ["<F1>"] = noop,
+        ["<F3>"] = noop,
+        ["<C-p>"] = actions.close,
+        ["<C-k>"] = actions.move_selection_previous,
+        ["<C-j>"] = actions.move_selection_next,
         ["<C-c>"] = stopinsert,
-        ["<ESC>"] = require("telescope.actions").close,
+        ["<ESC>"] = actions.close,
       },
       n = {
-        ["<C-p>"] = require("telescope.actions").close,
-        ["<C-k>"] = require("telescope.actions").move_selection_previous,
-        ["<C-j>"] = require("telescope.actions").move_selection_next,
+        ["<F1>"] = noop,
+        ["<F3>"] = noop,
+        ["q"] = actions.close,
+        ["<C-p>"] = actions.close,
+        ["<C-k>"] = actions.move_selection_previous,
+        ["<C-j>"] = actions.move_selection_next,
       },
     },
     vimgrep_arguments = {
@@ -37,6 +45,7 @@ require("telescope").setup({
     layout_config = { horizontal = { prompt_position = "top" } },
   },
 })
+require("telescope").load_extension("custom_buffers")
 require("telescope").load_extension("yank_history")
 require("telescope").load_extension("macro_history")
 require("telescope").load_extension("diffsplit")

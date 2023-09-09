@@ -1,5 +1,4 @@
 local F = require("user.functional")
-local U = require("user.utils")
 
 local config = require("user.config")
 
@@ -29,46 +28,12 @@ local function l(plugin_name)
   end
 end
 
-local function creq(plugin_name)
-  return setmetatable({}, {
-    __index = function(_, method_name)
-      return function(...)
-        local args = { ... }
-        return function()
-          local method = require(plugin_name)[method_name]
-          method(unpack(args))
-        end
-      end
-    end,
-  })
-end
-
-local function req(plugin_name)
-  return setmetatable({}, {
-    __index = function(_, method_name)
-      return function(...)
-        local args = { ... }
-        local method = require(plugin_name)[method_name]
-        return method(unpack(args))
-      end
-    end,
-  })
-end
-
 local function with_dependencies(plugin, optional_dependencies)
   if not config.minimal then
     plugin.dependencies = plugin.dependencies or {}
     plugin.dependencies = F.concat(plugin.dependencies, optional_dependencies)
   end
   return plugin
-end
-
-local function jabs_toggle()
-  if vim.bo.filetype == "JABSwindow" then
-    vim.cmd("close")
-  else
-    vim.cmd("JABSOpen")
-  end
 end
 
 local lspconfig = with_dependencies({
@@ -204,8 +169,16 @@ local plugins = {
         mode = { "n", "x" },
         desc = "fuzzy find in current buffer",
       },
+      {
+        "<space>/",
+        "<CMD>Telescope current_buffer_fuzzy_find<CR>",
+        mode = { "n", "x" },
+        desc = "fuzzy find in current buffer",
+      },
+      { "<F2>", "<CMD>Telescope custom_buffers<CR>", mode = { "n", "x", "t", "i" }, desc = "toggle buffer explorer" },
       { "<space>h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" }, desc = "search help tags" },
       { "<space>,,", "<CMD>Telescope resume<CR>", mode = { "n", "x" }, desc = "resume last search" },
+      { "<space>,h", "<CMD>Telescope highlights<CR>", mode = { "n", "x" }, desc = "search highlights" },
       { "<space>,k", "<CMD>Telescope keymaps<CR>", mode = { "n", "x" }, desc = "search keymaps" },
       { "<space>,j", "<CMD>Telescope jumplist<CR>", mode = { "n", "x" }, desc = "search jumplist" },
       { "<space>,y", "<CMD>Telescope yank_history<CR>", mode = { "n", "x" }, desc = "search yank history" },
@@ -219,46 +192,8 @@ local plugins = {
     opts = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },
     ft = "qf",
   },
-  {
-    "matbme/JABS.nvim",
-    opts = {
-      position = { "center", "center" },
-      relative = "editor",
-      width = 80,
-      height = 20,
-      border = "rounded",
-      sort_mru = true,
-      split_filename = true,
-      split_filename_path_width = 50,
-      preview_position = "right",
-      preview = { width = 40, height = 60, border = "single" },
-      keymap = { close = "d", jump = "<cr>", h_split = "v", v_split = "s" },
-      symbols = {
-        current = "C",
-        split = "S",
-        alternate = "A",
-        hidden = "H",
-        locked = "L",
-        ro = "R",
-        edited = "E",
-        terminal = "T",
-        default_file = "D",
-        terminal_symbol = ">_",
-      },
-      highlight = {
-        current = "StatusLine",
-        hidden = "ModeMsg",
-        split = "WarningMsg",
-        alternate = "ModeMsg",
-      },
-    },
-    dependencies = { { "nvim-tree/nvim-web-devicons" } },
-    keys = { { "<F2>", jabs_toggle, mode = { "n", "x", "i", "t" }, desc = "toggle buffer explorer" } },
-  },
-  {
-    "mg979/vim-visual-multi",
-    keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } },
-  },
+  -- { "smoka7/multicursors.nvim", event = "VeryLazy", opts = {}, cmd = {"MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor"}, keys = {{mode = {"v", "n"}, "<Leader>k", "<cmd>MCstart<cr>", desc = "Create a selection for selected text or word under the cursor"}} },
+  { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
   { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
 }
 
@@ -297,7 +232,12 @@ if not config.minimal then
       },
     },
     { "rhysd/clever-f.vim", event = "VeryLazy" },
-    { "windwp/nvim-autopairs", config = true, event = "InsertEnter" },
+    {
+      "altermo/ultimate-autopair.nvim",
+      event = { "InsertEnter", "CmdlineEnter" },
+      branch = "v0.6",
+      opts = { tabout = { enable = true } },
+    },
     { "NvChad/nvim-colorizer.lua" },
     { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },
     {
@@ -328,23 +268,13 @@ if not config.minimal then
           config = function()
             local sibling_swap = require("sibling-swap")
             sibling_swap.setup({ use_default_keymaps = false })
-            vim.keymap.set('n', "R", sibling_swap.swap_with_left)
-            vim.keymap.set('n', "U", sibling_swap.swap_with_right)
+            vim.keymap.set("n", "R", sibling_swap.swap_with_left)
+            vim.keymap.set("n", "U", sibling_swap.swap_with_right)
           end,
         },
       },
     },
-    {
-      "Wansmer/treesj",
-      opts = {
-        use_default_keymaps = false,
-        check_syntax_error = true,
-        cursor_behavior = "hold",
-        notify = true,
-        max_join_length = 100000,
-      },
-      keys = { { "Y", creq("treesj").toggle(), mode = { "n", "x" }, desc = "toggle split join" } },
-    },
+    { "Wansmer/treesj", config = l("treesj") },
     {
       "mfussenegger/nvim-dap",
       event = "VeryLazy",
@@ -416,7 +346,15 @@ if not config.minimal then
         },
         {
           "S",
-          mode = { "n", "o", "x" },
+          mode = { "n", "o" },
+          function()
+            require("flash").treesitter()
+          end,
+          desc = "Flash Treesitter",
+        },
+        {
+          "<C-s>",
+          mode = { "x" },
           function()
             require("flash").treesitter()
           end,
@@ -478,6 +416,7 @@ if not config.minimal then
       "FabijanZulj/blame.nvim",
       keys = { { "<space>gb", "<CMD>ToggleBlame window<CR>", desc = "toggle blamer" } },
     },
+    { "echasnovski/mini.nvim", version = false },
   })
 end
 

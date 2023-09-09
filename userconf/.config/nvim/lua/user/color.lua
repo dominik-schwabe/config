@@ -461,7 +461,7 @@ HL.telescope = {
   TelescopeSelection = { fg = C.white, bold = true },
   TelescopeSelectionCaret = { fg = C.green },
   TelescopeMultiSelection = { fg = C.pink },
-  TelescopeMatching = { fg = C.aqua },
+  TelescopeMatching = { fg = C.orange },
 }
 
 HL.cmp = {
@@ -550,6 +550,7 @@ HL.other = {
   Yellow = { fg = C.yellow },
   Purple = { fg = C.purple },
   Green = { fg = C.green },
+  Olive = { fg = C.alt_green },
   Aqua = { fg = C.aqua },
   Blue = { fg = C.fn },
   White = { fg = C.white },

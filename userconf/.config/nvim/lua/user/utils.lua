@@ -125,17 +125,33 @@ function M.exists(path)
   return vim.fn.empty(vim.fn.glob(path)) == 0
 end
 
-function M.mru_buffers()
-  local buffers = vim.api.nvim_exec(":ls t", true)
-  buffers = vim.split(buffers, "\n")
-  buffers = F.map(buffers, function(e)
-    return tonumber(e:match("^%s*(%d+)"))
-  end)
+function M.list_buffers(opts)
+  opts = opts or {}
+  if opts.buftype and type(opts.buftype) == "string" then
+    opts.buftype = { opts.buftype }
+  end
+  local buffers = vim.api.nvim_list_bufs()
+  buffers = F.filter(buffers, vim.api.nvim_buf_is_loaded)
+  if not opts.unlisted then
+    buffers = F.filter(buffers, function(buf)
+      return vim.fn.buflisted(buf) == 1
+    end)
+  end
+  if opts.buftype then
+    buffers = F.filter(buffers, function(buf)
+      return F.contains(opts.buftype, vim.bo[buf].buftype)
+    end)
+  end
+  if opts.mru then
+    table.sort(buffers, function(a, b)
+      return vim.fn.getbufinfo(a)[1].lastused > vim.fn.getbufinfo(b)[1].lastused
+    end)
+  end
   return buffers
 end
 
 function M.last_regular_buffer()
-  local buffers = M.mru_buffers()
+  local buffers = M.list_buffers({ mru = true })
   return F.find(buffers, function(bufnr)
     local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
     return not F.contains({ "terminal", "quickfix", "nofile" }, buftype)
