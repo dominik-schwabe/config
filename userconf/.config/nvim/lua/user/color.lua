@@ -9,6 +9,8 @@ M.rainbow = {
   "#dddd00",
 }
 
+local TW = require("user.palette.tailwind")
+
 local C = {
   base0 = "#222426",
   base1 = "#272a30",
@@ -453,15 +455,18 @@ HL.diagnostics = {
 
 HL.nvim_tree = {
   NvimTreeRootFolder = { fg = C.yellow },
+  NvimTreeSymLink = { fg = C.aqua, bold = true },
+  NvimTreeExecFile = { fg = C.green, bold = true },
+  NvimTreeImageFile = { fg = C.purple },
 }
 
 HL.telescope = {
   TelescopeBorder = { fg = C.base7 },
   TelescopeNormal = { fg = C.base9, bg = C.base0 },
-  TelescopeSelection = { fg = C.white, bold = true },
+  TelescopeSelection = { bg = TW.zinc_700 },
   TelescopeSelectionCaret = { fg = C.green },
   TelescopeMultiSelection = { fg = C.pink },
-  TelescopeMatching = { fg = C.orange },
+  TelescopeMatching = { fg = C.pink, bold = true },
 }
 
 HL.cmp = {
@@ -556,7 +561,7 @@ HL.other = {
   White = { fg = C.white },
   Grey = { fg = C.grey },
   YankHighlight = { bg = C.yank },
-  FlashLabel = { fg = C.link, bold = true },
+  FlashLabel = { fg = C.neon_purple, bg = C.black, bold = true },
   qfFileName = { fg = C.directory, bold = true },
   qfSeparatorLeft = { fg = C.yellow },
   qfSeparatorRight = { fg = C.yellow },

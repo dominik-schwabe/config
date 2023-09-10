@@ -1,10 +1,11 @@
 local nvim_tree = require("nvim-tree")
 
+local U = require("user.utils")
 local config = require("user.config")
 
-local function on_attach(bufnr)
-  local api = require("nvim-tree.api")
+local api = require("nvim-tree.api")
 
+local function on_attach(bufnr)
   local function opts(desc)
     return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
   end
@@ -68,11 +69,8 @@ nvim_tree.setup({
   view = {
     width = 32,
   },
-  git = {
-    ignore = true,
-    timeout = 500,
-  },
   diagnostics = {
+    enable = false,
     icons = {
       hint = config.icons.Hint,
       info = config.icons.Info,
@@ -90,3 +88,11 @@ nvim_tree.setup({
     },
   },
 })
+
+vim.keymap.set("n", "<space>af", function()
+  local last_buffer = U.list_buffers({ mru = true })[1]
+  api.tree.open()
+  if last_buffer then
+    api.tree.find_file({ buf = last_buffer, update_root = true })
+  end
+end, { desc = "find file" })

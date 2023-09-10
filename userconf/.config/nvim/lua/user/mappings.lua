@@ -31,17 +31,19 @@ end, { desc = "change directory to current file" })
 
 local function movement(key)
   return function()
-    local count = vim.v.count
-    if count == 0 then
-      vim.api.nvim_feedkeys("g" .. key, "n", false)
+    if vim.v.count == 0 then
+      return "g" .. key
     else
-      vim.cmd.normal({ "m'", bang = true })
-      vim.api.nvim_feedkeys(tostring(count) .. key, "n", false)
+      local win = vim.api.nvim_get_current_win()
+      local buf = vim.api.nvim_win_get_buf(win)
+      local l, c = unpack(vim.api.nvim_win_get_cursor(win))
+      vim.api.nvim_buf_set_mark(buf, "'", l, c, {})
+      return key
     end
   end
 end
 
-vim.keymap.set({ "n", "x" }, "k", movement("k"), { silent = true })
-vim.keymap.set({ "n", "x" }, "j", movement("j"), { silent = true })
+vim.keymap.set({ "n", "x" }, "k", movement("k"), { silent = true, expr = true })
+vim.keymap.set({ "n", "x" }, "j", movement("j"), { silent = true, expr = true })
 vim.keymap.set("n", "<", "<<")
 vim.keymap.set("n", ">", ">>")

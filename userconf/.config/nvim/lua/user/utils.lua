@@ -3,13 +3,6 @@ local config = require("user.config")
 
 local M = {}
 
-function M.reverse_replace_termcodes(str)
-  str = str:gsub("\27", "<ESC>")
-  str = str:gsub("\r\n", "<CR>")
-  str = str:gsub("\r", "<CR>")
-  return str
-end
-
 function M.replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end

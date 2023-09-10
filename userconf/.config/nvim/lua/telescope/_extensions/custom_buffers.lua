@@ -23,7 +23,6 @@ local function delete_buffer(prompt_bufnr)
       vim.notify("can not delete buffer with unsaved changes", vim.log.levels.WARN)
       return false
     end
-    local force = vim.api.nvim_buf_get_option(selection.bufnr, "buftype") == "terminal"
     local windows = F.filter(vim.api.nvim_list_wins(), function(win)
       return not U.is_floating(win)
     end)
@@ -39,12 +38,15 @@ local function delete_buffer(prompt_bufnr)
       if #left_buffers > 0 then
         vim.api.nvim_win_set_buf(keep_win, left_buffers[1])
       else
+        local dummy_buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_win_set_buf(keep_win, dummy_buf)
         actions.close(prompt_bufnr)
       end
     end
     F.foreach(close_wins, function(win)
       vim.api.nvim_win_close(win, false)
     end)
+    local force = vim.api.nvim_buf_get_option(selection.bufnr, "buftype") == "terminal"
     local ok = pcall(vim.api.nvim_buf_delete, selection.bufnr, { force = force })
     return ok
   end)

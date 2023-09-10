@@ -21,7 +21,7 @@ local function l(plugin_name)
     local success, message = true, require(src)
     if not success then
       vim.notify(
-        "loader for '" .. plugin_name .. "' failed (used name: '" .. plugin_name .. "')" .. "\n" .. message,
+        "loader for '" .. plugin_name .. "' failed (used: '" .. src .. "')" .. "\n" .. message,
         vim.log.levels.INFO
       )
     end
@@ -84,17 +84,9 @@ local cmp = with_dependencies({
 }, {
   { "onsails/lspkind.nvim" },
   { "hrsh7th/cmp-buffer" },
-  { "hrsh7th/cmp-path" },
+  { "FelipeLema/cmp-async-path" },
   { "hrsh7th/cmp-nvim-lua" },
   { "andersevenrud/cmp-tmux" },
-  -- {
-  --   "roobert/tailwindcss-colorizer-cmp.nvim",
-  --   config = function()
-  --     require("tailwindcss-colorizer-cmp").setup({
-  --       color_square_width = 2,
-  --     })
-  --   end,
-  -- },
 })
 
 local nvim_tree = with_dependencies({
@@ -104,7 +96,6 @@ local nvim_tree = with_dependencies({
   keys = {
     { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
     { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
-    { "<space>af", "<CMD>NvimTreeFindFile!<CR><CMD>NvimTreeOpen<CR>", mode = { "n" } },
   },
 }, { { "nvim-tree/nvim-web-devicons" } })
 

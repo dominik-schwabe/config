@@ -21,6 +21,10 @@ require("telescope").setup({
         ["<ESC>"] = actions.close,
       },
       n = {
+        ["Q"] = function(...)
+          actions.close(...)
+          vim.cmd("qa")
+        end,
         ["<F1>"] = noop,
         ["<F3>"] = noop,
         ["q"] = actions.close,

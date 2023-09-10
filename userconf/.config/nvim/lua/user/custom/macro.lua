@@ -10,14 +10,26 @@ local function is_recording()
   return vim.fn.reg_recording() ~= ""
 end
 
+local function special_replace(str)
+  str = str:gsub("\27", "<ESC>")
+  str = str:gsub("\13", "<CR>")
+  return str
+end
+
+local function reverse_special_replace(str)
+  str = str:gsub("<ESC>", "\27")
+  str = str:gsub("<CR>", "\13")
+  return str
+end
+
 local function get_macro(s)
   s = s or slot
-  return U.reverse_replace_termcodes(vim.fn.getreg(macro_regs[s]))
+  return vim.fn.getreg(macro_regs[s])
 end
 
 local function set_macro(str, s)
   s = s or slot
-  vim.fn.setreg(macro_regs[s], U.replace_termcodes(str))
+  vim.fn.setreg(macro_regs[s], str)
 end
 
 local function start_macro()
@@ -97,11 +109,11 @@ local history = History:new({
 })
 
 local function edit_macro()
-  local macro_content = get_macro()
+  local macro_content = special_replace(get_macro())
   local macro_string = get_long_string()
   vim.ui.input({ prompt = "Edit " .. macro_string, default = macro_content }, function(edited_macro)
     if edited_macro then
-      set_macro(edited_macro)
+      set_macro(reverse_special_replace(edited_macro))
       history:add_register()
       show_macro()
     end

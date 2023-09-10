@@ -11,7 +11,7 @@ local max_buffer_size = config.max_buffer_size
 
 local cmp_options = {
   enabled = function()
-    return vim.bo.buftype ~= "prompt" and vim.bo.buftype ~= "nofile"
+    return vim.fn.reg_recording() == "" and not F.contains({ "prompt", "nofile" }, vim.bo.buftype)
   end,
   mapping = cmp.mapping.preset.insert({
     ["<C-w>"] = cmp.mapping.scroll_docs(-4),
@@ -47,7 +47,7 @@ local cmp_options = {
       name = "yank_history",
       max_item_count = 3,
     },
-    { name = "path" },
+    { name = "async_path" },
     { name = "crates" },
     {
       name = "buffer",
