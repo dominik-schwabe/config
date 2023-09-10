@@ -301,4 +301,13 @@ function M.merge_sorted(tbl1, tbl2, opts)
   return new_tbl
 end
 
+function M.threshold(thresholds, value)
+  local found, upper = M.sorted_find(thresholds, value)
+  local index = upper - 1
+  if found then
+    index = index + 1
+  end
+  return index
+end
+
 return M

@@ -142,10 +142,10 @@ F.foreach(macro_regs, function(reg)
   vim.fn.setreg(reg, "")
 end)
 
-vim.keymap.set("n", toggle_key, toggle_recording, { desc = "toggle macro recording" })
-vim.keymap.set("n", "<C-s>", play_recording, { desc = "replay last macro" })
+vim.keymap.set({ "n", "x" }, toggle_key, toggle_recording, { desc = "toggle macro recording" })
+vim.keymap.set({ "n", "x" }, "<C-q>", play_recording, { desc = "replay last macro" })
+vim.keymap.set({ "n", "x" }, "<space>rf", next_macro, { desc = "select next macro" })
+vim.keymap.set({ "n", "x" }, "<space>rb", prev_macro, { desc = "select previous macro" })
 vim.keymap.set("n", "<space>re", edit_macro, { desc = "edit last macro" })
-vim.keymap.set("n", "<space>rf", next_macro, { desc = "select next macro" })
-vim.keymap.set("n", "<space>rb", prev_macro, { desc = "select previous macro" })
 
 return { history = history }

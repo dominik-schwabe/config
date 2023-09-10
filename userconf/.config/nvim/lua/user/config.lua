@@ -4,7 +4,7 @@ M.minimal = os.getenv("MINIMAL_CONFIG")
 M.rg_maximum_lines = 100
 M.log_level = vim.log.levels.OFF
 M.max_buffer_size = 300 * 1024
-M.big_files_whitelist = { "help" }
+M.big_files_allowlist = { "help" }
 M.icons = {
   Branch = "󰘬",
   Fix = "",
@@ -93,54 +93,22 @@ M.rooter = {
     { 0, "/lib/python3.[0-9]*$" },
   },
 }
-M.whitespace_blacklist = {
-  "",
-  "TelescopePrompt",
-  "TelescopeResults",
-  "Trouble",
-  "diff",
-  "fugitive",
-  "git",
-  "gitcommit",
-  "help",
-  "markdown",
-  "qf",
-  "unite",
-  "checkhealth",
-  "dap-repl",
-  "dapui_watches",
-}
-M.illuminate_blacklist = {
-  "",
-  "NvimTree",
-  "Trouble",
-  "fugitiveblame",
-  "help",
-  "json",
-  "lsputil_codeaction_list",
-  "markdown",
-  "packer",
-  "qf",
-  "vista",
-  "yaml",
-  "TelescopePrompt",
-}
 M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
 M.mason_ensure_installed = { "black", "isort", "prettierd" }
 M.lsp_configs = {
   -- latex = {
-  -- 	settings = {
-  -- 	  texlab = {
-  -- 	    build = {
-  -- 	      forwardSearchAfter = true;
-  -- 	      onSave = true;
-  -- 	    },
-  -- 	    forwardSearch = {
-  -- 	      executable = "zathura",
-  -- 	      args = { "--synctex-forward", "%l:1:%f", "%p" }
-  -- 	    }
-  -- 	  }
-  -- 	}
+  --   settings = {
+  --     texlab = {
+  --       build = {
+  --         forwardSearchAfter = true,
+  --         onSave = true,
+  --       },
+  --       forwardSearch = {
+  --         executable = "zathura",
+  --         args = { "--synctex-forward", "%l:1:%f", "%p" },
+  --       },
+  --     },
+  --   },
   -- },
 
   jsonls = {

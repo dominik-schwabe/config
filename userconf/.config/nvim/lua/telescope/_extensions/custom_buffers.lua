@@ -7,9 +7,11 @@ local finders = require("telescope.finders")
 local Path = require("plenary.path")
 local utils = require("telescope.utils")
 local conf = require("telescope.config").values
+local config = require("user.config")
 
 local F = require("user.functional")
 local U = require("user.utils")
+local C = require("user.constants")
 
 local function stopinsert()
   vim.cmd("stopinsert")
@@ -64,6 +66,8 @@ local function attach_mappings(_, map)
   return true
 end
 
+local thresholds = { 10, 30, 100, 300, 1000, 3000, 10000 }
+
 local function gen_from_buffer(opts)
   opts = opts or {}
 
@@ -74,6 +78,7 @@ local function gen_from_buffer(opts)
     items = {
       { width = opts.bufnr_width },
       { width = 4 },
+      { width = 2 },
       { width = icon_width },
       { width = opts.longest_tail, remaining = true },
       { remaining = true },
@@ -88,9 +93,10 @@ local function gen_from_buffer(opts)
 
     return displayer({
       { entry.bufnr, "TelescopeResultsNumber" },
-      { entry.indicator, "TelescopeResultsComment" },
+      { entry.indicator, "Orange" },
+      entry.is_path and { config.icons.Tailwind, "Progress" .. entry.progress } or "",
       { icon, hl_group },
-      { entry.tail, entry.is_path and "Olive" or "Purple" },
+      { entry.tail, entry.is_path and "BoldOlive" or "BoldPurple" },
       { entry.filename, "Grey" },
     })
   end
@@ -99,14 +105,15 @@ local function gen_from_buffer(opts)
     local bufname = entry.info.name ~= "" and entry.info.name or "[No Name]"
     bufname = Path:new(bufname):normalize(cwd)
 
-    local hidden = entry.info.hidden == 1 and "h" or "a"
-    local readonly = vim.api.nvim_buf_get_option(entry.bufnr, "readonly") and "=" or " "
-    local changed = entry.info.changed == 1 and "+" or " "
-    local indicator = hidden .. readonly .. changed
+    local progress = entry.is_path and F.threshold(thresholds, entry.info.changedtick) or nil
+    local readonly = vim.bo[entry.bufnr].readonly and config.icons.Readonly or " "
+    local changed = entry.info.changed == 1 and config.icons.Modified or " "
+    local indicator = string.format("%s %s ", readonly, changed)
 
     return make_entry.set_default_entry_mt({
       value = bufname,
       ordinal = entry.bufnr .. " : " .. entry.tail .. bufname,
+      progress = progress,
       display = make_display,
       is_path = entry.is_path,
       bufnr = entry.bufnr,
@@ -118,7 +125,7 @@ local function gen_from_buffer(opts)
 end
 
 local entry_point = function(opts)
-  local path_bufnrs = U.list_buffers({ mru = true, buftype = { "", "acwrite" } })
+  local path_bufnrs = U.list_buffers({ mru = true, buftype = C.FILE_BUFTYPE })
   local terminal_bufnrs = F.reverse(U.list_buffers({ mru = true, unlisted = true, buftype = "terminal" }))
   local all_bufnrs = F.concat(terminal_bufnrs, path_bufnrs)
 

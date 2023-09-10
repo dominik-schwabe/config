@@ -72,13 +72,11 @@ function Diffstate:_register_autocmds()
   end
   local autocmd_ids = {}
   autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufWinEnter", "WinClosed" }, {
-    callback = function()
-      vim.schedule(function()
-        if not self.resetted and not self:is_consitent() then
-          self:reset()
-        end
-      end)
-    end,
+    callback = vim.schedule_wrap(function()
+      if not self.resetted and not self:is_consitent() then
+        self:reset()
+      end
+    end),
   })
   self.autocmd_ids = autocmd_ids
 end

@@ -3,6 +3,7 @@ local M = {}
 M.map = function(tbl, func)
   return vim.tbl_map(func, tbl)
 end
+
 M.filter = function(tbl, func)
   return vim.tbl_filter(func, tbl)
 end

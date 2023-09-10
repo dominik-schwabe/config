@@ -106,13 +106,11 @@ local function fullscreen_toggle()
         "BufWinEnter",
         "WinNew",
       }, {
-        callback = function()
-          vim.schedule(function()
-            if FS ~= nil and not is_consistent() then
-              fullscreen_off()
-            end
-          end)
-        end,
+        callback = vim.schedule_wrap(function()
+          if FS ~= nil and not is_consistent() then
+            fullscreen_off()
+          end
+        end),
       })
       FS.autocmd_ids[#FS.autocmd_ids + 1] = vim.api.nvim_create_autocmd("VimResized", {
         callback = resize_fullscreen,

@@ -7,7 +7,7 @@ local F = require("user.functional")
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
 local function disable_func(filetype, bufnr)
-  return U.is_big_buffer_whitelisted(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
+  return U.is_in_big_buffer_allowlist(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
 end
 
 F.load("nvim-treesitter.configs", function(tc)

@@ -1,13 +1,12 @@
-local config = require("user.config")
-
 local F = require("user.functional")
-
-local whitespace_blacklist = config.whitespace_blacklist
+local C = require("user.constants")
 
 local trailing_patterns = {
   n = [[\(\s\|\r\)\+$]],
   i = [[\(\s\|\r\)\+\%#\@<!$]],
 }
+
+local filetype_denylist = { "markdown" }
 
 local function trailing_highlight(mode)
   mode = mode or vim.fn.mode()
@@ -38,10 +37,11 @@ end
 
 local function update_trailing_highlight(opts)
   local buf = opts.buf
-  local filetype = vim.bo[buf].filetype
+  local bo = vim.bo[buf]
   vim.b[buf].disable_trailing = vim.b[buf].is_big_buffer
-    or F.contains(whitespace_blacklist, filetype)
-    or not vim.bo[buf].modifiable
+    or not F.contains(C.FILE_BUFTYPE, bo.buftype)
+    or not bo.modifiable
+    or F.contains(filetype_denylist, bo.filetype)
   trailing_highlight()
 end
 

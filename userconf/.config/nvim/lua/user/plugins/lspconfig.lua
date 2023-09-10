@@ -37,23 +37,22 @@ vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, U.desc(map_opt, "rename var
 vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, U.desc(map_opt, "select code action"))
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
-  callback = function(args)
-    vim.schedule(function()
-      local buf_map_opt = { noremap = true, silent = true, buffer = args.bufnr }
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      local should_attach = not vim.b[args.buf].is_big_buffer or client.name == "null-ls"
-      -- client.server_capabilities.semanticTokensProvider = nil
-      if should_attach then
-        if client.name == "rust_analyzer" then
-          F.load("rust-tools", function(rt)
-            vim.keymap.set("n", "gh", rt.hover_actions.hover_actions, U.desc(buf_map_opt, "rust hover actions"))
-          end)
-        end
-      else
-        vim.lsp.buf_detach_client(args.buf, args.data.client_id)
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = vim.schedule_wrap(function(args)
+    local buf_map_opt = { noremap = true, silent = true, buffer = args.bufnr }
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local should_attach = not vim.b[args.buf].is_big_buffer or client.name == "null-ls"
+    -- client.server_capabilities.semanticTokensProvider = nil
+    if should_attach then
+      if client.name == "rust_analyzer" then
+        F.load("rust-tools", function(rt)
+          vim.keymap.set("n", "gh", rt.hover_actions.hover_actions, U.desc(buf_map_opt, "rust hover actions"))
+        end)
       end
-    end)
-  end,
+    else
+      vim.lsp.buf_detach_client(args.buf, args.data.client_id)
+    end
+  end),
 })
 
 local config = require("user.config")

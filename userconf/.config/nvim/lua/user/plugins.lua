@@ -2,6 +2,22 @@ local F = require("user.functional")
 
 local config = require("user.config")
 
+local illuminate_denylist = {
+  "",
+  "NvimTree",
+  "Trouble",
+  "fugitiveblame",
+  "help",
+  "json",
+  "lsputil_codeaction_list",
+  "markdown",
+  "packer",
+  "qf",
+  "vista",
+  "yaml",
+  "TelescopePrompt",
+}
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -51,7 +67,7 @@ local lspconfig = with_dependencies({
     config = function()
       require("illuminate").configure({
         providers = { "lsp" },
-        filetypes_denylist = config.illuminate_blacklist,
+        filetypes_denylist = illuminate_denylist,
         modes_allowlist = { "n" },
       })
     end,
