@@ -19,12 +19,9 @@ end
 
 vim.keymap.set({ "n", "x" }, "<space>j", set_jumplist, { desc = "open the quickfix with the jumplist" })
 
-local backward_key = vim.api.nvim_replace_termcodes("<c-o>", true, false, true)
-local forward_key = vim.api.nvim_replace_termcodes("<c-i>", true, false, true)
-
 local function jump(direction, opt)
   opt = opt or {}
-  local once_per_buffer = opt.once_per_buffer
+  local buffer = opt.buffer
   local jumplist, start_pos = unpack(vim.fn.getjumplist())
   if #jumplist == 0 then
     return
@@ -41,13 +38,13 @@ local function jump(direction, opt)
     if
       current_bufnr ~= nil
       and vim.api.nvim_buf_is_loaded(current_bufnr)
-      and (not once_per_buffer or start_bufnr ~= current_bufnr)
+      and (not buffer or start_bufnr ~= current_bufnr)
     then
       local displacement = current_pos - start_pos
       if displacement < 0 then
-        vim.api.nvim_feedkeys(-displacement .. backward_key, "n", false)
+        return -displacement .. "<c-o>"
       elseif displacement > 0 then
-        vim.api.nvim_feedkeys(displacement .. forward_key, "n", false)
+        return displacement .. "<c-i>"
       end
       return
     end
@@ -55,7 +52,7 @@ local function jump(direction, opt)
   end
 end
 
-vim.keymap.set({ "n" }, "<C-i>", F.f(jump, 1), { desc = "jump to next jumpmark" })
-vim.keymap.set({ "n" }, "<C-o>", F.f(jump, -1), { desc = "jump to previous jumpmark" })
-vim.keymap.set({ "n" }, "<space>i", F.f(jump, 1, { once_per_buffer = true, desc = "jump to next file" }))
-vim.keymap.set({ "n" }, "<space>o", F.f(jump, -1, { once_per_buffer = true, desc = "jump to previous file" }))
+vim.keymap.set("n", "<C-i>", F.f(jump, 1), { expr = true, desc = "jump to next jumpmark" })
+vim.keymap.set("n", "<C-o>", F.f(jump, -1), { expr = true, desc = "jump to previous jumpmark" })
+vim.keymap.set("n", "<space>i", F.f(jump, 1, { buffer = true }), { expr = true, desc = "jump to next file" })
+vim.keymap.set("n", "<space>o", F.f(jump, -1, { buffer = true }), { expr = true, desc = "jump to previous file" })

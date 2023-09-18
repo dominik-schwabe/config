@@ -59,25 +59,41 @@ set ttyfast
 set incsearch
 set hlsearch
 set modeline
+set list
+set splitkeep=screen
+set virtualedit=block
+set breakindent
 
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 noremap gw :write<CR>
 noremap Q :qa<CR>
-noremap <left> <C-W>H
-noremap <right> <C-W>L
-noremap <up> <C-W>K
-noremap <down> <C-W>J
 nnoremap <silent> ö :noh<CR>
 noremap <c-g> 2<c-g>
+tnoremap <C-e> <C-\><C-n>
+noremap <left> <CMD>wincmd H<CR>
+noremap <right> <CMD>wincmd L<CR>
+noremap <up> <CMD>wincmd K<CR>
+noremap <down> <CMD>wincmd J<CR>
+noremap <space>tw <CMD>set wrap!<CR>
+nnoremap <expr> h v:count ? 'h' : 'gh'
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+nnoremap <expr> l v:count ? 'l' : 'gl'
+nnoremap db dvb
+nnoremap dB dvB
+nnoremap cb cvb
+nnoremap cB cvB
+nnoremap yb yvb
+nnoremap yB yvB
 
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
 
-vmap < <gv
-vmap > >gv
+vnoremap < <gv
+vnoremap > >gv
 
 "smart resize
 function MyResize(dir)
@@ -124,7 +140,7 @@ endif
 
 " Set default whitespace characters when using `:set list`
 if &listchars ==# 'eol:$'
-  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+  set listchars=extends:>,precedes:<,nbsp:␣,tab:>-,trail:_,nbsp:+
 endif
 
 " Delete comment character when joining commented lines

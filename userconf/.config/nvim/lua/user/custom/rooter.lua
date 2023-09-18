@@ -1,22 +1,32 @@
 local U = require("user.utils")
 local F = require("user.functional")
-
-local NO_FILES = {
-  "nofile",
-  "quickfix",
-  "terminal",
-  "prompt",
-}
+local C = require("user.constants")
 
 vim.opt.autochdir = false
 
-local base = {
-  has = {},
-  ends_with = {},
-  parent_ends_with = {},
-  patterns = {},
+local check_functions = {
+  contains = function(dir, contents)
+    return F.any(contents, function(content)
+      return U.exists(dir .. "/" .. content)
+    end)
+  end,
+  ends_with = function(dir, suffixes)
+    return F.any(suffixes, function(suffix)
+      return U.has_suffix(dir, suffix)
+    end)
+  end,
+  patterns = function(dir, patterns)
+    return F.any(patterns, function(pattern)
+      return dir:match(pattern)
+    end)
+  end,
 }
-local rooter_config = vim.tbl_deep_extend("force", base, require("user.config").rooter)
+
+local keys = F.keys(check_functions)
+
+local rooter_config = F.map(require("user.config").rooter, function(entry)
+  return { entry[1] or 0, F.subset(entry, keys) }
+end)
 
 local function list_parents(path)
   local new_table = {}
@@ -26,36 +36,18 @@ local function list_parents(path)
   return new_table
 end
 
-local function has(dir, contents)
-  return F.any(contents, function(content)
-    return U.exists(dir .. "/" .. content)
-  end)
-end
-
-local function ends_with(dir, suffixes)
-  return F.any(suffixes, function(suffix)
-    return U.has_suffix(dir, suffix)
-  end)
-end
-
-local function parent_ends_with(dir, suffixes)
-  return ends_with(vim.fs.dirname(dir), suffixes)
-end
-
 local function find_root(base_path)
   local dirs = list_parents(base_path .. "/")
   for i, dir in ipairs(dirs) do
-    if
-      has(dir, rooter_config["has"])
-      or ends_with(dir, rooter_config["ends_with"])
-      or parent_ends_with(dir, rooter_config["parent_ends_with"])
-    then
-      return dir
-    end
-    for _, p in ipairs(rooter_config["patterns"]) do
-      local pos, pattern = unpack(p)
-      local d = dirs[i + pos]
-      if d and d:match(pattern) then
+    for _, config_entry in ipairs(rooter_config) do
+      local level, entry = unpack(config_entry)
+      local context_dir = dirs[i + level]
+      if
+        context_dir
+        and F.any(keys, function(key)
+          return entry[key] and check_functions[key](context_dir, entry[key])
+        end)
+      then
         return dir
       end
     end
@@ -64,7 +56,7 @@ local function find_root(base_path)
 end
 
 local function chdir(args)
-  if F.contains(NO_FILES, vim.bo[args.buf].buftype) then
+  if F.contains(C.NOPATH_BUFTYPES, vim.bo[args.buf].buftype) then
     return
   end
   local base_path = vim.fn.expand("%:p:h", true)

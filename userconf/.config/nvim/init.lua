@@ -1,6 +1,6 @@
 vim.loader.enable()
 
-require("user.debug")
+require("user.globals")
 
 vim.cmd("colorscheme monokai")
 
@@ -32,7 +32,7 @@ local function mark_jump()
 end
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = "user",
+  group = vim.api.nvim_create_augroup("UserRepl", {}),
   callback = function(args)
     local bufopt = vim.bo[args.buf]
     if F.contains(repls, bufopt.filetype) then

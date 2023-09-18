@@ -5,10 +5,10 @@ local config = require("user.config")
 
 local function leave_term()
   vim.b.term_was_normal = true
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "t", true)
+  return "<C-\\><C-n>"
 end
 
-vim.keymap.set("t", "<C-e>", leave_term, { desc = "leave terminal mode" })
+vim.keymap.set("t", "<C-e>", leave_term, { desc = "leave terminal mode", expr = true })
 
 local function delete_term(args)
   vim.schedule(function()

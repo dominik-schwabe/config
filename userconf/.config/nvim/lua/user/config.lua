@@ -63,34 +63,35 @@ M.icons = {
   Readonly = "",
 }
 M.rooter = {
-  ends_with = {
-    "/nvim",
-    "/node_modules",
+  {
+    ends_with = {
+      "/nvim",
+      "/node_modules",
+    },
+    contains = {
+      ".bzr",
+      ".git",
+      ".hg",
+      ".latexmkrc",
+      ".luarc.json",
+      ".svn",
+      "Cargo.toml",
+      "Makefile",
+      "Pipfile",
+      "Pipfile.lock",
+      "_darcs",
+      "node_modules",
+      "package-lock.json",
+      "package.json",
+      "pyproject.toml",
+      "requirements.txt",
+    },
+    patterns = { "/lib/python3.[0-9]*$" },
   },
-  has = {
-    ".bzr",
-    ".git",
-    ".hg",
-    ".latexmkrc",
-    ".luarc.json",
-    ".svn",
-    "Cargo.toml",
-    "Makefile",
-    "Pipfile",
-    "Pipfile.lock",
-    "_darcs",
-    "node_modules",
-    "package-lock.json",
-    "package.json",
-    "pyproject.toml",
-    "requirements.txt",
-  },
-  parent_ends_with = {
-    "/site-packages",
-  },
-  patterns = {
-    { 1, "/lib/python3.[0-9]*$" },
-    { 0, "/lib/python3.[0-9]*$" },
+  {
+    1,
+    ends_with = { "/site-packages" },
+    patterns = { "/lib/python3.[0-9]*$" },
   },
 }
 M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
@@ -177,30 +178,33 @@ M.lsp_configs = {
     },
   },
 }
-M.null_ls = {
-  code_actions = {},
-  diagnostics = {
-    -- "chktex",
-    -- "eslint_d",
-    -- "pylint"
+M.linters = {
+  text = { "languagetool" },
+  tex = { "chktex", "lacheck", "vale" },
+  cpp = { "cppcheck" },
+  javascript = { "eslint" },
+  markdown = { "markdownlint" },
+  python = { "pylint" },
+  lua = { "luacheck" },
+}
+M.formatters = {
+  clients = {
+    "rust_analyzer",
   },
-  formatting = {
-    -- "beautysh",
-    "black",
-    "clang_format",
-    "isort",
-    "prettierd",
-    "taplo",
-    "styler",
-    latexindent = {
-      extra_args = { "-y", 'defaultIndent:"  "', "-y", "verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1" },
-    },
-    shfmt = {
-      extra_args = { "-i", "2", "-ci" },
-    },
-    stylua = {
-      extra_args = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
-    },
+  args = {
+    latexindent = { "-y", 'defaultIndent:"  "', "-y", "verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1" },
+    shfmt = { "-i", "2", "-ci" },
+    stylua = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
+  },
+  filetype = {
+    python = { "black", "isort" },
+    javascript = { { "prettierd", "prettier" } },
+    cpp = { "clang_format" },
+    toml = { "taplo" },
+    r = { "styler" },
+    tex = { "latexindent" },
+    sh = { "shfmt" },
+    lua = { "stylua" },
   },
 }
 M.treesitter = {
@@ -232,19 +236,6 @@ M.treesitter = {
     "yaml",
   },
   highlight_disable = {},
-}
-M.format_clients = {
-  "null-ls",
-  "rust_analyzer",
-}
-M.linters = {
-  text = { "languagetool" },
-  tex = { "chktex", "lacheck", "vale" },
-  cpp = { "cppcheck" },
-  javascript = { "eslint" },
-  markdown = { "markdownlint" },
-  python = { "pylint" },
-  lua = { "luacheck" },
 }
 M.brackets = {
   { "(", ")" },

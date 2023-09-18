@@ -1,6 +1,6 @@
 local F = require("user.functional")
 
-function D(...)
+local function D(...)
   local tbl = F.map({ ... }, vim.inspect)
   if #tbl ~= 0 then
     print(unpack(tbl))
@@ -9,10 +9,14 @@ function D(...)
   end
 end
 
-function DK(list)
+local function DK(list)
   if type(list) == "table" then
-    D(F.keys(list))
+    DK(F.keys(list))
   else
     print("--- object is not a table ---")
   end
 end
+
+_G.f = F
+_G.D = D
+_G.DK = DK

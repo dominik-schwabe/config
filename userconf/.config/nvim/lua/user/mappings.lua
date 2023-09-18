@@ -1,3 +1,6 @@
+local F = require("user.functional")
+local C = require("user.constants")
+
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>qa<CR>", { desc = "quit neovim" })
 vim.keymap.set({ "n", "x" }, "ö", "<CMD>noh<CR>", { desc = "clear selection" })
 vim.keymap.set("x", "<", "<gv", { desc = "decrement indentation" })
@@ -26,7 +29,12 @@ vim.keymap.set({ "n" }, "gqq", "gwl", { desc = "break line" })
 vim.keymap.set({ "n", "x" }, "<space>tw", "<CMD>set wrap!<CR>", { desc = "toggle wrap" })
 vim.keymap.set({ "n" }, "<space>ah", "<CMD>Inspect<CR>", { desc = "inspect current element" })
 vim.keymap.set("n", "<space>cw", function()
-  vim.cmd("cd %:p:h")
+  if F.contains(C.PATH_BUFTYPES, vim.bo.buftype) then
+    vim.cmd("cd %:p:h")
+    vim.notify("new cwd: " .. vim.fn.getcwd())
+  else
+    vim.notify("no file", vim.log.levels.ERROR)
+  end
 end, { desc = "change directory to current file" })
 
 local function movement(key)

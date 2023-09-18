@@ -158,9 +158,9 @@ local plugins = {
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    config = l("null-ls"),
+    config = l("conform"),
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -243,7 +243,7 @@ if not config.minimal then
       "altermo/ultimate-autopair.nvim",
       event = { "InsertEnter", "CmdlineEnter" },
       branch = "v0.6",
-      opts = { tabout = { enable = true } },
+      opts = { tabout = { enable = true }, cmap = false },
     },
     { "NvChad/nvim-colorizer.lua" },
     { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },

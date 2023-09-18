@@ -132,6 +132,7 @@ udiskie
 wireless_tools
 xbindkeys
 xclip
+xsel
 xcolor
 xdotool
 xorg

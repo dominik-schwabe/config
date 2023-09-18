@@ -1,7 +1,7 @@
 local awful = require("awful")
 
 local layouts = {
-  awful.layout.suit.tile,
+  awful.layout.suit.tile.right,
   awful.layout.suit.max,
   awful.layout.suit.tile.bottom,
   awful.layout.suit.fair,

@@ -37,6 +37,12 @@ function M.foreach(list, cb)
   end
 end
 
+function M.foreach_items(obj, cb)
+  for key, value in pairs(obj) do
+    cb(key, value)
+  end
+end
+
 function M.reduce(list, cb, default)
   local acc = default
   if acc == nil then
@@ -59,6 +65,14 @@ function M.find(list, cb)
   for _, value in ipairs(list) do
     if cb(value) then
       return value
+    end
+  end
+end
+
+function M.find_index(list, cb)
+  for index, value in ipairs(list) do
+    if cb(value) then
+      return index
     end
   end
 end
@@ -308,6 +322,38 @@ function M.threshold(thresholds, value)
     index = index + 1
   end
   return index
+end
+
+function M.set_timeout(callback, timeout)
+  local timer = vim.loop.new_timer()
+  timer:start(timeout or 0, 0, function()
+    timer:stop()
+    timer:close()
+    callback()
+  end)
+  return timer
+end
+
+function M.clear_timeout(timer)
+  if timer and not timer:is_closing() then
+    timer:stop()
+    timer:close()
+  end
+end
+
+function M.defer(func, timeout)
+  local timer = nil
+  local function deferred_func(...)
+    local args = { ... }
+    M.clear_timeout(timer)
+    timer = M.set_timeout(
+      vim.schedule_wrap(function()
+        func(unpack(args))
+      end),
+      timeout
+    )
+  end
+  return deferred_func
 end
 
 return M

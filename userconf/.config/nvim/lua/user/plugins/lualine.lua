@@ -1,4 +1,5 @@
 local F = require("user.functional")
+local U = require("user.utils")
 
 local lualine = require("lualine")
 
@@ -65,8 +66,34 @@ F.load("lsp-progress", function(lsp_progress)
   table.insert(lualine_x, 1, progress)
 end)
 
+vim.g.qf_disable_statusline = true
+
+local quickfix = {
+  sections = {
+    lualine_a = {
+      {
+        function()
+          return U.is_loclist(0) and "Location List" or "Quickfix List"
+        end,
+        color = function()
+          return U.is_loclist(0) and { bg = vim.api.nvim_get_hl_by_name("Constant", false).foreground }
+            or { bg = vim.api.nvim_get_hl_by_name("Identifier", false).foreground }
+        end,
+      },
+    },
+    lualine_b = {
+      function()
+        local title = U.quickfix_title(0)
+        return title:gsub("%%", "%%%%")
+      end,
+    },
+    lualine_z = { "location" },
+  },
+  filetypes = { "qf" },
+}
+
 local lualine_config = {
-  extensions = { "quickfix", "nvim-tree", "lazy" },
+  extensions = { quickfix, "nvim-tree", "lazy" },
   options = {
     section_separators = "",
     component_separators = { left = "|", right = "|" },

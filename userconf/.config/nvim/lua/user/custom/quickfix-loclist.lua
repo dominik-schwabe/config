@@ -1,20 +1,14 @@
 local F = require("user.functional")
+local U = require("user.utils")
 
 local function window_exists(cb)
   return function()
-    return F.any(vim.fn.getwininfo(), cb)
+    return F.any(vim.api.nvim_tabpage_list_wins(0), cb)
   end
 end
 
-local function is_quickfix(win)
-  return win.quickfix == 1 and win.loclist == 0
-end
-local function is_loclist(win)
-  return win.quickfix == 1 and win.loclist == 1
-end
-
-local quickfix_exists = window_exists(is_quickfix)
-local loclist_exists = window_exists(is_loclist)
+local quickfix_exists = window_exists(U.is_quickfix)
+local loclist_exists = window_exists(U.is_loclist)
 
 local function loclist_toggle()
   if loclist_exists() then

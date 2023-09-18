@@ -340,9 +340,33 @@ function M.quickfix(lines, title)
     vim.fn.setqflist(lines, " ")
     vim.fn.setqflist({}, "a", { title = title })
   else
-    vim.fn.setqflist({}, "r", { title = title, lines = lines })
+    vim.fn.setqflist({}, " ", { title = title, lines = lines })
   end
   vim.api.nvim_command("botright copen")
+end
+
+function M.is_quickfix(win)
+  if win == 0 then
+    win = vim.api.nvim_get_current_win()
+  end
+  local wininfo = vim.fn.getwininfo(win)[1]
+  return wininfo.quickfix == 1 and wininfo.loclist == 0
+end
+
+function M.is_loclist(win)
+  if win == 0 then
+    win = vim.api.nvim_get_current_win()
+  end
+  local wininfo = vim.fn.getwininfo(win)[1]
+  return wininfo.quickfix == 1 and wininfo.loclist == 1
+end
+
+function M.quickfix_title(win)
+  if M.is_quickfix(win) then
+    return vim.fn.getqflist({ title = 0 }).title
+  elseif M.is_loclist(win) then
+    return vim.fn.getloclist(0, { title = 0 }).title
+  end
 end
 
 return M

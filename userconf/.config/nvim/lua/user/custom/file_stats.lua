@@ -1,12 +1,6 @@
 local U = require("user.utils")
 local F = require("user.functional")
-
-local NO_FILES = {
-  "nofile",
-  "quickfix",
-  "terminal",
-  "prompt",
-}
+local C = require("user.constants")
 
 local function file_stats()
   local win = vim.api.nvim_get_current_win()
@@ -21,8 +15,14 @@ local function file_stats()
     { " ", "White" },
   }
   local path = vim.fn.expand("%:p")
-  if F.contains(NO_FILES, vim.bo[buf].buftype) or path:sub(0, 1) ~= "/" then
-    local name = vim.api.nvim_buf_get_name(buf)
+  local buftype = vim.bo[buf].buftype
+  if F.contains(C.NOPATH_BUFTYPES, buftype) or path:sub(0, 1) ~= "/" then
+    local name
+    if buftype == "quickfix" then
+      name = U.quickfix_title(win)
+    else
+      name = vim.api.nvim_buf_get_name(buf)
+    end
     sections[#sections + 1] = { name, "Orange" }
   else
     local cwd, subpath = U.split_cwd_path(path)

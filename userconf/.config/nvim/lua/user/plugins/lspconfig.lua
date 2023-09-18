@@ -1,5 +1,3 @@
-local def_opt = { silent = true }
-
 local F = require("user.functional")
 local U = require("user.utils")
 
@@ -139,15 +137,6 @@ vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>", { desc = "show loaded lsp s
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", { desc = "restart lsp server" })
 
 vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
-
-vim.keymap.set({ "n", "x" }, "<space>f", function()
-  vim.lsp.buf.format({
-    async = true,
-    filter = function(a)
-      return F.contains(config.format_clients, a.name)
-    end,
-  })
-end, U.desc(def_opt, "format buffer"))
 
 -- show settings of lspserver
 local function lsp_settings()

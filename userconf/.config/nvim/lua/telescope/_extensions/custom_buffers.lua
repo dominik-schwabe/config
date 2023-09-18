@@ -144,8 +144,12 @@ local entry_point = function(opts)
     return #entry.tail
   end) or 0)
   opts.bufnr_width = #tostring(F.max(all_bufnrs) or 0)
+  local current_buffer = vim.api.nvim_get_current_buf()
+  local active_index = F.find_index(all_bufnrs, function(buf)
+    return buf == current_buffer
+  end)
 
-  local default_selection_idx = #terminal_bufnrs + 1
+  local default_selection_index = active_index or #terminal_bufnrs + 1
 
   pickers
     .new(opts, {
@@ -156,8 +160,9 @@ local entry_point = function(opts)
       }),
       attach_mappings = attach_mappings,
       sorter = conf.generic_sorter(opts),
-      default_selection_index = default_selection_idx,
+      default_selection_index = default_selection_index,
       initial_mode = "normal",
+      scroll_strategy = "limit",
     })
     :find()
 end

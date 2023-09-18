@@ -113,7 +113,7 @@ local globalkeys = gears.table.join(
 
   bindkey("dropdown", mod, "asciicircum", dropdown_terminal_toggle, "toggle the dropdown terminal"),
   bindkey("dropdown", mod, "F1", sxiv_toggle, "toggle picture viewer"),
-  bindkey("dropdown", mod_shift, "t", todo_toggle, "toggle the todo scratchpad"),
+  bindkey("dropdown", mod_shift, "e", todo_toggle, "toggle the todo scratchpad"),
   bindkey("dropdown", mod, "adiaeresis", thunderbird_toggle, "toggle thunderbird"),
   bindkey("dropdown", mod_shift, "x", blanket_toggle, "toggle blanket"),
   bindkey("dropdown", mod_shift, "y", cmus_toggle, "toggle cmus"),
@@ -127,8 +127,8 @@ local globalkeys = gears.table.join(
   bindkey("awesome", mod_shift, "Delete", f.quit, "quit awesome"),
   bindkey("awesome", mod_shift_ctrl, "Delete", f.reboot, "reboot the system"),
 
-  bindkey("layout", mod_shift, "t", f.inc_number_of_masters, "increase the number of master clients"),
-  bindkey("layout", mod_shift, "z", f.dec_number_of_masters, "decrease the number of master clients"),
+  bindkey("layout", mod_shift, ",", f.inc_number_of_masters, "increase the number of master clients"),
+  bindkey("layout", mod_shift, ".", f.dec_number_of_masters, "decrease the number of master clients"),
 
   bindkey("client", mod, "n", f.restore_minimized, "restore minimized"),
 

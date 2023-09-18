@@ -21,7 +21,8 @@ xbindkeys
 
 [[ -f $HOME/.xmodmaprc ]] && xmodmap $HOME/.xmodmaprc
 
-if [[ -n "$(xinput | grep -i synaptics)" ]]; then
+TOUCHPAD_DEVICE=$(xinput | grep -i synaptics | sed -n 's/.*id=\([0-9]\+\).*/\1/p')
+if [[ -n "$TOUCHPAD_DEVICE" ]]; then
   synclient VertScrollDelta=-60
   synclient TapButton1=1
   synclient TapButton2=3
@@ -42,6 +43,7 @@ if [[ -n "$(xinput | grep -i synaptics)" ]]; then
   synclient CoastingFriction=20
   synclient HorizHysteresis=10
   synclient VertHysteresis=10
+  xinput --set-prop "$TOUCHPAD_DEVICE" "Synaptics Finger" 35 45 250
 fi
 
 [[ -f $HOME/.xsession_extra ]] && . $HOME/.xsession_extra

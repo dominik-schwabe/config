@@ -1,9 +1,37 @@
 local config = require("user.config")
 
-local U = require("user.utils")
 local F = require("user.functional")
+local U = require("user.utils")
 
 local curr_rg_job = nil
+
+local function parse_line(line)
+  local _, _, filename, lnum, col, text = string.find(line, [[(..-):(%d+):(%d+):(.*)]])
+  return {
+    line = line,
+    filename = filename,
+    lnum = tonumber(lnum),
+    col = tonumber(col),
+    text = text,
+  }
+end
+
+local function sort_rg_matches(lines)
+  lines = F.map(lines, parse_line)
+  table.sort(lines, function(a, b)
+    if a.filename == b.filename then
+      if a.lnum == b.lnum then
+        return a.col < b.col
+      end
+      return a.lnum < b.lnum
+    end
+    return a.filename < b.filename
+  end)
+  lines = F.map(lines, function (entry)
+    return entry.line
+  end)
+  return lines
+end
 
 local function rg(string, opt)
   opt = opt or {}
@@ -11,7 +39,6 @@ local function rg(string, opt)
   local raw = opt.raw
   local boundry = opt.boundry
   local maximum = opt.maximum
-  local here = opt.here
 
   if string == "" then
     return
@@ -21,14 +48,15 @@ local function rg(string, opt)
   end
   local args = {
     "--color=never",
-    "--ignore-case",
-    "--with-filename",
     "--no-heading",
+    "--with-filename",
+    "--ignore-case",
     "--vimgrep",
     "--max-filesize=1M",
+    "--max-columns=1000",
   }
   if raw then
-    string = vim.fn.escape(string, "^$.*+?()[]{}|")
+    string = vim.fn.escape(string, "^$.*+?()[]{}|\\-") -- don't use "--fixed-strings" because else boundary does not work
   end
   if maximum then
     maximum = maximum - 1
@@ -37,18 +65,11 @@ local function rg(string, opt)
     string = "\\b" .. string .. "\\b"
   end
   args[#args + 1] = string
-  local root
-  if here then
-    root = vim.fn.expand("%:p:h")
-    vim.cmd("cd " .. root)
-  else
-    root = vim.fn.getcwd()
-  end
   curr_rg_job = require("plenary.job"):new({
     command = "rg",
     args = args,
     interactive = false,
-    cwd = root,
+    cwd = vim.fn.getcwd(),
     maximum_results = maximum,
     on_exit = function(j, return_val)
       if return_val == 0 or return_val == nil then
@@ -64,6 +85,7 @@ local function rg(string, opt)
             vim.notify("nothing found")
           end
           if #lines ~= 0 then
+            lines = sort_rg_matches(lines)
             U.quickfix(lines, command)
           end
         end)
@@ -82,30 +104,13 @@ local function rg(string, opt)
   curr_rg_job:start()
 end
 
-local function _rg_word(here)
-  rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, here = here, maximum = config.rg_maximum_lines })
-end
-
-local function _rg_visual(here)
-  local selection = U.get_visual_selection(0)
-  if #selection == 0 then
-    vim.notify("empty selection")
-    return
+local function _rg()
+  if vim.fn.mode() == "v" then
+    local selection = U.get_visual_selection(0)
+    rg(table.concat(selection, ""), { raw = true, maximum = config.rg_maximum_lines })
+  else
+    rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, maximum = config.rg_maximum_lines })
   end
-  rg(table.concat(selection, ""), { raw = true, here = here, maximum = config.rg_maximum_lines })
 end
 
-vim.keymap.set("n", "<space>-", F.f(_rg_word, false), { desc = "search for word in files" })
-vim.keymap.set("x", "<space>-", F.f(_rg_visual, false), { desc = "search for visual selection in files" })
-vim.keymap.set("n", "<space>_", F.f(_rg_word, true), { desc = "search for word in files from current file" })
-vim.keymap.set("x", "<space>_", F.f(_rg_visual, true), { desc = "search for visual selection from current file" })
-
--- local function rg_input()
---   vim.ui.input({ prompt = "Search in files: : " }, function(query)
---     if query then
---       rg(query)
---     end
---   end)
--- end
-
--- vim.keymap.set("n", "_", rg_input)
+vim.keymap.set({ "n", "x" }, "<space>-", _rg, { desc = "search for word or selection in files" })

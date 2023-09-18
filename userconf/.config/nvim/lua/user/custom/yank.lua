@@ -72,8 +72,8 @@ end, { desc = "select previous yank from history" })
 local function bind_paste_func(key)
   vim.keymap.set("n", key, function()
     history:add_register()
-    U.feedkeys(key, "n", false)
-  end, { desc = "paste selection (" .. key .. ")" })
+    return key
+  end, { desc = "paste selection (" .. key .. ")", expr = true })
 end
 
 bind_paste_func("p")
