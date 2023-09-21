@@ -80,10 +80,8 @@ noremap <right> <CMD>wincmd L<CR>
 noremap <up> <CMD>wincmd K<CR>
 noremap <down> <CMD>wincmd J<CR>
 noremap <space>tw <CMD>set wrap!<CR>
-nnoremap <expr> h v:count ? 'h' : 'gh'
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
-nnoremap <expr> l v:count ? 'l' : 'gl'
 nnoremap db dvb
 nnoremap dB dvB
 nnoremap cb cvb
