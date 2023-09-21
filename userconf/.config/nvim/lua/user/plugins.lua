@@ -421,7 +421,7 @@ if not config.minimal then
     },
     {
       "FabijanZulj/blame.nvim",
-      keys = { { "<space>gb", "<CMD>ToggleBlame window<CR>", desc = "toggle blamer" } },
+      keys = { { "<space>tb", "<CMD>ToggleBlame window<CR>", desc = "toggle blamer" } },
     },
     { "echasnovski/mini.nvim", version = false },
   })

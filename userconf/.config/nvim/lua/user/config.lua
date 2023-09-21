@@ -111,7 +111,6 @@ M.lsp_configs = {
   --     },
   --   },
   -- },
-
   jsonls = {
     settings = {
       json = {
@@ -192,7 +191,7 @@ M.formatters = {
     "rust_analyzer",
   },
   args = {
-    latexindent = { "-y", 'defaultIndent:"  "', "-y", "verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1" },
+    latexindent = { "-y", 'defaultIndent:"  ",verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1' },
     shfmt = { "-i", "2", "-ci" },
     stylua = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
   },

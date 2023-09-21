@@ -356,4 +356,14 @@ function M.defer(func, timeout)
   return deferred_func
 end
 
+function M.cache(func)
+  local cached = nil
+  return function()
+    if not cached then
+      cached = func()
+    end
+    return cached
+  end
+end
+
 return M
