@@ -60,9 +60,13 @@ set incsearch
 set hlsearch
 set modeline
 set list
-set splitkeep=screen
 set virtualedit=block
 set breakindent
+
+if exists('splitkeep')
+  set splitkeep=screen
+endif
+
 
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
