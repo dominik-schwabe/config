@@ -86,7 +86,7 @@ alias pipu='pip install -U --upgrade-strategy eager'
 
 alias amount='udiskie'
 alias curl='curl -fsSL'
-alias top='bpytop'
+alias top='btop'
 alias otop='/usr/bin/env top'
 
 alias a='vim ~/.config/awesome/rc.lua'

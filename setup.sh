@@ -56,7 +56,7 @@ fi
 echo
 if [[ -z "$CONTAINERIZED" ]]; then
   echo "tool setup"
-  $CURRPATH/tools/install_tools.sh
+  $CURRPATH/tools/install_tools.py
 fi
 echo
 echo "folder links"

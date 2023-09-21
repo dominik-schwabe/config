@@ -34,7 +34,7 @@ run() {
 }
 
 case "$FILE" in
-  *.tar.bz2 | *.tbz2) run "tar xvjf" "$FILE" ;;
+  *.tar.bz2 | *.tbz2 | *.tbz) run "tar xvjf" "$FILE" ;;
   *.tar.xz) run "tar xvJf" "$FILE" ;;
   *.tar.gz | *.tgz) run "tar xvzf" "$FILE" ;;
   *.tar.zst) run "tar --use-compress-program=unzstd -xvf" "$FILE" ;;
