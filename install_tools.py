@@ -22,7 +22,10 @@ TOOLS = {
     "fd": "sharkdp/fd",
     "jq": "jqlang/jq",
     "zoxide": "ajeetdsouza/zoxide",
-    "btop": "aristocratos/btop",
+    "btop": {
+        "repo": "aristocratos/btop",
+        "files": {"themes": "~/.config/btop/themes"},
+    },
 }
 
 GREEN = "\x1b[32m"  # ]
@@ -60,6 +63,7 @@ def extract(file):
     if result == 2:
         raise ValueError(f"extraction failed: {stderr}")
     return result == 0
+
 
 system = [platform.system().lower()]
 machine = platform.machine().lower()
@@ -102,13 +106,28 @@ BIN_FOLDER = Path("~/bin").expanduser()
 BIN_FOLDER.mkdir(exist_ok=True)
 
 
+def tool_is_setup(name, tool_args):
+    tool_dest = BIN_FOLDER / name
+    return all(
+        Path(path).expanduser().exists()
+        for path in [tool_dest, *tool_args.get("files", {}).values()]
+    )
+
+
 def move(src, dest):
-    if dest.exists():
+    if dest.is_file():
+        if not dest.is_file():
+            raise ValueError("dest is file but src is not")
         dest.unlink()
+    elif dest.is_dir():
+        if not src.is_dir():
+            raise ValueError("dest is dir but src is not")
+        shutil.rmtree(dest)
     shutil.move(src, dest)
 
 
-def extract_tool_from_archive(name, archive_path: Path):
+def extract_tool_from_archive(name, archive_path: Path, tool_args):
+    extra_files = tool_args.get("files", {})
     parent_path = archive_path.parent
     tool_dest = BIN_FOLDER / name
     if extract(archive_path):
@@ -128,35 +147,40 @@ def extract_tool_from_archive(name, archive_path: Path):
                 break
         else:
             raise ValueError("tool not found")
+        for src_path, dest_path in extra_files.items():
+            dest_path = Path(dest_path).expanduser()
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
+            move(result_dir / src_path, dest_path)
     else:
         raise ValueError("no directory")
-    tool_dest.chmod("755")
+    tool_dest.chmod(755)
 
 
-def download_tool(name, repo):
-    url = get_archive_url(repo)
+def download_tool(name, tool_args):
+    url = get_archive_url(tool_args["repo"])
     archive_name = os.path.basename(url)
-    print(f"downloading {archive_name} ", end="", flush=True)
+    print(f"[downloading {archive_name}] ", end="", flush=True)
     with urlopen(url) as file:
         content = file.read()
     temp_dir = Path(tempfile.mkdtemp())
     archive_path = temp_dir / archive_name
     archive_path.write_bytes(content)
     try:
-        extract_tool_from_archive(name, archive_path)
+        extract_tool_from_archive(name, archive_path, tool_args)
     finally:
         shutil.rmtree(temp_dir)
 
 
-for name, repo in TOOLS.items():
+for name, tool_args in TOOLS.items():
+    if isinstance(tool_args, str):
+        tool_args = {"repo": tool_args}
     print(f"installing {name} ", end="", flush=True)
-    tool_dest = BIN_FOLDER / name
 
-    if tool_dest.exists() and not args.f:
+    if tool_is_setup(name, tool_args) and not args.f:
         print(f"{BLUE}exists{RESET}", flush=True)
     else:
         try:
-            download_tool(name, repo)
+            download_tool(name, tool_args)
             print(f"{GREEN}success{RESET}", flush=True)
         except Exception as exc:
             print(f"{RED}failure: {str(exc)}{RESET}", flush=True)
