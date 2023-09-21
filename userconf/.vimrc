@@ -75,11 +75,11 @@ noremap Q :qa<CR>
 nnoremap <silent> ö :noh<CR>
 noremap <c-g> 2<c-g>
 tnoremap <C-e> <C-\><C-n>
-noremap <left> <CMD>wincmd H<CR>
-noremap <right> <CMD>wincmd L<CR>
-noremap <up> <CMD>wincmd K<CR>
-noremap <down> <CMD>wincmd J<CR>
-noremap <space>tw <CMD>set wrap!<CR>
+noremap <left> :wincmd H<CR>
+noremap <right> :wincmd L<CR>
+noremap <up> :wincmd K<CR>
+noremap <down> :wincmd J<CR>
+noremap <space>tw :set wrap!<CR>
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 nnoremap db dvb
