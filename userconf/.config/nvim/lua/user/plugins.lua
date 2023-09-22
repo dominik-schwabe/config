@@ -270,6 +270,7 @@ if not config.minimal then
         { "nvim-treesitter/nvim-treesitter-textobjects" },
         { "nvim-treesitter/nvim-treesitter-context" },
         { "windwp/nvim-ts-autotag" },
+        { "Wansmer/treesj", config = l("treesj") },
         {
           "Wansmer/sibling-swap.nvim",
           config = function()
@@ -281,7 +282,6 @@ if not config.minimal then
         },
       },
     },
-    { "Wansmer/treesj", config = l("treesj") },
     {
       "mfussenegger/nvim-dap",
       event = "VeryLazy",

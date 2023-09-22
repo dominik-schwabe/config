@@ -7,7 +7,7 @@ local F = require("user.functional")
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
 local function disable_func(filetype, bufnr)
-  return U.is_in_big_buffer_allowlist(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
+  return U.is_big_buffer_or_in_allowlist(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
 end
 
 F.load("nvim-treesitter.configs", function(tc)
@@ -137,6 +137,16 @@ F.load("nvim-treesitter.configs", function(tc)
       enable_autocmd = false,
     },
     additional_vim_regex_highlighting = false,
+  })
+end)
+
+F.load("treesitter-context", function(treesitter_context)
+  treesitter_context.setup({
+    multiline_threshold = 1,
+    on_attach = function(bufnr)
+      local filetype = vim.bo[bufnr].filetype
+      return not disable_func(filetype, bufnr)
+    end,
   })
 end)
 

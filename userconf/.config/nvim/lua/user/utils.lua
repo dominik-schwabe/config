@@ -233,9 +233,9 @@ function M.is_big_buffer(buf, max_size)
   return M.buffer_size(buf) > max_size
 end
 
-function M.is_in_big_buffer_allowlist(buf, max_size, allowlist)
+function M.is_big_buffer_or_in_allowlist(buf, max_size, allowlist)
   allowlist = allowlist or config.big_files_allowlist
-  return M.is_big_buffer(buf, max_size) and not vim.tbl_contains(allowlist, vim.bo[buf].filetype)
+  return M.is_big_buffer(buf, max_size) and not F.contains(allowlist, vim.bo[buf].filetype)
 end
 
 function M.convert(b)

@@ -11,7 +11,9 @@ local max_buffer_size = config.max_buffer_size
 
 local cmp_options = {
   enabled = function()
-    return vim.fn.reg_recording() == "" and not F.contains({ "prompt", "nofile" }, vim.bo.buftype)
+    return vim.fn.reg_recording() == ""
+      and vim.fn.reg_executing() == ""
+      and not F.contains({ "prompt", "nofile" }, vim.bo.buftype)
   end,
   mapping = cmp.mapping.preset.insert({
     ["<C-w>"] = cmp.mapping.scroll_docs(-4),

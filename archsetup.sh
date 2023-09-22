@@ -160,7 +160,7 @@ birdtray
 brave-bin
 jmtpfs
 lain-git
-lua-inspect
+lua53-inspect
 unclutter-xfixes-git
 "
 

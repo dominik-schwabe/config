@@ -188,6 +188,7 @@ M.linters = {
 }
 M.formatters = {
   clients = {
+    "jsonls",
     "rust_analyzer",
   },
   args = {
@@ -197,6 +198,7 @@ M.formatters = {
   },
   filetype = {
     python = { "black", "isort" },
+    json = { "jq" },
     javascript = { { "prettierd", "prettier" } },
     cpp = { "clang_format" },
     toml = { "taplo" },
@@ -235,12 +237,6 @@ M.treesitter = {
     "yaml",
   },
   highlight_disable = {},
-}
-M.brackets = {
-  { "(", ")" },
-  { "[", "]" },
-  { "{", "}" },
-  { "<", ">" },
 }
 M.quotes = { '"', "'", "`" }
 M.closable_terminals = { "term://repl*", "term://toggleterm" }

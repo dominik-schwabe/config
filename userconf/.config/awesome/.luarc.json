@@ -1,14 +1,18 @@
 {
-    "Lua": {
-        "runtime.version": "Lua4",
-        "workspace.checkThirdParty": false
-    },
-    "Lua.diagnostics.globals": [
-        "root",
-        "client",
-        "screen",
-        "tag",
-        "awesome",
-        "mouse"
-    ]
+  "Lua": {
+    "runtime.version": "Lua5.3",
+    "workspace.checkThirdParty": false
+  },
+  "Lua.diagnostics.globals": [
+    "root",
+    "client",
+    "screen",
+    "tag",
+    "awesome",
+    "mouse"
+  ],
+  "Lua.workspace.library": [
+    "/usr/share/awesome/lib",
+    "/usr/share/lua/5.3/"
+  ]
 }
