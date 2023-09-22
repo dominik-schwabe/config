@@ -27,11 +27,7 @@ local function format()
   conform.format({
     async = true,
     lsp_fallback = true,
-    callback = function ()
-      D("done")
-    end,
     filter = function(client)
-      D("here")
       return F.contains(formatters.clients, client.name)
     end,
   })
