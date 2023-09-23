@@ -386,7 +386,7 @@ bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
 _yay_update() {
-    LBUFFER="yay -Syu"
+    LBUFFER="yay -Syu --noconfirm"
     RBUFFER=""
     zle accept-line
 }

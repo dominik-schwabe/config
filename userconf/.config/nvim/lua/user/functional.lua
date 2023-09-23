@@ -237,16 +237,9 @@ function M.load(src, cb, silent)
     end
     return pkg
   end
-  if config.log_level ~= nil and config.log_level ~= vim.log.levels.OFF then
-    local command = "loading '" .. src .. "' failed"
-    if config.log_level <= vim.log.levels.INFO then
-      if not silent then
-        vim.notify(command, config.log_level)
-      end
-    else
-      command = command .. "\n" .. pkg
-      vim.notify(command, vim.log.levels.WARN)
-    end
+  if not silent or (config.log_level and config.log_level < vim.log.levels.WARN) then
+    local command = "loading '" .. src .. "' failed" .. "\n" .. pkg
+    vim.notify(command, vim.log.levels.WARN)
   end
   return nil
 end

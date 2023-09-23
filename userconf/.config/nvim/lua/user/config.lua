@@ -111,6 +111,15 @@ M.lsp_configs = {
   --     },
   --   },
   -- },
+  lua_ls = {
+    settings = {
+      Lua = {
+        completion = {
+          showWord = "Disable",
+        },
+      },
+    },
+  },
   jsonls = {
     settings = {
       json = {

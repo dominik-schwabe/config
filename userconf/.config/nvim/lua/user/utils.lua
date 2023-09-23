@@ -1,4 +1,5 @@
 local F = require("user.functional")
+local C = require("user.constants")
 local config = require("user.config")
 
 local M = {}
@@ -102,7 +103,7 @@ function M.load_neighbor_modules(this_file, module_path)
   local files = vim.fn.readdir(this_folder)
   for _, file in ipairs(files) do
     if file ~= this_file_end then
-      require(module_path .. "." .. vim.fn.fnamemodify(file, ":r"))
+      F.load(module_path .. "." .. vim.fn.fnamemodify(file, ":r"), nil, false)
     end
   end
 end
@@ -115,11 +116,15 @@ function M.esc_wrap(func)
 end
 
 function M.exists(path)
-  return vim.fn.empty(vim.fn.glob(path)) == 0
+  return path and vim.fn.empty(vim.fn.glob(path)) == 0
+end
+
+function M.isdirectory(path)
+  return path and vim.fn.isdirectory(path) == 1
 end
 
 function M.list_buffers(opts)
-  opts = opts or {}
+  opts = vim.F.if_nil(opts, {})
   if opts.buftype and type(opts.buftype) == "string" then
     opts.buftype = { opts.buftype }
   end
@@ -144,12 +149,9 @@ function M.list_buffers(opts)
 end
 
 function M.last_regular_buffer()
-  local buffers = M.list_buffers({ mru = true })
+  local buffers = M.list_buffers({ mru = true, buftype = C.PATH_BUFTYPES })
   return F.find(buffers, function(bufnr)
-    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
-    return not F.contains({ "terminal", "quickfix", "nofile" }, buftype)
-      and M.buf_options_set(bufnr, { "modifiable" })
-      and M.exists(vim.api.nvim_buf_get_name(bufnr))
+    return M.exists(vim.api.nvim_buf_get_name(bufnr))
   end)
 end
 
