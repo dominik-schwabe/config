@@ -59,6 +59,13 @@ local lsp_configs = config.lsp_configs
 local ensure_installed = config.minimal and {} or config.lsp_ensure_installed
 local mason_ensure_installed = config.minimal and {} or config.mason_ensure_installed
 
+local handlers = {
+  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = config.border }),
+  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = config.border }),
+}
+
+vim.diagnostic.config({ float = { border = config.border } })
+
 F.load("mason-lspconfig", function(mason_lspconfig)
   mason_lspconfig.setup({
     ensure_installed = ensure_installed,
@@ -80,6 +87,7 @@ F.load("mason-lspconfig", function(mason_lspconfig)
   for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
     local opts = lsp_configs[server_name] or {}
     opts.capabilities = capabilities
+    opts.handlers = handlers
     opts.lsp_flags = {
       debounce_text_changes = 250,
     }

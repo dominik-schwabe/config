@@ -12,17 +12,18 @@ M.rainbow = {
 local TW = require("user.palette.tailwind")
 
 local C = {
-  base0 = "#222426",
+  base0 = "#222222",
   base1 = "#272a30",
   base2 = "#26292C",
   base3 = "#2E323C",
   base4 = "#333842",
   base5 = "#4d5154",
-  base6 = "#9ca0a4",
-  base7 = "#b1b1b1",
-  base8 = "#c3c3c1",
-  base9 = "#e3e3e1",
-  border = "#a1b5b1",
+  base6 = "#74787c",
+  base7 = "#888c90",
+  base8 = "#9ca0a4",
+  base9 = "#b1b1b1",
+  base10 = "#c3c3c3",
+  base11 = "#e3e3e3",
   brown = "#504945",
   white = "#f8f8f0",
   full_white = "#ffffff",
@@ -70,6 +71,7 @@ local C = {
   light_yellow = "#444411",
   light_white = "#444444",
   yank = "#770077",
+  term_bg = "#111111",
 }
 
 local S = {
@@ -87,13 +89,13 @@ local S = {
   annotation = C.green,
   class = C.aqua,
   constructor = C.aqua,
-  comment = C.base6,
+  comment = C.base8,
   conditional = C.conditional,
   debug = C.neon_purple,
   define = C.neon_purple,
   delimiter = C.white,
   exception = C.pink,
-  field = C.base7,
+  field = C.base9,
   float = C.purple,
   function_builtin = C.neon_purple,
   function_macro = C.neon_purple,
@@ -112,7 +114,7 @@ local S = {
   operator = C.pink,
   parameter = C.orange,
   parameter_reference = C.white,
-  property = C.base7,
+  property = C.base9,
   punctuation_delimiter = C.full_white,
   punctuation_bracket = C.white,
   punctuation_special = C.pink,
@@ -327,8 +329,8 @@ HL.navic = {
   NavicIconsEvent = { fg = S.event, bg = C.base3 },
   NavicIconsOperator = { fg = S.operator, bg = C.base3 },
   NavicIconsTypeParameter = { fg = S.parameter, bg = C.base3 },
-  -- NavicText = {fg = palette.base9, bg = palette.base3},
-  -- NavicSeparator = {fg = palette.base9, bg = palette.base3},
+  -- NavicText = {fg = palette.base10, bg = palette.base3},
+  -- NavicSeparator = {fg = palette.base10, bg = palette.base3},
 }
 
 HL.syntax = {
@@ -375,7 +377,7 @@ HL.syntax = {
   MatchParen = { bg = C.match_paren, fg = "black" },
   NonText = { fg = C.base5 },
   Normal = { bg = "none" },
-  NormalFloat = { bg = "#262626" },
+  NormalFloat = { bg = C.term_bg },
   Number = { fg = S.number },
   Operator = { fg = S.operator },
   Pmenu = { fg = C.white, bg = C.base3 },
@@ -399,7 +401,7 @@ HL.syntax = {
   SpellLocal = { fg = C.pink, undercurl = true },
   SpellRare = { fg = C.aqua, undercurl = true },
   Statement = { fg = C.pink },
-  StatusLine = { fg = C.base7, bg = C.base3 },
+  StatusLine = { fg = C.base9, bg = C.base3 },
   StatusLineNC = { fg = C.grey, bg = C.base3 },
   StorageClass = { fg = S.storageclass },
   String = { fg = S.string },
@@ -461,8 +463,8 @@ HL.nvim_tree = {
 }
 
 HL.telescope = {
-  TelescopeBorder = { fg = C.base7 },
-  TelescopeNormal = { fg = C.base9, bg = C.base0 },
+  TelescopeBorder = { fg = C.base9 },
+  TelescopeNormal = { fg = C.base11, bg = C.base0 },
   TelescopeSelection = { bg = TW.zinc_700 },
   TelescopeSelectionCaret = { fg = C.green },
   TelescopeMultiSelection = { fg = C.pink },
@@ -470,11 +472,11 @@ HL.telescope = {
 }
 
 HL.cmp = {
-  CmpDocumentation = { fg = C.white, bg = C.base1 },
-  CmpDocumentationBorder = { fg = C.white, bg = C.base1 },
-  CmpItemAbbr = { fg = C.base6 },
+  CmpItemMenu = { fg = C.base6 },
+  CmpItemAbbr = { fg = C.base8 },
   CmpItemAbbrMatch = { fg = C.white },
   CmpItemAbbrMatchFuzzy = { fg = C.white },
+  CmpItemAbbrDeprecated = { fg = C.base5, strikethrough = true },
   CmpItemKindClass = { fg = S.class },
   CmpItemKindColor = { fg = C.orange },
   CmpItemKindConstant = { fg = S.constant },
@@ -501,9 +503,8 @@ HL.cmp = {
   CmpItemKindUnit = { fg = C.orange },
   CmpItemKindValue = { fg = C.orange },
   CmpItemKindVariable = { fg = S.variable },
-  CmpItemMenu = { fg = C.base6 },
   CmpItemKindYank = { fg = C.orange },
-  CmpItemKindPath = { fg = C.base8, bold = true },
+  CmpItemKindPath = { fg = C.base10, bold = true },
   CmpItemKindTmux = { fg = C.yellow },
 }
 
@@ -538,7 +539,7 @@ HL.other = {
   MultiCursor = { link = "Visual" },
   NoHighlight = { bg = "none", fg = "none" },
   FullscreenMarker = { bg = C.beautiful_white },
-  TermBackground = { bg = "#111111" },
+  TermBackground = { bg = C.term_bg },
   EyelinerPrimary = { bg = C.base5, fg = "none" },
   EyelinerSecondary = { bg = "none", fg = "none" },
   IlluminatedWordText = { link = "CursorLine" },
@@ -560,14 +561,14 @@ HL.other = {
   Blue = { fg = C.fn },
   White = { fg = C.white },
   Grey = { fg = C.grey },
-  Progress0 = {fg = "#ffffff"},
-  Progress1 = {fg = "#ffdddd"},
-  Progress2 = {fg = "#ffbbbb"},
-  Progress3 = {fg = "#ff9999"},
-  Progress4 = {fg = "#ff7777"},
-  Progress5 = {fg = "#ff5555"},
-  Progress6 = {fg = "#ff3333"},
-  Progress7 = {fg = "#ff1111"},
+  Progress0 = { fg = "#ffffff" },
+  Progress1 = { fg = "#ffdddd" },
+  Progress2 = { fg = "#ffbbbb" },
+  Progress3 = { fg = "#ff9999" },
+  Progress4 = { fg = "#ff7777" },
+  Progress5 = { fg = "#ff5555" },
+  Progress6 = { fg = "#ff3333" },
+  Progress7 = { fg = "#ff1111" },
   BoldOrange = { fg = C.orange, bold = true },
   BoldPink = { fg = C.pink, bold = true },
   BoldYellow = { fg = C.yellow, bold = true },
@@ -587,6 +588,7 @@ HL.other = {
   qfError = { fg = C.error, bold = true },
   helpSectionDelim = { fg = C.purple, bold = true },
   helpHeader = { fg = C.link, bold = true },
+  FloatBorder = { fg = C.white },
 }
 
 function M.setup()
