@@ -120,8 +120,6 @@ local comment = with_dependencies(
   { { "JoosepAlviste/nvim-ts-context-commentstring" } }
 )
 
-vim.g.polyglot_disabled = { "autoindent", "sensible" }
-
 vim.g.VM_maps = {
   ["Select Cursor Down"] = "L",
   ["Select Cursor Up"] = "K",
@@ -196,7 +194,14 @@ local plugins = {
   },
   {
     "kevinhwang91/nvim-bqf",
-    opts = { auto_resize_height = false, func_map = { open = "o", openc = "<CR>" } },
+    opts = {
+      auto_resize_height = false,
+      func_map = { open = "o", openc = "<CR>" },
+      preview = {
+        border = config.border,
+        winblend = 0,
+      },
+    },
     ft = "qf",
   },
   -- { "smoka7/multicursors.nvim", event = "VeryLazy", opts = {}, cmd = {"MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor"}, keys = {{mode = {"v", "n"}, "<Leader>k", "<cmd>MCstart<cr>", desc = "Create a selection for selected text or word under the cursor"}} },
@@ -394,7 +399,6 @@ if not config.minimal then
       },
     },
     { "nmac427/guess-indent.nvim", opts = {} },
-    { "sheerun/vim-polyglot" },
     { "anuvyklack/hydra.nvim", lazy = true },
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>al", "<space>ö" } },
     {

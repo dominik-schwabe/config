@@ -39,7 +39,7 @@ local C = {
   dark_yellow = "#cccc00",
   gold = "#ffd700",
   yellow = "#e6db74",
-  dark_orange = "#bb5500",
+  dark_orange = "#aa5500",
   orange = "#fd971f",
   dawn = "#ff6600",
   purple = "#ae81ff",
@@ -363,6 +363,7 @@ HL.syntax = {
   ErrorMsg = { fg = S.soft_error, bold = true },
   Exception = { fg = S.exception },
   Float = { fg = S.float },
+  FloatBorder = { fg = C.link },
   FoldColumn = { fg = C.white, bg = C.black },
   Folded = { fg = C.grey, bg = C.base3 },
   Function = { fg = S.func },
@@ -464,7 +465,7 @@ HL.nvim_tree = {
 
 HL.telescope = {
   TelescopeNormal = { fg = C.base10, bg = C.base0 },
-  TelescopeSelection = { bg = TW.zinc_700 },
+  TelescopeSelection = { bg = C.base4 },
   TelescopeSelectionCaret = { fg = C.green },
   TelescopeMultiSelection = { fg = C.pink },
   TelescopeMatching = { fg = C.pink, bold = true },
@@ -588,7 +589,9 @@ HL.other = {
   qfError = { fg = C.error, bold = true },
   helpSectionDelim = { fg = C.purple, bold = true },
   helpHeader = { fg = C.link, bold = true },
-  FloatBorder = { fg = C.link },
+  TreesitterContext = { bg = C.base3 },
+  TreesitterContextLineNumber = { bg = C.base3 },
+  Selection = { bg = C.base4 },
 }
 
 function M.setup()

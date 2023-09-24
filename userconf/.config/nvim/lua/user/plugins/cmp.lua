@@ -16,7 +16,11 @@ local cmp_options = {
       and not F.contains({ "prompt", "nofile" }, vim.bo.buftype)
   end,
   window = {
-    completion = cmp.config.window.bordered({ scrolloff = 5, col_offset = -3 }),
+    completion = cmp.config.window.bordered({
+      scrolloff = 5,
+      col_offset = -3,
+      winhighlight = "FloatBorder:Normal,CursorLine:Selection,Search:None",
+    }),
     documentation = cmp.config.window.bordered({ scrolloff = 5, winhighlight = "" }),
   },
   mapping = cmp.mapping.preset.insert({
