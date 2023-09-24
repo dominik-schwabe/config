@@ -5,16 +5,7 @@ M.rg_maximum_lines = 100
 M.log_level = vim.log.levels.OFF
 M.max_buffer_size = 300 * 1024
 M.big_files_allowlist = { "help" }
-M.border = {
-  { "╭", "FloatBorder" },
-  { "─", "FloatBorder" },
-  { "╮", "FloatBorder" },
-  { "│", "FloatBorder" },
-  { "╯", "FloatBorder" },
-  { "─", "FloatBorder" },
-  { "╰", "FloatBorder" },
-  { "│", "FloatBorder" },
-}
+M.border = "rounded"
 M.icons = {
   Branch = "󰘬",
   Fix = "",

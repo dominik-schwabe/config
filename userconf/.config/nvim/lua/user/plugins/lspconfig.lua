@@ -63,6 +63,7 @@ local handlers = {
   ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = config.border }),
   ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = config.border }),
 }
+require("lspconfig.ui.windows").default_options.border = config.border
 
 vim.diagnostic.config({ float = { border = config.border } })
 

@@ -56,7 +56,7 @@ local lspconfig = with_dependencies({
   "neovim/nvim-lspconfig",
   config = l("lspconfig"),
   dependencies = {
-    { "williamboman/mason.nvim", config = true },
+    { "williamboman/mason.nvim", opts = { ui = { border = config.border } }, config = true },
     { "williamboman/mason-lspconfig.nvim" },
   },
 }, {
@@ -433,6 +433,9 @@ require("lazy").setup(plugins, {
   },
   checker = {
     enabled = false,
+  },
+  ui = {
+    border = config.border,
   },
   performance = {
     cache = {

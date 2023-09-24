@@ -321,6 +321,27 @@ function M.simplify_path(path)
   return path
 end
 
+function M.replace_root_path(path, root, replacement)
+  local home, rest_prefix = M.remove_prefix(path, M.add_slash(root))
+  if home then
+    path = replacement .. rest_prefix
+  end
+  return path
+end
+
+function M.path_replacements()
+  local paths = {
+    ["asdf://"] = vim.env.ASDF_DIR .. "/installs",
+    ["~/"] = vim.env.HOME,
+  }
+  paths = F.map_obj(paths, function(path)
+    path = vim.fs.normalize(path)
+    path = M.simplify_path(path)
+    return path
+  end)
+  return paths
+end
+
 function M.split_cwd_path(path)
   local cwd = M.add_slash(vim.loop.cwd())
   if path:sub(0, 1) ~= "/" then
@@ -329,10 +350,7 @@ function M.split_cwd_path(path)
   path = M.simplify_path(path)
   local prefix, suffix = M.remove_prefix(path, cwd)
   if prefix then
-    local home, rest_prefix = M.remove_prefix(prefix, M.add_slash(vim.env.HOME))
-    if home then
-      prefix = "~/" .. rest_prefix
-    end
+    prefix = M.replace_root_path(prefix, vim.env.HOME, "~/")
   end
   return prefix, suffix
 end

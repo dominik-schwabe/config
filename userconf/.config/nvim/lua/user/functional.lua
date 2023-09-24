@@ -37,6 +37,14 @@ function M.foreach(list, cb)
   end
 end
 
+function M.map_obj(obj, cb)
+  local new_obj = {}
+  for key, value in pairs(obj) do
+    new_obj[key] = cb(value)
+  end
+  return new_obj
+end
+
 function M.foreach_items(obj, cb)
   for key, value in pairs(obj) do
     cb(key, value)

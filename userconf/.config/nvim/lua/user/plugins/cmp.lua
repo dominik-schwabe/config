@@ -17,7 +17,7 @@ local cmp_options = {
   end,
   window = {
     completion = cmp.config.window.bordered({ scrolloff = 5, col_offset = -3 }),
-    documentation = cmp.config.window.bordered({ scrolloff = 5 }),
+    documentation = cmp.config.window.bordered({ scrolloff = 5, winhighlight = "" }),
   },
   mapping = cmp.mapping.preset.insert({
     ["<C-w>"] = cmp.mapping.scroll_docs(-4),

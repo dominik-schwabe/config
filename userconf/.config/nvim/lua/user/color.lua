@@ -463,8 +463,7 @@ HL.nvim_tree = {
 }
 
 HL.telescope = {
-  TelescopeBorder = { fg = C.base9 },
-  TelescopeNormal = { fg = C.base11, bg = C.base0 },
+  TelescopeNormal = { fg = C.base10, bg = C.base0 },
   TelescopeSelection = { bg = TW.zinc_700 },
   TelescopeSelectionCaret = { fg = C.green },
   TelescopeMultiSelection = { fg = C.pink },
@@ -513,6 +512,7 @@ HL.lsp = {
   LspReferenceText = { link = "CursorLine" },
   LspReferenceWrite = { link = "CursorLine" },
   LspSignatureActiveParameter = { fg = C.black, bg = C.orange },
+  LspInfoBorder = { fg = C.link },
 }
 
 HL.help = {
@@ -588,7 +588,7 @@ HL.other = {
   qfError = { fg = C.error, bold = true },
   helpSectionDelim = { fg = C.purple, bold = true },
   helpHeader = { fg = C.link, bold = true },
-  FloatBorder = { fg = C.white },
+  FloatBorder = { fg = C.link },
 }
 
 function M.setup()

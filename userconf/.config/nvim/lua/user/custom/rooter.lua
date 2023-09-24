@@ -108,7 +108,20 @@ local function pick_root(opts)
   history = F.map(history, function(e)
     return e[1]
   end)
-  vim.ui.select(history, { prompt = "Select cwd:" }, function(root)
+  local replacements = U.path_replacements()
+  vim.ui.select(history, {
+    prompt = "Select cwd:",
+    format_item = function(path)
+      local replaced = path
+      for replacement, root in pairs(replacements) do
+        replaced = U.replace_root_path(replaced, root, replacement)
+        if replaced ~= path then
+          return replaced
+        end
+      end
+      return replaced
+    end,
+  }, function(root)
     if root then
       set_root(root, { is_fallback = root_history[root].is_fallback })
       F.load("nvim-tree.api", function(tree_api)
