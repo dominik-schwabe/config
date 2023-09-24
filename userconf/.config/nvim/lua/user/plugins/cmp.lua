@@ -16,8 +16,8 @@ local cmp_options = {
       and not F.contains({ "prompt", "nofile" }, vim.bo.buftype)
   end,
   window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
+    completion = cmp.config.window.bordered({ scrolloff = 5, col_offset = -3 }),
+    documentation = cmp.config.window.bordered({ scrolloff = 5 }),
   },
   mapping = cmp.mapping.preset.insert({
     ["<C-w>"] = cmp.mapping.scroll_docs(-4),
