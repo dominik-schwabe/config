@@ -281,27 +281,16 @@ function History:make_completion_source()
     return setmetatable({}, self)
   end
 
-  function Source:complete(request, callback)
-    local input = request.context.cursor_before_line:sub(request.offset - 1)
+  function Source:complete(_, callback)
     local items = F.map(history:topn(10), function(entry)
+      local text = entry:text()
       return {
-        label = entry:text(true),
+        label = entry:first_line(),
+        filterText = text,
+        insertText = text,
         documentation = {
           kind = "markdown",
           value = entry:markdown_string(true),
-        },
-        textEdit = {
-          newText = entry:text(),
-          range = {
-            start = {
-              line = request.context.cursor.row,
-              character = request.context.cursor.col - #input,
-            },
-            ["end"] = {
-              line = request.context.cursor.row,
-              character = request.context.cursor.col - #input,
-            },
-          },
         },
       }
     end)

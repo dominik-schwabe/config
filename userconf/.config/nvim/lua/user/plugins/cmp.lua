@@ -34,18 +34,18 @@ local cmp_options = {
       end
     end,
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-    ["<Tab>"] = function()
+    ["<Tab>"] = function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       else
-        U.feedkeys("<Tab>", "n")
+        fallback()
       end
     end,
-    ["<S-Tab>"] = function()
+    ["<S-Tab>"] = function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       else
-        U.feedkeys("<S-Tab>", "n")
+        fallback()
       end
     end,
   }),
