@@ -61,6 +61,17 @@ local lspconfig = with_dependencies({
   },
 }, {
   { "WhoIsSethDaniel/mason-tool-installer.nvim" },
+  {
+    "azabiong/vim-highlighter",
+    keys = {
+      { "f<CR>", "<CMD>call highlighter#Command('+')<CR>", mode = "n", silent = true },
+      { "f<CR>", ":<C-U>call highlighter#Command('+x')<CR>", mode = "x", silent = true },
+      { "dh", "<CMD>call highlighter#Command('-')<CR>", mode = "n", silent = true },
+      { "dah", "<CMD>call highlighter#Command('clear')<CR>", mode = "n", silent = true },
+      { "t<CR>", "<CMD>call highlighter#Command('+%')<CR>", mode = "n", silent = true },
+      { "t<CR>", ":<C-U>call highlighter#Command('+x%')<CR>", mode = "x", silent = true },
+    },
+  },
   { "b0o/schemastore.nvim" },
   {
     "RRethy/vim-illuminate",

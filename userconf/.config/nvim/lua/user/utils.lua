@@ -330,14 +330,29 @@ function M.replace_root_path(path, root, replacement)
 end
 
 function M.path_replacements()
-  local paths = {
-    ["asdf://"] = vim.env.ASDF_DIR .. "/installs",
-    ["~/"] = vim.env.HOME,
+  local path_defs = {
+    {
+      path = vim.env.ASDF_DIR,
+      replacement = "asdf://",
+      sub = "/installs",
+    },
+    {
+      path = vim.env.HOME,
+      replacement = "~/",
+    },
   }
-  paths = F.map_obj(paths, function(path)
+  path_defs = F.filter(path_defs, function(path_def)
+    return path_def.path ~= nil
+  end)
+  local paths = {}
+  F.foreach(path_defs, function(path_def)
+    local path = path_def.path
+    if path_def.sub then
+      path = path .. path_def.sub
+    end
     path = vim.fs.normalize(path)
     path = M.simplify_path(path)
-    return path
+    paths[path_def.replacement] = path
   end)
   return paths
 end

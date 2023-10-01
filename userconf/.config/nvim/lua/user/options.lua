@@ -53,6 +53,8 @@ g.clever_f_across_no_line = 1
 g.clever_f_smart_case = 1
 g.clever_f_mark_direct = 1
 
+g.HiMapKeys = 0
+
 g.PYTHONUNBUFFERED = 1
 
 g.loaded_python_provider = 0
