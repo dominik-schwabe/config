@@ -56,14 +56,12 @@ end)
 
 local lualine_x = { "filetype" }
 F.load("lsp-progress", function(lsp_progress)
-  local progress = lsp_progress.progress
-
   vim.api.nvim_create_augroup("lualine_refresh_augroup", {})
   vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
     group = "lualine_refresh_augroup",
     callback = lualine.refresh,
   })
-  table.insert(lualine_x, 1, progress)
+  table.insert(lualine_x, 1, lsp_progress.progress)
 end)
 
 vim.g.qf_disable_statusline = true

@@ -233,15 +233,22 @@ if not config.minimal then
       dependencies = {
         { "SmiteshP/nvim-navic" },
         { "nvim-tree/nvim-web-devicons" },
-        {
-          "linrongbin16/lsp-progress.nvim",
-          dependencies = { "nvim-tree/nvim-web-devicons" },
-          opts = {
-            spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
-            spin_update_time = 100,
-            decay = 100,
-          },
-        },
+        -- {
+        --   "j-hui/fidget.nvim",
+        --   tag = "legacy",
+        --   event = "LspAttach",
+        --   opts = {},
+        -- },
+        -- {
+        --   "linrongbin16/lsp-progress.nvim",
+        --   dependencies = { "nvim-tree/nvim-web-devicons" },
+        --   commit = "eb1cb14",
+        --   opts = {
+        --     spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
+        --     spin_update_time = 100,
+        --     decay = 700,
+        --   },
+        -- },
       },
     },
     {

@@ -13,6 +13,8 @@ from urllib.request import urlopen
 parser = argparse.ArgumentParser(description="download tools")
 
 parser.add_argument("-f", action="store_true")
+parser.add_argument("--extra", action="store_true")
+parser.add_argument("--rm", default=None)
 
 args = parser.parse_args()
 
@@ -27,6 +29,31 @@ TOOLS = {
         "files": {"themes": "~/.config/btop/themes"},
     },
 }
+
+EXTRA_TOOLS = {
+    "nvim": {
+        "bin": "~/.local/bin",
+        "repo": "neovim/neovim",
+        "files": {
+            "lib/nvim": "~/.local/lib/nvim",
+            "share/nvim/runtime": "~/.local/share/nvim/runtime",
+            "share/locale": "~/.local/share/locale",
+        },
+    },
+}
+
+TOOLS = {
+    key: ({"repo": value} if isinstance(value, str) else value)
+    for key, value in TOOLS.items()
+}
+
+EXTRA_TOOLS = {
+    key: ({"repo": value} if isinstance(value, str) else value)
+    for key, value in EXTRA_TOOLS.items()
+}
+
+
+ALL_TOOLS = {**TOOLS, **EXTRA_TOOLS}
 
 GREEN = "\x1b[32m"  # ]
 BLUE = "\x1b[34m"  # ]
@@ -102,12 +129,12 @@ def get_archive_url(repo):
     return assets[0]["browser_download_url"]
 
 
-BIN_FOLDER = Path("~/bin").expanduser()
-BIN_FOLDER.mkdir(exist_ok=True)
+BIN_FOLDER = "~/bin"
 
 
 def tool_is_setup(name, tool_args):
-    tool_dest = BIN_FOLDER / name
+    bin_folder = Path(tool_args.get("bin", BIN_FOLDER)).expanduser()
+    tool_dest = bin_folder / name
     return all(
         Path(path).expanduser().exists()
         for path in [tool_dest, *tool_args.get("files", {}).values()]
@@ -129,7 +156,9 @@ def move(src, dest):
 def extract_tool_from_archive(name, archive_path: Path, tool_args):
     extra_files = tool_args.get("files", {})
     parent_path = archive_path.parent
-    tool_dest = BIN_FOLDER / name
+    bin_folder = Path(tool_args.get("bin", BIN_FOLDER)).expanduser()
+    bin_folder.mkdir(exist_ok=True)
+    tool_dest = bin_folder / name
     if extract(archive_path):
         Path(archive_path).unlink()
     files = list(parent_path.glob("*"))
@@ -171,16 +200,36 @@ def download_tool(name, tool_args):
         shutil.rmtree(temp_dir)
 
 
-for name, tool_args in TOOLS.items():
-    if isinstance(tool_args, str):
-        tool_args = {"repo": tool_args}
-    print(f"installing {name} ", end="", flush=True)
-
-    if tool_is_setup(name, tool_args) and not args.f:
-        print(f"{BLUE}exists{RESET}", flush=True)
+if args.rm is not None:
+    if not args.rm in ALL_TOOLS:
+        print(f"{RED}{args.rm} is not valid{RESET}", flush=True)
+        exit(1)
+    tool_args = ALL_TOOLS[args.rm]
+    if not tool_is_setup(args.rm, tool_args):
+        print(f"{BLUE}{args.rm} is not installed{RESET}", flush=True)
     else:
-        try:
-            download_tool(name, tool_args)
-            print(f"{GREEN}success{RESET}", flush=True)
-        except Exception as exc:
-            print(f"{RED}failure: {str(exc)}{RESET}", flush=True)
+        bin_folder = Path(tool_args.get("bin", BIN_FOLDER)).expanduser()
+        files = [bin_folder / args.rm]
+        if "files" in tool_args:
+            files.extend(tool_args["files"].values())
+        for file in files:
+            path = Path(file).expanduser()
+            if path.exists():
+                if path.is_file():
+                    path.unlink()
+                else:
+                    shutil.rmtree(path)
+        print(f"{GREEN}{args.rm} removed{RESET}", flush=True)
+else:
+    install_tools = ALL_TOOLS if args.extra else TOOLS
+    for name, tool_args in install_tools.items():
+        print(f"installing {name} ", end="", flush=True)
+
+        if tool_is_setup(name, tool_args) and not args.f:
+            print(f"{BLUE}exists{RESET}", flush=True)
+        else:
+            try:
+                download_tool(name, tool_args)
+                print(f"{GREEN}success{RESET}", flush=True)
+            except Exception as exc:
+                print(f"{RED}failure: {str(exc)}{RESET}", flush=True)
