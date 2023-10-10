@@ -2,7 +2,7 @@ local M = {}
 
 M.minimal = os.getenv("MINIMAL_CONFIG")
 M.rg_maximum_lines = 100
-M.log_level = vim.log.levels.OFF
+M.log_level = vim.log.levels.INFO
 M.max_buffer_size = 300 * 1024
 M.big_files_allowlist = { "help" }
 M.border = "rounded"

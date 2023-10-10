@@ -57,8 +57,9 @@ end)
 local lualine_x = { "filetype" }
 F.load("lsp-progress", function(lsp_progress)
   vim.api.nvim_create_augroup("lualine_refresh_augroup", {})
-  vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
+  vim.api.nvim_create_autocmd("User", {
     group = "lualine_refresh_augroup",
+    pattern = "LspProgressStatusUpdated",
     callback = lualine.refresh,
   })
   table.insert(lualine_x, 1, lsp_progress.progress)

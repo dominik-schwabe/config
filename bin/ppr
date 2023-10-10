@@ -20,7 +20,7 @@ def filter_non_printable(str):
 
 def normalize_line(line):
     line = line.expandtabs(2).strip()
-    line = unicodedata.normalize("NFC", line)
+    line = unicodedata.normalize("NFKC", line)
     line = filter_non_printable(line)
     return line
 

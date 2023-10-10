@@ -51,7 +51,7 @@ end
 local history = History:new(conf)
 
 vim.api.nvim_create_augroup("UserYankHistory", {})
-vim.api.nvim_create_autocmd("TextYankPost ", {
+vim.api.nvim_create_autocmd("TextYankPost", {
   group = "UserYankHistory",
   callback = function(args)
     history:add({

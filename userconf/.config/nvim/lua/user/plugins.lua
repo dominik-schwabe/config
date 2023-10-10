@@ -137,6 +137,7 @@ vim.g.VM_maps = {
 }
 
 local plugins = {
+  { "folke/lazy.nvim" },
   lspconfig,
   nvim_tree,
   cmp,
@@ -239,16 +240,16 @@ if not config.minimal then
         --   event = "LspAttach",
         --   opts = {},
         -- },
-        -- {
-        --   "linrongbin16/lsp-progress.nvim",
-        --   dependencies = { "nvim-tree/nvim-web-devicons" },
-        --   commit = "eb1cb14",
-        --   opts = {
-        --     spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
-        --     spin_update_time = 100,
-        --     decay = 700,
-        --   },
-        -- },
+        {
+          "linrongbin16/lsp-progress.nvim",
+          dependencies = { "nvim-tree/nvim-web-devicons" },
+          commit = "eb1cb14",
+          opts = {
+            spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
+            spin_update_time = 100,
+            decay = 700,
+          },
+        },
       },
     },
     {

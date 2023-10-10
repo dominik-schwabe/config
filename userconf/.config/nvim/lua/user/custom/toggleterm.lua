@@ -56,7 +56,7 @@ local function toggle_term(opts)
   opts = opts or {}
   local height = opts.height or 10
   local bottom = vim.F.if_nil(opts.bottom, true)
-  if term_win ~= nil and vim.api.nvim_win_is_valid(term_win) then
+  if term_win ~= nil and vim.api.nvim_win_is_valid(term_win) and vim.api.nvim_win_get_buf(term_win) == term_buf then
     if not opts.only_open then
       local is_bottom = F.all({ "left", "bottom", "right" }, function(direction)
         return not has_neighbour(term_win, direction)
