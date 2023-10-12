@@ -17,7 +17,7 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition, U.desc(map_opt, "go to definit
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, U.desc(map_opt, "go to type definition"))
 vim.keymap.set("n", "gr", vim.lsp.buf.references, U.desc(map_opt, "go to reference"))
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, U.desc(map_opt, "go to implementation"))
-vim.keymap.set({ "n", "i" }, "<C-_>", vim.lsp.buf.signature_help, U.desc(map_opt, "show signature help"))
+vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, U.desc(map_opt, "show signature help"))
 vim.keymap.set("n", "gh", vim.lsp.buf.hover, U.desc(map_opt, "show hover info"))
 vim.keymap.set("n", "gm", vim.diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
 vim.keymap.set("n", "gn", vim.diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))

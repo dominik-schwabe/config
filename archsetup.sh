@@ -86,6 +86,7 @@ zsh
 "
 
 GRAPHIC="
+i3lock
 brightnessctl
 accountsservice
 alacritty

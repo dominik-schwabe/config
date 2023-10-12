@@ -512,7 +512,7 @@ HL.lsp = {
   LspReferenceRead = { link = "CursorLine" },
   LspReferenceText = { link = "CursorLine" },
   LspReferenceWrite = { link = "CursorLine" },
-  LspSignatureActiveParameter = { fg = C.black, bg = C.orange },
+  LspSignatureActiveParameter = { fg = C.orange, bold=true, underline=true},
   LspInfoBorder = { fg = C.link },
 }
 

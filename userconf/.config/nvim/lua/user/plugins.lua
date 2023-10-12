@@ -246,7 +246,7 @@ if not config.minimal then
           commit = "eb1cb14",
           opts = {
             spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
-            spin_update_time = 100,
+            spin_update_time = 20,
             decay = 700,
           },
         },
@@ -383,14 +383,14 @@ if not config.minimal then
           end,
           desc = "Flash Treesitter",
         },
-        {
-          "<C-s>",
-          mode = { "x" },
-          function()
-            require("flash").treesitter()
-          end,
-          desc = "Flash Treesitter",
-        },
+        -- {
+        --   "<C-s>",
+        --   mode = { "x" },
+        --   function()
+        --     require("flash").treesitter()
+        --   end,
+        --   desc = "Flash Treesitter",
+        -- },
         {
           "r",
           mode = "o",
@@ -407,14 +407,14 @@ if not config.minimal then
           end,
           desc = "Treesitter Search",
         },
-        {
-          "<c-s>",
-          mode = { "c" },
-          function()
-            require("flash").toggle()
-          end,
-          desc = "Toggle Flash Search",
-        },
+        -- {
+        --   "<c-s>",
+        --   mode = { "c" },
+        --   function()
+        --     require("flash").toggle()
+        --   end,
+        --   desc = "Toggle Flash Search",
+        -- },
       },
     },
     { "nmac427/guess-indent.nvim", opts = {} },

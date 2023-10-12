@@ -99,6 +99,7 @@ alias work='track work'
 
 alias whatismyip='curl ifconfig.me'
 alias whereami='curl https://ipinfo.io/loc'
+alias firmware='fwupdmgr'
 
 alias sst='(sinfo -S "%n" -O nodehost:12,memory:8,freemem:10,allocmem:11,cpusstate:15,socketcorethread:10 \
 && echo && sinfo -S "%n" -O nodehost:12,statecompact:7,gres:30,gresused:50,reason:35 \
