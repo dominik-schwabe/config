@@ -159,7 +159,7 @@ local globalkeys = gears.table.join(
   bindkey("audio", mod, "less", f.audio_prev, "play the previous track"),
   bindkey("audio", mod, "y", f.toggle_audio_program, "start/stop the audio"),
   bindkey("audio", mod, "x", f.audio_next, "play the next track"),
-  bindkey("misc", {}, "XF86Launch1", f.toggle_lidswitch, "toggle preventing supending"),
+  bindkey("misc", {}, "XF86Display", f.toggle_lidswitch, "toggle preventing supending"),
   bindkey("tag", mod, "odiaeresis", f.to_webbrowser_screen, "focus the webbrowser screen"),
   bindkey("launcher", mod_shift, "Return", f.open_filebrowser, "open the graphical file browser"),
   bindkey("screenshot", {}, "Print", f.screen_screenshot, "take a screenshot of the entire screen"),

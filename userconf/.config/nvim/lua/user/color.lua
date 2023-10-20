@@ -393,7 +393,7 @@ HL.syntax = {
   Repeat = { fg = S.loop, bold = true },
   Search = { fg = C.base2, bg = C.gold },
   SignColumn = { bg = "none" },
-  Special = { fg = C.white },
+  Special = { fg = C.aqua },
   SpecialChar = { fg = C.pink },
   SpecialComment = { fg = C.grey },
   SpecialKey = { fg = C.pink },

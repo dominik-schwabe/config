@@ -71,6 +71,9 @@ local lspconfig = with_dependencies({
       { "t<CR>", "<CMD>call highlighter#Command('+%')<CR>", mode = "n", silent = true },
       { "t<CR>", ":<C-U>call highlighter#Command('+x%')<CR>", mode = "x", silent = true },
     },
+    init = function()
+      vim.g.HiMapKeys = 0
+    end,
   },
   { "b0o/schemastore.nvim" },
   {
@@ -262,7 +265,15 @@ if not config.minimal then
         { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x", desc = "decrement additional" },
       },
     },
-    { "rhysd/clever-f.vim", event = "VeryLazy" },
+    {
+      "rhysd/clever-f.vim",
+      event = "VeryLazy",
+      init = function()
+        vim.g.clever_f_across_no_line = 1
+        vim.g.clever_f_smart_case = 1
+        vim.g.clever_f_mark_direct = 1
+      end,
+    },
     {
       "altermo/ultimate-autopair.nvim",
       event = { "InsertEnter", "CmdlineEnter" },
@@ -321,7 +332,23 @@ if not config.minimal then
       opts = { width = 40 },
       keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
-    { "lervag/vimtex", config = l("vimtex"), ft = "tex" },
+    {
+      "lervag/vimtex",
+      init = function()
+        vim.g.vimtex_imaps_enabled = 0
+        vim.g.vimtex_complete_enabled = 0
+        vim.g.vimtex_matchparen_enabled = 0
+        vim.g.vimtex_syntax_enabled = 0
+        vim.g.vimtex_syntax_conceal_disable = 1
+        vim.g.vimtex_view_method = "zathura"
+        vim.g.vimtex_view_skim_reading_bar = 1
+        vim.g.vimtex_quickfix_mode = 2
+        vim.g.vimtex_quickfix_open_on_warning = 0
+        vim.g.tex_flavor = "latex"
+        vim.g.tex_conceal = "abdmg"
+      end,
+      ft = "tex",
+    },
     {
       "folke/todo-comments.nvim",
       event = { "BufReadPost", "BufNewFile" },
@@ -422,9 +449,12 @@ if not config.minimal then
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>al", "<space>ö" } },
     {
       "iamcco/markdown-preview.nvim",
-      event = { "BufReadPost", "BufNewFile" },
-      build = "cd app && npm install",
-      config = function()
+      cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+      ft = { "markdown" },
+      build = function()
+        vim.fn["mkdp#util#install"]()
+      end,
+      init = function()
         vim.cmd([[
           function OpenMarkdown(url)
             echo a:url

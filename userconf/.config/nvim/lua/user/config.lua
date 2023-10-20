@@ -216,6 +216,7 @@ M.formatters = {
     tex = { "latexindent" },
     sh = { "shfmt" },
     lua = { "stylua" },
+    xml = { "xmlformat" },
   },
 }
 M.treesitter = {
