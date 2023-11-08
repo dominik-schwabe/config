@@ -92,7 +92,7 @@ stream_application() {
 }
 
 default_application() {
-  mimetype=$(xdg-mime query filetype "$ARGUMENT" 2>/dev/null)
+  mimetype=$(file -b --mime-type "$ARGUMENT")
   case "$?" in
     0)
       default_app=$(xdg-mime query default "$mimetype")

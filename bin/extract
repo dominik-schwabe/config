@@ -22,7 +22,7 @@ elif ! [ -f "$FILE" ]; then
 fi
 
 extract_lzma() {
-  echo "lzma -d <'$1\' >'${1%.lzma}'"
+  echo "lzma -d <'$1' >'${1%.lzma}'"
   lzma -d <"$1" >"${1%.lzma}"
 }
 
@@ -44,8 +44,8 @@ case "$FILE" in
   *.gz) run "gunzip" "$FILE" ;;
   *.tar) run "tar xvf" "$FILE" ;;
   *.zip) run "unzip" "$FILE" ;;
-  *.xz) run "unxz" "$FILE" ;;
-  *.lzma) extract_lzma "$FILE" ;;
+  *.xz | *.lzma) run "unxz" "$FILE" ;;
+  # *.lzma) extract_lzma "$FILE" ;;
   *.Z) run "uncompress" "$FILE" ;;
   *.7z) run "7z x" "$FILE" ;;
   *)

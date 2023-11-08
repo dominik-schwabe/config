@@ -128,6 +128,7 @@ F.load("nvim-treesitter.configs", function(tc)
     autotag = {
       enable = true,
       disable = disable_func,
+      enable_close_on_slash = false,
     },
     ensure_installed = ensure_installed,
     ignore_install = treesitter_config.ignore_install,

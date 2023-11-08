@@ -24,6 +24,7 @@ TOOLS = {
     "fd": "sharkdp/fd",
     "jq": "jqlang/jq",
     "zoxide": "ajeetdsouza/zoxide",
+    "ytfzf": {"repo": "pystardust/ytfzf", "source": "tarball"},
     "btop": {
         "repo": "aristocratos/btop",
         "files": {"themes": "~/.config/btop/themes"},
@@ -85,7 +86,7 @@ exit 0
 """
 
 
-def extract(file):
+def extract(file: Path):
     result, _, stderr = run_script(EXTRACT_SCRIPT, file)
     if result == 2:
         raise ValueError(f"extraction failed: {stderr}")
@@ -116,17 +117,21 @@ def score_asset(asset):
     return score
 
 
-def get_archive_url(repo):
+def get_archive_url(repo, args):
+    source = args.get("source", "assets")
     url = f"https://api.github.com/repos/{repo}/releases"
     with urlopen(url) as file:
         j = json.loads(file.read().decode("utf-8"))
-
     release = next(x for x in j if not x["prerelease"])
-    assets = release["assets"]
-    for asset in assets:
-        asset["score"] = score_asset(asset)
-    assets = sorted(assets, key=lambda x: x["score"], reverse=True)
-    return assets[0]["browser_download_url"]
+    if source == "assets":
+        assets = release["assets"]
+        for asset in assets:
+            asset["score"] = score_asset(asset)
+        best_asset = max(assets, key=lambda x: x["score"])
+        return best_asset["browser_download_url"]
+    elif source == "tarball":
+        return release["tarball_url"]
+    raise ValueError(f"unknown source: {source}")
 
 
 BIN_FOLDER = "~/bin"
@@ -159,6 +164,12 @@ def extract_tool_from_archive(name, archive_path: Path, tool_args):
     bin_folder = Path(tool_args.get("bin", BIN_FOLDER)).expanduser()
     bin_folder.mkdir(exist_ok=True)
     tool_dest = bin_folder / name
+    source = tool_args.get("source")
+    if source == "tarball":
+        if not archive_path.name.endswith(".tar"):
+            new_path = archive_path.parent / (archive_path.name + ".tar")
+            archive_path.rename(new_path)
+            archive_path = new_path
     if extract(archive_path):
         Path(archive_path).unlink()
     files = list(parent_path.glob("*"))
@@ -182,11 +193,11 @@ def extract_tool_from_archive(name, archive_path: Path, tool_args):
             move(result_dir / src_path, dest_path)
     else:
         raise ValueError("no directory")
-    tool_dest.chmod(755)
+    tool_dest.chmod(0o755)
 
 
 def download_tool(name, tool_args):
-    url = get_archive_url(tool_args["repo"])
+    url = get_archive_url(tool_args["repo"], tool_args)
     archive_name = os.path.basename(url)
     print(f"[downloading {archive_name}] ", end="", flush=True)
     with urlopen(url) as file:
