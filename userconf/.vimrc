@@ -38,6 +38,7 @@ set softtabstop=2
 set autoindent
 set smartindent
 set expandtab
+set shiftround
 
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
@@ -67,7 +68,6 @@ if exists('splitkeep')
   set splitkeep=screen
 endif
 
-
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 noremap gw :write<CR>
@@ -79,7 +79,8 @@ noremap <left> :wincmd H<CR>
 noremap <right> :wincmd L<CR>
 noremap <up> :wincmd K<CR>
 noremap <down> :wincmd J<CR>
-noremap <space>tw :set wrap!<CR>
+noremap <space>tw :set wrap!\|echo 'wrap ='&wrap<CR>
+noremap <space>tp :set paste!\|echo 'paste ='&paste<CR>
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 nnoremap db dvb
@@ -94,6 +95,8 @@ noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
+noremap < <<
+noremap > >>
 vnoremap < <gv
 vnoremap > >gv
 
@@ -120,7 +123,6 @@ function MyResize(dir)
 endfunction
 nnoremap <silent> + :call MyResize(0)<CR>
 nnoremap <silent> - :call MyResize(1)<CR>
-
 
 " --------------------------
 " --- vim-sensible start ---
