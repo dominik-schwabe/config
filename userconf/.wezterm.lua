@@ -12,6 +12,7 @@ config.scrollback_lines = 10000
 config.enable_tab_bar = false
 config.disable_default_key_bindings = true
 config.adjust_window_size_when_changing_font_size = false
+config.bold_brightens_ansi_colors = "No"
 config.window_padding = {
   left = 6,
   right = 6,

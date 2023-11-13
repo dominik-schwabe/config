@@ -10,19 +10,49 @@ shopt -s checkwinsize
 shopt -s cmdhist
 shopt -u autocd
 
-RESET="\[\017\]"
-RED="\[\033[1;31m\]"
-GREEN="\[\033[1;32m\]"
-ORANGE="\[\033[0;33m\]"
-BLUE="\[\033[1;34m\]"
-WHITE="\[\033[00m\]"
-BOLDWHITE="\[\033[1;37m\]"
+RESET="\033[0m"
 
-PROMPT_COLOR=$GREEN
-[[ "$UID" == "0" ]] && PROMPT_COLOR=$RED
-[[ "$SSH_TTY" ]] && PROMPT_COLOR=$ORANGE
+BLACK='\033[0;30m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
 
-export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${ORANGE}$(date +'%H:%M') ${RED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>> ${RESET}"
+BBLACK='\033[1;30m'
+BRED='\033[1;31m'
+BGREEN='\033[1;32m'
+BYELLOW='\033[1;33m'
+BBLUE='\033[1;34m'
+BPURPLE='\033[1;35m'
+BCYAN='\033[1;36m'
+BWHITE='\033[1;37m'
+
+IBLACK='\033[0;90m'
+IRED='\033[0;91m'
+IGREEN='\033[0;92m'
+IYELLOW='\033[0;93m'
+IBLUE='\033[0;94m'
+IPURPLE='\033[0;95m'
+ICYAN='\033[0;96m'
+IWHITE='\033[0;97m'
+
+BIBLACK='\033[1;90m'
+BIRED='\033[1;91m'
+BIGREEN='\033[1;92m'
+BIYELLOW='\033[1;93m'
+BIBLUE='\033[1;94m'
+BIPURPLE='\033[1;95m'
+BICYAN='\033[1;96m'
+BIWHITE='\033[1;97m'
+
+PROMPT_COLOR=$BGREEN
+[[ "$UID" == "0" ]] && PROMPT_COLOR=$BRED
+[[ "$SSH_TTY" ]] && PROMPT_COLOR=$BYELLOW
+
+export PS1="${PROMPT_COLOR}\u${BWHITE}@${PROMPT_COLOR}\h ${BBLUE}\w ${IYELLOW}$(date +'%H:%M') ${BRED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>>${RESET} "
 
 # zoxide
 if command -v zoxide &>/dev/null; then
