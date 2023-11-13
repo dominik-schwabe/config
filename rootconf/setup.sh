@@ -3,8 +3,8 @@
 main() {
   CURRPATH="$(pwd)/$(dirname $0)"
 
-  GREEN="\e[32m"
-  RED="\e[31m"
+  GREEN="\e[1;32m"
+  RED="\e[1;31m"
   RESET="\e[0m"
 
   cpconfig() {

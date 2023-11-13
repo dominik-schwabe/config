@@ -11,18 +11,18 @@ shopt -s cmdhist
 shopt -u autocd
 
 RESET="\[\017\]"
-RED="\[\033[31;1m\]"
-GREEN="\[\033[32;1m\]"
-YELLOW="\[\033[33;1m\]"
-BLUE="\[\033[34;1m\]"
+RED="\[\033[1;31m\]"
+GREEN="\[\033[1;32m\]"
+ORANGE="\[\033[0;33m\]"
+BLUE="\[\033[1;34m\]"
 WHITE="\[\033[00m\]"
-BOLDWHITE="\[\033[37;1m\]"
+BOLDWHITE="\[\033[1;37m\]"
 
 PROMPT_COLOR=$GREEN
 [[ "$UID" == "0" ]] && PROMPT_COLOR=$RED
-[[ "$SSH_TTY" ]] && PROMPT_COLOR=$YELLOW
+[[ "$SSH_TTY" ]] && PROMPT_COLOR=$ORANGE
 
-export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${YELLOW}$(date +'%H:%M') ${RED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>> ${RESET}"
+export PS1="${PROMPT_COLOR}\u${BOLDWHITE}@${PROMPT_COLOR}\h ${BLUE}\w ${ORANGE}$(date +'%H:%M') ${RED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>> ${RESET}"
 
 # zoxide
 if command -v zoxide &>/dev/null; then

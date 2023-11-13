@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-GREEN="\e[32m"
-BLUE="\e[34m"
-RED="\e[31m"
+GREEN="\e[1;32m"
+BLUE="\e[1;34m"
+RED="\e[1;31m"
 RESET="\e[0m"
 
 SYMLINK="-sr"

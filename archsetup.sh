@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-RED="\e[31m"
-GREEN="\e[32m"
-ORANGE="\e[33m"
-BLUE="\e[34m"
-VIOLET="\e[35m"
+RED="\e[1;31m"
+GREEN="\e[1;32m"
+ORANGE="\e[0;33m"
+BLUE="\e[1;34m"
+VIOLET="\e[1;35m"
 RESET="\e[0m"
 
 grep -q vmx /proc/cpuinfo && UCODE="intel-ucode"
