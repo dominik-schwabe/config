@@ -1,7 +1,7 @@
 local home = os.getenv("HOME")
 local editor = os.getenv("EDITOR") or "vim"
 local webbrowser = os.getenv("BROWSER") or "brave"
-local terminal = "alacritty"
+local terminal = "wezterm"
 
 local M = {
   debug = true,

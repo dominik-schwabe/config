@@ -89,7 +89,7 @@ GRAPHIC="
 i3lock
 brightnessctl
 accountsservice
-alacritty
+wezterm
 android-file-transfer
 arandr
 arc-gtk-theme

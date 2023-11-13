@@ -14,8 +14,8 @@ local mod_shift = { vars.modkey, "Shift" }
 local mod_shift_ctrl = { vars.modkey, "Control", "Shift" }
 
 local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -qq -t ___dropdownterminal___ -o font.size=11.5 -e bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
-  name = "___dropdownterminal___",
+  cmd = "wezterm --config 'font_size=11.5' start --class ___dropdownterminal___ -- bash -c 'export IS_DROPDOWN=true; tmux -L dropdown attach -t dropdown &>/dev/null || tmux -L dropdown new-session -t dropdown'",
+  class = "___dropdownterminal___",
   border_width = 3,
   overlap = false,
   width = 0.85,
@@ -27,10 +27,10 @@ local dropdown_terminal_toggle = dropdown.build_toggle_dropdown({
 })
 
 local todo_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___todo___ -o font.size=10 -e nvim -u NONE "
+  cmd = "wezterm --config 'font_size=10' start --class ___todo___ -- nvim -u NONE "
     .. vars.home
     .. '/.todo --cmd "set clipboard=unnamedplus mouse= nowrap tabstop=2 shiftwidth=2 softtabstop=2 autoindent smartindent expandtab ignorecase" --cmd "au TextChanged * write" --cmd "au VimLeavePre * write" --cmd "noremap Q :xa<cr> | noremap ö :noh<cr>"',
-  name = "___todo___",
+  class = "___todo___",
   border_width = 3,
   overlap = false,
   width = 0.85,
@@ -42,8 +42,8 @@ local todo_toggle = dropdown.build_toggle_dropdown({
 })
 
 local cmus_toggle = dropdown.build_toggle_dropdown({
-  cmd = "alacritty -t ___musicplayer___ -e cmus",
-  name = "___musicplayer___",
+  cmd = "wezterm start --class ___musicplayer___ -- cmus",
+  class = "___musicplayer___",
   border_width = 3,
   overlap = false,
   width = 0.9,
