@@ -95,14 +95,25 @@ def extract(file: Path):
 
 system = [platform.system().lower()]
 machine = platform.machine().lower()
+arch, _ = platform.architecture()
 if machine == "x86_64":
     architecture = ["x86_64", "amd64", "linux64"]
     specific_architecture = []
 else:
     architecture = ["arm"]
     specific_architecture = re.findall("armv[0-9]", machine)
+antiwords = []
+if arch == "32bit":
+    antiwords.append("64")
+else:
+    antiwords.append("32")
 archive = ["tar"]
 compiler = ["gnu", "musl"]
+
+print(specific_architecture)
+print(architecture)
+print(archive)
+print(compiler)
 
 aspects = [system, specific_architecture, architecture, compiler, archive]
 
@@ -110,6 +121,8 @@ aspects = [system, specific_architecture, architecture, compiler, archive]
 def score_asset(asset):
     name = asset["name"].lower()
     discount = 0.8
+    if any(word in name for word in antiwords):
+        return -1
     score = sum(
         any(word in name for word in aspect) * discount**i
         for i, aspect in enumerate(aspects)
@@ -127,6 +140,7 @@ def get_archive_url(repo, args):
         assets = release["assets"]
         for asset in assets:
             asset["score"] = score_asset(asset)
+            print(asset["name"], asset["score"])
         best_asset = max(assets, key=lambda x: x["score"])
         return best_asset["browser_download_url"]
     elif source == "tarball":
