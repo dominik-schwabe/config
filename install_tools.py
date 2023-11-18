@@ -110,11 +110,6 @@ else:
 archive = ["tar"]
 compiler = ["gnu", "musl"]
 
-print(specific_architecture)
-print(architecture)
-print(archive)
-print(compiler)
-
 aspects = [system, specific_architecture, architecture, compiler, archive]
 
 
@@ -140,7 +135,6 @@ def get_archive_url(repo, args):
         assets = release["assets"]
         for asset in assets:
             asset["score"] = score_asset(asset)
-            print(asset["name"], asset["score"])
         best_asset = max(assets, key=lambda x: x["score"])
         return best_asset["browser_download_url"]
     elif source == "tarball":
