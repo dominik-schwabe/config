@@ -37,6 +37,16 @@ function M.foreach(list, cb)
   end
 end
 
+function M.flat(list_of_lists)
+  local result = {}
+  for _, list in ipairs(list_of_lists) do
+    for _, e in ipairs(list) do
+      result[#result + 1] = e
+    end
+  end
+  return result
+end
+
 function M.map_obj(obj, cb)
   local new_obj = {}
   for key, value in pairs(obj) do

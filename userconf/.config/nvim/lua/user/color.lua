@@ -378,7 +378,7 @@ HL.syntax = {
   Macro = { fg = S.constant_macro },
   MatchParen = { bg = C.match_paren, fg = "black" },
   NonText = { fg = C.base5 },
-  Normal = { bg = "none" },
+  Normal = { bg = C.term_bg },
   NormalFloat = { bg = C.term_bg },
   Number = { fg = S.number },
   Operator = { fg = S.operator },
@@ -513,7 +513,7 @@ HL.lsp = {
   LspReferenceRead = { link = "CursorLine" },
   LspReferenceText = { link = "CursorLine" },
   LspReferenceWrite = { link = "CursorLine" },
-  LspSignatureActiveParameter = { fg = C.orange, bold=true, underline=true},
+  LspSignatureActiveParameter = { fg = C.orange, bold = true, underline = true },
   LspInfoBorder = { fg = C.link },
 }
 
@@ -582,6 +582,10 @@ HL.other = {
   BoldWhite = { fg = C.white, bold = true },
   BoldGrey = { fg = C.grey, bold = true },
   YankHighlight = { bg = C.yank },
+  FidgetNormal = { bg = C.base3, fg = "#00ff00", bold = true },
+  FidgetDone = { fg = C.base6 },
+  FidgetGroup = { fg = C.white },
+  FidgetProgress = { fg = "#ffff00" },
   FlashLabel = { fg = C.neon_purple, bg = C.black, bold = true },
   qfFileName = { fg = C.directory, bold = true },
   qfSeparatorLeft = { fg = C.yellow },

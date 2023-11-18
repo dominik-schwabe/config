@@ -7,6 +7,8 @@ if wezterm.config_builder then
 end
 
 config.font = wezterm.font("Fira Code Nerd Font")
+config.harfbuzz_features = { 'calt=0' }
+config.warn_about_missing_glyphs = false
 config.font_size = 10.5
 config.scrollback_lines = 10000
 config.enable_tab_bar = false

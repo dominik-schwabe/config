@@ -220,6 +220,7 @@ local plugins = {
     ft = "qf",
   },
   -- { "smoka7/multicursors.nvim", event = "VeryLazy", opts = {}, cmd = {"MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor"}, keys = {{mode = {"v", "n"}, "<Leader>k", "<cmd>MCstart<cr>", desc = "Create a selection for selected text or word under the cursor"}} },
+  -- { "brenton-leighton/multiple-cursors.nvim" },
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
   { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
 }
@@ -237,22 +238,38 @@ if not config.minimal then
       dependencies = {
         { "SmiteshP/nvim-navic" },
         { "nvim-tree/nvim-web-devicons" },
-        -- {
-        --   "j-hui/fidget.nvim",
-        --   tag = "legacy",
-        --   event = "LspAttach",
-        --   opts = {},
-        -- },
         {
-          "linrongbin16/lsp-progress.nvim",
-          dependencies = { "nvim-tree/nvim-web-devicons" },
-          commit = "eb1cb14",
+          "j-hui/fidget.nvim",
+          event = "LspAttach",
           opts = {
-            spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
-            spin_update_time = 20,
-            decay = 700,
+            progress = {
+              suppress_on_insert = false,
+              ignore_done_already = true,
+              display = {
+                done_style = "FidgetDone",
+                group_style = "FidgetGroup",
+                progress_style = "FidgetProgress",
+              },
+            },
+            notification = {
+              window = {
+                normal_hl = "FidgetNormal",
+                winblend = 100,
+                x_padding = 0,
+                align_bottom = false,
+              },
+            },
           },
         },
+        -- {
+        --   "linrongbin16/lsp-progress.nvim",
+        --   dependencies = { "nvim-tree/nvim-web-devicons" },
+        --   opts = {
+        --     spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
+        --     spin_update_time = 20,
+        --     decay = 700,
+        --   },
+        -- },
       },
     },
     {

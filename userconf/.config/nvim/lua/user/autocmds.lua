@@ -1,6 +1,38 @@
 local F = require("user.functional")
+local U = require("user.utils")
 
 vim.api.nvim_create_augroup("user", {})
+
+local function set_window_options(opts)
+  local bufnr = opts.buf
+  local buftype = vim.bo[bufnr].buftype
+  F.foreach(U.list_normal_windows(), function(win)
+    if vim.api.nvim_win_get_buf(win) == bufnr then
+      local wo = vim.wo[win]
+      if buftype == "terminal" then
+        wo.spell = false
+        wo.number = false
+        wo.relativenumber = false
+        wo.signcolumn = "no"
+      else
+        wo.number = true
+        wo.scrolloff = 8
+        if buftype == "quickfix" then
+          wo.signcolumn = "yes"
+          wo.relativenumber = false
+        else
+          wo.signcolumn = "yes:2"
+          wo.relativenumber = true
+        end
+      end
+    end
+  end)
+end
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = "UserTerm",
+  callback = set_window_options,
+})
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
   group = "user",
@@ -23,6 +55,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
       bo.modifiable = false
     end
     vim.opt.formatoptions:remove({ "c", "r", "o" })
+    set_window_options(opts)
   end,
 })
 

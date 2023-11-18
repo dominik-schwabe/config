@@ -17,6 +17,10 @@ local function stopinsert()
   vim.cmd("stopinsert")
 end
 
+local function is_regular_buffer(buf)
+  return F.contains(C.PATH_BUFTYPES, vim.bo[buf].buftype) or U.is_dummy_buffer(buf)
+end
+
 local function delete_buffer(prompt_bufnr)
   local current_picker = action_state.get_current_picker(prompt_bufnr)
   current_picker:delete_selection(function(selection)
@@ -25,31 +29,35 @@ local function delete_buffer(prompt_bufnr)
       vim.notify("can not delete buffer with unsaved changes", vim.log.levels.WARN)
       return false
     end
-    local windows = F.filter(vim.api.nvim_list_wins(), function(win)
-      return not U.is_floating(win)
+    local windows = U.list_normal_windows()
+    local regular_windows = F.filter(windows, function(win)
+      local win_buf = vim.api.nvim_win_get_buf(win)
+      return is_regular_buffer(win_buf)
     end)
     local close_wins = F.filter(windows, function(win)
       return vim.api.nvim_win_get_buf(win) == selection.bufnr
     end)
-    if #close_wins >= #windows then
+    local left_buffers = F.filter(U.list_buffers({ mru = true }), function(buf)
+      return buf ~= selection.bufnr
+    end)
+    if (is_regular_buffer(selection.bufnr) and #close_wins >= #regular_windows) or #close_wins >= #windows then
       local keep_win = close_wins[1]
       close_wins = F.slice(close_wins, 2)
-      local left_buffers = F.filter(U.list_buffers({ mru = true }), function(buf)
-        return buf ~= selection.bufnr
-      end)
       if #left_buffers > 0 then
         vim.api.nvim_win_set_buf(keep_win, left_buffers[1])
       else
-        local dummy_buf = vim.api.nvim_create_buf(false, true)
+        local dummy_buf = U.get_dummy_buffer()
         vim.api.nvim_win_set_buf(keep_win, dummy_buf)
-        actions.close(prompt_bufnr)
       end
+    end
+    if #left_buffers == 0 then
+      actions.close(prompt_bufnr)
     end
     F.foreach(close_wins, function(win)
       vim.api.nvim_win_close(win, false)
     end)
-    local force = vim.api.nvim_buf_get_option(selection.bufnr, "buftype") == "terminal"
-    local ok = pcall(vim.api.nvim_buf_delete, selection.bufnr, { force = force })
+    local buftype = vim.bo[selection.bufnr].buftype
+    local ok = pcall(vim.api.nvim_buf_delete, selection.bufnr, { force = (buftype == "terminal") })
     return ok
   end)
 end

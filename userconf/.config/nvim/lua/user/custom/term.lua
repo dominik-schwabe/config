@@ -1,6 +1,3 @@
-local U = require("user.utils")
-local F = require("user.functional")
-
 local config = require("user.config")
 
 local function leave_term()
@@ -18,35 +15,10 @@ local function delete_term(args)
   end)
 end
 
-local function set_term_options(args)
-  local bufnr = args.buf
-  local buftype = vim.bo[bufnr].buftype
-  F.foreach(vim.api.nvim_list_wins(), function(win)
-    if vim.api.nvim_win_get_buf(win) == bufnr then
-      local wo = vim.wo[win]
-      if buftype == "terminal" then
-        wo.spell = false
-        wo.number = false
-        wo.relativenumber = false
-        wo.signcolumn = "no"
-      elseif buftype == "quickfix" then
-        wo.signcolumn = "yes"
-        wo.number = true
-        wo.relativenumber = false
-      elseif buftype ~= "nofile" and U.exists(vim.api.nvim_buf_get_name(bufnr)) then
-        wo.signcolumn = "yes:2"
-        wo.number = true
-        wo.relativenumber = true
-      end
-    end
-  end)
-end
-
 vim.api.nvim_create_augroup("UserTerm", {})
 vim.api.nvim_create_autocmd("TermOpen", {
   group = "UserTerm",
   callback = function(args)
-    set_term_options(args)
     vim.api.nvim_create_autocmd("BufEnter", {
       group = "UserTerm",
       buffer = args.buf,
@@ -64,11 +36,6 @@ vim.api.nvim_create_autocmd("TermEnter", {
   callback = function()
     vim.b.term_was_normal = false
   end,
-})
-
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  group = "UserTerm",
-  callback = set_term_options,
 })
 
 vim.api.nvim_create_autocmd("TermClose", {

@@ -452,8 +452,25 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
 
     get_python_version() { _get_asdf_versions_prompt python || echo system }
     get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
-    PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
+    COMMON_PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b '
+    ACTIVE_PROMPT=${COMMON_PROMPT}$'\e[5m>>>\e[0m '
+    DONE_PROMPT=${COMMON_PROMPT}'>>> '
+    PROMPT=$DONE_PROMPT
     RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
+
+    # show-inactive-prompt() {
+    #   PROMPT=$DONE_PROMPT
+    #   zle reset-prompt
+    #   PROMPT=$ACTIVE_PROMPT
+    # }
+
+    # change-prompt-and-accept-line() {
+    #   show-inactive-prompt
+    #   zle accept-line
+    # }
+
+    # zle -N change-prompt-and-accept-line
+    # bindkey "^M" change-prompt-and-accept-line
 
     load_plugin() {
         local URL=$1

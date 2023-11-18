@@ -1,7 +1,7 @@
 local M = {}
 
 function M.convert(b)
-  local num_digits = math.max(math.floor(math.log10(b)), 0)
+  local num_digits = math.max(math.floor(math.log(b, 10)), 0)
   local lower_power = num_digits - num_digits % 3
   local order = lower_power / 3
   local unit
@@ -33,7 +33,7 @@ function M.convert(b)
     color = "#FF0000"
   end
   return {
-    num = b / math.pow(1000, order),
+    num = b / (1000 ^ order),
     unit = unit,
     color = color,
   }

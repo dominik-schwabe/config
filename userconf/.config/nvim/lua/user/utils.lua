@@ -129,7 +129,9 @@ function M.list_buffers(opts)
     opts.buftype = { opts.buftype }
   end
   local buffers = vim.api.nvim_list_bufs()
-  buffers = F.filter(buffers, vim.api.nvim_buf_is_loaded)
+  if not opts.unloaded then
+    buffers = F.filter(buffers, vim.api.nvim_buf_is_loaded)
+  end
   if not opts.unlisted then
     buffers = F.filter(buffers, function(buf)
       return vim.fn.buflisted(buf) == 1
@@ -357,6 +359,17 @@ function M.path_replacements()
   return paths
 end
 
+function M.buffer_path(buf)
+  local path = vim.api.nvim_buf_get_name(buf)
+  path = vim.fs.normalize(path)
+  path = M.simplify_path(path)
+  return path
+end
+
+function M.cwd()
+  return M.add_slash(vim.loop.cwd())
+end
+
 function M.split_cwd_path(path)
   local cwd = M.add_slash(vim.loop.cwd())
   if path:sub(0, 1) ~= "/" then
@@ -402,6 +415,28 @@ function M.quickfix_title(win)
   elseif M.is_loclist(win) then
     return vim.fn.getloclist(0, { title = 0 }).title
   end
+end
+
+function M.is_dummy_buffer(buf)
+  return vim.b[buf].is_dummy
+end
+
+function M.get_dummy_buffer()
+  local buf = F.filter(vim.api.nvim_list_bufs(), M.is_dummy_buffer)[1]
+  if not buf then
+    buf = vim.api.nvim_create_buf(false, true)
+    vim.bo[buf].bufhidden = "wipe"
+    vim.bo[buf].modifiable = false
+    vim.bo[buf].readonly = true
+    vim.b[buf].is_dummy = true
+  end
+  return buf
+end
+
+function M.list_normal_windows()
+  return F.filter(vim.api.nvim_list_wins(), function(win)
+    return not M.is_floating(win)
+  end)
 end
 
 return M

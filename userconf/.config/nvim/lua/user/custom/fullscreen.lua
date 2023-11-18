@@ -1,10 +1,7 @@
 local F = require("user.functional")
+local U = require("user.utils")
 
 local FS
-
-local function is_floating(win)
-  return vim.api.nvim_win_get_config(win).zindex ~= nil
-end
 
 local function resize_fullscreen()
   local uis = vim.api.nvim_list_uis()[1]
@@ -34,21 +31,16 @@ local function fullscreen_off()
   end
   FS = nil
 end
-local function get_normal_windows()
-  return F.filter(vim.api.nvim_list_wins(), function(win)
-    return not is_floating(win)
-  end)
-end
 
 local function is_consistent()
   if
     not vim.api.nvim_win_is_valid(FS.win)
     or vim.api.nvim_win_get_buf(FS.win) ~= FS.buf
-    or not is_floating(vim.api.nvim_get_current_win())
+    or not U.is_floating(vim.api.nvim_get_current_win())
   then
     return false
   end
-  local normal_windows = get_normal_windows()
+  local normal_windows = U.list_normal_windows()
   if #normal_windows ~= FS.state_len then
     return false
   end
@@ -61,13 +53,13 @@ local function fullscreen_toggle()
   if FS ~= nil then
     fullscreen_off()
   else
-    if #get_normal_windows() <= 1 then
+    if #U.list_normal_windows() <= 1 then
       vim.notify("already one window")
       return
     end
     local topline = vim.fn.line("w0")
     local origin_win = vim.api.nvim_get_current_win()
-    if is_floating(origin_win) then
+    if U.is_floating(origin_win) then
       vim.notify("can not fullscreen floating window")
       return
     end
@@ -88,7 +80,7 @@ local function fullscreen_toggle()
       local row, col = unpack(vim.api.nvim_win_get_cursor(origin_win))
       vim.api.nvim_win_set_cursor(win, { row, col })
       local state = {}
-      local normal_windows = get_normal_windows()
+      local normal_windows = U.list_normal_windows()
       F.foreach(normal_windows, function(window)
         state[window] = vim.api.nvim_win_get_buf(window)
       end)
