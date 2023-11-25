@@ -15,6 +15,7 @@ opt.virtualedit = "block"
 opt.splitkeep = "screen"
 opt.listchars = "extends:>,precedes:<,nbsp:␣,tab:>-,trail:_,nbsp:+"
 opt.list = true
+opt.jumpoptions = "stack"
 
 opt.number = true
 opt.relativenumber = true

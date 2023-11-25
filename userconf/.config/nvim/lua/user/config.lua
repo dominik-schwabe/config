@@ -163,6 +163,7 @@ M.lsp_configs = {
       python = {
         analysis = {
           diagnosticMode = "openFilesOnly",
+          -- diagnosticMode = "workspace",
           useLibraryCodeForTypes = true,
           typeCheckingMode = "off",
         },

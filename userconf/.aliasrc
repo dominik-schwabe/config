@@ -52,7 +52,7 @@ alias dsp='sudo systemctl stop docker.socket'
 
 alias assh='eval $(keychain --eval --quiet id_rsa)'
 
-alias ssh='TERM=xterm-256color ssh -CA'
+alias ssh='ssh -CA'
 alias xssh='ssh -XCA'
 alias lssh='ssh -Aq -L 3000:localhost:3000 -L 5000:localhost:5000'
 
