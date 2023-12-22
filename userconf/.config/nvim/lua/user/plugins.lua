@@ -131,7 +131,14 @@ local nvim_tree = with_dependencies({
 
 local comment = with_dependencies(
   { "numToStr/Comment.nvim", config = l("comment"), keys = { { "gc", mode = { "n", "x" } } } },
-  { { "JoosepAlviste/nvim-ts-context-commentstring" } }
+  {
+    {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+      init = function()
+        vim.g.skip_ts_context_commentstring_module = true
+      end,
+    },
+  }
 )
 
 vim.g.VM_maps = {
@@ -256,7 +263,7 @@ if not config.minimal then
                 normal_hl = "FidgetNormal",
                 winblend = 100,
                 x_padding = 0,
-                align_bottom = false,
+                align = "top",
               },
             },
           },

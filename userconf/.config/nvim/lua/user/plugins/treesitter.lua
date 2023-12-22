@@ -132,11 +132,6 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     ensure_installed = ensure_installed,
     ignore_install = treesitter_config.ignore_install,
-    context_commentstring = {
-      enable = true,
-      disable = disable_func,
-      enable_autocmd = false,
-    },
     additional_vim_regex_highlighting = false,
   })
 end)

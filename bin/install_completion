@@ -54,13 +54,15 @@ download_completion youtube-dl      https://raw.githubusercontent.com/dominik-sc
 download_completion cht.sh          https://cheat.sh/:zsh
 download_completion c               https://cheat.sh/:zsh
 download_completion docker-compose  https://raw.githubusercontent.com/docker/compose/1.26.0/contrib/completion/zsh/_docker-compose
-download_completion rg              https://raw.githubusercontent.com/BurntSushi/ripgrep/master/complete/_rg
 
 command_completion kubectl          kubectl completion zsh
 command_completion pdm              pdm completion
 command_completion pipenv           _PIPENV_COMPLETE=zsh_source pipenv
 command_completion rustup           rustup completions zsh rustup
 command_completion cargo            cat '"$(rustc --print sysroot)"/share/zsh/site-functions/_cargo'
+command_completion rg               rg --generate complete-zsh
+command_completion ruff             ruff generate-shell-completion zsh
+
 
 TMP=$(mktemp -d)
 git clone https://github.com/zsh-users/zsh-completions $TMP

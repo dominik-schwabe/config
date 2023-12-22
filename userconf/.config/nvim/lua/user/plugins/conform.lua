@@ -8,7 +8,7 @@ local formatters = require("user.config").formatters
 local function extend_args(formatter, args)
   local format_definition = require("conform.formatters." .. formatter)
   local extra = {
-    args = util.extend_args(format_definition.args, args, { append = true }),
+    args = util.extend_args(format_definition.args, args, { append = false }),
   }
   if format_definition.range_args then
     extra.range_args = util.extend_args(format_definition.range_args, args, { append = true })

@@ -95,8 +95,8 @@ M.rooter = {
     patterns = { "/lib/python3.[0-9]*$" },
   },
 }
-M.lsp_ensure_installed = { "pyright", "tsserver", "jsonls", "bashls" }
-M.mason_ensure_installed = { "black", "isort", "prettierd" }
+M.lsp_ensure_installed = { "pyright", "ruff_lsp", "tsserver", "jsonls", "bashls" }
+M.mason_ensure_installed = { "ruff", "prettierd" }
 M.lsp_configs = {
   -- latex = {
   --   settings = {
@@ -203,12 +203,13 @@ M.formatters = {
     "rust_analyzer",
   },
   args = {
+    ruff_fix = { "--unfixable", "F401,F841" },
     latexindent = { "-y", 'defaultIndent:"  ",verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1' },
     shfmt = { "-i", "2", "-ci" },
     stylua = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
   },
   filetype = {
-    python = { "black", "isort" },
+    python = { "ruff_fix", "ruff_format" },
     json = { "jq" },
     html = { { "prettierd", "prettier" } },
     javascript = { { "prettierd", "prettier" } },
@@ -256,7 +257,6 @@ M.treesitter = {
   },
   highlight_disable = {},
 }
-M.quotes = { '"', "'", "`" }
 M.closable_terminals = { "term://repl*", "term://toggleterm" }
 
 return M
