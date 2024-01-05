@@ -6,6 +6,7 @@ local config = require("user.config")
 require("user.completions")
 
 local cmp = require("cmp")
+local compare = require("cmp.config.compare")
 
 local max_buffer_size = config.max_buffer_size
 
@@ -15,6 +16,20 @@ local cmp_options = {
       and vim.fn.reg_executing() == ""
       and not F.contains({ "prompt", "nofile" }, vim.bo.buftype)
   end,
+  sorting = {
+    comparators = {
+      compare.offset,
+      compare.exact,
+      -- compare.scopes,
+      compare.score,
+      compare.recently_used,
+      compare.locality,
+      compare.kind,
+      compare.sort_text,
+      compare.length,
+      compare.order,
+    },
+  },
   window = {
     completion = cmp.config.window.bordered({
       scrolloff = 5,
@@ -50,15 +65,12 @@ local cmp_options = {
     end,
   }),
   sources = cmp.config.sources({
+    { name = "crates" },
     { name = "luasnip", max_item_count = 3 },
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
-    {
-      name = "yank_history",
-      max_item_count = 3,
-    },
+    { name = "yank_history", max_item_count = 3 },
     { name = "async_path" },
-    { name = "crates" },
     {
       name = "buffer",
       option = {
@@ -123,6 +135,7 @@ F.load("lspkind", function(lspkind)
     rg = "[rg]",
     copilot = "[cp]",
     yank_history = "[yank]",
+    crates = "[crates]",
   }
 
   local cmp_hl = {

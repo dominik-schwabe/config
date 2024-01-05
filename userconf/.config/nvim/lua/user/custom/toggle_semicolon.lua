@@ -12,5 +12,7 @@ local function toggle_end_char(char)
   vim.api.nvim_buf_set_text(0, row - 1, 0, row - 1, #curr_line, { next_line })
 end
 
-vim.keymap.set("n", ",", F.f(toggle_end_char, ","), { desc = "toggle ',' at end of line" })
-vim.keymap.set("n", ";", F.f(toggle_end_char, ";"), { desc = "toggle ';' at end of line" })
+local toggle_end_char_cb = F.f(toggle_end_char)
+
+vim.keymap.set("n", ",", toggle_end_char_cb(","), { desc = "toggle ',' at end of line" })
+vim.keymap.set("n", ";", toggle_end_char_cb(";"), { desc = "toggle ';' at end of line" })

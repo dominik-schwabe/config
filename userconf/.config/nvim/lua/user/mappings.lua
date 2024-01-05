@@ -2,7 +2,7 @@ local F = require("user.functional")
 local C = require("user.constants")
 
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>qa<CR>", { desc = "quit neovim" })
-vim.keymap.set({ "n", "x" }, "ö", "<CMD>noh<CR>", { desc = "clear selection" })
+vim.keymap.set({ "n", "x" }, "ö", "<CMD>noh|diffupdate<CR>", { desc = "clear selection" })
 vim.keymap.set("x", "<", "<gv", { desc = "decrement indentation" })
 vim.keymap.set("x", ">", ">gv", { desc = "increment indentation" })
 vim.keymap.set({ "n", "x", "t" }, "<C-h>", "<CMD>wincmd h<CR>", { desc = "move to left window" })

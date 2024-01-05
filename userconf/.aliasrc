@@ -75,7 +75,7 @@ alias install_treesitter='cargo install tree-sitter-cli'
 alias install_trans='curl --create-dirs -sfLo ~/bin/trans https://git.io/trans && chmod 755 ~/bin/trans'
 alias install_chtsh='curl --create-dirs -sfLo ~/bin/cht.sh https://cht.sh/:cht.sh && chmod 755 ~/bin/cht.sh'
 alias install_tldr='npm install -g tldr'
-alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path"
+alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain stable"
 alias te='translate de:en'
 alias td='translate en:de'
 alias e='extract'
@@ -111,6 +111,7 @@ alias sk='scancel --user dschwabe'
 alias sdel='srun --pty --mem=8G enroot remove'
 
 alias pw-reload='systemctl restart --user wireplumber.service pipewire.service pipewire-pulse.service'
+alias load-esp32='. /opt/esp-idf/export.sh'
 
 #command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 

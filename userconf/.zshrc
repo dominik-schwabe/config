@@ -395,7 +395,8 @@ zle -N _yay_update
 bindkey -M vicmd '^[[15~' _yay_update
 bindkey -M viins '^[[15~' _yay_update
 
-fpath=($HOME/.zsh-completions $fpath)
+fpath+=~/.zfunc
+fpath+=~/.zsh-completions
 
 if autoload -Uz compinit bashcompinit; then
     compinit -d $HOME/.zcompdump2

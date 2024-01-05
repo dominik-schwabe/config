@@ -28,5 +28,7 @@ local function smart_resize(dir)
   end
 end
 
-vim.keymap.set({ "n", "x" }, "+", F.f(smart_resize, 0), { desc = "increase size of current buffer" })
-vim.keymap.set({ "n", "x" }, "-", F.f(smart_resize, 1), { desc = "decrease size of current buffer" })
+local smart_resize_cb = F.f(smart_resize)
+
+vim.keymap.set({ "n", "x" }, "+", smart_resize_cb(0), { desc = "increase size of current buffer" })
+vim.keymap.set({ "n", "x" }, "-", smart_resize_cb(1), { desc = "decrease size of current buffer" })

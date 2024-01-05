@@ -52,7 +52,9 @@ local function jump(direction, opt)
   end
 end
 
-vim.keymap.set("n", "<C-i>", F.f(jump, 1), { expr = true, desc = "jump to next jumpmark" })
-vim.keymap.set("n", "<C-o>", F.f(jump, -1), { expr = true, desc = "jump to previous jumpmark" })
-vim.keymap.set("n", "<space>i", F.f(jump, 1, { buffer = true }), { expr = true, desc = "jump to next file" })
-vim.keymap.set("n", "<space>o", F.f(jump, -1, { buffer = true }), { expr = true, desc = "jump to previous file" })
+local jump_cb = F.f(jump)
+
+vim.keymap.set("n", "<C-i>", jump_cb(1), { expr = true, desc = "jump to next jumpmark" })
+vim.keymap.set("n", "<C-o>", jump_cb(-1), { expr = true, desc = "jump to previous jumpmark" })
+vim.keymap.set("n", "<space>i", jump_cb(1), { buffer = true }, { expr = true, desc = "jump to next file" })
+vim.keymap.set("n", "<space>o", jump_cb(-1), { buffer = true }, { expr = true, desc = "jump to previous file" })

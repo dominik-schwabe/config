@@ -2,6 +2,28 @@ local F = require("user.functional")
 
 local config = require("user.config")
 
+local function desc(opts, description)
+  return F.extend(opts, { desc = description })
+end
+
+local function bind_select_action(entries, opts)
+  opts = opts or {}
+  local buffer = opts.buffer
+  local on_select = opts.on_select
+  local format_item = opts.format_item
+  local map_opts = { noremap = true, silent = true, buffer = buffer }
+  vim.keymap.set({ "n", "x" }, "<space>ch", function()
+    vim.ui.select(entries, {
+      prompt = "actions:",
+      format_item = format_item,
+    }, function(choice)
+      if choice then
+        on_select(choice)
+      end
+    end)
+  end, desc(map_opts, "select actions"))
+end
+
 local illuminate_denylist = {
   "",
   "NvimTree",
@@ -86,8 +108,54 @@ local lspconfig = with_dependencies({
       })
     end,
   },
-  { "simrat39/rust-tools.nvim" },
-  -- { "folke/neodev.nvim" },
+  {
+    "mrcjkb/rustaceanvim",
+    ft = { "rust" },
+    init = function()
+      vim.g.rustaceanvim = {
+        tools = {},
+        server = {
+          on_attach = function(client, bufnr)
+            local map_opts = { noremap = true, silent = true, buffer = bufnr }
+            local rcb = F.f(vim.cmd.RustLsp)
+            vim.keymap.set("n", "gh", rcb({ "hover", "actions" }), desc(map_opts, "rust hover actions"))
+            bind_select_action({
+              { "debuggables" },
+              { "debuggables", "last" },
+              { "runnables" },
+              { "runnables", "last" },
+              { "explainError" },
+              { "expandMacro" },
+              { "rebuildProcMacros" },
+              { "openCargo" },
+              { "view", "hir" },
+              { "view", "mir" },
+            }, {
+              buffer = bufnr,
+              on_select = function(choice)
+                vim.cmd.RustLsp(F.copy(choice))
+              end,
+              format_item = function(item)
+                return table.concat(item, " ")
+              end,
+            })
+          end,
+          settings = function(project_root)
+            local ra = require("rustaceanvim.config.server")
+            local default_settings = require("rustaceanvim.config.internal").server.default_settings
+            local settings = ra.load_rust_analyzer_settings(project_root, {
+              settings_file_pattern = "rust-analyzer.json",
+            })
+            if settings == default_settings then
+              settings = { ["rust-analyzer"] = config.lsp_configs.rust_analyzer or {} }
+            end
+            return settings
+          end,
+        },
+        dap = {},
+      }
+    end,
+  },
 })
 
 local luasnip = {
@@ -95,6 +163,7 @@ local luasnip = {
   config = l("luasnip"),
   dependencies = {
     { "rafamadriz/friendly-snippets" },
+    -- { "mireq/luasnip-snippets" },
   },
 }
 
@@ -305,7 +374,46 @@ if not config.minimal then
       opts = { tabout = { enable = true }, cmap = false },
     },
     { "NvChad/nvim-colorizer.lua" },
-    { "saecki/crates.nvim", config = true, event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" } },
+    {
+      "saecki/crates.nvim",
+      config = true,
+      opts = {
+        popup = {
+          border = config.border,
+          hide_on_select = true,
+          show_version_date = true,
+          max_height = 25,
+        },
+        src = {
+          cmp = {
+            enabled = true,
+          },
+        },
+        on_attach = function(bufnr)
+          bind_select_action({
+            { "Dependencies", "show_dependencies_popup", true },
+            { "Update Crate", "update_crate", false },
+            { "Update All", "update_all_crates", false },
+            { "Upgrade Crate", "upgrade_crate", false },
+            { "Upgrade All", "upgrade_all_crates", false },
+            { "Features", "show_features_popup", true },
+          }, {
+            buffer = bufnr,
+            on_select = function(choice)
+              local crates = require("crates")
+              crates[choice[2]]()
+              if choice[3] then
+                crates.focus_popup()
+              end
+            end,
+            format_item = function(item)
+              return item[1]
+            end,
+          })
+        end,
+      },
+      event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" },
+    },
     {
       "nvim-treesitter/nvim-treesitter",
       build = ":TSUpdate",

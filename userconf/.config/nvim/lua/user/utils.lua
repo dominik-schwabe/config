@@ -222,12 +222,6 @@ function M.input(prompt, callback)
   end)
 end
 
-function M.desc(opts, description)
-  opts = vim.deepcopy(opts)
-  opts.desc = description
-  return opts
-end
-
 function M.buffer_size(buf)
   return math.max(vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf)) - 1, 0)
 end

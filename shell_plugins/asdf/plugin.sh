@@ -32,7 +32,7 @@ if [[ -z "$__ASDF_INIT" && "$ASDF_ENABLED" = "true" ]]; then
   fi
 
   [[ -z "$ASDF_DIR" ]] && export ASDF_DIR="$HOME/.asdf"
-  if [[ -e $ASDF_DIR ]] || git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR; then
+  if [[ -e $ASDF_DIR ]] || git clone --depth=1 https://github.com/asdf-vm/asdf.git $ASDF_DIR; then
     PATH="$ASDF_DIR/bin:$PATH"
     for L in $ASDF_ENABLED_PLUGINS; do
       __setup_asdf $L

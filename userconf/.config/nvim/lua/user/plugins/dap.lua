@@ -5,7 +5,7 @@ local dap = require("dap")
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "dap-repl",
-  callback = F.f(require("dap.ext.autocompl").attach),
+  callback = F.f(require("dap.ext.autocompl").attach)(),
 })
 
 F.load("dap-python", function(dap_python)
@@ -38,6 +38,8 @@ local dapui = F.load("dapui", function(dapui)
   end
 end)
 
+local map_opts = { silent = true, nowait = true }
+
 F.load("hydra", function(Hydra)
   local dap_hydra = Hydra({
     hint = hydra_hint,
@@ -53,18 +55,18 @@ F.load("hydra", function(Hydra)
     mode = { "n", "x" },
     body = "<F21>",
     heads = {
-      { "+", dap.step_into, { silent = true, nowait = true } },
-      { "-", dap.step_out, { silent = true, nowait = true } },
-      { "<F5>", dap.toggle_breakpoint, { silent = true, nowait = true } },
-      { "<F17>", F.f(U.input, "Breakpoint condition: ", dap.set_breakpoint), { silent = true, nowait = true } },
-      { "<F6>", dap.continue, { silent = true, nowait = true } },
-      { "<F8>", dap.run_to_cursor, { silent = true, nowait = true } },
-      { "<F9>", dap.step_over, { silent = true, nowait = true } },
-      { "<F11>", dap.run_last, { silent = true, nowait = true } },
-      { "gx", dap.clear_breakpoints, { silent = true, nowait = true } },
-      { "<F7>", dap.list_breakpoints, { silent = true, nowait = true } },
-      { "<F10>", require("dap.ui.widgets").hover, { silent = true, nowait = true } },
-      { "<F12>", dap.terminate, { silent = true, nowait = true } },
+      { "+", dap.step_into, map_opts },
+      { "-", dap.step_out, map_opts },
+      { "<F5>", dap.toggle_breakpoint, map_opts },
+      { "<F17>", F.f(U.input)("Breakpoint condition: ", dap.set_breakpoint), map_opts },
+      { "<F6>", dap.continue, map_opts },
+      { "<F8>", dap.run_to_cursor, map_opts },
+      { "<F9>", dap.step_over, map_opts },
+      { "<F11>", dap.run_last, map_opts },
+      { "gx", dap.clear_breakpoints, map_opts },
+      { "<F7>", dap.list_breakpoints, map_opts },
+      { "<F10>", require("dap.ui.widgets").hover, map_opts },
+      { "<F12>", dap.terminate, map_opts },
       { "<F21>", nil, { exit = true, nowait = true } },
     },
   })

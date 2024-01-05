@@ -42,13 +42,13 @@ vim.api.nvim_create_autocmd("FileType", {
         F.chain(mark_jump, send.paragraph),
         { buffer = args.buf, desc = "send paragraph" }
       )
-      vim.keymap.set("n", "<CR>", F.f(send.line_next), { buffer = args.buf, desc = "send line and go next" })
-      vim.keymap.set("x", "<CR>", F.f(send.visual), { buffer = args.buf, desc = "send visual" })
-      vim.keymap.set("n", "=", F.f(send.line), { buffer = args.buf, desc = "send line and stay" })
-      vim.keymap.set("n", "<leader><space>", F.f(send.buffer), { buffer = args.buf, desc = "send buffer" })
-      vim.keymap.set("n", "<leader>m", F.f(send.motion), { buffer = args.buf, desc = "send motion" })
-      vim.keymap.set("n", "<leader>M", F.f(send.newline), { buffer = args.buf, desc = "send newline" })
-      vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl), { buffer = args.buf, desc = "toggle repl" })
+      vim.keymap.set("n", "<CR>", F.f(send.line_next)(), { buffer = args.buf, desc = "send line and go next" })
+      vim.keymap.set("x", "<CR>", F.f(send.visual)(), { buffer = args.buf, desc = "send visual" })
+      vim.keymap.set("n", "=", F.f(send.line)(), { buffer = args.buf, desc = "send line and stay" })
+      vim.keymap.set("n", "<leader><space>", F.f(send.buffer)(), { buffer = args.buf, desc = "send buffer" })
+      vim.keymap.set("n", "<leader>m", F.f(send.motion)(), { buffer = args.buf, desc = "send motion" })
+      vim.keymap.set("n", "<leader>M", F.f(send.newline)(), { buffer = args.buf, desc = "send newline" })
+      vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl)(), { buffer = args.buf, desc = "toggle repl" })
     end
   end,
 })

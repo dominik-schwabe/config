@@ -1,6 +1,9 @@
+local F = require("user.functional")
+
 local M = {}
 
 M.minimal = os.getenv("MINIMAL_CONFIG")
+M.log_load = vim.log.levels.OFF
 M.rg_maximum_lines = 100
 M.log_level = vim.log.levels.INFO
 M.max_buffer_size = 300 * 1024
@@ -36,6 +39,8 @@ M.icons = {
   Object = "󰅩",
   Key = "󰌋",
   Null = "󰟢",
+  Version = "󰜢",
+  Feature = "󰜢",
   Event = "",
   Operator = "󰆕",
   TypeParameter = "󰊄",
@@ -112,6 +117,18 @@ M.lsp_configs = {
   --     },
   --   },
   -- },
+  rust_analyzer = {
+    lspconfig_ignore = true,
+    checkOnSave = { command = "clippy" },
+    hover = {
+      actions = {
+        gotoTypeDef = { enable = false },
+        implementations = { enable = false },
+        references = { enable = false },
+      },
+    },
+    completion = { postfix = { enable = false } },
+  },
   lua_ls = {
     settings = {
       Lua = {
@@ -130,11 +147,18 @@ M.lsp_configs = {
             url = os.getenv("HOME") .. "/experiments/schema-test.json",
           },
         },
-        validate = {
-          enable = true,
-        },
+        validate = { enable = true },
       },
     },
+    lspconfig_hook = function(opts)
+      F.load("schemastore", function(schemastore)
+        opts = require("user.utils").tbl_merge(opts, {
+          settings = {
+            json = { schemas = schemastore.json.schemas() },
+          },
+        })
+      end)
+    end,
   },
   ltex = {
     filetypes = { "tex" },
@@ -200,7 +224,7 @@ M.linters = {
 M.formatters = {
   clients = {
     "jsonls",
-    "rust_analyzer",
+    "rust-analyzer",
   },
   args = {
     ruff_fix = { "--unfixable", "F401,F841" },
@@ -219,6 +243,7 @@ M.formatters = {
     markdown = { { "prettierd", "prettier" } },
     yaml = { { "prettierd", "prettier" } },
     cpp = { "clang_format" },
+    c = { "clang_format" },
     toml = { "taplo" },
     r = { "styler" },
     tex = { "latexindent" },

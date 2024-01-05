@@ -59,12 +59,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
   callback = trailing_highlight,
 })
 
+local trailing_highlight_cb = F.f(trailing_highlight)
+
 vim.api.nvim_create_autocmd({ "InsertLeave" }, {
   group = "UserTrailingWhitespace",
-  callback = F.f(trailing_highlight, { mode = "n" }),
+  callback = trailing_highlight_cb({ mode = "n" }),
 })
 
 vim.api.nvim_create_autocmd({ "InsertEnter" }, {
   group = "UserTrailingWhitespace",
-  callback = F.f(trailing_highlight, { mode = "i" }),
+  callback = trailing_highlight_cb({ mode = "i" }),
 })

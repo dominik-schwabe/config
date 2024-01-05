@@ -35,6 +35,7 @@ local C = {
   amaranth = "#ff0077",
   alt_green = "#aadb00",
   green = "#87ff00",
+  dark_green = "#87bb00",
   bright_green = "#88ff66",
   aqua = "#66d9ef",
   dark_yellow = "#cccc00",
@@ -108,7 +109,7 @@ local S = {
   label = C.cool_green,
   method = C.green,
   method_call = C.green,
-  namespace = C.teal,
+  namespace = C.fn,
   none = C.bright_purple,
   number = C.purple,
   boolean = C.purple,
@@ -215,7 +216,7 @@ HL.treesitter = {
   ["@label"] = { fg = S.label },
   ["@method"] = { fg = S.method },
   ["@method.call"] = { fg = S.method_call },
-  ["@namespace"] = { fg = S.namespace },
+  ["@namespace"] = { fg = S.namespace, bold = true },
   ["@none"] = { fg = S.none },
   ["@number"] = { fg = S.number },
   ["@operator"] = { fg = S.operator },
@@ -507,6 +508,8 @@ HL.cmp = {
   CmpItemKindYank = { fg = C.orange },
   CmpItemKindPath = { fg = C.base10, bold = true },
   CmpItemKindTmux = { fg = C.yellow },
+  CmpItemKindVersion = { fg = C.dark_green },
+  CmpItemKindFeature = { fg = S.field },
 }
 
 HL.lsp = {

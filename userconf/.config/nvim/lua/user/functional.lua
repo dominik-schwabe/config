@@ -1,5 +1,4 @@
 local M = {}
-local config = require("user.config")
 
 M.map = function(tbl, func)
   return vim.tbl_map(func, tbl)
@@ -10,6 +9,10 @@ end
 M.keys = vim.tbl_keys
 M.values = vim.tbl_values
 M.contains = vim.tbl_contains
+
+function M.empty(tbl)
+  return next(tbl) == nil
+end
 
 function M.iter(tbl)
   local i, v = next(tbl, nil)
@@ -47,7 +50,7 @@ function M.flat(list_of_lists)
   return result
 end
 
-function M.map_obj(obj, cb)
+function M.map_values(obj, cb)
   local new_obj = {}
   for key, value in pairs(obj) do
     new_obj[key] = cb(value)
@@ -143,10 +146,12 @@ function M.subset(obj, values)
   return new_obj
 end
 
-function M.f(func, ...)
-  local tbl = { ... }
-  return function()
-    return func(unpack(tbl))
+function M.f(func)
+  return function(...)
+    local tbl = { ... }
+    return function()
+      return func(unpack(tbl))
+    end
   end
 end
 
@@ -255,14 +260,14 @@ function M.load(src, cb, silent)
     end
     return pkg
   end
-  if not silent or config.log_level >= vim.log.levels.WARN then
+  local log_load = require("user.config").log_load
+  if not silent or log_load < vim.log.levels.OFF then
     local command = "loading '" .. src .. "' failed"
-    if (not silent and config.log_level >= vim.log.levels.INFO) or config.log_level >= vim.log.levels.ERROR then
+    if not silent or log_load <= vim.log.levels.DEBUG then
       command = command .. "\n" .. pkg
-      vim.notify(command, vim.log.levels.ERROR)
-    else
-      vim.notify(command, vim.log.levels.WARN)
     end
+    local level = silent and vim.log.levels.WARN or vim.log.levels.ERROR
+    vim.notify(command, level)
   end
   return nil
 end

@@ -1,5 +1,4 @@
 local F = require("user.functional")
-local U = require("user.utils")
 
 F.load("neodev", function(neodev)
   neodev.setup({})
@@ -11,43 +10,57 @@ local function get_active_client_by_name(bufnr, servername)
   end)
 end
 
+local function desc(opts, description)
+  F.extend(opts, { desc = description })
+end
+
+local function hover()
+  local filetype = vim.bo.filetype
+  if vim.tbl_contains({ "vim", "help" }, filetype) then
+    vim.cmd("h " .. vim.fn.expand("<cword>"))
+  elseif vim.tbl_contains({ "man" }, filetype) then
+    vim.cmd("Man " .. vim.fn.expand("<cword>"))
+  else
+    if vim.fn.expand("%:t") == "Cargo.toml" then
+      local crates = F.load("crates")
+      if crates and crates.popup_available() then
+        crates.show_popup()
+        return
+      end
+    end
+    vim.lsp.buf.hover()
+  end
+end
+
 local map_opt = { noremap = true, silent = true }
-vim.keymap.set("n", "gD", vim.lsp.buf.declaration, U.desc(map_opt, "go to declaration"))
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, U.desc(map_opt, "go to definition"))
-vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, U.desc(map_opt, "go to type definition"))
-vim.keymap.set("n", "gr", vim.lsp.buf.references, U.desc(map_opt, "go to reference"))
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation, U.desc(map_opt, "go to implementation"))
-vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, U.desc(map_opt, "show signature help"))
-vim.keymap.set("n", "gh", vim.lsp.buf.hover, U.desc(map_opt, "show hover info"))
-vim.keymap.set("n", "gm", vim.diagnostic.open_float, U.desc(map_opt, "show diagnostics under cursor"))
-vim.keymap.set("n", "gn", vim.diagnostic.goto_next, U.desc(map_opt, "go to next diagnostic"))
-vim.keymap.set("n", "gp", vim.diagnostic.goto_prev, U.desc(map_opt, "go to previous diagnostic"))
-vim.keymap.set("n", "gll", vim.lsp.codelens.refresh, U.desc(map_opt, "refresh codelens"))
-vim.keymap.set("n", "glr", vim.lsp.codelens.run, U.desc(map_opt, "run codelens"))
-vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, U.desc(map_opt, "show incoming calls"))
-vim.keymap.set("n", "glo", vim.lsp.buf.outgoing_calls, U.desc(map_opt, "show outgoing calls"))
-vim.keymap.set("n", "<space>awa", vim.lsp.buf.add_workspace_folder, U.desc(map_opt, "add workspace folder"))
-vim.keymap.set("n", "<space>awr", vim.lsp.buf.remove_workspace_folder, U.desc(map_opt, "remove workspace folder"))
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, desc(map_opt, "go to declaration"))
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, desc(map_opt, "go to definition"))
+vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, desc(map_opt, "go to type definition"))
+vim.keymap.set("n", "gr", vim.lsp.buf.references, desc(map_opt, "go to reference"))
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, desc(map_opt, "go to implementation"))
+vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, desc(map_opt, "show signature help"))
+vim.keymap.set("n", "gh", hover, desc(map_opt, "show hover info"))
+vim.keymap.set("n", "gm", vim.diagnostic.open_float, desc(map_opt, "show diagnostics under cursor"))
+vim.keymap.set("n", "gn", vim.diagnostic.goto_next, desc(map_opt, "go to next diagnostic"))
+vim.keymap.set("n", "gp", vim.diagnostic.goto_prev, desc(map_opt, "go to previous diagnostic"))
+vim.keymap.set("n", "gll", vim.lsp.codelens.refresh, desc(map_opt, "refresh codelens"))
+vim.keymap.set("n", "glr", vim.lsp.codelens.run, desc(map_opt, "run codelens"))
+vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, desc(map_opt, "show incoming calls"))
+vim.keymap.set("n", "glo", vim.lsp.buf.outgoing_calls, desc(map_opt, "show outgoing calls"))
+vim.keymap.set("n", "<space>awa", vim.lsp.buf.add_workspace_folder, desc(map_opt, "add workspace folder"))
+vim.keymap.set("n", "<space>awr", vim.lsp.buf.remove_workspace_folder, desc(map_opt, "remove workspace folder"))
 vim.keymap.set("n", "<space>awl", function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end, U.desc(map_opt, "list loaded workspaces"))
-vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, U.desc(map_opt, "rename variable"))
-vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, U.desc(map_opt, "select code action"))
+end, desc(map_opt, "list loaded workspaces"))
+vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, desc(map_opt, "rename variable"))
+vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, desc(map_opt, "select code action"))
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   callback = vim.schedule_wrap(function(args)
-    local buf_map_opt = { noremap = true, silent = true, buffer = args.bufnr }
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local should_attach = not vim.b[args.buf].is_big_buffer or client.name == "null-ls"
-    -- client.server_capabilities.semanticTokensProvider = nil
-    if should_attach then
-      if client.name == "rust_analyzer" then
-        F.load("rust-tools", function(rt)
-          vim.keymap.set("n", "gh", rt.hover_actions.hover_actions, U.desc(buf_map_opt, "rust hover actions"))
-        end)
-      end
-    else
+    if not should_attach then
       vim.lsp.buf_detach_client(args.buf, args.data.client_id)
     end
   end),
@@ -87,42 +100,13 @@ F.load("mason-lspconfig", function(mason_lspconfig)
 
   for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
     local opts = lsp_configs[server_name] or {}
-    opts.capabilities = capabilities
-    opts.handlers = handlers
-    opts.lsp_flags = {
-      debounce_text_changes = 250,
-    }
-    if server_name == "jsonls" then
-      F.load("schemastore", function(schemastore)
-        opts = U.tbl_merge(opts, {
-          settings = { json = { schemas = schemastore.json.schemas() } },
-        })
-      end)
-    elseif server_name == "clangd" then
-      opts.capabilities = vim.lsp.protocol.make_client_capabilities()
-      opts.capabilities.offsetEncoding = { "utf-16" }
-    end
-    if server_name == "rust_analyzer" then
-      opts.cmd = { vim.fn.stdpath("data") .. "/mason/bin/rust-analyzer" }
-      opts.settings = {
-        ["rust-analyzer"] = {
-          checkOnSave = {
-            command = "clippy",
-          },
-        },
-      }
-      F.load("rust-tools", function(rt)
-        local extension_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/"
-        local codelldb_path = extension_path .. "adapter/codelldb"
-        local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
-        rt.setup({
-          server = opts,
-          dap = {
-            adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-          },
-        })
-      end)
-    else
+    if not opts.lspconfig_ignore then
+      opts.capabilities = capabilities
+      opts.handlers = handlers
+      opts.lsp_flags = { debounce_text_changes = 250 }
+      if opts.lspconfig_hook then
+        opts.lspconfig_hook(opts)
+      end
       lspconfig[server_name].setup(opts)
     end
   end

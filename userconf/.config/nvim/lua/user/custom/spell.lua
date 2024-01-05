@@ -18,6 +18,8 @@ vim.api.nvim_create_user_command("SetSpell", function(arg)
   set_spell(arg.fargs[1])
 end, { nargs = "*" })
 
-vim.keymap.set({ "n", "x" }, "<space>ss", F.f(set_spell, nil), { desc = "disable spell" })
-vim.keymap.set({ "n", "x" }, "<space>sd", F.f(set_spell, "de_de"), { desc = "toggle spell German" })
-vim.keymap.set({ "n", "x" }, "<space>se", F.f(set_spell, "en_us"), { desc = "toggle spell English" })
+local set_spell_cb = F.f(set_spell)
+
+vim.keymap.set({ "n", "x" }, "<space>ss", set_spell_cb(nil), { desc = "disable spell" })
+vim.keymap.set({ "n", "x" }, "<space>sd", set_spell_cb("de_de"), { desc = "toggle spell German" })
+vim.keymap.set({ "n", "x" }, "<space>se", set_spell_cb("en_us"), { desc = "toggle spell English" })
