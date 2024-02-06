@@ -1,10 +1,10 @@
-local U = require("user.utils")
-local F = require("user.functional")
-local C = require("user.constants")
+local U = require("rooter.utils")
+local F = require("rooter.functional")
+local C = require("rooter.constants")
+local conf = require("rooter.config")
 
-vim.opt.autochdir = false
-
-local root_history = {}
+local M = {}
+M.root_history = {}
 
 local check_functions = {
   contains = function(dir, contents)
@@ -30,19 +30,11 @@ local rooter_config = F.map(require("user.config").rooter, function(entry)
   return { entry[1] or 0, F.subset(entry, keys) }
 end)
 
-local function list_parents(path)
-  local new_table = {}
-  for v in vim.fs.parents(path) do
-    new_table[#new_table + 1] = v
-  end
-  return new_table
-end
-
-local function find_root(base_path)
+function M.find_root(base_path)
   if vim.fn.filereadable(base_path) == 1 then
     base_path = vim.fs.dirname(base_path)
   end
-  local dirs = list_parents(base_path .. "/")
+  local dirs = U.list_parents(base_path .. "/")
   for i, dir in ipairs(dirs) do
     for _, config_entry in ipairs(rooter_config) do
       local level, entry = unpack(config_entry)
@@ -65,34 +57,35 @@ local function set_root(root, opts)
   opts = vim.F.if_nil(opts, {})
   local is_fallback = vim.F.if_nil(opts.is_fallback, false)
   if U.isdirectory(root) then
-    root_history[root] = { timestamp = vim.loop.now(), is_fallback = is_fallback }
+    M.root_history[root] = { timestamp = vim.loop.now(), is_fallback = is_fallback }
     if root ~= vim.fn.getcwd() then
       vim.api.nvim_set_current_dir(root)
     end
   end
 end
 
-local function chdir(args)
-  if F.contains(C.NOPATH_BUFTYPES, vim.bo[args.buf].buftype) then
+function M.trigger(opts)
+  if F.contains(C.NOPATH_BUFTYPES, vim.bo[opts.buf].buftype) then
     return
   end
-  local base_path = args.file
+  local base_path = opts.file
   base_path = vim.fs.normalize(base_path)
   base_path = U.simplify_path(base_path)
   if base_path:sub(0, 1) ~= "/" then
     return
   end
-  local found_root, fallback = find_root(base_path)
+  local found_root, fallback = M.find_root(base_path)
   local root = found_root or fallback
   local is_fallback = found_root == nil
   set_root(root, { is_fallback = is_fallback })
 end
 
-local function pick_root(opts)
+function M.pick_root(opts)
   opts = vim.F.if_nil(opts, {})
-  local no_fallback = vim.F.if_nil(opts.no_fallback, true)
-  local history = F.entries(root_history)
-  if no_fallback then
+  local include_fallbacks = vim.F.if_nil(opts.include_fallbacks, false)
+  local callback = opts.callback
+  local history = F.entries(M.root_history)
+  if include_fallbacks then
     history = F.filter(history, function(e)
       return not e[2].is_fallback
     end)
@@ -108,7 +101,7 @@ local function pick_root(opts)
   history = F.map(history, function(e)
     return e[1]
   end)
-  local replacements = U.path_replacements()
+  local replacements = U.prepare_replacements(conf.config.path_replacements)
   vim.ui.select(history, {
     prompt = "Select cwd:",
     format_item = function(path)
@@ -123,18 +116,28 @@ local function pick_root(opts)
     end,
   }, function(root)
     if root then
-      set_root(root, { is_fallback = root_history[root].is_fallback })
-      F.load("nvim-tree.api", function(tree_api)
-        tree_api.tree.open({ path = root })
-      end)
+      set_root(root, { is_fallback = M.root_history[root].is_fallback })
+      if callback then
+        callback(root)
+      end
     end
   end)
 end
 
-vim.keymap.set("n", "<space>cc", pick_root, { desc = "pick a root" })
+function M.setup(opts)
+  conf.setup(opts)
 
-vim.api.nvim_create_augroup("UserRooter", {})
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  group = "UserRooter",
-  callback = chdir,
-})
+  if conf.config.auto_chdir then
+    vim.opt.autochdir = false
+  end
+
+  if conf.config.setup_auto_cmd then
+    local augroup = vim.api.nvim_create_augroup("Rooter", {})
+    vim.api.nvim_create_autocmd({ "BufEnter" }, {
+      group = augroup,
+      callback = M.trigger,
+    })
+  end
+end
+
+return M

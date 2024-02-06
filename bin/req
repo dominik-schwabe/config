@@ -1,60 +1,54 @@
 #!/usr/bin/env python3
 import json
-import sys
 
+import argparse
 import requests
 
-try:
-    data = sys.argv[1]
-except:
-    print("data method(POST) route(/) port(5000) host(localhost)")
-    exit()
+parser = argparse.ArgumentParser()
+parser.add_argument("--json", default=None)
+parser.add_argument("--method", default=None)
+parser.add_argument("--route", type=str, default="")
+parser.add_argument("--port", type=int, default=5000)
+parser.add_argument("--base", type=str, default="http://localhost")
+parser.add_argument("--origin", type=str, default="http://localhost:3000")
+parser.add_argument("--show-input", action="store_true")
+parser.add_argument("--show-output", action="store_true")
+args = parser.parse_args()
 
-try:
-    method = sys.argv[2].upper()
-except IndexError:
+if args.method is not None:
+    method = args.method.upper()
+elif args.json is None:
+    method = "GET"
+else:
     method = "POST"
 
-if method != "GET":
-    data = json.loads(data)
-
-try:
-    route = sys.argv[3]
-except IndexError:
-    route = "/"
-
-try:
-    port = sys.argv[4]
-except IndexError:
-    port = 5000
-
-try:
-    host = sys.argv[5]
-except IndexError:
-    host = "localhost"
-
-url = f"http://{host}:{port}{route}"
-
 kwargs = {
-    "headers": {
-        "origin": "http://localhost:3000",
-    }
+    "method": method,
+    "url": f"{args.base}:{args.port}{args.route}",
+    "headers": {"origin": args.origin},
 }
-if method != "GET":
-    kwargs["json"] = data
+
+if args.json is not None:
+    kwargs["json"] = json.loads(args.json)
+
+if args.show_input:
+    print(json.dumps(kwargs), end="\n")
+    print("\n")
 
 try:
-    r = requests.request(method, url, **kwargs)
+    r = requests.request(**kwargs, stream=True)
+    for line in r.iter_lines():
+        print(line.decode())
+    print("\n")
+    if args.show_output or not 200 <= r.status_code < 300:
+        print(
+            json.dumps(
+                {
+                    "code": r.status_code,
+                    "method": method,
+                    "headers": dict(r.headers),
+                }
+            )
+        )
 except requests.exceptions.ConnectionError:
-    print(f"{url} unreachable")
-    exit()
-
-result = r.text
-try:
-    result = json.dumps(r.json())
-except:
-    result = r.text
-print(r.status_code, result)
-print()
-for name, value in r.headers.items():
-    print(name, ":", value)
+    print(f"{kwargs['url']} unreachable")

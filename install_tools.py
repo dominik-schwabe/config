@@ -220,7 +220,7 @@ def download_tool(name, tool_args):
 
 
 if args.rm is not None:
-    if not args.rm in ALL_TOOLS:
+    if args.rm not in ALL_TOOLS:
         print(f"{RED}{args.rm} is not valid{RESET}", flush=True)
         exit(1)
     tool_args = ALL_TOOLS[args.rm]

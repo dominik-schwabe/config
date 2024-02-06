@@ -31,19 +31,18 @@ if [[ -n "$TOUCHPAD_DEVICE" ]]; then
   synclient AreaRightEdge=1750
   synclient ClickPad=0
   synclient MinSpeed=1
-  synclient FingerLow=25
-  synclient FingerHigh=30
+  synclient MaxTapTime=125
   synclient MaxSpeed=1.75
   synclient AccelFactor=0.1
   synclient ClickTime=100
-  synclient MaxTapTime=80
   synclient MaxTapMove=20
   synclient SingleTapTimeout=150
   synclient CoastingSpeed=10
   synclient CoastingFriction=20
   synclient HorizHysteresis=10
   synclient VertHysteresis=10
-  xinput --set-prop "$TOUCHPAD_DEVICE" "Synaptics Finger" 35 45 250
+  # following line sets FingerLow=10 FingerHigh=40
+  xinput --set-prop "$TOUCHPAD_DEVICE" "Synaptics Finger" 10 40 250
 fi
 
 [[ -f $HOME/.xsession_extra ]] && . $HOME/.xsession_extra

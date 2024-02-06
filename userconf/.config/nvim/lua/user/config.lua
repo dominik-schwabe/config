@@ -133,6 +133,7 @@ M.lsp_configs = {
     settings = {
       Lua = {
         completion = {
+          callSnippet = "Replace",
           showWord = "Disable",
         },
       },
@@ -263,8 +264,6 @@ M.treesitter = {
     "dockerfile",
     "vimdoc",
     "html",
-    "http",
-    "java",
     "javascript",
     "json",
     "latex",
@@ -272,7 +271,6 @@ M.treesitter = {
     "make",
     "markdown",
     "python",
-    "r",
     "rust",
     "toml",
     "tsx",
@@ -283,5 +281,11 @@ M.treesitter = {
   highlight_disable = {},
 }
 M.closable_terminals = { "term://repl*", "term://toggleterm" }
+M.custom_plugin_path = vim.fn.stdpath("config") .. "/custom_plugins"
+M.repls = {
+  python = { "ipython", "python", "python3", "qtconsole" },
+  r = { "radian", "R" },
+  lua = { "lua5.4", "luajit" },
+}
 
 return M

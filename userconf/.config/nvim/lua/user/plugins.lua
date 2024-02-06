@@ -198,24 +198,36 @@ local nvim_tree = with_dependencies({
   },
 }, { { "nvim-tree/nvim-web-devicons" } })
 
-local comment = with_dependencies(
-  { "numToStr/Comment.nvim", config = l("comment"), keys = { { "gc", mode = { "n", "x" } } } },
+local comment = with_dependencies({
+  "numToStr/Comment.nvim",
+  config = function()
+    local opts = {
+      padding = true,
+      sticky = true,
+      ignore = "^%s*$",
+      mappings = { basic = true, extra = true },
+    }
+    F.load("ts_context_commentstring.integrations.comment_nvim", function(ttscc)
+      opts.pre_hook = ttscc.create_pre_hook()
+    end)
+    require("Comment").setup(opts)
+  end,
+  keys = { { "gc", mode = { "n", "x" } } },
+}, {
   {
-    {
-      "JoosepAlviste/nvim-ts-context-commentstring",
-      init = function()
-        vim.g.skip_ts_context_commentstring_module = true
-      end,
-    },
-  }
-)
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    init = function()
+      vim.g.skip_ts_context_commentstring_module = true
+    end,
+  },
+})
 
 vim.g.VM_maps = {
   ["Select Cursor Down"] = "L",
   ["Select Cursor Up"] = "K",
 }
 
-local plugins = {
+local plugins = F.concat({
   { "folke/lazy.nvim" },
   lspconfig,
   nvim_tree,
@@ -299,7 +311,75 @@ local plugins = {
   -- { "brenton-leighton/multiple-cursors.nvim" },
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
   { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
-}
+  {
+    dir = config.custom_plugin_path .. "/rooter",
+    config = function()
+      local rooter = require("rooter")
+      rooter.setup({
+        path_replacements = function()
+          local replacements = { [vim.env.HOME] = "~/" }
+          if vim.env.ASDF_DIR then
+            replacements[vim.env.ASDF_DIR .. "/installs"] = "asdf://"
+          end
+          return replacements
+        end,
+      })
+      vim.keymap.set("n", "<space>cc", function()
+        rooter.pick_root({
+          callback = function(root)
+            F.load("nvim-tree.api", function(tree_api)
+              tree_api.tree.open({ path = root })
+            end)
+          end,
+        })
+      end, { desc = "pick a root" })
+    end,
+  },
+  {
+    dir = config.custom_plugin_path .. "/repl",
+    config = function()
+      require("repl").setup({
+        preferred = config.repls,
+        listed = false,
+        debug = false,
+        ensure_win = true,
+      })
+
+      local send = require("repl.send")
+      local window = require("repl.window")
+      local repls = F.keys(require("repl.repls").repls)
+
+      local function mark_jump()
+        vim.cmd("mark '")
+      end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("UserRepl", {}),
+        callback = function(args)
+          local bufopt = vim.bo[args.buf]
+          if F.contains(repls, bufopt.filetype) then
+            local map_opt = { buffer = args.buf }
+            vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph), desc(map_opt, "send paragraph"))
+            vim.keymap.set("n", "<CR>", F.f(send.line_next)(), desc(map_opt, "send line and go next"))
+            vim.keymap.set("x", "<CR>", F.f(send.visual)(), desc(map_opt, "send visual"))
+            vim.keymap.set("n", "=", F.f(send.line)(), desc(map_opt, "send line and stay"))
+            vim.keymap.set("n", "<leader><space>", F.f(send.buffer)(), desc(map_opt, "send buffer"))
+            vim.keymap.set("n", "<leader>m", F.f(send.motion)(), desc(map_opt, "send motion"))
+            vim.keymap.set("n", "<leader>M", F.f(send.newline)(), desc(map_opt, "send newline"))
+            vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl)(), desc(map_opt, "toggle repl"))
+          end
+        end,
+      })
+    end,
+  },
+  { dir = config.custom_plugin_path .. "/monokai-rainbow" },
+  {
+    dir = config.custom_plugin_path .. "/fullscreen",
+    opts = {},
+    cmd = { "ToggleFullscreen" },
+    keys = { { "<F24>", "<ESC>:ToggleFullscreen<CR>", mode = { "n", "x", "i", "t" }, desc = "toggle fullscreen" } },
+  },
+})
 
 if not config.minimal then
   plugins = F.concat(plugins, {
@@ -337,15 +417,6 @@ if not config.minimal then
             },
           },
         },
-        -- {
-        --   "linrongbin16/lsp-progress.nvim",
-        --   dependencies = { "nvim-tree/nvim-web-devicons" },
-        --   opts = {
-        --     spinner = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
-        --     spin_update_time = 20,
-        --     decay = 700,
-        --   },
-        -- },
       },
     },
     {
@@ -373,7 +444,13 @@ if not config.minimal then
       branch = "v0.6",
       opts = { tabout = { enable = true }, cmap = false },
     },
-    { "NvChad/nvim-colorizer.lua" },
+    {
+      "NvChad/nvim-colorizer.lua",
+      opts = {
+        filetypes = { "*", "!cmp_menu" },
+        user_default_options = { rgb_fn = true, hsl_fn = true, tailwind = true },
+      },
+    },
     {
       "saecki/crates.nvim",
       config = true,

@@ -1,5 +1,7 @@
-local F = require("user.functional")
-local U = require("user.utils")
+local F = require("fullscreen.functional")
+local U = require("fullscreen.utils")
+
+local M = {}
 
 local FS
 
@@ -49,7 +51,7 @@ local function is_consistent()
   end)
 end
 
-local function fullscreen_toggle()
+function M.toggle_fullscreen()
   if FS ~= nil then
     fullscreen_off()
   else
@@ -111,4 +113,8 @@ local function fullscreen_toggle()
   end
 end
 
-vim.keymap.set({ "n", "x", "i", "t" }, "<F24>", fullscreen_toggle, { desc = "toggle fullscreen" })
+function M.setup(opts)
+  vim.api.nvim_create_user_command("ToggleFullscreen", M.toggle_fullscreen, {})
+end
+
+return M

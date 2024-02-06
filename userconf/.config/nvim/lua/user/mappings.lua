@@ -27,7 +27,7 @@ vim.keymap.set({ "n", "x" }, "gw", "<CMD>write<CR>", { desc = "write buffer chan
 vim.keymap.set({ "n", "x" }, "gq", "gw", { desc = "break line" })
 vim.keymap.set({ "n" }, "gqq", "gwl", { desc = "break line" })
 vim.keymap.set({ "n", "x" }, "<space>tw", "<CMD>set wrap!<CR>", { desc = "toggle wrap" })
-vim.keymap.set({ "n", "x" }, "<space>tl", "<CMD>set relativenumber!<CR>", { desc = "toggle wrap" })
+vim.keymap.set({ "n", "x" }, "<space>tl", "<CMD>set relativenumber!<CR>", { desc = "toggle relativenumber" })
 vim.keymap.set({ "n" }, "<space>ah", "<CMD>Inspect<CR>", { desc = "inspect current element" })
 vim.keymap.set("n", "<space>cw", function()
   if F.contains(C.PATH_BUFTYPES, vim.bo.buftype) then
