@@ -35,4 +35,4 @@ end
 vim.api.nvim_create_user_command("Lint", lint_buffer, {})
 
 vim.keymap.set("n", "<space>al", lint_buffer, { desc = "lint buffer" })
-vim.keymap.set("n", "<space>ö", hide_lint, { desc = "hide linter diagnostics" })
+vim.keymap.set("n", "<space>hl", hide_lint, { desc = "hide linter diagnostics" })

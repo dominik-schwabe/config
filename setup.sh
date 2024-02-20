@@ -38,14 +38,14 @@ if command -v redshift &>/dev/null; then
     LAT=$(echo $LOCATION | cut -f1 -d,)
     LON=$(echo $LOCATION | cut -f2 -d,)
     echo "[redshift]
-    temp-day=6500
-    temp-night=2700
-    location-provider=manual
-    adjustment-method=vidmode
+temp-day=6500
+temp-night=2700
+location-provider=manual
+adjustment-method=vidmode
 
-    [manual]
-    lat=$LAT
-    lon=$LON" >"$HOME/.config/redshift.conf"
+[manual]
+lat=$LAT
+lon=$LON" >"$HOME/.config/redshift.conf"
     echo -e "${GREEN}success${RESET}"
   else
     echo -e "${RED}failure${RESET}"

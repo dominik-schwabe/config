@@ -1,10 +1,10 @@
-[[ -r ~/.envrc ]] && . ~/.envrc
-[[ -r ~/.genrc ]] && . ~/.genrc
-[[ -r ~/.aliasrc ]] && . ~/.aliasrc
+[[ -r "$HOME/.envrc" ]] && . "$HOME/.envrc"
+[[ -r "$HOME/.genrc" ]] && . "$HOME/.genrc"
+[[ -r "$HOME/.aliasrc" ]] && . "$HOME/.aliasrc"
 
 [[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
 
-export HISTFILE=~/.zsh_history
+export HISTFILE="$HOME/.zsh_history"
 export HISTORY_IGNORE="(ls|mv|cp|rm|cd|z|cat|pwd|td|te|o|vim|ovim|novim|rg|fd|ga|gco|ytdl|file|whereis) *"
 
 # +++++++++++++++++++++++++++++++++++++++++++
@@ -185,7 +185,7 @@ fzf-open-file() {
 }
 
 fzf-media() {
-  local cmd="cat ~/.media 2>/dev/null"
+  local cmd="cat $HOME/.media 2>/dev/null"
   setopt localoptions pipefail no_aliases 2> /dev/null
   local media="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m)"
   if [[ -z "$media" ]]; then
@@ -395,8 +395,8 @@ zle -N _yay_update
 bindkey -M vicmd '^[[15~' _yay_update
 bindkey -M viins '^[[15~' _yay_update
 
-fpath+=~/.zfunc
-fpath+=~/.zsh-completions
+fpath+=$HOME/.zfunc
+fpath+=$HOME/.zsh-completions
 
 if autoload -Uz compinit bashcompinit; then
     compinit -d $HOME/.zcompdump2
@@ -440,7 +440,7 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
                 return 0
             }
         fi
-        [[ -r ~/.tool-versions ]] || return 1
+        [[ -r $HOME/.tool-versions ]] || return 1
         while read LINE; do
             IFS=" " read _ASDF_PROG_NAME _ASDF_PROG_VERSION <<< $LINE;
             if [[ "$_ASDF_PROG_NAME" = $1 ]]; then

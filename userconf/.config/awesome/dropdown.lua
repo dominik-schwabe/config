@@ -69,6 +69,7 @@ local function client_matcher(config)
     name = config.name,
     instance = config.instance,
     class = config.class,
+    role = config.role,
   }
   return function(c)
     for key, value in pairs(match_args) do

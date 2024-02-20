@@ -47,9 +47,9 @@ vim.keymap.set("n", "gll", vim.lsp.codelens.refresh, desc(map_opt, "refresh code
 vim.keymap.set("n", "glr", vim.lsp.codelens.run, desc(map_opt, "run codelens"))
 vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, desc(map_opt, "show incoming calls"))
 vim.keymap.set("n", "glo", vim.lsp.buf.outgoing_calls, desc(map_opt, "show outgoing calls"))
-vim.keymap.set("n", "<space>awa", vim.lsp.buf.add_workspace_folder, desc(map_opt, "add workspace folder"))
-vim.keymap.set("n", "<space>awr", vim.lsp.buf.remove_workspace_folder, desc(map_opt, "remove workspace folder"))
-vim.keymap.set("n", "<space>awl", function()
+vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, desc(map_opt, "add workspace folder"))
+vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, desc(map_opt, "remove workspace folder"))
+vim.keymap.set("n", "<space>wl", function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, desc(map_opt, "list loaded workspaces"))
 vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, desc(map_opt, "rename variable"))
@@ -129,7 +129,7 @@ end)
 vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>", { desc = "show loaded lsp servers" })
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", { desc = "restart lsp server" })
 
-vim.keymap.set("n", "<space>m", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
+vim.keymap.set("n", "<space>om", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
 
 -- show settings of lspserver
 local function lsp_settings()

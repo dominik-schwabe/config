@@ -85,6 +85,7 @@ awful.rules.rules = {
         "Event Tester", -- xev.
       },
       role = {
+        "about",
         "AlarmWindow", -- Thunderbird's calendar.
         "ConfigManager", -- Thunderbird's about:config.
         "pop-up", -- e.g. Google Chrome's (detached) Developer Tools.

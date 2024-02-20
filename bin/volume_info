@@ -5,6 +5,6 @@ VOLUME_INFO=$(pamixer --get-volume --get-mute)
 [[ $? != 0 ]] && exit 1
 for SOURCE in $OUTPUT; do
   VOLUME_INFO="$VOLUME_INFO $(pamixer --source $SOURCE --get-mute)"
-  [[ $? != 0 ]] && exit 1
+  [[ $? != 0 ]] && exit 2
 done
 echo $VOLUME_INFO

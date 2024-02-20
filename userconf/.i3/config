@@ -326,12 +326,12 @@ for_window [instance="Mail" class="thunderbird" title=".*Mozilla Thunderbird"] s
 bindsym $mod+adiaeresis exec --no-startup-id "scratchpad_handle -s 90 -n -t \\".*Mozilla Thunderbird\\" -i Mail -c thunderbird"
 
 exec_always --no-startup-id feh --bg-fill "$HOME/.bg.png"
-exec --no-startup-id flameshot
-exec --no-startup-id telegram-desktop -startintray
-exec --no-startup-id "sleep 10; launch_discord"
-exec --no-startup-id "sleep 10; birdtray"
-exec --no-startup-id "sleep 5; spotify"
-exec --no-startup-id unclutter --timeout 0.7
+# exec --no-startup-id flameshot
+# exec --no-startup-id telegram-desktop -startintray
+# exec --no-startup-id "sleep 10; launch_discord"
+# exec --no-startup-id "sleep 10; birdtray"
+# exec --no-startup-id "sleep 5; spotify"
+# exec --no-startup-id unclutter --timeout 0.7
 
 assign [class="firefox"] $ws1
 assign [class="Brave-browser"] $ws1

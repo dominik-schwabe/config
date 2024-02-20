@@ -89,7 +89,7 @@ nvim_tree.setup({
   },
 })
 
-vim.keymap.set("n", "<space>af", function()
+vim.keymap.set("n", "<space>of", function()
   local last_buffer = U.list_buffers({ mru = true })[1]
   api.tree.open()
   if last_buffer then

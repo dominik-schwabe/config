@@ -380,11 +380,11 @@ local function cycle(direction)
   vim.api.nvim_echo({ { string.format("%d/%d %s", next_index, #changed_files, next_file) } }, false, {})
 end
 
-vim.keymap.set("n", "<space>an", function()
+vim.keymap.set("n", "<space>dn", function()
   cycle(1)
 end, { desc = "diff cycle next" })
 
-vim.keymap.set("n", "<space>ap", function()
+vim.keymap.set("n", "<space>dp", function()
   cycle(-1)
 end, { desc = "diff cycle previous" })
 

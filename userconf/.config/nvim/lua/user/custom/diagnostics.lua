@@ -25,7 +25,7 @@ local function show_diagnostics(only_buffer)
   U.quickfix(diagnostics, name)
 end
 
-vim.keymap.set("n", "<space>d", F.f(show_diagnostics)(true), { desc = "show buffer diagnostics in quickfix" })
-vim.keymap.set("n", "<space>w", function()
+vim.keymap.set("n", "<space>od", F.f(show_diagnostics)(true), { desc = "show buffer diagnostics in quickfix" })
+vim.keymap.set("n", "<space>ow", function()
   show_diagnostics(false)
 end, { desc = "show workspace diagnostics in quickfix" })

@@ -52,7 +52,7 @@ Hydra({
   },
   name = "textcase",
   mode = { "n", "x" },
-  body = "<space>ac",
+  body = "<space>cc",
   heads = {
     { "<F5>", to_snake_case, { silent = true, nowait = true } },
     { "<F6>", to_constant_case, { silent = true, nowait = true } },

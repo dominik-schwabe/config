@@ -639,6 +639,7 @@ function M.load()
   vim.o.background = "dark"
   vim.o.termguicolors = true
   vim.g.colors_name = "monokai"
+  vim.g.VM_theme = ""
   for _, group in pairs(HL) do
     for hl_group, colors in pairs(group) do
       vim.api.nvim_set_hl(0, hl_group, colors)

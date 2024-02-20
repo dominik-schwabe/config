@@ -44,5 +44,5 @@ local function filepath()
   print(vim.fn.expand("%:p"))
 end
 
-vim.keymap.set("n", "<space>aj", file_stats, { desc = "show information about buffer" })
-vim.keymap.set("n", "<space>ag", filepath, { desc = "show current file path" })
+vim.keymap.set("n", "<space>pb", file_stats, { desc = "show information about buffer" })
+vim.keymap.set("n", "<space>pp", filepath, { desc = "show current file path" })

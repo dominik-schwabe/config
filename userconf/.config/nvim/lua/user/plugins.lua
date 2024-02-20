@@ -86,12 +86,12 @@ local lspconfig = with_dependencies({
   {
     "azabiong/vim-highlighter",
     keys = {
-      { "f<CR>", "<CMD>call highlighter#Command('+')<CR>", mode = "n", silent = true },
-      { "f<CR>", ":<C-U>call highlighter#Command('+x')<CR>", mode = "x", silent = true },
+      { "<space>ha", "<CMD>call highlighter#Command('+')<CR>", mode = "n", silent = true },
+      { "<space>ha", ":<C-U>call highlighter#Command('+x')<CR>", mode = "x", silent = true },
       { "dh", "<CMD>call highlighter#Command('-')<CR>", mode = "n", silent = true },
       { "dah", "<CMD>call highlighter#Command('clear')<CR>", mode = "n", silent = true },
-      { "t<CR>", "<CMD>call highlighter#Command('+%')<CR>", mode = "n", silent = true },
-      { "t<CR>", ":<C-U>call highlighter#Command('+x%')<CR>", mode = "x", silent = true },
+      { "<space>hi", "<CMD>call highlighter#Command('+%')<CR>", mode = "n", silent = true },
+      { "<space>hi", ":<C-U>call highlighter#Command('+x%')<CR>", mode = "x", silent = true },
     },
     init = function()
       vim.g.HiMapKeys = 0
@@ -284,13 +284,13 @@ local plugins = F.concat({
         desc = "fuzzy find in current buffer",
       },
       { "<F2>", "<CMD>Telescope custom_buffers<CR>", mode = { "n", "x", "t", "i" }, desc = "toggle buffer explorer" },
-      { "<space>h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" }, desc = "search help tags" },
       { "<space>,,", "<CMD>Telescope resume<CR>", mode = { "n", "x" }, desc = "resume last search" },
-      { "<space>,h", "<CMD>Telescope highlights<CR>", mode = { "n", "x" }, desc = "search highlights" },
+      { "<space>,h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" }, desc = "search help tags" },
+      { "<space>,c", "<CMD>Telescope highlights<CR>", mode = { "n", "x" }, desc = "search highlights" },
       { "<space>,k", "<CMD>Telescope keymaps<CR>", mode = { "n", "x" }, desc = "search keymaps" },
       { "<space>,j", "<CMD>Telescope jumplist<CR>", mode = { "n", "x" }, desc = "search jumplist" },
       { "<space>,y", "<CMD>Telescope yank_history<CR>", mode = { "n", "x" }, desc = "search yank history" },
-      { "<space>,q", "<CMD>Telescope macro_history<CR>", mode = { "n", "x" }, desc = "search macro history" },
+      { "<space>,m", "<CMD>Telescope macro_history<CR>", mode = { "n", "x" }, desc = "search macro history" },
       { "<space>,d", "<CMD>Telescope diffsplit<CR>", mode = { "n", "x" }, desc = "search diffsplit commits" },
       { "<space>,s", "<CMD>Telescope git_status<CR>", mode = { "n", "x" }, desc = "search changed files" },
     },
@@ -312,6 +312,19 @@ local plugins = F.concat({
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
   { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
   {
+    "jiaoshijie/undotree",
+    dependencies = "nvim-lua/plenary.nvim",
+    config = true,
+    keys = {
+      {
+        "<F3>",
+        function()
+          require("undotree").toggle()
+        end,
+      },
+    },
+  },
+  {
     dir = config.custom_plugin_path .. "/rooter",
     config = function()
       local rooter = require("rooter")
@@ -324,7 +337,7 @@ local plugins = F.concat({
           return replacements
         end,
       })
-      vim.keymap.set("n", "<space>cc", function()
+      vim.keymap.set("n", "<space>,w", function()
         rooter.pick_root({
           callback = function(root)
             F.load("nvim-tree.api", function(tree_api)
@@ -386,7 +399,7 @@ if not config.minimal then
     {
       "johmsalas/text-case.nvim",
       config = l("text-case"),
-      keys = { "<space>ac" },
+      keys = { "<space>cc" },
     },
     {
       "nvim-lualine/lualine.nvim",
@@ -539,7 +552,7 @@ if not config.minimal then
     {
       "simrat39/symbols-outline.nvim",
       opts = { width = 40 },
-      keys = { { "<space>as", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
+      keys = { { "<space>os", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
     {
       "lervag/vimtex",
@@ -583,12 +596,12 @@ if not config.minimal then
           },
         },
       },
-      keys = { { "<space>at", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
+      keys = { { "<space>ot", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
     },
     {
       "ziontee113/icon-picker.nvim",
       config = true,
-      keys = { { "<space>ai", "<CMD>IconPickerYank emoji nerd_font_v3<CR>", desc = "open icon picker" } },
+      keys = { { "<space>,i", "<CMD>IconPickerYank emoji nerd_font_v3<CR>", desc = "open icon picker" } },
     },
     {
       "folke/flash.nvim",
@@ -679,7 +692,7 @@ if not config.minimal then
         vim.g.mkdp_auto_start = 0
         vim.g.mkdp_auto_close = 0
       end,
-      keys = { { "<space>am", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
+      keys = { { "<space>tm", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
     },
     {
       "FabijanZulj/blame.nvim",
@@ -746,4 +759,4 @@ require("lazy").setup(plugins, {
 --   { "NTBBloodbath/rest.nvim" },
 -- }
 
-vim.keymap.set("n", "<space>ps", "<ESC>:Lazy sync<CR>", { desc = "install, clean, and update plugins" })
+vim.keymap.set("n", "<space>ol", "<ESC>:Lazy<CR>", { desc = "install, clean, and update plugins" })

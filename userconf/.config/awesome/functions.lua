@@ -629,7 +629,9 @@ M.toggle_color_picker = cmd("pick_color")
 M.toggle_window_terminator = toggle_launched_cmd("xkill")
 
 local function focus(c)
-  c:emit_signal("request::activate", "mouse_click", { raise = true })
+  if client.focus ~= c then
+    c:emit_signal("request::activate", "mouse_click", { raise = true })
+  end
 end
 
 M.click = focus

@@ -58,6 +58,7 @@ local thunderbird_toggle = dropdown.build_toggle_dropdown({
   instance = "Mail",
   class = "thunderbird",
   name = ".*Mozilla Thunderbird",
+  role = "3pane",
   border_width = 3,
   overlap = false,
   width = 0.9,

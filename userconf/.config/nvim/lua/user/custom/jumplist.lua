@@ -17,7 +17,7 @@ local function set_jumplist()
   U.quickfix(filtered_jumplist, "Jumplist")
 end
 
-vim.keymap.set({ "n", "x" }, "<space>j", set_jumplist, { desc = "open the quickfix with the jumplist" })
+vim.keymap.set({ "n", "x" }, "<space>oj", set_jumplist, { desc = "open the quickfix with the jumplist" })
 
 local function jump(direction, opt)
   opt = opt or {}
@@ -56,5 +56,5 @@ local jump_cb = F.f(jump)
 
 vim.keymap.set("n", "<C-i>", jump_cb(1), { expr = true, desc = "jump to next jumpmark" })
 vim.keymap.set("n", "<C-o>", jump_cb(-1), { expr = true, desc = "jump to previous jumpmark" })
-vim.keymap.set("n", "<space>i", jump_cb(1), { buffer = true }, { expr = true, desc = "jump to next file" })
-vim.keymap.set("n", "<space>o", jump_cb(-1), { buffer = true }, { expr = true, desc = "jump to previous file" })
+vim.keymap.set("n", "<leader>i", jump_cb(1), { expr = true, desc = "jump to next file buffer" })
+vim.keymap.set("n", "<leader>o", jump_cb(-1), { expr = true, desc = "jump to previous file buffer" })
