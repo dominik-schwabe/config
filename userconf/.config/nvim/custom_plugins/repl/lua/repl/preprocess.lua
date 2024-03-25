@@ -1,17 +1,17 @@
-local bo = vim.bo
-
 local F = require("repl.functional")
 
 local M = {}
 
-M.is_windows = vim.fn.has('win32') == 1
+M.is_windows = vim.fn.has("win32") == 1
 
 function M.is_whitespace(str)
   return str:match([[^%s*$]])
 end
 
 function M.add_windows_linefeed(lines)
-  return F.map(lines, function(str) return str .. "\13" end)
+  return F.map(lines, function(str)
+    return str .. "\13"
+  end)
 end
 
 function M.num_leading_spaces(str)
@@ -20,7 +20,7 @@ function M.num_leading_spaces(str)
 end
 
 function M.replace_tab(str)
-  return str:gsub("\t", string.rep(" ", bo.tabstop))
+  return str:gsub("\t", string.rep(" ", vim.bo.tabstop))
 end
 
 function M.replace_tabs(lines)

@@ -124,6 +124,22 @@ function M.entries(obj)
   return entries
 end
 
+function M.from_entries(list)
+  local obj = {}
+  for _, e in ipairs(list) do
+    local key, value = unpack(e)
+    obj[key] = value
+  end
+  return obj
+end
+
+function M.map_obj(obj, cb)
+  return M.from_entries(M.map(M.entries(obj), function(item)
+    local key, value = unpack(item)
+    return cb(key, value)
+  end))
+end
+
 function M.max(list)
   if #list > 0 then
     return math.max(unpack(list))

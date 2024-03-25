@@ -59,9 +59,6 @@ if [[ -z "$CONTAINERIZED" ]]; then
   $CURRPATH/install_tools.py
 fi
 echo
-echo "folder links"
-./create_symlink.sh $CURRPATH/shell_plugins $FORCE $HOME/.shell_plugins
-echo
 echo -n "generated config "
 GENERATED_PATH="$HOME/.genrc"
 TEMP_FILE=$(mktemp)

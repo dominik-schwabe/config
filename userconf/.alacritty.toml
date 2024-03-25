@@ -1,0 +1,48 @@
+[colors.bright]
+black = "#5f87af"
+blue = "#5f87af"
+cyan = "#66d9ef"
+green = "#3fff3f"
+magenta = "#f92672"
+red = "#ff3f3f"
+white = "#dddddd"
+yellow = "#deed12"
+
+[colors.cursor]
+cursor = "#dddddd"
+text = "#000000"
+
+[colors.normal]
+black = "#555555"
+blue = "#5f87af"
+cyan = "#66d9ef"
+green = "#3fff3f"
+magenta = "#f92672"
+red = "#ff1111"
+white = "#dddddd"
+yellow = "#ed9d12"
+
+[colors.primary]
+background = "#111111"
+foreground = "#dddddd"
+
+[font]
+size = 10.5
+
+[font.bold]
+family = "Fira Code Nerd Font"
+style = "Bold"
+
+[font.normal]
+family = "Fira Code Nerd Font"
+style = "Regular"
+
+[mouse]
+hide_when_typing = true
+
+[window]
+decorations = "none"
+
+[window.padding]
+x = 4
+y = 2

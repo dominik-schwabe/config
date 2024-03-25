@@ -2,8 +2,6 @@
 [[ -r "$HOME/.genrc" ]] && . "$HOME/.genrc"
 [[ -r "$HOME/.aliasrc" ]] && . "$HOME/.aliasrc"
 
-[[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
-
 export HISTFILE="$HOME/.zsh_history"
 export HISTORY_IGNORE="(ls|mv|cp|rm|cd|z|cat|pwd|td|te|o|vim|ovim|novim|rg|fd|ga|gco|ytdl|file|whereis) *"
 
@@ -318,6 +316,19 @@ bindkey -M vicmd '^[[1;5D' backward-word
 # -------------------------------------------
 
 # +++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++++++ mise ++++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++
+
+if (( $+commands[mise] )); then
+    eval "$(mise activate zsh)"
+fi
+
+# -------------------------------------------
+# ------------------- mise -----------------
+# -------------------------------------------
+
+
+# +++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++ zoxide +++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++
 if (( $+commands[zoxide] )); then
@@ -385,15 +396,15 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-_yay_update() {
-    LBUFFER="yay -Syu --noconfirm"
+_paru_update() {
+    LBUFFER="paru -Syu --noconfirm"
     RBUFFER=""
     zle accept-line
 }
 
-zle -N _yay_update
-bindkey -M vicmd '^[[15~' _yay_update
-bindkey -M viins '^[[15~' _yay_update
+zle -N _paru_update
+bindkey -M vicmd '^[[15~' _paru_update
+bindkey -M viins '^[[15~' _paru_update
 
 fpath+=$HOME/.zfunc
 fpath+=$HOME/.zsh-completions
@@ -430,34 +441,23 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
         fi
     }
 
-    declare -u _GET_ASDF_VERSION_VARIABLE_NAME
-    _get_asdf_versions_prompt() {
-        _GET_ASDF_VERSION_VARIABLE_NAME=ASDF_$1_VERSION
-        if DEFINED_NAME=$(export -p "$_GET_ASDF_VERSION_VARIABLE_NAME") 2>/dev/null && [[ "$DEFINED_NAME" = 'export'* ]]; then
-            eval "_VERSIONS=\$$_GET_ASDF_VERSION_VARIABLE_NAME"
-            [[ -n "$_VERSIONS" ]] && {
-                echo "$_VERSIONS"
-                return 0
-            }
-        fi
-        [[ -r $HOME/.tool-versions ]] || return 1
-        while read LINE; do
-            IFS=" " read _ASDF_PROG_NAME _ASDF_PROG_VERSION <<< $LINE;
-            if [[ "$_ASDF_PROG_NAME" = $1 ]]; then
-                echo "$_ASDF_PROG_VERSION"
-                return 0
-            fi
-        done < "$HOME/.tool-versions"
-        return 1
+    _get_tool_version_prompt() {
+      if mise which $1 &>/dev/null; then
+        echo $(mise current $1)
+      elif $(which $1 &>/dev/null); then
+        echo "sys"
+      else
+        echo "none"
+      fi
     }
 
-    get_python_version() { _get_asdf_versions_prompt python || echo system }
-    get_node_version() { _get_asdf_versions_prompt nodejs || echo system }
+    get_python_version() { _get_tool_version_prompt python }
+    get_node_version() { _get_tool_version_prompt node }
     COMMON_PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b '
     ACTIVE_PROMPT=${COMMON_PROMPT}$'\e[5m>>>\e[0m '
     DONE_PROMPT=${COMMON_PROMPT}'>>> '
     PROMPT=$DONE_PROMPT
-    RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B $(get_python_version)%b%f%F{34}%B $(get_node_version)%b%f'
+    RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B python%f:%F{9}$(get_python_version)%b%f%F{34}%B node%f:%F{34}$(get_node_version)%b%f'
 
     # show-inactive-prompt() {
     #   PROMPT=$DONE_PROMPT

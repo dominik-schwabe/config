@@ -65,7 +65,7 @@ function M.get_motion(motion_type)
   return lines
 end
 
-function M.get_shifts(num)
+function M.get_indents(num)
   local text
   if vim.bo.expandtab then
     text = string.rep(" ", vim.bo.tabstop)
@@ -74,12 +74,6 @@ function M.get_shifts(num)
   end
   text = string.rep(text, math.floor(num * vim.bo.shiftwidth / vim.bo.tabstop))
   return text
-end
-
-function M.buf_options_set(bufnr, options)
-  return F.all(options, function(option)
-    return vim.api.nvim_buf_get_option(bufnr, option)
-  end)
 end
 
 function M.tbl_merge(t1, t2)
@@ -105,13 +99,6 @@ function M.load_neighbor_modules(this_file, module_path)
     if file ~= this_file_end then
       F.load(module_path .. "." .. vim.fn.fnamemodify(file, ":r"), nil, false)
     end
-  end
-end
-
-function M.esc_wrap(func)
-  return function()
-    M.feedkeys(esc, "n", false)
-    func()
   end
 end
 
@@ -278,13 +265,6 @@ function M.convert(b)
   }
 end
 
-function M.add_slash(path)
-  if path:sub(-1) ~= "/" then
-    path = path .. "/"
-  end
-  return path
-end
-
 function M.has_prefix(str, prefix)
   return str:sub(1, #prefix) == prefix
 end
@@ -317,62 +297,43 @@ function M.simplify_path(path)
   return path
 end
 
+function M.path(components, opts)
+  opts = opts or {}
+  local is_dir = opts.is_dir
+  local path = table.concat(components, "/")
+  path = vim.fs.normalize(path)
+  path = M.simplify_path(path)
+  if is_dir and path:sub(-1) ~= "/" then
+    path = path .. "/"
+  end
+  return path
+end
+
 function M.replace_root_path(path, root, replacement)
-  local home, rest_prefix = M.remove_prefix(path, M.add_slash(root))
-  if home then
+  local split_root, rest_prefix = M.remove_prefix(path, M.path({ root }, { is_dir = true }))
+  if split_root then
     path = replacement .. rest_prefix
   end
   return path
 end
 
-function M.path_replacements()
-  local path_defs = {
-    {
-      path = vim.env.ASDF_DIR,
-      replacement = "asdf://",
-      sub = "/installs",
-    },
-    {
-      path = vim.env.HOME,
-      replacement = "~/",
-    },
-  }
-  path_defs = F.filter(path_defs, function(path_def)
-    return path_def.path ~= nil
-  end)
-  local paths = {}
-  F.foreach(path_defs, function(path_def)
-    local path = path_def.path
-    if path_def.sub then
-      path = path .. path_def.sub
-    end
-    path = vim.fs.normalize(path)
-    path = M.simplify_path(path)
-    paths[path_def.replacement] = path
-  end)
-  return paths
-end
-
 function M.buffer_path(buf)
-  local path = vim.api.nvim_buf_get_name(buf)
-  path = vim.fs.normalize(path)
-  path = M.simplify_path(path)
-  return path
+  return M.path({ vim.api.nvim_buf_get_name(buf) })
 end
 
 function M.cwd()
-  return M.add_slash(vim.loop.cwd())
+  return M.path({ vim.loop.cwd() }, { is_dir = true })
 end
 
 function M.split_cwd_path(path)
-  local cwd = M.add_slash(vim.loop.cwd())
+  local cwd = M.cwd()
+  path = M.path({ path })
   if path:sub(0, 1) ~= "/" then
-    path = cwd .. "/" .. path
+    path = M.path({ cwd, path })
   end
-  path = M.simplify_path(path)
   local prefix, suffix = M.remove_prefix(path, cwd)
   if prefix then
-    prefix = M.replace_root_path(prefix, vim.env.HOME, "~/")
+    prefix = M.replace_root_path(prefix, "~/", "~/")
   end
   return prefix, suffix
 end

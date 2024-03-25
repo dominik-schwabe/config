@@ -9,12 +9,14 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
     local is_big_buffer = U.is_big_buffer_or_in_allowlist(opts.buf)
     vim.b[opts.buf].is_big_buffer = is_big_buffer
     if is_big_buffer then
+      vim.cmd("syntax clear")
       vim.bo[opts.buf].syntax = "off"
-      vim.opt_local.swapfile = false
+      vim.bo[opts.buf].swapfile = false
+      vim.bo[opts.buf].undolevels = -1
       F.load("illuminate.engine", function(illuminate)
         illuminate.stop_buf(opts.buf)
       end)
-      F.load("colorizer", function (colorizer)
+      F.load("colorizer", function(colorizer)
         colorizer.detach_from_buffer(opts.buf)
       end)
     end

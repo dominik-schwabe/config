@@ -142,7 +142,7 @@ def get_archive_url(repo, args):
     raise ValueError(f"unknown source: {source}")
 
 
-BIN_FOLDER = "~/bin"
+BIN_FOLDER = "~/.local/bin"
 
 
 def tool_is_setup(name, tool_args):

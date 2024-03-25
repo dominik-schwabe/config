@@ -27,7 +27,7 @@ local function sort_rg_matches(lines)
     end
     return a.filename < b.filename
   end)
-  lines = F.map(lines, function (entry)
+  lines = F.map(lines, function(entry)
     return entry.line
   end)
   return lines
@@ -37,7 +37,7 @@ local function rg(string, opt)
   opt = opt or {}
 
   local raw = opt.raw
-  local boundry = opt.boundry
+  local boundary = opt.boundary
   local maximum = opt.maximum
 
   if string == "" then
@@ -61,7 +61,7 @@ local function rg(string, opt)
   if maximum then
     maximum = maximum - 1
   end
-  if boundry then
+  if boundary then
     string = "\\b" .. string .. "\\b"
   end
   args[#args + 1] = string
@@ -109,7 +109,7 @@ local function _rg()
     local selection = U.get_visual_selection(0)
     rg(table.concat(selection, ""), { raw = true, maximum = config.rg_maximum_lines })
   else
-    rg(vim.fn.expand("<cword>"), { raw = true, boundry = true, maximum = config.rg_maximum_lines })
+    rg(vim.fn.expand("<cword>"), { raw = true, boundary = true, maximum = config.rg_maximum_lines })
   end
 end
 

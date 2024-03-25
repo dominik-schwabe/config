@@ -1,13 +1,15 @@
 local opt = vim.opt
 local g = vim.g
 
+local U = require("user.utils")
+
 opt.foldenable = false
 opt.tabstop = 2
 opt.shiftround = true
 opt.shiftwidth = 2
 opt.softtabstop = 2
 opt.autoindent = true
-opt.smartindent = true
+opt.smartindent = false
 opt.expandtab = true
 opt.cmdwinheight = 1
 opt.breakindent = true
@@ -59,13 +61,14 @@ g.loaded_perl_provider = 0
 
 g.python3_host_prog = "/usr/bin/python3"
 
-local PYTHON_VERSION = os.getenv("PYTHON_VERSION")
-local ASDF_DIR = os.getenv("ASDF_DIR")
-if PYTHON_VERSION and ASDF_DIR then
-  ASDF_DIR = vim.fn.glob(ASDF_DIR)
-  local version = string.match(PYTHON_VERSION, "[^%s]+")
-  local python_interpreter = ASDF_DIR .. "/installs/python/" .. version .. "/bin/python"
-  if vim.fn.executable(python_interpreter) ~= 0 then
-    g.python3_host_prog = python_interpreter
+if vim.fn.executable("mise") ~= 0 then
+  local output = vim.fn.system("mise global python")
+  local exit_code = vim.v.shell_error
+  if exit_code == 0 then
+    local PYTHON_VERSION = output:gsub("[\n\t ]+", "")
+    local PYTHON_PATH = U.path({ vim.env.HOME, "/.local/share/mise/installs/python/", PYTHON_VERSION, "/bin/python" })
+    if vim.fn.executable(PYTHON_PATH) ~= 0 then
+      g.python3_host_prog = PYTHON_PATH
+    end
   end
 end

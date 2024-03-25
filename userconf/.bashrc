@@ -3,8 +3,6 @@
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
-[[ -r "$HOME/.shell_plugins/asdf/plugin.sh" ]] && . "$HOME/.shell_plugins/asdf/plugin.sh"
-
 shopt -s histappend
 shopt -s checkwinsize
 shopt -s cmdhist

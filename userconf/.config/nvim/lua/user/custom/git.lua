@@ -73,7 +73,7 @@ function Diffstate:_register_autocmds()
   local autocmd_ids = {}
   autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufWinEnter", "WinClosed" }, {
     callback = vim.schedule_wrap(function()
-      if not self.resetted and not self:is_consitent() then
+      if not self.resetted and not self:is_consistent() then
         self:reset()
       end
     end),
@@ -85,7 +85,7 @@ function Diffstate:_clear_autocmds()
   F.foreach(self.autocmd_ids, vim.api.nvim_del_autocmd)
 end
 
-function Diffstate:is_consitent()
+function Diffstate:is_consistent()
   return vim.api.nvim_win_is_valid(self.main_win)
     and vim.api.nvim_win_is_valid(self.dependent_win)
     and vim.api.nvim_win_get_buf(self.main_win) == self.main_buf
@@ -154,7 +154,7 @@ end
 
 local function get_paths(buf)
   local file_path = vim.api.nvim_buf_call(buf, function()
-    return U.simplify_path(vim.fn.expand("%:p"))
+    return U.path({ vim.fn.expand("%:p") })
   end)
   local paths = {}
   paths.file_path = file_path:sub(1, 1) == "/" and file_path or nil
@@ -277,7 +277,7 @@ local function _diffsplit(main_win, opts)
   end
   local commit_hash = opts.commit_hash or resolve_commit_hash(paths.git_dir, opts.commit)
   if not commit_hash then
-    notify("could not reslove commit hash")
+    notify("could not resolve commit hash")
     return
   end
   if old_stats and old_stats.main_win == main_win and old_stats.commit == commit_hash then
@@ -448,7 +448,7 @@ function M.make_telescope_extension()
       return
     end
     local filtered_commits = F.filter({ "HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD" }, function(commit)
-      return U.exists(vim.fs.normalize(paths.git_dir .. "/" .. commit))
+      return U.exists(U.path({ paths.git_dir, commit }))
     end)
     local named = F.map(F.concat(filtered_commits, refs), function(commit)
       return {

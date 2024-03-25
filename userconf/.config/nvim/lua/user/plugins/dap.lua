@@ -1,3 +1,5 @@
+local config = require("user.config")
+
 local F = require("user.functional")
 local U = require("user.utils")
 
@@ -48,7 +50,9 @@ F.load("hydra", function(Hydra)
       invoke_on_body = true,
       hint = {
         position = "middle-right",
-        border = "rounded",
+        float_opts = {
+          border = config.border,
+        },
       },
     },
     name = "dap",

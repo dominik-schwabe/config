@@ -149,7 +149,7 @@ end)
 F.load("hlargs", function(hlargs)
   hlargs.setup({
     paint_arg_declarations = false,
-    color = "#00ffaf",
+    color = "#16e5a4",
     disable = disable_func,
     excluded_argnames = {
       declarations = {},

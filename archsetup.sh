@@ -165,10 +165,10 @@ lua53-inspect
 unclutter-xfixes-git
 "
 
-installyay() {
-  YAYPATH=$(mktemp -d)
-  git clone https://aur.archlinux.org/yay-bin.git $YAYPATH
-  cd $YAYPATH
+installparu() {
+  PARU_PATH=$(mktemp -d)
+  git clone https://aur.archlinux.org/paru-bin.git $PARU_PATH
+  cd $PARU_PATH
   makepkg -si
 }
 
@@ -220,11 +220,11 @@ if [ -n "$INSTALLSTRING" ]; then
     su -c "pacman -S --needed $INSTALLSTRING" || exit 1
   fi
 fi
-if ! command -v yay &>/dev/null; then
-  echo -e "installing ${BLUE}yay${RESET}"
-  installyay || exit 1
+if ! command -v paru &>/dev/null; then
+  echo -e "installing ${BLUE}paru${RESET}"
+  installparu || exit 1
 fi
 if [ -n "$INSTALLAUR" ]; then
   echo "$AURPKG"
-  yay -S --needed $AURPKG || exit 1
+  paru -S --needed $AURPKG || exit 1
 fi

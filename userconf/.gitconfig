@@ -1,14 +1,32 @@
 [user]
-	email = schwabedominik@gmail.com
-	name = Dominik Schwabe
+  email = schwabedominik@gmail.com
+  name = Dominik Schwabe
+[core]
+  hooksPath = .githooks
 [protocol "file"]
-	allow = always
+  allow = always
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
 [mergetool "nvimdiff4"]
-	cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$windcmd w' -c 'windcmd J'
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$windcmd w' -c 'windcmd J'
+
+[alias]
+  rmuntracked = clean -df
+  other = ls-files --other
+  review = "!f() { git log -p --reverse \"$@\" origin/master...HEAD; }; f"
+  pr = "!f() { git fetch --force origin pull/$1/head:pr-$1; }; f"
+  mff = merge --ff-only
+
+[diff]
+  tool = difftastic
+[difftool]
+  prompt = false
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+  difftool = true

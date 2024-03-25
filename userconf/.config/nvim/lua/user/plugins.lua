@@ -310,7 +310,7 @@ local plugins = F.concat({
   -- { "smoka7/multicursors.nvim", event = "VeryLazy", opts = {}, cmd = {"MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor"}, keys = {{mode = {"v", "n"}, "<Leader>k", "<cmd>MCstart<cr>", desc = "Create a selection for selected text or word under the cursor"}} },
   -- { "brenton-leighton/multiple-cursors.nvim" },
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
-  { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
+  -- { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
   {
     "jiaoshijie/undotree",
     dependencies = "nvim-lua/plenary.nvim",
@@ -321,6 +321,7 @@ local plugins = F.concat({
         function()
           require("undotree").toggle()
         end,
+        desc = "toggle undo tree",
       },
     },
   },
@@ -330,11 +331,11 @@ local plugins = F.concat({
       local rooter = require("rooter")
       rooter.setup({
         path_replacements = function()
-          local replacements = { [vim.env.HOME] = "~/" }
-          if vim.env.ASDF_DIR then
-            replacements[vim.env.ASDF_DIR .. "/installs"] = "asdf://"
-          end
-          return replacements
+          return {
+            [vim.env.HOME] = "~/",
+            [vim.env.HOME .. "/.local/share/mise/installs"] = "mise://",
+            [vim.env.HOME .. "/.asdf"] = "asdf://",
+          }
         end,
       })
       vim.keymap.set("n", "<space>,w", function()
@@ -667,8 +668,8 @@ if not config.minimal then
       },
     },
     { "nmac427/guess-indent.nvim", opts = {} },
-    { "anuvyklack/hydra.nvim", lazy = true },
-    { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>al", "<space>ö" } },
+    { "nvimtools/hydra.nvim", lazy = true },
+    { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>cl", "dal" } },
     {
       "iamcco/markdown-preview.nvim",
       cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },

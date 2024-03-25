@@ -39,32 +39,25 @@ function M.simplify_path(path)
   return path
 end
 
-function M.prepare_replacements(path_replacements)
-  local paths = {}
-  if type(path_replacements) == "function" then
-    path_replacements = path_replacements()
-  end
-  F.foreach_items(path_replacements, function(path, replacement)
-    path = vim.fs.normalize(path)
-    path = M.simplify_path(path)
-    paths[replacement] = path
-  end)
-  return paths
-end
-
-function M.add_slash(path)
-  if path:sub(-1) ~= "/" then
+function M.path(components, opts)
+  opts = opts or {}
+  local is_dir = opts.is_dir
+  local path = table.concat(components, "/")
+  path = vim.fs.normalize(path)
+  path = M.simplify_path(path)
+  if is_dir and path:sub(-1) ~= "/" then
     path = path .. "/"
   end
   return path
 end
 
-function M.replace_root_path(path, root, replacement)
-  local home, rest_prefix = M.remove_prefix(path, M.add_slash(root))
-  if home then
-    path = replacement .. rest_prefix
+function M.prepare_replacements(path_replacements)
+  if type(path_replacements) == "function" then
+    path_replacements = path_replacements()
   end
-  return path
+  return F.map_obj(path_replacements, function(path, replacement)
+    return { M.path({ path }, { is_dir = true }), replacement }
+  end)
 end
 
 return M

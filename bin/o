@@ -23,7 +23,7 @@ ARGUMENT="$1"
 custom_application() {
   TEXT_ONLY=$1
   [[ -e "$ARGUMENT" ]] || error "file does not exist"
-  mimetype=$(file -b --mime-type "$ARGUMENT")
+  mimetype=$(file -b --mime-type -L "$ARGUMENT")
   if [[ "$mimetype" == "text/"* || "$mimetype" == "inode/"* ]]; then
     [[ "$ECHO" == true ]] && echo "$EDITOR" "$mimetype"
     [[ "$ARGUMENT" = *".log" ]] && ARGS="+"
@@ -92,7 +92,7 @@ stream_application() {
 }
 
 default_application() {
-  mimetype=$(file -b --mime-type "$ARGUMENT")
+  mimetype=$(file -b --mime-type -L "$ARGUMENT")
   case "$?" in
     0)
       default_app=$(xdg-mime query default "$mimetype")

@@ -1,10 +1,7 @@
-bpytop
 ipdb
 ipython
 ipython_autoimport
-neovim-remote
 pipenv
 pynvim
 telegram-send
 yt-dlp
-python_telegram_bot==13.*

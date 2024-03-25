@@ -214,12 +214,12 @@ M.lsp_configs = {
   },
 }
 M.linters = {
-  text = { "languagetool" },
+  text = {},
   tex = { "chktex", "lacheck", "vale" },
   cpp = { "cppcheck" },
-  javascript = { "eslint" },
-  markdown = { "markdownlint" },
-  python = { "pylint" },
+  javascript = { "cspell" },
+  markdown = { "cspell" },
+  python = { "cspell" },
   lua = { "luacheck" },
 }
 M.formatters = {
@@ -228,7 +228,7 @@ M.formatters = {
     "rust-analyzer",
   },
   args = {
-    ruff_fix = { "--unfixable", "F401,F841" },
+    ruff_fix = { "--unfixable", "F401,F811,F841" },
     latexindent = { "-y", 'defaultIndent:"  ",verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1' },
     shfmt = { "-i", "2", "-ci" },
     stylua = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },

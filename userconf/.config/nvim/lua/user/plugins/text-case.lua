@@ -1,3 +1,5 @@
+local config = require("user.config")
+
 local textcase = require("textcase")
 
 local function lsp_to_snake_case()
@@ -47,7 +49,9 @@ Hydra({
     invoke_on_body = true,
     hint = {
       position = "middle-right",
-      border = "rounded",
+      float_opts = {
+        border = config.border,
+      },
     },
   },
   name = "textcase",

@@ -9,7 +9,7 @@ M.root_history = {}
 local check_functions = {
   contains = function(dir, contents)
     return F.any(contents, function(content)
-      return U.exists(dir .. "/" .. content)
+      return U.exists(U.path({ dir, content }))
     end)
   end,
   ends_with = function(dir, suffixes)
@@ -46,7 +46,7 @@ function M.find_root(base_path)
           return entry[key] and check_functions[key](context_dir, entry[key])
         end)
       then
-        return dir, base_path
+        return U.path({ dir }, { is_dir = true }), base_path
       end
     end
   end
@@ -68,9 +68,7 @@ function M.trigger(opts)
   if F.contains(C.NOPATH_BUFTYPES, vim.bo[opts.buf].buftype) then
     return
   end
-  local base_path = opts.file
-  base_path = vim.fs.normalize(base_path)
-  base_path = U.simplify_path(base_path)
+  local base_path = U.path({ opts.file })
   if base_path:sub(0, 1) ~= "/" then
     return
   end
@@ -105,14 +103,21 @@ function M.pick_root(opts)
   vim.ui.select(history, {
     prompt = "Select cwd:",
     format_item = function(path)
-      local replaced = path
-      for replacement, root in pairs(replacements) do
-        replaced = U.replace_root_path(replaced, root, replacement)
-        if replaced ~= path then
-          return replaced
+      local replaced = F.map(F.entries(replacements), function(item)
+        local root, replacement = unpack(item)
+        local split_root, rest_prefix = U.remove_prefix(path, U.path({ root }, { is_dir = true }))
+        if split_root then
+          return { #split_root, replacement .. rest_prefix }
         end
-      end
-      return replaced
+      end)
+      replaced = F.filter(replaced, function(e)
+        return e ~= nil
+      end)
+      replaced[#replaced + 1] = { 0, path }
+      table.sort(replaced, function(a, b)
+        return a[1] > b[1]
+      end)
+      return replaced[1][2]
     end,
   }, function(root)
     if root then

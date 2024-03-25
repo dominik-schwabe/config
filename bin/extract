@@ -29,7 +29,10 @@ extract_lzma() {
 run() {
   PROGRAMM="$1"
   FILE="$2"
-  echo $PROGRAMM "'$FILE'"
+  OUTPUT="$PROGRAMM '$FILE'"
+  sed "s/./-/g" <<< "$OUTPUT"
+  echo "$OUTPUT"
+  sed "s/./-/g" <<< "$OUTPUT"
   $PROGRAMM "$FILE"
 }
 
@@ -37,7 +40,7 @@ case "$FILE" in
   *.tar.bz2 | *.tbz2 | *.tbz) run "tar xvjf" "$FILE" ;;
   *.tar.xz) run "tar xvJf" "$FILE" ;;
   *.tar.gz | *.tgz) run "tar xvzf" "$FILE" ;;
-  *.tar.zst) run "tar --use-compress-program=unzstd -xvf" "$FILE" ;;
+  *.tar.zst) run "tar --use-compress-program=zstd -xvf" "$FILE" ;;
   *.zst) run "unzstd" "$FILE" ;;
   *.bz2) run "bunzip2" "$FILE" ;;
   *.rar) run "unrar x" "$FILE" ;;

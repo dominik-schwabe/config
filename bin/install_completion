@@ -63,6 +63,7 @@ command_completion cargo            cat '"$(rustc --print sysroot)"/share/zsh/si
 command_completion rg               rg --generate complete-zsh
 command_completion ruff             ruff generate-shell-completion zsh
 command_completion espflash         espflash completions zsh
+command_completion mise             mise completions zsh
 
 
 TMP=$(mktemp -d)
