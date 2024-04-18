@@ -110,7 +110,7 @@ local S = {
   punctuation_bracket = C.white,
   list = C.pink,
   keyword_repeat = C.loop,
-  modifier = C.aqua,
+  modifier = C.amaranth,
   lifetime = C.yellow,
   quote = C.neon_purple,
   string = C.yellow,
@@ -209,7 +209,7 @@ HL.treesitter = {
   ["@operator"] = { fg = S.operator },
 
   ["@keyword"] = { fg = S.keyword },
-  ["@keyword.modifier"] = { fg = S.modifier },
+  ["@keyword.modifier"] = { fg = S.modifier, bold = true },
   ["@keyword.coroutine"] = { fg = S.coroutine, italic = true },
   ["@keyword.function"] = { fg = S.function_definition, bold = true },
   ["@keyword.operator"] = { fg = S.operator },

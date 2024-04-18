@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+import argparse
+import httpx
+from sys import stderr
+import json
+
+BASE = "http://dominiks-hvac:80"
+
+SPEED_MAP = {
+    "off": 0,
+    "low": 0.35,
+    "mid": 0.6,
+    "high": 0.8,
+    "max": 1.0,
+}
+
+parser = argparse.ArgumentParser()
+parser.add_argument("speed", choices=SPEED_MAP, nargs="?")
+args = parser.parse_args()
+
+speed = args.speed
+try:
+    if speed is not None:
+        httpx.post(f"{BASE}/pwm", json={"percent": SPEED_MAP[speed]})
+    else:
+        response = httpx.get(f"{BASE}/info")
+        print(json.dumps(response.json()))
+except httpx.ConnectError:
+    print(f"{BASE} is unreachable", file=stderr)
+    exit(1)

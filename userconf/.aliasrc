@@ -87,6 +87,8 @@ alias te='translate de:en'
 alias td='translate en:de'
 alias e='extract'
 
+alias use='mise use -g'
+
 alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'
 

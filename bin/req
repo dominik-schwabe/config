@@ -2,7 +2,7 @@
 import json
 
 import argparse
-import requests
+import httpx
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--json", default=None)
@@ -11,6 +11,7 @@ parser.add_argument("--route", type=str, default="")
 parser.add_argument("--port", type=int, default=5000)
 parser.add_argument("--base", type=str, default="http://localhost")
 parser.add_argument("--origin", type=str, default="http://localhost:3000")
+parser.add_argument("--force-http2", action="store_true")
 parser.add_argument("--show-input", action="store_true")
 parser.add_argument("--show-output", action="store_true")
 args = parser.parse_args()
@@ -36,19 +37,22 @@ if args.show_input:
     print("\n")
 
 try:
-    r = requests.request(**kwargs, stream=True)
-    for line in r.iter_lines():
-        print(line.decode())
-    print("\n")
-    if args.show_output or not 200 <= r.status_code < 300:
-        print(
-            json.dumps(
-                {
-                    "code": r.status_code,
-                    "method": method,
-                    "headers": dict(r.headers),
-                }
+    with httpx.Client(http1=not args.force_http2, http2=True) as client, client.stream(
+        **kwargs
+    ) as r:
+        for line in r.iter_lines():
+            print(line)
+        if args.show_output or not 200 <= r.status_code < 300:
+            print("\n")
+            print(
+                json.dumps(
+                    {
+                        "http_version": r.http_version,
+                        "code": r.status_code,
+                        "method": method,
+                        "headers": dict(r.headers),
+                    }
+                )
             )
-        )
-except requests.exceptions.ConnectionError:
+except httpx.ConnectError:
     print(f"{kwargs['url']} unreachable")

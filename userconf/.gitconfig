@@ -1,8 +1,6 @@
 [user]
   email = schwabedominik@gmail.com
   name = Dominik Schwabe
-[core]
-  hooksPath = .githooks
 [protocol "file"]
   allow = always
 [init]
