@@ -420,13 +420,16 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
     unset correctall
 
     # theme
-    DEFAULT_COLOR="2"
-    ROOT_COLOR="161"
-    SSH_COLOR="214"
+    DEFAULT_COLOR="green"
+    ROOT_COLOR="red"
+    SSH_COLOR="yellow"
+    DOCKER_COLOR="cyan"
 
-    PROMPT_COLOR=${DEFAULT_COLOR:-green}
-    [[ "$UID" = "0" ]] && PROMPT_COLOR=${ROOT_COLOR:-red}
-    [[ "$SSH_TTY" ]] && PROMPT_COLOR=${SSH_COLOR:-blue}
+    USER_COLOR=${DEFAULT_COLOR}
+    HOST_COLOR=${DEFAULT_COLOR}
+    [[ "$UID" = "0" ]] && USER_COLOR=${ROOT_COLOR}
+    [[ "$SSH_TTY" ]] && HOST_COLOR=${SSH_COLOR}
+    [[ -f "/.dockerenv" ]] && HOST_COLOR=${DOCKER_COLOR}
 
     git_prompt_info() {
         if ref=$(git symbolic-ref HEAD 2>&1); then
@@ -453,7 +456,7 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
 
     get_python_version() { _get_tool_version_prompt python }
     get_node_version() { _get_tool_version_prompt node }
-    COMMON_PROMPT='%B%F{'$PROMPT_COLOR'}%n%f%F{7}@%F{'$PROMPT_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b '
+    COMMON_PROMPT='%B%F{'$USER_COLOR'}%n%f%F{7}@%F{'$HOST_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b '
     ACTIVE_PROMPT=${COMMON_PROMPT}$'\e[5m>>>\e[0m '
     DONE_PROMPT=${COMMON_PROMPT}'>>> '
     PROMPT=$DONE_PROMPT

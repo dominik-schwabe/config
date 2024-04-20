@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for REPO in "$@"; do
+  huggingface-cli download --resume-download "$REPO" --exclude "*.pth" "*.bin" "*.pt"
+done

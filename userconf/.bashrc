@@ -48,11 +48,13 @@ BIPURPLE="\[\033[1;95m\]"
 BICYAN="\[\033[1;96m\]"
 BIWHITE="\[\033[1;97m\]"
 
-PROMPT_COLOR=$BGREEN
-[[ "$UID" == "0" ]] && PROMPT_COLOR=$BRED
-[[ "$SSH_TTY" ]] && PROMPT_COLOR=$BYELLOW
+USER_COLOR=$BGREEN
+HOST_COLOR=$BGREEN
+[[ "$UID" == "0" ]] && USER_COLOR=$BRED
+[[ "$SSH_TTY" ]] && HOST_COLOR=$BYELLOW
+[[ -f "/.dockerenv" ]] && HOST_COLOR=$BCYAN
 
-export PS1="${PROMPT_COLOR}\u${BWHITE}@${PROMPT_COLOR}\h ${BBLUE}\w ${IYELLOW}\A ${BRED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>>${RESET} "
+export PS1="${USER_COLOR}\u${BWHITE}@${HOST_COLOR}\h ${BBLUE}\w ${IYELLOW}\A ${BRED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>>${RESET} "
 
 # zoxide
 if command -v zoxide &>/dev/null; then

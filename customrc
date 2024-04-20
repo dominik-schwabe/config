@@ -1,8 +1,12 @@
-# export LANG=de_DE.UTF-8
-# export LC_ALL=de_DE.UTF-8
-# export LANG=en_US.UTF-8
-# export LC_ALL=en_US.UTF-8
+# export LANG=de_DE.UTF-8 LC_ALL=de_DE.UTF-8
+# export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 # export MINIMAL_CONFIG=true
 # export SYSTEM_PURPOSE="productive"
+
+# export QT_AUTO_SCREEN_SET_FACTOR=0
+# export QT_SCALE_FACTOR=2
+# export QT_FONT_DPI=96
+# export GDK_SCALE=2
+# export GDK_DPI_SCALE=0.5
 
 # vi: ft=sh

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DEVICE=$(route | grep '^default' | grep -o '[^ ]*$')
+LIMIT=$1
+
+if [[ -n "$LIMIT" ]]; then
+  tc qdisc add dev "$DEVICE" root tbf rate "$LIMIT" burst 16kbit latency 50ms
+  tc qdisc add dev "$DEVICE" handle ffff: ingress
+  tc filter add dev "$DEVICE" parent ffff: protocol ip prio 50 u32 match ip dst 0.0.0.0/0 flowid :1
+else
+  tc qdisc del dev "$DEVICE" root
+  tc qdisc del dev "$DEVICE" ingress
+fi

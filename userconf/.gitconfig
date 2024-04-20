@@ -28,3 +28,5 @@
   cmd = difft "$LOCAL" "$REMOTE"
 [pager]
   difftool = true
+[credential]
+  helper = store
