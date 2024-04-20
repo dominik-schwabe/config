@@ -6,7 +6,7 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 augroup myCmds
 au!
-autocmd VimEnter * silent !echo -ne "\e[2 q"
+autocmd VimEnter * silent! !echo -ne "\e[2 q" | redraw!
 augroup END
 
 if has("termguicolors") | set termguicolors | endif

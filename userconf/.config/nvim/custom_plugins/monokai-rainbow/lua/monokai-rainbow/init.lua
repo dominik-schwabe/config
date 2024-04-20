@@ -184,7 +184,7 @@ HL.treesitter = {
   ["@string.special.path"] = { fg = S.path },
 
   ["@character"] = { fg = S.character },
-  ["@character.special"] = UNKNOWN,
+  ["@character.special"] = { fg = C.purple },
 
   ["@boolean"] = { fg = S.boolean },
   ["@number"] = { fg = S.number },
