@@ -170,7 +170,7 @@ def extract_tool_from_archive(name, archive_path: Path, tool_args):
     extra_files = tool_args.get("files", {})
     parent_path = archive_path.parent
     bin_folder = Path(tool_args.get("bin", BIN_FOLDER)).expanduser()
-    bin_folder.mkdir(exist_ok=True)
+    bin_folder.mkdir(exist_ok=True, parents=True)
     tool_dest = bin_folder / name
     source = tool_args.get("source")
     if source == "tarball":

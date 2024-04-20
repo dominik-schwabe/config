@@ -12,6 +12,7 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 
 BASE="
 $UCODE
+man-db
 alsa-tools
 alsa-utils
 arch-install-scripts
@@ -26,12 +27,14 @@ cmus
 curl
 dnsutils
 docker
+docker-buildx
 docker-compose
 dosfstools
 efibootmgr
 gcc-fortran
 git
 git-lfs
+os-prober
 grub
 gvfs
 gvfs-mtp
@@ -47,6 +50,7 @@ luajit
 luarocks
 mtpfs
 neovim
+tree-sitter-cli
 net-tools
 networkmanager
 openresolv

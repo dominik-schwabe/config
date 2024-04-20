@@ -3,6 +3,8 @@
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
+alias unlock="faillock --reset --user"
+
 shopt -s histappend
 shopt -s checkwinsize
 shopt -s cmdhist
