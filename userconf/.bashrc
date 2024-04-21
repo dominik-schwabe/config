@@ -48,13 +48,19 @@ BIPURPLE="\[\033[1;95m\]"
 BICYAN="\[\033[1;96m\]"
 BIWHITE="\[\033[1;97m\]"
 
-USER_COLOR=$BGREEN
-HOST_COLOR=$BGREEN
-[[ "$UID" == "0" ]] && USER_COLOR=$BRED
-[[ "$SSH_TTY" ]] && HOST_COLOR=$BYELLOW
-[[ -f "/.dockerenv" ]] && HOST_COLOR=$BCYAN
+prompt_cmd() {
+  LAST_STATUS=$?
+  USER_COLOR=$BGREEN
+  HOST_COLOR=$BGREEN
+  [[ "$UID" == "0" ]] && USER_COLOR=$BRED
+  [[ "$SSH_TTY" ]] && HOST_COLOR=$BYELLOW
+  [[ -f "/.dockerenv" ]] && HOST_COLOR=$BCYAN
+  export PS1="${USER_COLOR}$(printf "%-7s" $(whoami))${BWHITE} @ ${HOST_COLOR}\h${RESET} ${BBLUE}\w${RESET} ${IYELLOW}\A${RESET} "
+  [[ "$LAST_STATUS" == 0 ]] || PS1+="${BRED}$LAST_STATUS${RESET} "
+  PS1+="${WHITE}>>>${RESET} "
+}
 
-export PS1="${USER_COLOR}\u${BWHITE}@${HOST_COLOR}\h ${BBLUE}\w ${IYELLOW}\A ${BRED}\$(_RET=\$?; [ \"\$_RET\" = 0 ] || echo \"\$_RET \")${WHITE}>>>${RESET} "
+export PROMPT_COMMAND="prompt_cmd"
 
 # zoxide
 if command -v zoxide &>/dev/null; then

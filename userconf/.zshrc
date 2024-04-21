@@ -456,25 +456,8 @@ if [[ -z "$MINIMAL_CONFIG" ]]; then
 
     get_python_version() { _get_tool_version_prompt python }
     get_node_version() { _get_tool_version_prompt node }
-    COMMON_PROMPT='%B%F{'$USER_COLOR'}%n%f%F{7}@%F{'$HOST_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b '
-    ACTIVE_PROMPT=${COMMON_PROMPT}$'\e[5m>>>\e[0m '
-    DONE_PROMPT=${COMMON_PROMPT}'>>> '
-    PROMPT=$DONE_PROMPT
+    PROMPT='%B%F{'$USER_COLOR'}$(printf "%-7s" $(whoami))%f%F{7} @ %F{'$HOST_COLOR'}%m %F{blue}%2~%f%B$(git_prompt_info)%b%b >>> '
     RPS1='%(?..%F{1}%B%?%b%f )% %w %B%F{11}%T%f%b%F{9}%B python%f:%F{9}$(get_python_version)%b%f%F{34}%B node%f:%F{34}$(get_node_version)%b%f'
-
-    # show-inactive-prompt() {
-    #   PROMPT=$DONE_PROMPT
-    #   zle reset-prompt
-    #   PROMPT=$ACTIVE_PROMPT
-    # }
-
-    # change-prompt-and-accept-line() {
-    #   show-inactive-prompt
-    #   zle accept-line
-    # }
-
-    # zle -N change-prompt-and-accept-line
-    # bindkey "^M" change-prompt-and-accept-line
 
     load_plugin() {
         local URL=$1

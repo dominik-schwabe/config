@@ -72,7 +72,7 @@ au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 noremap gw :write<CR>
 noremap Q :qa<CR>
-nnoremap <silent> ö :noh<CR>
+nnoremap <silent> <C-e> :noh<CR>
 noremap <c-g> 2<c-g>
 tnoremap <C-e> <C-\><C-n>
 noremap <left> :wincmd H<CR>
