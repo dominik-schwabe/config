@@ -444,15 +444,6 @@ if not config.minimal then
       },
     },
     {
-      "rhysd/clever-f.vim",
-      event = "VeryLazy",
-      init = function()
-        vim.g.clever_f_across_no_line = 1
-        vim.g.clever_f_smart_case = 1
-        vim.g.clever_f_mark_direct = 1
-      end,
-    },
-    {
       "altermo/ultimate-autopair.nvim",
       event = { "InsertEnter", "CmdlineEnter" },
       branch = "v0.6",
@@ -682,7 +673,7 @@ if not config.minimal then
           function OpenMarkdown(url)
             echo a:url
             if empty($SSH_TTY)
-              call system($BROWSER .. " " .. a:url)
+              call system("xdg-open " .. a:url)
             endif
           endfunction
         ]])

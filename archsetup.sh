@@ -43,8 +43,8 @@ inetutils
 jq
 keychain
 linux-firmware
-linux-zen
-linux-zen-headers
+linux
+linux-headers
 lua
 luajit
 luarocks

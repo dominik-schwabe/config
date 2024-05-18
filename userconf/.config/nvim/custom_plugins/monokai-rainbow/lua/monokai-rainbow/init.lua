@@ -116,7 +116,7 @@ local S = {
   string = C.yellow,
   regexp = C.purple,
   string_escape = C.purple,
-  string_special = C.yellow,
+  string_special = C.neon_purple,
   symbol = C.neon_purple,
   tag = C.pink,
   tag_attribute = C.base9,
@@ -467,6 +467,7 @@ HL.rainbow = {
 }
 
 HL.diagnostics = {
+  DiagnosticOk = { fg = S.success },
   DiagnosticHint = { fg = S.hint },
   DiagnosticInfo = { fg = S.info },
   DiagnosticWarn = { fg = S.warning },

@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+from PIL import Image
+from PIL.PngImagePlugin import PngInfo
+import json
+import argparse
+from colorama import init, Fore
+
+init()
+
+parser = argparse.ArgumentParser(description="change png metadata tags")
+
+parser.add_argument("path", type=str)
+parser.add_argument("--tag", type=str, action="append", nargs=2)
+parser.add_argument("--json", action="store_true")
+
+args = parser.parse_args()
+image = Image.open(args.path)
+
+if not args.tag:
+    if args.json:
+        print(json.dumps(image.info))
+    else:
+        for key, value in image.info.items():
+            print(f"{Fore.GREEN}{key}{Fore.RESET}", value)
+else:
+    new_metadata = PngInfo()
+    merged = image.info.copy()
+    merged.update(dict(args.tag))
+    for key, value in merged.items():
+        new_metadata.add_text(key, value)
+    image.save(args.path, pnginfo=new_metadata)

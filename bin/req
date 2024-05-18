@@ -37,9 +37,9 @@ if args.show_input:
     print("\n")
 
 try:
-    with httpx.Client(http1=not args.force_http2, http2=True) as client, client.stream(
-        **kwargs
-    ) as r:
+    with httpx.Client(
+        http1=not args.force_http2, http2=True, timeout=None
+    ) as client, client.stream(**kwargs) as r:
         for line in r.iter_lines():
             print(line)
         if args.show_output or not 200 <= r.status_code < 300:
