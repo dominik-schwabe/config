@@ -553,6 +553,7 @@ HL.help = {
 HL.health = {
   healthHeadingChar = { fg = S.comment },
   healthError = { link = "@comment.error" },
+  healthWarning = { link = "@comment.warning" },
   healthSuccess = { link = "@comment.ok" },
 }
 

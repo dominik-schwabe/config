@@ -1,5 +1,5 @@
 configuration {
-  terminal: "alacritty";
+  terminal: "wezterm";
   window-format: "{w}    {c}   {t}";
   modi: "drun,window";
   display-drun: "Launch";

@@ -19,10 +19,10 @@ parser.add_argument("--rm", default=None)
 args = parser.parse_args()
 
 TOOLS = {
-    "rg": "BurntSushi/ripgrep",
-    "fzf": "junegunn/fzf",
-    "fd": "sharkdp/fd",
-    "jq": "jqlang/jq",
+    # "rg": "BurntSushi/ripgrep",
+    # "fzf": "junegunn/fzf",
+    # "fd": "sharkdp/fd",
+    # "jq": "jqlang/jq",
     "zoxide": "ajeetdsouza/zoxide",
     "ytfzf": {"repo": "pystardust/ytfzf", "source": "tarball"},
     "btop": {
@@ -32,15 +32,18 @@ TOOLS = {
 }
 
 EXTRA_TOOLS = {
-    "nvim": {
-        "bin": "~/.local/bin",
-        "repo": "neovim/neovim",
-        "files": {
-            "lib/nvim": "~/.local/lib/nvim",
-            "share/nvim/runtime": "~/.local/share/nvim/runtime",
-            "share/locale": "~/.local/share/locale",
-        },
-    },
+    # "nvim": {
+    #     "repo": "neovim/neovim",
+    #     "appimage": True,
+    # },
+    # "nvim": {
+    #     "repo": "neovim/neovim",
+    #     "files": {
+    #         "lib/nvim": "~/.local/lib/nvim",
+    #         "share/nvim/runtime": "~/.local/share/nvim/runtime",
+    #         "share/locale": "~/.local/share/locale",
+    #     },
+    # },
 }
 
 TOOLS = {
@@ -127,12 +130,15 @@ def score_asset(asset):
 
 def get_archive_url(repo, args):
     source = args.get("source", "assets")
+    appimage = args.get("appimage", False)
     url = f"https://api.github.com/repos/{repo}/releases"
     with urlopen(url) as file:
         j = json.loads(file.read().decode("utf-8"))
     release = next(x for x in j if not x["prerelease"])
     if source == "assets":
         assets = release["assets"]
+        if appimage:
+            assets = [asset for asset in assets if "appimage" in asset["name"].lower()]
         for asset in assets:
             asset["score"] = score_asset(asset)
         best_asset = max(assets, key=lambda x: x["score"])

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for TOOL in "usage fzf jq ripgrep fd"; do
+  mise use -yg $TOOL
+done
