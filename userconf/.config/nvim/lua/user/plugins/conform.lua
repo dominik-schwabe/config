@@ -1,24 +1,14 @@
-local util = require("conform.util")
 local apply_format = require("conform.runner").apply_format
+local conform = require("conform")
 
 local F = require("user.functional")
 
 local formatters = require("user.config").formatters
 
-local function extend_args(formatter, args)
-  local format_definition = require("conform.formatters." .. formatter)
-  local extra = {
-    args = util.extend_args(format_definition.args, args, { append = false }),
-  }
-  if format_definition.range_args then
-    extra.range_args = util.extend_args(format_definition.range_args, args, { append = true })
-  end
-  require("conform").formatters[formatter] = vim.tbl_deep_extend("force", format_definition, extra)
-end
+F.foreach_items(formatters.args or {}, function(formatter, args)
+  conform.formatters[formatter] = { append_args = args }
+end)
 
-F.foreach_items(formatters.args or {}, extend_args)
-
-local conform = require("conform")
 conform.setup({
   formatters_by_ft = formatters.filetype or {},
 })

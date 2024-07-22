@@ -3,6 +3,16 @@ import json
 
 import argparse
 import httpx
+import sys
+
+
+def print_err(arg: str, end: str = "\n"):
+    print(arg, file=sys.stderr, flush=True, end=end)
+
+
+def print_out(arg: str, end: str = "\n"):
+    print(arg, file=sys.stdout, flush=True, end=end)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--json", default=None)
@@ -12,8 +22,11 @@ parser.add_argument("--port", type=int, default=5000)
 parser.add_argument("--base", type=str, default="http://localhost")
 parser.add_argument("--origin", type=str, default="http://localhost:3000")
 parser.add_argument("--force-http2", action="store_true")
-parser.add_argument("--show-input", action="store_true")
-parser.add_argument("--show-output", action="store_true")
+parser.add_argument("--show-request-meta", action="store_true")
+parser.add_argument("--show-response-meta", action="store_true")
+parser.add_argument("--fake", action="store_true")
+parser.add_argument("--headers", default=None)
+parser.add_argument("url", nargs="?", default=None)
 args = parser.parse_args()
 
 if args.method is not None:
@@ -23,36 +36,65 @@ elif args.json is None:
 else:
     method = "POST"
 
+headers = {}
+
+url = args.url
+if url is None:
+    url = f"{args.base}"
+    if args.port >= 0:
+        url = f"{url}:{args.port}"
+    url = f"{url}{args.route}"
+    headers["origin"] = args.origin
+
+if "://" not in url:
+    url = f"http://{url}"
+
+
+if args.fake:
+    import fake_useragent
+
+    headers["User-Agent"] = fake_useragent.UserAgent().chrome
+    if user_headers := args.headers:
+        headers.update(json.loads(user_headers))
+
+
 kwargs = {
     "method": method,
-    "url": f"{args.base}:{args.port}{args.route}",
-    "headers": {"origin": args.origin},
+    "url": url,
+    "headers": headers,
 }
 
 if args.json is not None:
     kwargs["json"] = json.loads(args.json)
 
-if args.show_input:
-    print(json.dumps(kwargs), end="\n")
-    print("\n")
+
+if args.show_request_meta:
+    print_err(json.dumps(kwargs), end="\n\n")
+
 
 try:
     with httpx.Client(
-        http1=not args.force_http2, http2=True, timeout=None
-    ) as client, client.stream(**kwargs) as r:
-        for line in r.iter_lines():
-            print(line)
-        if args.show_output or not 200 <= r.status_code < 300:
-            print("\n")
-            print(
-                json.dumps(
-                    {
-                        "http_version": r.http_version,
-                        "code": r.status_code,
-                        "method": method,
-                        "headers": dict(r.headers),
-                    }
+        http1=not args.force_http2, http2=False, follow_redirects=True, timeout=None
+    ) as client:
+        with client.stream(**kwargs) as r:
+            for line in r.iter_text():
+                print_out(line, end="")
+            if (
+                args.show_response_meta
+                or method == "HEAD"
+                or not 200 <= r.status_code < 300
+            ):
+                redirects = [str(e.url) for e in [*r.history, r]]
+                print_err(
+                    json.dumps(
+                        {
+                            "http_version": r.http_version,
+                            "code": r.status_code,
+                            "method": method,
+                            "headers": dict(r.headers),
+                            "history": redirects,
+                        }
+                    ),
                 )
-            )
 except httpx.ConnectError:
-    print(f"{kwargs['url']} unreachable")
+    print_err(f"{kwargs['url']} unreachable")

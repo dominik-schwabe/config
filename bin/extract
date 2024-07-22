@@ -30,9 +30,9 @@ run() {
   PROGRAMM="$1"
   FILE="$2"
   OUTPUT="$PROGRAMM '$FILE'"
-  sed "s/./-/g" <<< "$OUTPUT"
+  sed "s/./-/g" <<<"$OUTPUT"
   echo "$OUTPUT"
-  sed "s/./-/g" <<< "$OUTPUT"
+  sed "s/./-/g" <<<"$OUTPUT"
   $PROGRAMM "$FILE"
 }
 
@@ -51,6 +51,7 @@ case "$FILE" in
   # *.lzma) extract_lzma "$FILE" ;;
   *.Z) run "uncompress" "$FILE" ;;
   *.7z) run "7z x" "$FILE" ;;
+  *.br) run "brotli -d" "$FILE" ;;
   *)
     error "don't know how to extract '$FILE'..."
     ;;

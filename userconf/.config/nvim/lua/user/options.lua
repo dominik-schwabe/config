@@ -25,7 +25,7 @@ opt.wrap = false
 opt.cursorline = true
 opt.signcolumn = "yes:2"
 opt.shada = "'0,f0"
-opt.mouse = nil
+opt.mouse = ""
 opt.showmode = false
 
 opt.completeopt = { "menu", "menuone", "noselect" }

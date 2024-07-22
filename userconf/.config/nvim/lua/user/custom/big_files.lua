@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
       vim.cmd("syntax clear")
       vim.bo[opts.buf].syntax = "off"
       vim.bo[opts.buf].swapfile = false
-      vim.bo[opts.buf].undolevels = -1
+      -- vim.bo[opts.buf].undolevels = -1
       F.load("illuminate.engine", function(illuminate)
         illuminate.stop_buf(opts.buf)
       end)

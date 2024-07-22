@@ -391,7 +391,10 @@ local plugins = F.concat({
     dir = config.custom_plugin_path .. "/fullscreen",
     opts = {},
     cmd = { "ToggleFullscreen" },
-    keys = { { "<F24>", "<ESC>:ToggleFullscreen<CR>", mode = { "n", "x", "i", "t" }, desc = "toggle fullscreen" } },
+    keys = {
+      { "<F24>", "<CMD>ToggleFullscreen<CR>", mode = { "n", "x", "t" }, desc = "toggle fullscreen" },
+      { "<F24>", "<ESC>:ToggleFullscreen<CR>", mode = { "i" }, desc = "toggle fullscreen" },
+    },
   },
 })
 
@@ -692,6 +695,8 @@ if not config.minimal then
       keys = { { "<space>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
     },
     { "echasnovski/mini.nvim", version = false },
+    { "kyoh86/vim-jsonl" },
+    { "lark-parser/vim-lark-syntax" },
   })
 end
 
