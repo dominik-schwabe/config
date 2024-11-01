@@ -680,7 +680,6 @@ if not config.minimal then
     },
     { "nmac427/guess-indent.nvim", opts = {} },
     { "nvimtools/hydra.nvim", lazy = true },
-    { "debugloop/layers.nvim" },
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>cl", "dal" } },
     {
       "OXY2DEV/markview.nvim",
@@ -721,9 +720,6 @@ if not config.minimal then
       keys = { { "<space>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
     },
     { "echasnovski/mini.nvim", version = false },
-    { "kyoh86/vim-jsonl" },
-    { "lark-parser/vim-lark-syntax" },
-    { "pest-parser/pest.vim" },
   })
 end
 
