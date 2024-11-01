@@ -12,6 +12,13 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 
 BASE="
 $UCODE
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+noto-fonts-extra
+man-pages
 man-db
 alsa-tools
 alsa-utils
@@ -107,7 +114,6 @@ lightdm
 lightdm-gtk-greeter
 mpv
 nm-connection-editor
-noto-fonts-emoji
 pavucontrol
 perl-file-mimeinfo
 picom

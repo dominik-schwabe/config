@@ -4,6 +4,8 @@
 [[ -r /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
 alias unlock="faillock --reset --user"
+alias ls='ls --color=auto'
+alias rl='readlink'
 
 shopt -s histappend
 shopt -s checkwinsize

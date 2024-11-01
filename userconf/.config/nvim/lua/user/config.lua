@@ -61,7 +61,7 @@ M.icons = {
   Reference = "",
   Folder = "󰉋",
   Struct = "󰙅",
-  Tailwind = "󰝤", -- ■  
+  KnownColor = "󰝤", -- ■  
   Yank = "󰏢",
   Path = "/",
   Tmux = "󰓫",
@@ -100,8 +100,8 @@ M.rooter = {
     patterns = { "/lib/python3.[0-9]*$" },
   },
 }
-M.lsp_ensure_installed = { "pyright", "ruff_lsp", "tsserver", "jsonls", "bashls" }
-M.mason_ensure_installed = { "ruff", "prettierd" }
+M.lsp_ensure_installed = { "basedpyright", "ruff", "ts_ls", "jsonls", "bashls" }
+M.mason_ensure_installed = { "prettierd" }
 M.lsp_configs = {
   -- latex = {
   --   settings = {
@@ -118,6 +118,13 @@ M.lsp_configs = {
   --   },
   -- },
   rust_analyzer = {
+    inlayHints = {
+      closureCaptureHints = { enable = true },
+      closureReturnTypeHints = { enable = "always" },
+      discriminantHints = { enable = "always" },
+      maxLength = 50,
+      renderColons = false,
+    },
     lspconfig_ignore = true,
     checkOnSave = { command = "clippy" },
     hover = {
@@ -135,6 +142,9 @@ M.lsp_configs = {
         completion = {
           callSnippet = "Replace",
           showWord = "Disable",
+        },
+        hint = {
+          enable = true,
         },
       },
     },
@@ -180,21 +190,6 @@ M.lsp_configs = {
       },
     },
   },
-  pyright = {
-    settings = {
-      pyright = {
-        disableOrganizeImports = true,
-      },
-      python = {
-        analysis = {
-          diagnosticMode = "openFilesOnly",
-          -- diagnosticMode = "workspace",
-          useLibraryCodeForTypes = true,
-          typeCheckingMode = "off",
-        },
-      },
-    },
-  },
   tailwindcss = {
     settings = {
       tailwindCSS = {
@@ -236,13 +231,13 @@ M.formatters = {
   filetype = {
     python = { "ruff_fix", "ruff_format" },
     json = { "jq" },
-    html = { { "prettierd", "prettier" } },
-    javascript = { { "prettierd", "prettier" } },
-    javascriptreact = { { "prettierd", "prettier" } },
-    typescript = { { "prettierd", "prettier" } },
-    typescriptreact = { { "prettierd", "prettier" } },
-    markdown = { { "prettierd", "prettier" } },
-    yaml = { { "prettierd", "prettier" } },
+    html = { "prettierd", "prettier" },
+    javascript = { "prettierd", "prettier" },
+    javascriptreact = { "prettierd", "prettier" },
+    typescript = { "prettierd", "prettier" },
+    typescriptreact = { "prettierd", "prettier" },
+    markdown = { "prettierd", "prettier" },
+    yaml = { "prettierd", "prettier" },
     cpp = { "clang_format" },
     c = { "clang_format" },
     toml = { "taplo" },
@@ -251,6 +246,9 @@ M.formatters = {
     sh = { "shfmt" },
     lua = { "stylua" },
     xml = { "xmlformat" },
+    pest = { "pestfmt" },
+    xj = { "xj" },
+    xjl = { "xjl" },
   },
 }
 M.treesitter = {

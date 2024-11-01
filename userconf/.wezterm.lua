@@ -2,23 +2,25 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder and wezterm.config_builder() or {}
 
+local LINK_RE = "(\\w+://[^ \t\n\"'()<>]+[/a-zA-Z0-9-]+)"
+
 config.hyperlink_rules = {
   -- Matches: a URL in parens: (URL)
-  { regex = "\\((\\w+://\\S+)\\)", format = "$1", highlight = 1 },
+  { regex = "\\(" .. LINK_RE .. "\\)", format = "$1", highlight = 1 },
   -- Matches: a URL in brackets: [URL]
-  { regex = "\\[(\\w+://\\S+)\\]", format = "$1", highlight = 1 },
+  { regex = "\\[" .. LINK_RE .. "\\]", format = "$1", highlight = 1 },
   -- Matches: a URL in curly braces: {URL}
-  { regex = "\\{(\\w+://\\S+)\\}", format = "$1", highlight = 1 },
+  { regex = "\\{" .. LINK_RE .. "\\}", format = "$1", highlight = 1 },
   -- Matches: a URL in angle brackets: <URL>
-  { regex = "<(\\w+://\\S+)>", format = "$1", highlight = 1 },
+  { regex = "<" .. LINK_RE .. ">", format = "$1", highlight = 1 },
   -- Then handle URLs not wrapped in brackets
-  { regex = "[^(]\\b(\\w+://[^ \t\n\"']+[)/a-zA-Z0-9-]+)", format = "$1", highlight = 1 },
+  { regex = "\\b" .. LINK_RE, format = "$1", highlight = 1 },
   -- implicit mailto link
   { regex = "\\b\\w+@[\\w-]+(\\.[\\w-]+)+\\b", format = "mailto:$0" },
 }
 
 config.font = wezterm.font("Fira Code Nerd Font")
-config.harfbuzz_features = { "calt=0" }
+config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 config.warn_about_missing_glyphs = false
 config.font_size = 10.5
 config.scrollback_lines = 10000
@@ -49,7 +51,7 @@ config.colors = {
   split = "#444444",
 
   ansi = {
-    "#555555",
+    "#777777",
     "#ff1111",
     "#83e516",
     "#ed9d12",
@@ -112,7 +114,7 @@ config.keys = {
     mods = "SHIFT|CTRL",
     action = act.CharSelect({ copy_on_select = true, copy_to = "ClipboardAndPrimarySelection" }),
   },
-  -- { key = 'L', mods = 'SHIFT|CTRL', action = act.ShowDebugOverlay },
+  { key = "K", mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
   -- { key = 'l', mods = 'SHIFT|CTRL', action = act.ShowDebugOverlay },
   -- { key = 'P', mods = 'SHIFT|CTRL', action = act.ActivateCommandPalette },
   -- { key = 'p', mods = 'SHIFT|CTRL', action = act.ActivateCommandPalette },

@@ -29,15 +29,15 @@ local function to_pascal_case()
 end
 
 local hydra_hint = [[
-_<F9>_: to-snake-case (LSP)
-_<F10>_: TO-CONSTANT-CASE (LSP)
-_<F11>_: toCamelCase (LSP)
-_<F12>_: ToPascalCase (LSP)
-_<F5>_: to-snake-case
-_<F6>_: TO-CONSTANT-CASE
-_<F7>_: toCamelCase
-_<F8>_: ToPascalCase
-_<ESC>_: exit
+_<F9>_  : to-snake-case (LSP)
+_<F10>_ : TO-CONSTANT-CASE (LSP)
+_<F11>_ : toCamelCase (LSP)
+_<F12>_ : ToPascalCase (LSP)
+_<F5>_  : to-snake-case
+_<F6>_  : TO-CONSTANT-CASE
+_<F7>_  : toCamelCase
+_<F8>_  : ToPascalCase
+_<ESC>_ : exit
 ]]
 
 local Hydra = require("hydra")

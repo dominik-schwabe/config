@@ -1,17 +1,31 @@
 #!/usr/bin/env python3
 import json
+from typing import Any
 
+import rich
 import argparse
 import httpx
 import sys
+from rich.pretty import Pretty
+from rich.text import Text
 
 
-def print_err(arg: str, end: str = "\n"):
-    print(arg, file=sys.stderr, flush=True, end=end)
+def print_err(arg: Any, end: str = "\n"):
+    rich.print(
+        arg,
+        file=sys.stderr,
+        flush=True,
+        end=end,
+    )
 
 
 def print_out(arg: str, end: str = "\n"):
-    print(arg, file=sys.stdout, flush=True, end=end)
+    print(
+        arg,
+        file=sys.stdout,
+        flush=True,
+        end=end,
+    )
 
 
 parser = argparse.ArgumentParser()
@@ -69,14 +83,21 @@ if args.json is not None:
 
 
 if args.show_request_meta:
-    print_err(json.dumps(kwargs), end="\n\n")
+    print_err(Pretty(kwargs), end="\n\n")
+
+
+def to_number(x: Any):
+    number = float(x)
+    return int(number) if number.is_integer() else number
 
 
 try:
     with httpx.Client(
-        http1=not args.force_http2, http2=False, follow_redirects=True, timeout=None
+        http1=not args.force_http2, http2=True, follow_redirects=True, timeout=None
     ) as client:
         with client.stream(**kwargs) as r:
+            network_stream = r.extensions["network_stream"]
+            server_addr = network_stream.get_extra_info("server_addr")
             for line in r.iter_text():
                 print_out(line, end="")
             if (
@@ -85,16 +106,18 @@ try:
                 or not 200 <= r.status_code < 300
             ):
                 redirects = [str(e.url) for e in [*r.history, r]]
+                print()
                 print_err(
-                    json.dumps(
+                    Pretty(
                         {
-                            "http_version": r.http_version,
-                            "code": r.status_code,
-                            "method": method,
                             "headers": dict(r.headers),
                             "history": redirects,
+                            "code": r.status_code,
+                            "method": method,
+                            "address": server_addr,
+                            "http_version": to_number(r.http_version.split("/")[-1]),
                         }
-                    ),
+                    )
                 )
 except httpx.ConnectError:
-    print_err(f"{kwargs['url']} unreachable")
+    print_err(Text.from_markup(f"{kwargs['url']} unreachable", style="red"))

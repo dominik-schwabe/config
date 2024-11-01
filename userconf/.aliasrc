@@ -1,4 +1,7 @@
 alias ls='ls --color=auto'
+alias rl='readlink'
+
+alias cloc='tokei -s code -C'
 
 alias grep='grep -i --color=auto'
 alias fgrep='fgrep -i --color=auto'
@@ -17,7 +20,6 @@ alias rg='rg -i'
 
 alias ip='ip -color=auto'
 
-alias ls='ls --color=tty'
 alias lr="find -type f -exec basename {} \;"
 alias l='ls -lAthr'
 alias ll='ls -lAh'
@@ -77,6 +79,7 @@ alias ppjson='python -m json.tool'
 
 alias install_zsh='curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh'
 alias install_treesitter='cargo install tree-sitter-cli'
+alias install_rye='curl -sSf https://Rye-up.com/get | bash'
 alias install_mise='curl https://mise.run | sh'
 alias install_trans='curl --create-dirs -sfLo ~/.toolbin/trans https://git.io/trans && chmod 755 ~/.toolbin/trans'
 alias install_chtsh='curl --create-dirs -sfLo ~/.toolbin/cht.sh https://cht.sh/:cht.sh && chmod 755 ~/.toolbin/cht.sh'

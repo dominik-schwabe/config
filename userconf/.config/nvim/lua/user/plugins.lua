@@ -82,7 +82,6 @@ local lspconfig = with_dependencies({
     { "williamboman/mason-lspconfig.nvim" },
   },
 }, {
-  { "WhoIsSethDaniel/mason-tool-installer.nvim" },
   {
     "azabiong/vim-highlighter",
     keys = {
@@ -113,7 +112,11 @@ local lspconfig = with_dependencies({
     ft = { "rust" },
     init = function()
       vim.g.rustaceanvim = {
-        tools = {},
+        tools = {
+          float_win_config = {
+            border = config.border,
+          },
+        },
         server = {
           on_attach = function(client, bufnr)
             local map_opts = { noremap = true, silent = true, buffer = bufnr }
@@ -310,21 +313,21 @@ local plugins = F.concat({
   -- { "smoka7/multicursors.nvim", event = "VeryLazy", opts = {}, cmd = {"MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor"}, keys = {{mode = {"v", "n"}, "<Leader>k", "<cmd>MCstart<cr>", desc = "Create a selection for selected text or word under the cursor"}} },
   -- { "brenton-leighton/multiple-cursors.nvim" },
   { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
-  -- { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
-  {
-    "jiaoshijie/undotree",
-    dependencies = "nvim-lua/plenary.nvim",
-    config = true,
-    keys = {
-      {
-        "<F3>",
-        function()
-          require("undotree").toggle()
-        end,
-        desc = "toggle undo tree",
-      },
-    },
-  },
+  { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
+  -- {
+  --   "jiaoshijie/undotree",
+  --   dependencies = "nvim-lua/plenary.nvim",
+  --   config = true,
+  --   keys = {
+  --     {
+  --       "<F3>",
+  --       function()
+  --         require("undotree").toggle()
+  --       end,
+  --       desc = "toggle undo tree",
+  --     },
+  --   },
+  -- },
   {
     dir = config.custom_plugin_path .. "/rooter",
     config = function()
@@ -450,7 +453,21 @@ if not config.minimal then
       "altermo/ultimate-autopair.nvim",
       event = { "InsertEnter", "CmdlineEnter" },
       branch = "v0.6",
-      opts = { tabout = { enable = true }, cmap = false },
+      opts = {
+        tabout = { enable = true },
+        cmap = false,
+        config_internal_pairs = {
+          {
+            "'",
+            "'",
+            multiline = false,
+            surround = true,
+            cond = function(fn)
+              return not fn.in_node({ "bounded_type", "type_parameters" })
+            end,
+          },
+        },
+      },
     },
     {
       "NvChad/nvim-colorizer.lua",
@@ -469,7 +486,7 @@ if not config.minimal then
           show_version_date = true,
           max_height = 25,
         },
-        src = {
+        completion = {
           cmp = {
             enabled = true,
           },
@@ -663,7 +680,16 @@ if not config.minimal then
     },
     { "nmac427/guess-indent.nvim", opts = {} },
     { "nvimtools/hydra.nvim", lazy = true },
+    { "debugloop/layers.nvim" },
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>cl", "dal" } },
+    {
+      "OXY2DEV/markview.nvim",
+      lazy = false,
+      keys = { { "<space>tm", "<CMD>Markview splitToggle<CR>", desc = "toggle markview markdown preview" } },
+      config = function()
+        vim.cmd.Markview("disableAll")
+      end,
+    },
     {
       "iamcco/markdown-preview.nvim",
       cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -687,7 +713,7 @@ if not config.minimal then
         vim.g.mkdp_auto_start = 0
         vim.g.mkdp_auto_close = 0
       end,
-      keys = { { "<space>tm", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
+      keys = { { "<space>tM", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
     },
     {
       "FabijanZulj/blame.nvim",
@@ -697,6 +723,7 @@ if not config.minimal then
     { "echasnovski/mini.nvim", version = false },
     { "kyoh86/vim-jsonl" },
     { "lark-parser/vim-lark-syntax" },
+    { "pest-parser/pest.vim" },
   })
 end
 

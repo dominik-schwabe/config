@@ -89,6 +89,24 @@ F.load("mason-lspconfig", function(mason_lspconfig)
     log_level = vim.log.levels.ERROR,
   })
 
+  local cmp_nvim_lsp = F.load("cmp_nvim_lsp")
+  local capabilities = cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities()
+
+  mason_lspconfig.setup_handlers({
+    function(server_name)
+      local opts = lsp_configs[server_name] or {}
+      if not opts.lspconfig_ignore then
+        opts.capabilities = capabilities
+        opts.handlers = handlers
+        opts.lsp_flags = { debounce_text_changes = 250 }
+        if opts.lspconfig_hook then
+          opts.lspconfig_hook(opts)
+        end
+        lspconfig[server_name].setup(opts)
+      end
+    end,
+  })
+
   F.load("mason-tool-installer", function(mti)
     mti.setup({
       ensure_installed = mason_ensure_installed,
@@ -97,22 +115,6 @@ F.load("mason-lspconfig", function(mason_lspconfig)
       start_delay = 3000,
     })
   end)
-
-  local cmp_nvim_lsp = F.load("cmp_nvim_lsp")
-  local capabilities = cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities()
-
-  for _, server_name in pairs(mason_lspconfig.get_installed_servers()) do
-    local opts = lsp_configs[server_name] or {}
-    if not opts.lspconfig_ignore then
-      opts.capabilities = capabilities
-      opts.handlers = handlers
-      opts.lsp_flags = { debounce_text_changes = 250 }
-      if opts.lspconfig_hook then
-        opts.lspconfig_hook(opts)
-      end
-      lspconfig[server_name].setup(opts)
-    end
-  end
 end)
 
 for type, icon in pairs(F.subset(config.icons, { "Error", "Warn", "Hint", "Info" })) do
@@ -131,6 +133,11 @@ end)
 
 vim.keymap.set("n", "<space>ll", "<CMD>LspInfo<CR>", { desc = "show loaded lsp servers" })
 vim.keymap.set("n", "<space>lr", "<CMD>LspRestart<CR>", { desc = "restart lsp server" })
+vim.keymap.set("n", "<space>th", function()
+  local new_setting = not vim.lsp.inlay_hint.is_enabled()
+  vim.lsp.inlay_hint.enable(new_setting)
+  print("inlay hints: " .. (new_setting and "on" or "off"))
+end, { desc = "toggle inlay hints" })
 
 vim.keymap.set("n", "<space>om", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
 

@@ -3,6 +3,27 @@ local U = require("user.utils")
 
 vim.api.nvim_create_augroup("user", {})
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.pest",
+  callback = function()
+    vim.bo.filetype = "pest"
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.xj",
+  callback = function()
+    vim.bo.filetype = "xj"
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.xjl",
+  callback = function()
+    vim.bo.filetype = "xjl"
+  end,
+})
+
 local function set_window_options(opts)
   local bufnr = opts.buf
   local buftype = vim.bo[bufnr].buftype

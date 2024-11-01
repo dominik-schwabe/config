@@ -40,6 +40,18 @@ function M.foreach(list, cb)
   end
 end
 
+function M.resolve(list, ...)
+  local value = list
+  local keys = { ... }
+  for _, key in ipairs(keys) do
+    if type(value) ~= "table" then
+      return nil
+    end
+    value = value[key]
+  end
+  return value
+end
+
 function M.flat(list_of_lists)
   local result = {}
   for _, list in ipairs(list_of_lists) do

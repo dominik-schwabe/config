@@ -181,7 +181,7 @@ HL.treesitter = {
   ["@string.special"] = { fg = S.string_special },
   ["@string.special.symbol"] = { fg = S.symbol },
   ["@string.special.url"] = { fg = S.url },
-  ["@string.special.path"] = { fg = S.path },
+  ["@string.special.path"] = { fg = S.directory, bold = true },
 
   ["@character"] = { fg = S.character },
   ["@character.special"] = { fg = C.purple },
@@ -287,6 +287,7 @@ HL.semantic = {
   ["@lsp.type.struct"] = { link = "@constructor", default = true },
   ["@lsp.type.type"] = { link = "@type", default = true },
   ["@lsp.type.variable"] = {},
+  ["@lsp.typemod.class.defaultLibrary"] = { link = "@type.builtin", default = true },
   ["@lsp.typemod.function.defaultLibrary"] = { link = "@function.builtin", default = true },
   ["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin", default = true },
   ["@lsp.typemod.variable.global"] = { fg = S.global },
@@ -543,6 +544,7 @@ HL.lsp = {
   LspReferenceWrite = { link = "CursorLine" },
   LspSignatureActiveParameter = { fg = C.orange, bold = true, underline = true },
   LspInfoBorder = { fg = C.link },
+  LspInlayHint = { fg = C.purple, bg = C.base4 },
 }
 
 HL.help = {
@@ -628,6 +630,10 @@ HL.other = {
   TreesitterContext = { bg = C.base3 },
   TreesitterContextLineNumber = { bg = C.base3 },
   Selection = { bg = C.base4 },
+  pestName = { fg = C.orange },
+  pestSpecial = { fg = S.builtin_alt },
+  pestModifier = { fg = C.green },
+  pestTilde = { fg = C.link },
 }
 
 function M.load()

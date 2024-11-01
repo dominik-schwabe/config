@@ -163,6 +163,10 @@ c.InteractiveShell.cache_size = 0
 ## Set the color scheme (NoColor, Neutral, Linux, or LightBG).
 c.InteractiveShell.colors = "Linux"
 
+from IPython.core.ultratb import VerboseTB
+
+VerboseTB._tb_highlight = "bg:#222222"
+
 ##
 c.InteractiveShell.debug = True
 

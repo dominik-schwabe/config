@@ -11,6 +11,23 @@ end)
 
 conform.setup({
   formatters_by_ft = formatters.filetype or {},
+  formatters = {
+    pestfmt = {
+      command = "pestfmt",
+      args = { "--stdin" },
+      stdin = true,
+    },
+    xj = {
+      command = "xj",
+      args = { "--line-width", "70" },
+      stdin = true,
+    },
+    xjl = {
+      command = "xj",
+      args = { "--line-width", "70", "--multiple" },
+      stdin = true,
+    },
+  },
 })
 
 local function format()

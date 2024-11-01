@@ -10,6 +10,38 @@ local compare = require("cmp.config.compare")
 
 local max_buffer_size = config.max_buffer_size
 
+local function endswith(str, postfix)
+  return #postfix <= #str and str:sub(#str - #postfix + 1, #str) == postfix
+end
+
+local function startswith(str, prefix)
+  return #prefix <= #str and str:sub(1, #prefix) == prefix
+end
+
+local function get_description(entry)
+  local completion_item = entry:get_completion_item()
+  if completion_item.detail ~= "Auto-import" then
+    return ""
+  end
+  return F.resolve(completion_item, "labelDetails", "description") or ""
+end
+
+local function compare_description(entry1, entry2)
+  return #get_description(entry1) < #get_description(entry2)
+end
+
+local function compare_parameter(entry1, entry2)
+  local e1 = endswith(entry1.completion_item.label, "=")
+  local e2 = endswith(entry2.completion_item.label, "=")
+  if e1 == e2 then
+    return nil
+  elseif e1 then
+    return true
+  else
+    return false
+  end
+end
+
 local cmp_options = {
   enabled = function()
     return vim.fn.reg_recording() == ""
@@ -18,7 +50,8 @@ local cmp_options = {
   end,
   sorting = {
     comparators = {
-      compare.offset,
+      -- compare.offset,
+      compare_parameter,
       compare.exact,
       -- compare.scopes,
       compare.score,
@@ -27,6 +60,7 @@ local cmp_options = {
       compare.kind,
       compare.sort_text,
       compare.length,
+      -- compare_description,
       compare.order,
     },
   },
@@ -67,7 +101,13 @@ local cmp_options = {
   sources = cmp.config.sources({
     { name = "crates" },
     { name = "luasnip", max_item_count = 3 },
-    { name = "nvim_lsp" },
+    {
+      name = "nvim_lsp",
+      max_item_count = 50,
+      entry_filter = function(entry, ctx)
+        return not startswith(entry.completion_item.label, "__")
+      end,
+    },
     { name = "nvim_lua" },
     { name = "yank_history", max_item_count = 3 },
     { name = "async_path" },
@@ -153,23 +193,45 @@ F.load("lspkind", function(lspkind)
     },
   }
 
-  local function add_tailwind_kind(entry, vim_item)
-    if vim_item.kind == "Color" then -- Tailwind
-      local doc = entry.completion_item.documentation
-      if doc then
-        local _, _, r, g, b = string.find(doc, "^rgb%((%d+), (%d+), (%d+)")
-        if r then
-          local color = string.format("%02x%02x%02x", r, g, b)
-          local group = "tailwind_" .. color
-          if vim.fn.hlID(group) < 1 then
-            vim.api.nvim_set_hl(0, group, { fg = "#" .. color })
+  local function find_color(entry, vim_item)
+    local doc = entry:get_completion_item().documentation
+    if type(doc) == "string" then
+      local _, _, hex = string.find(doc, "^#(%x%x%x%x%x%x)")
+      if hex then
+        hex = hex:lower()
+        local group = "color_" .. hex
+        if vim.fn.hlID(group) < 1 then
+          vim.api.nvim_set_hl(0, group, { fg = "#" .. hex })
+        end
+        vim_item.kind = "KnownColor"
+        vim_item.kind_hl_group = group
+      end
+    end
+  end
+
+  local max_length = 35
+
+  local function pyright(entry, vim_item)
+    local completion_item = entry:get_completion_item()
+    if completion_item.detail == "Auto-import" then
+      local module = F.resolve(completion_item, "labelDetails", "description")
+      if module then
+        if module then
+          if #module > max_length then
+            module = string.sub(module, 1, max_length - 1) .. "…"
           end
-          vim_item.kind = "Tailwind"
-          vim_item.kind_hl_group = group
+          vim_item.menu = vim_item.menu .. " " .. module
+          return
         end
       end
     end
   end
+
+  local LSP_MODIFY = {
+    tailwindcss = find_color,
+    pyright = pyright,
+    basedpyright = pyright,
+  }
 
   local function map_source(entry, vim_item)
     local name = entry.source.name
@@ -188,7 +250,13 @@ F.load("lspkind", function(lspkind)
       ellipsis_char = "...",
       before = function(entry, vim_item)
         map_source(entry, vim_item)
-        add_tailwind_kind(entry, vim_item)
+        local client_name = F.resolve(entry.source.source, "client", "name")
+        if client_name then
+          local modify = LSP_MODIFY[client_name]
+          if modify then
+            modify(entry, vim_item)
+          end
+        end
         return vim_item
       end,
     }),

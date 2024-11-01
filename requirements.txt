@@ -1,6 +1,6 @@
 ipdb
 ipython
-ipython_autoimport
+ipython-autoimport
 pipenv
 pynvim
 telegram-send

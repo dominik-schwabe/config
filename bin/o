@@ -83,7 +83,7 @@ stream_application() {
   elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
     if command -v streamlink &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "streamlink twitch"
-      nohup streamlink --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $ARGUMENT $RESOLUTION' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT &>/dev/null &
+      nohup streamlink --twitch-disable-ads --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $ARGUMENT $RESOLUTION' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT &>/dev/null &
       exit 0
     else
       error "streamlink not installed"

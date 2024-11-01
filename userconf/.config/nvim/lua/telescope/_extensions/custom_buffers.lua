@@ -102,7 +102,7 @@ local function gen_from_buffer(opts)
     return displayer({
       { entry.bufnr, "TelescopeResultsNumber" },
       { entry.indicator, "Orange" },
-      entry.is_path and { config.icons.Tailwind, "Progress" .. entry.progress } or "",
+      entry.is_path and { config.icons.KnownColor, "Progress" .. entry.progress } or "",
       { icon, hl_group },
       { entry.tail, entry.is_path and "BoldOlive" or "BoldPurple" },
       { entry.filename, "Grey" },

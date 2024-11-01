@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [[ "$EUID" = 0 ]]; then
+  pacman -Rs $(pacman -Qtdq) --noconfirm
+  paru -Scc --noconfirm
+  journalctl --vacuum-size=100M
+fi
+pip cache remove '*'

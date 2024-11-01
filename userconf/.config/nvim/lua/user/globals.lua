@@ -11,7 +11,7 @@ end
 
 local function DK(list)
   if type(list) == "table" then
-    DK(F.keys(list))
+    D(F.keys(list))
   else
     print("--- object is not a table ---")
   end
