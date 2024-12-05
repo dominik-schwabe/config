@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder and wezterm.config_builder() or {}
 
-local LINK_RE = "(\\w+://[^ \t\n\"'()<>]+[/a-zA-Z0-9-]+)"
+local LINK_RE = "(https?://[^ \t\n\"'()<>]+[/a-zA-Z0-9-]+)"
 
 config.hyperlink_rules = {
   -- Matches: a URL in parens: (URL)

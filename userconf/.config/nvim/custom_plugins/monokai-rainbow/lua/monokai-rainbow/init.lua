@@ -118,7 +118,7 @@ local S = {
   string_escape = C.purple,
   string_special = C.neon_purple,
   symbol = C.neon_purple,
-  tag = C.pink,
+  tag = C.aqua,
   tag_attribute = C.base9,
   reference = C.link,
   url = C.neon_purple,
@@ -269,6 +269,7 @@ HL.treesitter = {
   ["@tag.delimiter"] = { fg = S.delimiter },
 
   ["@none"] = { fg = S.none },
+  ["@none.xml"] = { fg = C.purple },
 }
 
 HL.semantic = {

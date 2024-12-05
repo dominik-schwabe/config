@@ -37,7 +37,7 @@ _<F5>_  : to-snake-case
 _<F6>_  : TO-CONSTANT-CASE
 _<F7>_  : toCamelCase
 _<F8>_  : ToPascalCase
-_<ESC>_ : exit
+_<C-c>_ : exit
 ]]
 
 local Hydra = require("hydra")
@@ -66,7 +66,7 @@ Hydra({
     { "<F10>", lsp_to_constant_case, { silent = true, nowait = true } },
     { "<F11>", lsp_to_camel_case, { silent = true, nowait = true } },
     { "<F12>", lsp_to_pascal_case, { silent = true, nowait = true } },
-    { "<ESC>", nil, { exit = true, nowait = true } },
+    { "<C-c>", nil, { exit = true, nowait = true } },
   },
 })
 -- vim.keymap.set("<space>ac", textcase_hydra:activate, {})

@@ -720,6 +720,7 @@ if not config.minimal then
       keys = { { "<space>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
     },
     { "echasnovski/mini.nvim", version = false },
+    { "jbyuki/venn.nvim", config = l("venn") },
   })
 end
 

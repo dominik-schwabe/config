@@ -80,6 +80,7 @@ M.rooter = {
       ".hg",
       ".latexmkrc",
       ".luarc.json",
+      ".root",
       ".svn",
       "Cargo.toml",
       "Makefile",

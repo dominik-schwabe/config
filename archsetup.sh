@@ -12,12 +12,6 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 
 BASE="
 $UCODE
-xdg-desktop-portal
-xdg-desktop-portal-gtk
-noto-fonts
-noto-fonts-cjk
-noto-fonts-emoji
-noto-fonts-extra
 man-pages
 man-db
 alsa-tools
@@ -57,7 +51,6 @@ luajit
 luarocks
 mtpfs
 neovim
-tree-sitter-cli
 net-tools
 networkmanager
 openresolv
@@ -80,6 +73,12 @@ zsh
 "
 
 GRAPHIC="
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+noto-fonts-extra
+xdg-desktop-portal
+xdg-desktop-portal-gtk
 tcl
 tk
 bluez

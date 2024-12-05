@@ -30,7 +30,7 @@ _<F7>_: list bp
 _<F10>_: Eval
 _<F11>_: run last
 _<F12>_: terminate
-_<F21>_: exit
+_<C-c>_: exit
 ]]
 
 local dapui = F.load("dapui", function(dapui)
@@ -71,7 +71,7 @@ F.load("hydra", function(Hydra)
       { "<F7>", dap.list_breakpoints, map_opts },
       { "<F10>", require("dap.ui.widgets").hover, map_opts },
       { "<F12>", dap.terminate, map_opts },
-      { "<F21>", nil, { exit = true, nowait = true } },
+      { "<C-c>", nil, { exit = true, nowait = true } },
     },
   })
   if dapui then
