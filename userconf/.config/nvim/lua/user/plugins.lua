@@ -310,9 +310,80 @@ local plugins = F.concat({
     },
     ft = "qf",
   },
-  -- { "smoka7/multicursors.nvim", event = "VeryLazy", opts = {}, cmd = {"MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor"}, keys = {{mode = {"v", "n"}, "<Leader>k", "<cmd>MCstart<cr>", desc = "Create a selection for selected text or word under the cursor"}} },
-  -- { "brenton-leighton/multiple-cursors.nvim" },
-  { "mg979/vim-visual-multi", keys = { "L", "K", { "<C-n>", mode = { "n", "x" } } } },
+  {
+    "jake-stewart/multicursor.nvim",
+    branch = "1.0",
+    config = function()
+      local mc = require("multicursor-nvim")
+
+      mc.setup()
+
+      local set = vim.keymap.set
+
+      -- local line_add_cursor = F.f(mc.lineAddCursor)
+      -- local line_skip_cursor = F.f(mc.lineSkipCursor)
+      local match_add_cursor = F.f(mc.matchAddCursor)
+      local match_skip_cursor = F.f(mc.matchSkipCursor)
+      local transpose_cursor = F.f(mc.transposeCursors)
+
+      -- set({ "n", "v" }, "<up>", line_add_cursor(-1))
+      -- set({ "n", "v" }, "<down>", line_add_cursor(1))
+      -- set({ "n", "v" }, "<leader><up>", line_skip_cursor(-1))
+      -- set({ "n", "v" }, "<leader><down>", line_skip_cursor(1))
+
+      set({ "n", "v" }, "<C-N>", match_add_cursor(1))
+      set({ "n", "v" }, "<space>n", match_skip_cursor(-1))
+      set({ "n", "v" }, "<space>N", match_skip_cursor(1))
+
+      set({ "n", "v" }, "<space>ma", mc.matchAllAddCursors)
+
+      set({ "n", "v" }, "<space>j", mc.nextCursor)
+      set({ "n", "v" }, "<space>k", mc.prevCursor)
+
+      -- Delete the main cursor.
+      set({ "n", "v" }, "<leader>x", mc.deleteCursor)
+
+      -- Easy way to add and remove cursors using the main cursor.
+      set({ "n", "v" }, "<c-q>", mc.toggleCursor)
+
+      -- Clone every cursor and disable the originals.
+      set({ "n", "v" }, "<leader><c-q>", mc.duplicateCursors)
+
+      set("n", "<esc>", function()
+        if not mc.cursorsEnabled() then
+          mc.enableCursors()
+        elseif mc.hasCursors() then
+          mc.clearCursors()
+        else
+          -- Default <esc> handler.
+        end
+      end)
+
+      -- bring back cursors if you accidentally clear them
+      set("n", "<space>mm", mc.restoreCursors)
+
+      -- Align cursor columns.
+      set("n", "<space>ma", mc.alignCursors)
+
+      -- Split visual selections by regex.
+      set("v", "<space>mr", mc.splitCursors)
+
+      -- Append/insert for each line of visual selections.
+      set("v", "I", mc.insertVisual)
+      set("v", "A", mc.appendVisual)
+
+      -- match new cursors within visual selections by regex.
+      set("v", "M", mc.matchCursors)
+
+      -- Rotate visual selection contents.
+      set("v", "<space>mt", transpose_cursor(1))
+      set("v", "<leader>T", transpose_cursor(-1))
+
+      -- Jumplist support
+      set({ "v", "n" }, "<c-i>", mc.jumpForward)
+      set({ "v", "n" }, "<c-o>", mc.jumpBackward)
+    end,
+  },
   { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
   -- {
   --   "jiaoshijie/undotree",
@@ -462,15 +533,17 @@ if not config.minimal then
             "'",
             multiline = false,
             surround = true,
+            nft = { "xdata", "xdatal" },
             cond = function(fn)
               return not fn.in_node({ "bounded_type", "type_parameters" })
             end,
           },
+          { "`", "`", nft = { "python", "xdata", "xdatal" } },
         },
       },
     },
     {
-      "NvChad/nvim-colorizer.lua",
+      "catgoose/nvim-colorizer.lua",
       opts = {
         filetypes = { "*", "!cmp_menu" },
         user_default_options = { rgb_fn = true, hsl_fn = true, tailwind = true },
@@ -774,11 +847,5 @@ require("lazy").setup(plugins, {
     },
   },
 })
-
--- local unused = {
---   { "CRAG666/code_runner.nvim" },
---   { "pwntester/octo.nvim" },
---   { "NTBBloodbath/rest.nvim" },
--- }
 
 vim.keymap.set("n", "<space>ol", "<ESC>:Lazy<CR>", { desc = "install, clean, and update plugins" })

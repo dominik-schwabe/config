@@ -250,6 +250,8 @@ M.formatters = {
     pest = { "pestfmt" },
     xj = { "xj" },
     xjl = { "xjl" },
+    xdata = { "xdata" },
+    xdatal = { "xdatal" },
   },
 }
 M.treesitter = {

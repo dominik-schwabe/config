@@ -24,6 +24,20 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.xd",
+  callback = function()
+    vim.bo.filetype = "xdata"
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.xdl",
+  callback = function()
+    vim.bo.filetype = "xdatal"
+  end,
+})
+
 local function set_window_options(opts)
   local bufnr = opts.buf
   local buftype = vim.bo[bufnr].buftype

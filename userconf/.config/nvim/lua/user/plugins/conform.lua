@@ -27,6 +27,16 @@ conform.setup({
       args = { "--line-width", "70", "--multiple" },
       stdin = true,
     },
+    xdata = {
+      command = "xdata",
+      args = { "--line-width", "70" },
+      stdin = true,
+    },
+    xdatal = {
+      command = "xdata",
+      args = { "--line-width", "70", "--multiple" },
+      stdin = true,
+    },
   },
 })
 

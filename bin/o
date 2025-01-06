@@ -57,16 +57,16 @@ fi
 
 stream_application() {
   if [[ $RESOLUTION == "high" ]]; then
-    YTDL_FORMAT="ytdl-format=bestvideo[height<=1080]+bestaudio/best[height<=1080]"
+    YTDL_FORMAT="bestvideo[height<=1080]+bestaudio/best[height<=1080]"
     STREAM_LINK_FORMAT=1080p,1080p60,720p,720p60,480p,360p
   elif [[ $RESOLUTION == "medium" ]]; then
-    YTDL_FORMAT="ytdl-format=bestvideo[height<=720]+bestaudio/best[height<=720]"
+    YTDL_FORMAT="bestvideo[height<=720]+bestaudio/best[height<=720]"
     STREAM_LINK_FORMAT=720p,720p60,480p,360p
   elif [[ $RESOLUTION == "low" ]]; then
-    YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
+    YTDL_FORMAT="bestvideo[height<=360]+bestaudio/best[height<=360]"
     STREAM_LINK_FORMAT=360p,worst
   elif [[ $RESOLUTION == "worst" ]]; then
-    YTDL_FORMAT="ytdl-format=bestvideo[height<=360]+bestaudio/best[height<=360]"
+    YTDL_FORMAT="bestvideo[height<=360]+bestaudio/best[height<=360]"
     STREAM_LINK_FORMAT=worst
   else
     error "missing resolution"
