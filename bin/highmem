@@ -2,11 +2,12 @@
 
 from sys import argv
 from time import sleep
+from pathlib import Path
 
 
-def meminfo():
-    with open("/proc/meminfo", "r") as mem:
-        ret = {}
+def meminfo() -> dict[str, int]:
+    ret: dict[str, int] = {}
+    with Path("/proc/meminfo").open("r") as mem:
         tmp = 0
         for i in mem:
             sline = i.split()

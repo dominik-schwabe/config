@@ -72,4 +72,4 @@ function _G.qftf(info)
   return ret
 end
 
-vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
+-- vim.o.qftf = "{info -> v:lua._G.qftf(info)}"

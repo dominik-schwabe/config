@@ -302,13 +302,22 @@ local plugins = F.concat({
     "kevinhwang91/nvim-bqf",
     opts = {
       auto_resize_height = false,
-      func_map = { open = "o", openc = "<CR>" },
+      func_map = {
+        open = "o",
+        openc = "<CR>",
+        nextfile = "",
+      },
       preview = {
         border = config.border,
         winblend = 0,
       },
     },
     ft = "qf",
+  },
+  {
+    "stevearc/quicker.nvim",
+    ft = "qf",
+    opts = {},
   },
   {
     "jake-stewart/multicursor.nvim",
@@ -546,7 +555,12 @@ if not config.minimal then
       "catgoose/nvim-colorizer.lua",
       opts = {
         filetypes = { "*", "!cmp_menu" },
-        user_default_options = { rgb_fn = true, hsl_fn = true, tailwind = true },
+        user_default_options = {
+          names = false,
+          rgb_fn = true,
+          hsl_fn = true,
+          tailwind = true,
+        },
       },
     },
     {
@@ -754,14 +768,12 @@ if not config.minimal then
     { "nmac427/guess-indent.nvim", opts = {} },
     { "nvimtools/hydra.nvim", lazy = true },
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>cl", "dal" } },
-    {
-      "OXY2DEV/markview.nvim",
-      lazy = false,
-      keys = { { "<space>tm", "<CMD>Markview splitToggle<CR>", desc = "toggle markview markdown preview" } },
-      config = function()
-        vim.cmd.Markview("disableAll")
-      end,
-    },
+    -- {
+    --   "OXY2DEV/markview.nvim",
+    --   lazy = false,
+    --   opts = { preview = { enable = false, enable_hybrid_mode = false } },
+    --   keys = { { "<space>tm", "<CMD>Markview splitToggle<CR>", desc = "toggle markview markdown preview" } },
+    -- },
     {
       "iamcco/markdown-preview.nvim",
       cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },

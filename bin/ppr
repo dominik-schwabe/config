@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import unicodedata
+
 # from shutil import get_terminal_size
 from itertools import zip_longest
 from os import popen
@@ -14,11 +15,11 @@ COL_FORMAT = f"{WIDTH}.{WIDTH}"
 LINE_FORMAT = f"{{:{COL_FORMAT}}} | {{:{COL_FORMAT}}}"
 
 
-def filter_non_printable(str):
-    return "".join(c for c in str if unicodedata.category(c) not in PRINTABLE)
+def filter_non_printable(string: str):
+    return "".join(c for c in string if unicodedata.category(c) not in PRINTABLE)
 
 
-def normalize_line(line):
+def normalize_line(line: str):
     line = line.expandtabs(2).strip()
     line = unicodedata.normalize("NFKC", line)
     line = filter_non_printable(line)

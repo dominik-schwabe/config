@@ -58,6 +58,10 @@ end, desc(map_opt, "list loaded workspaces"))
 vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, desc(map_opt, "rename variable"))
 vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, desc(map_opt, "select code action"))
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  update_in_insert = false,
+})
+
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   callback = vim.schedule_wrap(function(args)

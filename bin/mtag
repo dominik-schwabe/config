@@ -4,20 +4,26 @@ import re
 import subprocess
 from pathlib import Path
 from sys import argv
+from collections.abc import Sequence
+from typing import Callable
 
 emoji_pattern = re.compile(
-    "["
-    "\U0001F600-\U0001F64F"  # emoticons
-    "\U0001F300-\U0001F5FF"  # symbols & pictographs
-    "\U0001F680-\U0001F6FF"  # transport & map symbols
-    "\U0001F1E0-\U0001F1FF"  # flags (iOS)
-    "]+",
+    "".join(
+        [
+            "[",
+            "\U0001f600-\U0001f64f",  # emoticons
+            "\U0001f300-\U0001f5ff",  # symbols & pictographs
+            "\U0001f680-\U0001f6ff",  # transport & map symbols
+            "\U0001f1e0-\U0001f1ff",  # flags (iOS)
+            "]+",
+        ]
+    ),
     flags=re.UNICODE,
 )
 
 filename_re = re.compile(r"^.*\.(mp3|m4a|wav)$")
 namesplit_re = re.compile(r" X | & |,| vs\.? ")
-space_re = re.compile("\s+")
+space_re = re.compile(r"\s+")
 
 try:
     path = Path(argv[1]).resolve()
@@ -42,7 +48,7 @@ if path.is_file():
 else:
     files = [e for e in path.glob("**/*") if e.is_file() and filename_re.match(e.name)]
 
-remix = ["remix", "bootleg", "mashup", "rework", "re\-edit", "edit", "cover", "mix"]
+remix = ["remix", "bootleg", "mashup", "rework", "re-edit", "edit", "cover", "mix"]
 special = {
     "instrumental": ["instrumental"],
     "slowed": ["slowed"],
@@ -51,59 +57,59 @@ special = {
     "VIP": ["vip"],
 }
 feat = ["featuring", "feat", "ft"]
-feat = [e for ft in feat for e in [f"{ft}\.", f"{ft}\\b"]]
+feat = [e for ft in feat for e in [rf"{ft}\.", rf"{ft}\b"]]
 breaked_feat = ["with\\b", *feat]
 
 
-def ordered_unique(elements):
-    taken = []
+def ordered_unique[T](elements: Sequence[T]) -> list[T]:
+    taken: list[T] = []
     for e in elements:
         if e not in taken:
             taken.append(e)
     return taken
 
 
-def compress_spaces(text):
+def compress_spaces(text: str) -> str:
     return space_re.sub(" ", text).strip()
 
 
-def split_names(text):
+def split_names(text: str) -> list[str]:
     result = namesplit_re.split(text)
     result = [compress_spaces(e) for e in result]
     return result
 
 
-def find_replace(regex, text):
-    regex = re.compile(regex, flags=re.IGNORECASE)
-    found = regex.findall(text)
-    text = regex.sub("", text)
+def find_replace(regex: str, text: str) -> tuple[str, list[str]]:
+    reg = re.compile(regex, flags=re.IGNORECASE)
+    found: list[str] = reg.findall(text)
+    text = reg.sub("", text)
     found = [compress_spaces(e) for e in found]
     found = [e for e in found if e]
     return text, found
 
 
-def find_breaked_featuring(text):
-    features = []
+def find_breaked_featuring(text: str) -> tuple[str, list[str]]:
+    features: list[str] = []
     for re_text in breaked_feat:
-        regex = f"\(\s*{re_text}([^()]*)\)"
+        regex = rf"\(\s*{re_text}([^()]*)\)"
         text, found = find_replace(regex, text)
         features.extend(found)
     return text, features
 
 
-def find_featuring(text):
-    features = []
+def find_featuring(text: str) -> tuple[str, list[str]]:
+    features: list[str] = []
     for re_text in feat:
-        regex = f"\\b{re_text}\s*(.*)"
+        regex = rf"\b{re_text}\s*(.*)"
         text, found = find_replace(regex, text)
         features.extend(found)
     return text, features
 
 
-def find_re_pattern(text, patterns):
-    features = []
+def find_re_pattern(text: str, patterns: Sequence[str]):
+    features: list[str] = []
     for re_text in patterns:
-        regex = f"\(([^()]*)\s+{re_text}\)"
+        regex = rf"\(([^()]*)\s+{re_text}\)"
         text, found = find_replace(regex, text)
         features.extend(found)
     return text, features
@@ -118,18 +124,24 @@ repls = {
 }
 
 
-def remove_unused(text):
-    text, found = find_replace("\(([^()]*)\)", text)
+def remove_unused(text: str):
+    text, found = find_replace(r"\(([^()]*)\)", text)
     found = [compress_spaces(e) for e in found]
     return text, found
 
 
-def remove_emojies(text):
+def remove_emojies(text: str):
     return emoji_pattern.sub(r"", text)
 
 
-def extract_patterns(title, artist, find_func, split=False):
-    extracted = []
+def extract_patterns(
+    title: str,
+    artist: str,
+    find_func: Callable[[str], tuple[str, Sequence[str]]],
+    *,
+    split: bool = False,
+):
+    extracted: list[str] = []
     artist, extr = find_func(artist)
     extracted.extend(extr)
     title, extr = find_func(title)
@@ -139,7 +151,7 @@ def extract_patterns(title, artist, find_func, split=False):
     return title, artist, extracted
 
 
-def parse_name(file_name):
+def parse_name(file_name: str):
     for old, new in repls.items():
         file_name = file_name.replace(old, new)
     file_name = remove_emojies(file_name)
@@ -200,7 +212,7 @@ def parse_name(file_name):
     }
 
 
-def kid3(commands, file):
+def kid3(commands: Sequence[str], file: str):
     if not commands:
         raise ValueError("commands is empty")
     args = ["kid3-cli"]
@@ -215,9 +227,9 @@ def kid3(commands, file):
         )
 
 
-def tag(file, **kwargs):
+def tag(file: str, **kwargs: str):
     print(f"tagging {new_file}")
-    commands = []
+    commands: list[str] = []
     for key, value in kwargs.items():
         key = key.replace("_", " ")
         print(f"  {key}={value}")

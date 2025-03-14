@@ -213,16 +213,14 @@ F.load("lspkind", function(lspkind)
 
   local function pyright(entry, vim_item)
     local completion_item = entry:get_completion_item()
-    if completion_item.detail == "Auto-import" then
-      local module = F.resolve(completion_item, "labelDetails", "description")
+    local module = vim.tbl_get(completion_item, "labelDetails", "description")
+    if module then
       if module then
-        if module then
-          if #module > max_length then
-            module = string.sub(module, 1, max_length - 1) .. "…"
-          end
-          vim_item.menu = vim_item.menu .. " " .. module
-          return
+        if #module > max_length then
+          module = string.sub(module, 1, max_length - 1) .. "…"
         end
+        vim_item.menu = vim_item.menu .. " " .. module
+        return
       end
     end
   end
