@@ -95,7 +95,8 @@ alias prj='pyr jupyter lab --no-browser'
 alias pv='PIPENV_VENV_IN_PROJECT=1 pipenv'
 
 alias pipi='pip install'
-alias pipu='pip install -U --upgrade-strategy eager'
+alias pipu='pip install -U'
+alias pipuu='pip install -U --upgrade-strategy eager'
 
 alias pmount='mount | column -t'
 alias amount='udiskie'

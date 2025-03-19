@@ -5,13 +5,13 @@ error() {
   exit 1
 }
 
-RESOLUTION="medium"
-while getopts "elhw" o &>/dev/null; do
+QUALITY="medium"
+while getopts "eq:l:" o &>/dev/null; do
+  [[ $o == "?" ]] && error "unknown argument"
   case $o in
     "e") ECHO=true ;;
-    "l") RESOLUTION="low" ;;
-    "h") RESOLUTION="high" ;;
-    "w") RESOLUTION="worst" ;;
+    "q") QUALITY=$OPTARG ;;
+    "l") LANGUAGE=$OPTARG ;;
   esac
 done
 
@@ -56,17 +56,18 @@ if [[ "$UID" = "0" ]] || [[ "$SSH_TTY" ]]; then
 fi
 
 stream_application() {
-  if [[ $RESOLUTION == "high" ]]; then
-    YTDL_FORMAT="bestvideo[height<=1080]+bestaudio/best[height<=1080]"
+  YTDL_LANG=${LANGUAGE:+[language=$LANGUAGE]}
+  if [[ $QUALITY == "high" ]]; then
+    YTDL_FORMAT="bestvideo[height<=1080]+bestaudio$YTDL_LANG/best[height<=1080]"
     STREAM_LINK_FORMAT=1080p,1080p60,720p,720p60,480p,360p
-  elif [[ $RESOLUTION == "medium" ]]; then
-    YTDL_FORMAT="bestvideo[height<=720]+bestaudio/best[height<=720]"
+  elif [[ $QUALITY == "medium" ]]; then
+    YTDL_FORMAT="bestvideo[height<=720]+bestaudio$YTDL_LANG/best[height<=720]"
     STREAM_LINK_FORMAT=720p,720p60,480p,360p
-  elif [[ $RESOLUTION == "low" ]]; then
-    YTDL_FORMAT="bestvideo[height<=360]+bestaudio/best[height<=360]"
+  elif [[ $QUALITY == "low" ]]; then
+    YTDL_FORMAT="bestvideo[height<=360]+bestaudio$YTDL_LANG/best[height<=360]"
     STREAM_LINK_FORMAT=360p,worst
-  elif [[ $RESOLUTION == "worst" ]]; then
-    YTDL_FORMAT="bestvideo[height<=360]+bestaudio/best[height<=360]"
+  elif [[ $QUALITY == "worst" ]]; then
+    YTDL_FORMAT="bestvideo[height<=360]+bestaudio$YTDL_LANG/best[height<=360]"
     STREAM_LINK_FORMAT=worst
   else
     error "missing resolution"
@@ -75,7 +76,7 @@ stream_application() {
   if [[ "$ARGUMENT" == "https://www.youtube.com/"* || "$ARGUMENT" == "https://youtu.be/"* ]]; then
     if command -v yt-dlp &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "youtube"
-      nohup mpv --input-conf=~/.config/mpv/m.conf --title="mpv_media_stream $ARGUMENT $RESOLUTION" --ytdl-format=$YTDL_FORMAT $ARGUMENT &>/dev/null &
+      nohup mpv --title="mpv_media_stream $ARGUMENT $QUALITY" --ytdl-format=$YTDL_FORMAT $ARGUMENT &>/dev/null &
       exit 0
     else
       error "yt-dlp not installed"
@@ -83,7 +84,7 @@ stream_application() {
   elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
     if command -v streamlink &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "streamlink twitch"
-      nohup streamlink --twitch-disable-ads --player-no-close --player mpv --player-args "--input-conf=~/.config/mpv/m.conf --title='mpv_media_stream $ARGUMENT $RESOLUTION' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT &>/dev/null &
+      nohup streamlink --twitch-disable-ads --player-no-close --player mpv --player-args "--title='mpv_media_stream $ARGUMENT $QUALITY' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT &>/dev/null &
       exit 0
     else
       error "streamlink not installed"

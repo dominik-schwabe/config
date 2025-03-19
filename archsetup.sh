@@ -36,7 +36,7 @@ gcc-fortran
 git
 git-lfs
 os-prober
-grub
+refind
 gvfs
 gvfs-mtp
 gvim
