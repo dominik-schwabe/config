@@ -27,6 +27,16 @@ conform.setup({
       args = { "--line-width", "70", "--multiple" },
       stdin = true,
     },
+    elsa = {
+      command = "elsa",
+      args = { "--line-width", "70", "--rotate-delimiters" },
+      stdin = true,
+    },
+    celsa = {
+      command = "elsa",
+      args = { "--line-width", "70", "--multiple", "--rotate-delimiters" },
+      stdin = true,
+    },
     xdata = {
       command = "xdata",
       args = { "--line-width", "70" },
@@ -35,6 +45,10 @@ conform.setup({
     xdatal = {
       command = "xdata",
       args = { "--line-width", "70", "--multiple" },
+      stdin = true,
+    },
+    cjson = {
+      command = "cjson_format",
       stdin = true,
     },
   },

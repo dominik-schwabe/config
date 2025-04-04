@@ -1,4 +1,3 @@
+#!/bin/sh
+
 exec awesome
-
-
-# vi: ft=sh

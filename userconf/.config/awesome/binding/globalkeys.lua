@@ -144,8 +144,10 @@ local globalkeys = gears.table.join(
   bindkey("backlight", mod, "F3", f.inc_brightness_1, "increase the screen brightness by 1%"),
   bindkey("backlight", {}, "XF86MonBrightnessUp", f.inc_brightness_5, "increase the screen brightness by 5%"),
   bindkey("backlight", {}, "XF86MonBrightnessDown", f.dec_brightness_5, "decrease the screen brightness by 5%"),
+
   bindkey("awesome", {}, "XF86ScreenSaver", f.lock, "lock the screen"),
   bindkey("awesome", mod_shift, "Home", f.lock, "lock the screen"),
+
   bindkey("audio", {}, "XF86AudioMute", f.toggle_audio, "toggle the audio output"),
   bindkey("audio", {}, "XF86AudioMicMute", f.toggle_mic_pci, "toggle the pci microphone"),
   bindkey("audio", mod, ",", f.toggle_mic_usb, "toggle the usb microphone"),
@@ -160,6 +162,7 @@ local globalkeys = gears.table.join(
   bindkey("audio", mod, "less", f.audio_prev, "play the previous track"),
   bindkey("audio", mod, "y", f.toggle_audio_program, "start/stop the audio"),
   bindkey("audio", mod, "x", f.audio_next, "play the next track"),
+
   bindkey("misc", {}, "XF86Display", f.toggle_lidswitch, "toggle preventing supending"),
   bindkey("tag", mod, "odiaeresis", f.to_webbrowser_screen, "focus the webbrowser screen"),
   bindkey("launcher", mod_shift, "Return", f.open_filebrowser, "open the graphical file browser"),

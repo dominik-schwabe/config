@@ -12,6 +12,7 @@ grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
 
 BASE="
 $UCODE
+glow
 man-pages
 man-db
 alsa-tools
@@ -73,6 +74,17 @@ zsh
 "
 
 GRAPHIC="
+ly
+dunst
+qtile
+python-dbus-fast
+python-psutil
+python-keyring
+python-pywayland
+python-pywlroots
+python-setproctitle
+python-xdg
+python-xkbcommon
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
@@ -109,8 +121,6 @@ feh
 firefox
 flameshot
 libreoffice-still
-lightdm
-lightdm-gtk-greeter
 mpv
 nm-connection-editor
 pavucontrol

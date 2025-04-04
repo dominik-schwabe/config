@@ -352,8 +352,22 @@ local plugins = F.concat({
       -- Delete the main cursor.
       set({ "n", "v" }, "<leader>x", mc.deleteCursor)
 
-      -- Easy way to add and remove cursors using the main cursor.
-      set({ "n", "v" }, "<c-q>", mc.toggleCursor)
+      local TERM_CODES = require("multicursor-nvim.term-codes")
+
+      set({ "v" }, "<tab>", function()
+        local mode = vim.fn.mode()
+        mc.action(function(ctx)
+          ctx:forEachCursor(function(cursor)
+            cursor:splitVisualLines()
+          end)
+          ctx:forEachCursor(function(cursor)
+            cursor:feedkeys(
+              (cursor:atVisualStart() and "o" or "") .. "<esc>" .. (mode == TERM_CODES.CTRL_V and "" or "$"),
+              { keycodes = true }
+            )
+          end)
+        end)
+      end)
 
       -- Clone every cursor and disable the originals.
       set({ "n", "v" }, "<leader><c-q>", mc.duplicateCursors)

@@ -9,7 +9,7 @@ local autostart_programs = {
   { 7, "spotify-launcher &>/dev/null" },
   { 8, "is_productive_system && birdtray" },
   { 10, "is_productive_system && telegram-desktop -startintray" },
-  { 12, "is_productive_system && is_work_time && discord --start-minimized" },
+  -- { 12, "is_productive_system && is_work_time && discord --start-minimized" },
   -- { 15, "is_productive_system && is_work_time && skypeforlinux" },
 }
 

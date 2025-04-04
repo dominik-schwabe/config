@@ -252,6 +252,9 @@ M.formatters = {
     xjl = { "xjl" },
     xdata = { "xdata" },
     xdatal = { "xdatal" },
+    cjson = { "cjson" },
+    elsa = { "elsa" },
+    celsa = { "celsa" },
   },
 }
 M.treesitter = {

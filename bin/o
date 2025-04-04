@@ -59,13 +59,13 @@ stream_application() {
   YTDL_LANG=${LANGUAGE:+[language=$LANGUAGE]}
   if [[ $QUALITY == "high" ]]; then
     YTDL_FORMAT="bestvideo[height<=1080]+bestaudio$YTDL_LANG/best[height<=1080]"
-    STREAM_LINK_FORMAT=1080p,1080p60,720p,720p60,480p,360p
+    STREAM_LINK_FORMAT=1080p,1080p30,1080p60,720p,720p30,720p60,480p,480p30,480p60,360p,360p30,360p60
   elif [[ $QUALITY == "medium" ]]; then
     YTDL_FORMAT="bestvideo[height<=720]+bestaudio$YTDL_LANG/best[height<=720]"
-    STREAM_LINK_FORMAT=720p,720p60,480p,360p
+    STREAM_LINK_FORMAT=720p,720p30,720p60,480p,480p30,480p60,360p,360p30,360p60
   elif [[ $QUALITY == "low" ]]; then
     YTDL_FORMAT="bestvideo[height<=360]+bestaudio$YTDL_LANG/best[height<=360]"
-    STREAM_LINK_FORMAT=360p,worst
+    STREAM_LINK_FORMAT=360p,360p30,360p60,worst
   elif [[ $QUALITY == "worst" ]]; then
     YTDL_FORMAT="bestvideo[height<=360]+bestaudio$YTDL_LANG/best[height<=360]"
     STREAM_LINK_FORMAT=worst

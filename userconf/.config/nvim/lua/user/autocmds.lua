@@ -32,9 +32,23 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.celsa",
+  callback = function()
+    vim.bo.filetype = "celsa"
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.xdl",
   callback = function()
     vim.bo.filetype = "xdatal"
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.cjson",
+  callback = function()
+    vim.bo.filetype = "cjson"
   end,
 })
 
@@ -115,7 +129,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = "user",
   callback = function()
-    vim.highlight.on_yank({ higroup = "YankHighlight", timeout = 400 })
+    vim.hl.on_yank({ higroup = "YankHighlight", timeout = 400 })
   end,
 })
 

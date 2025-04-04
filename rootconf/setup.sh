@@ -21,9 +21,7 @@ main() {
     fi
   }
 
-  set /etc/lightdm/lightdm.conf \
-    /etc/lightdm/lightdm-gtk-greeter.conf \
-    /etc/xdg/reflector/reflector.conf \
+  set /etc/xdg/reflector/reflector.conf \
     /usr/share/backgrounds/stars.png
 
   while [ $# -gt 0 ]; do

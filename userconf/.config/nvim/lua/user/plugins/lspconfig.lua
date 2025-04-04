@@ -1,3 +1,4 @@
+local config = require("user.config")
 local F = require("user.functional")
 
 F.load("neodev", function(neodev)
@@ -28,7 +29,7 @@ local function hover()
         return
       end
     end
-    vim.lsp.buf.hover()
+    vim.lsp.buf.hover({ border = config.border })
   end
 end
 
@@ -36,13 +37,18 @@ local map_opt = { noremap = true, silent = true }
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, desc(map_opt, "go to declaration"))
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, desc(map_opt, "go to definition"))
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, desc(map_opt, "go to type definition"))
-vim.keymap.set("n", "gr", vim.lsp.buf.references, desc(map_opt, "go to reference"))
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation, desc(map_opt, "go to implementation"))
-vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, desc(map_opt, "show signature help"))
+vim.keymap.set({ "n", "i" }, "<C-s>", function()
+  vim.lsp.buf.signature_help({ border = config.border })
+end, desc(map_opt, "show signature help"))
 vim.keymap.set("n", "gh", hover, desc(map_opt, "show hover info"))
 vim.keymap.set("n", "gm", vim.diagnostic.open_float, desc(map_opt, "show diagnostics under cursor"))
-vim.keymap.set("n", "gn", vim.diagnostic.goto_next, desc(map_opt, "go to next diagnostic"))
-vim.keymap.set("n", "gp", vim.diagnostic.goto_prev, desc(map_opt, "go to previous diagnostic"))
+vim.keymap.set("n", "gn", F.f(vim.diagnostic.jump)({ count = 1, float = true }), desc(map_opt, "go to next diagnostic"))
+vim.keymap.set(
+  "n",
+  "gp",
+  F.f(vim.diagnostic.jump)({ count = -1, float = true }),
+  desc(map_opt, "go to previous diagnostic")
+)
 vim.keymap.set("n", "gll", vim.lsp.codelens.refresh, desc(map_opt, "refresh codelens"))
 vim.keymap.set("n", "glr", vim.lsp.codelens.run, desc(map_opt, "run codelens"))
 vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, desc(map_opt, "show incoming calls"))
@@ -55,8 +61,6 @@ vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, desc(map_o
 vim.keymap.set("n", "<space>wl", function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, desc(map_opt, "list loaded workspaces"))
-vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, desc(map_opt, "rename variable"))
-vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, desc(map_opt, "select code action"))
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
   update_in_insert = false,
@@ -73,19 +77,43 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
   end),
 })
 
-local config = require("user.config")
+vim.api.nvim_create_autocmd({ "LspDetach" }, {
+  group = vim.api.nvim_create_augroup("LspStopWithLastClient", {}),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client or not client.attached_buffers then
+      return
+    end
+    for buf_id in pairs(client.attached_buffers) do
+      if buf_id ~= args.buf then
+        return
+      end
+    end
+    client:stop()
+  end,
+  desc = "Stop lsp client when no buffer is attached",
+})
+
 local lspconfig = require("lspconfig")
 local lsp_configs = config.lsp_configs
 local ensure_installed = config.minimal and {} or config.lsp_ensure_installed
 local mason_ensure_installed = config.minimal and {} or config.mason_ensure_installed
+local virtual_lines = false
 
-local handlers = {
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = config.border }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = config.border }),
-}
-require("lspconfig.ui.windows").default_options.border = config.border
+local function set_diagnostic_config(virtual)
+  if virtual then
+    vim.diagnostic.config({ virtual_lines = { current_line = true } })
+  else
+    vim.diagnostic.config({ virtual_lines = false })
+  end
+end
 
-vim.diagnostic.config({ float = { border = config.border } })
+set_diagnostic_config(false)
+
+vim.keymap.set("n", "td", function()
+  virtual_lines = not virtual_lines
+  set_diagnostic_config(virtual_lines)
+end, { desc = "toggle diagnostics" })
 
 F.load("mason-lspconfig", function(mason_lspconfig)
   mason_lspconfig.setup({
@@ -101,7 +129,6 @@ F.load("mason-lspconfig", function(mason_lspconfig)
       local opts = lsp_configs[server_name] or {}
       if not opts.lspconfig_ignore then
         opts.capabilities = capabilities
-        opts.handlers = handlers
         opts.lsp_flags = { debounce_text_changes = 250 }
         if opts.lspconfig_hook then
           opts.lspconfig_hook(opts)

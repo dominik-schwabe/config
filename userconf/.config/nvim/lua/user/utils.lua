@@ -79,7 +79,7 @@ end
 function M.tbl_merge(t1, t2)
   for k, v in pairs(t2) do
     if (type(v) == "table") and (type(t1[k]) == "table") then
-      if vim.tbl_islist(t1[k]) and vim.tbl_islist(v) then
+      if vim.islist(t1[k]) and vim.islist(v) then
         t1[k] = F.concat(t1[k], v)
       else
         M.tbl_merge(t1[k], v)
