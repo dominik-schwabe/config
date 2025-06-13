@@ -37,11 +37,19 @@ local map_opt = { noremap = true, silent = true }
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, desc(map_opt, "go to declaration"))
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, desc(map_opt, "go to definition"))
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, desc(map_opt, "go to type definition"))
-vim.keymap.set({ "n", "i" }, "<C-s>", function()
-  vim.lsp.buf.signature_help({ border = config.border })
-end, desc(map_opt, "show signature help"))
+vim.keymap.set(
+  { "n", "i" },
+  "<C-s>",
+  F.f(vim.lsp.buf.signature_help)({ border = config.border }),
+  desc(map_opt, "show signature help")
+)
 vim.keymap.set("n", "gh", hover, desc(map_opt, "show hover info"))
-vim.keymap.set("n", "gm", vim.diagnostic.open_float, desc(map_opt, "show diagnostics under cursor"))
+vim.keymap.set(
+  "n",
+  "gm",
+  F.f(vim.diagnostic.open_float)({ border = config.border }),
+  desc(map_opt, "show diagnostics under cursor")
+)
 vim.keymap.set("n", "gn", F.f(vim.diagnostic.jump)({ count = 1, float = true }), desc(map_opt, "go to next diagnostic"))
 vim.keymap.set(
   "n",
@@ -94,10 +102,6 @@ vim.api.nvim_create_autocmd({ "LspDetach" }, {
   desc = "Stop lsp client when no buffer is attached",
 })
 
-local lspconfig = require("lspconfig")
-local lsp_configs = config.lsp_configs
-local ensure_installed = config.minimal and {} or config.lsp_ensure_installed
-local mason_ensure_installed = config.minimal and {} or config.mason_ensure_installed
 local virtual_lines = false
 
 local function set_diagnostic_config(virtual)
@@ -115,37 +119,36 @@ vim.keymap.set("n", "td", function()
   set_diagnostic_config(virtual_lines)
 end, { desc = "toggle diagnostics" })
 
+F.load("cmp_nvim_lsp", function(cmp_nvim_lsp)
+  vim.lsp.config("*", { capabilities = cmp_nvim_lsp.default_capabilities() })
+end)
+
+for server_name, opts in pairs(config.lsp_configs) do
+  if not opts.lspconfig_ignore then
+    if opts.lspconfig_hook then
+      opts.lspconfig_hook(opts)
+    end
+    vim.lsp.config(server_name, opts)
+  end
+end
+
 F.load("mason-lspconfig", function(mason_lspconfig)
   mason_lspconfig.setup({
-    ensure_installed = ensure_installed,
+    ensure_installed = config.minimal and {} or config.lsp_ensure_installed,
     log_level = vim.log.levels.ERROR,
+    automatic_enable = {
+      exclude = { "rust_analyzer" },
+    },
   })
+end)
 
-  local cmp_nvim_lsp = F.load("cmp_nvim_lsp")
-  local capabilities = cmp_nvim_lsp and cmp_nvim_lsp.default_capabilities()
-
-  mason_lspconfig.setup_handlers({
-    function(server_name)
-      local opts = lsp_configs[server_name] or {}
-      if not opts.lspconfig_ignore then
-        opts.capabilities = capabilities
-        opts.lsp_flags = { debounce_text_changes = 250 }
-        if opts.lspconfig_hook then
-          opts.lspconfig_hook(opts)
-        end
-        lspconfig[server_name].setup(opts)
-      end
-    end,
+F.load("mason-tool-installer", function(mti)
+  mti.setup({
+    ensure_installed = config.minimal and {} or config.mason_ensure_installed,
+    auto_update = false,
+    run_on_start = true,
+    start_delay = 3000,
   })
-
-  F.load("mason-tool-installer", function(mti)
-    mti.setup({
-      ensure_installed = mason_ensure_installed,
-      auto_update = false,
-      run_on_start = true,
-      start_delay = 3000,
-    })
-  end)
 end)
 
 for type, icon in pairs(F.subset(config.icons, { "Error", "Warn", "Hint", "Info" })) do

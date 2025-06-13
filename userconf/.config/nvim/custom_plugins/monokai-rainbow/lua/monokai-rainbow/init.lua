@@ -42,7 +42,8 @@ local C = {
   cool_green = "#16e5a4",
   cool_green2 = "#4ffb87",
   cool_blue1 = "#02b4ef",
-  cool_blue2 = "#5fafff",
+  cool_blue2 = "#5eaeee",
+  cool_red1 = "#ee4444",
   directory = "#5e87af",
   link = "#8ab4f8",
   fn = "#6688dd",
@@ -63,6 +64,45 @@ local C = {
   light_white = "#444444",
   yank = "#770077",
   term_bg = "#111111",
+}
+
+local P = {
+  clojure1 = "#5881d8",
+  clojure2 = "#90b4fe",
+  clojure3 = "#91dc47",
+  clojure4 = "#63b132",
+  cpp1 = "#659ad2",
+  cpp2 = "#00599c",
+  cpp3 = "#004482",
+  dart1 = "#2cb7f6",
+  dart2 = "#04599c",
+  elm1 = "#5a6378",
+  elm2 = "#7fd13b",
+  elm3 = "#f0ad00",
+  elm4 = "#60b5cc",
+  erlang1 = "#a90533",
+  gleam1 = "#ffaff3",
+  gleam2 = "#fffbe8",
+  go1 = "#76cfdf",
+  go2 = "#00acd7",
+  java1 = "#f79221",
+  java2 = "#05799a",
+  javascript1 = "#f3db4c",
+  julia1 = "#4063d8",
+  julia2 = "#389826",
+  julia3 = "#9558b2",
+  julia4 = "#cb3c33",
+  lua1 = "#000080",
+  nim1 = "#efc743",
+  perl1 = "#4e5d84",
+  php1 = "#777bb3",
+  php2 = "#aeb2d5",
+  php3 = "#484c89",
+  python1 = "#3571a3",
+  python2 = "#fed142",
+  rust1 = "#f74b00",
+  typescript1 = "#3178c6",
+  zig1 = "#f7a41d",
 }
 
 local UNKNOWN = {
@@ -107,7 +147,7 @@ local S = {
   parameter = C.orange,
   property = C.base9,
   punctuation_delimiter = C.full_white,
-  punctuation_bracket = C.white,
+  punctuation_bracket = C.cool_blue2,
   list = C.pink,
   keyword_repeat = C.loop,
   modifier = C.amaranth,
@@ -207,6 +247,10 @@ HL.treesitter = {
 
   ["@constructor"] = { fg = S.type, bold = true },
   ["@operator"] = { fg = S.operator },
+  ["@operator.jon"] = { fg = C.pink },
+  ["@operator.cjon"] = { fg = C.pink },
+  ["@string.special.symbol.jon"] = { fg = C.orange },
+  ["@string.special.symbol.cjon"] = { fg = C.orange },
 
   ["@keyword"] = { fg = S.keyword },
   ["@keyword.modifier"] = { fg = S.modifier, bold = true },
@@ -533,7 +577,7 @@ HL.cmp = {
   CmpItemKindValue = { fg = C.orange },
   CmpItemKindVariable = { link = "@variable" },
   CmpItemKindYank = { fg = C.purple_alt, bold = true },
-  CmpItemKindPath = { fg = C.base10, bold = true },
+  CmpItemKindPath = { fg = S.folder },
   CmpItemKindTmux = { fg = C.yellow },
   CmpItemKindVersion = { fg = C.dark_green },
   CmpItemKindFeature = { fg = S.field },
@@ -551,6 +595,8 @@ HL.lsp = {
 HL.help = {
   helpCommand = { fg = C.yellow, bold = true },
   helpHeadline = { link = "@markup.heading" },
+  helpSectionDelim = { fg = C.purple, bold = true },
+  helpHeader = { link = "@markup.heading" },
 }
 
 HL.health = {
@@ -565,11 +611,6 @@ HL.other = {
   CursorWord1 = { bg = C.white, fg = C.black },
   TrailingWhitespace = { bg = C.trailing },
   dbui_tables = { fg = C.white },
-  VM_Cursor_hl = { link = "Visual" },
-  VM_Mono = { bg = C.neon_purple, fg = C.black },
-  VM_Cursor = { link = "PmenuSel" },
-  VM_Extend = { link = "PmenuSel" },
-  VM_Insert = { link = "Cursor" },
   MultiCursor = { link = "Visual" },
   MultiCursorCursor = { bg = C.purple, fg = C.black },
   MultiCursorVisual = { link = "Visual" },
@@ -632,8 +673,6 @@ HL.other = {
   qfSeparatorRight = { fg = C.yellow },
   qfLineNr = { fg = C.purple },
   qfError = { link = "@comment.error" },
-  helpSectionDelim = { fg = C.purple, bold = true },
-  helpHeader = { link = "@markup.heading" },
   TreesitterContext = { bg = C.base3 },
   TreesitterContextLineNumber = { bg = C.base3 },
   Selection = { bg = C.base4 },
@@ -651,14 +690,11 @@ function M.load()
   vim.o.background = "dark"
   vim.o.termguicolors = true
   vim.g.colors_name = "monokai"
-  vim.g.VM_theme = ""
   for _, group in pairs(HL) do
     for hl_group, colors in pairs(group) do
       vim.api.nvim_set_hl(0, hl_group, colors)
     end
   end
-
-  vim.g.VM_theme_set_by_colorscheme = true
 end
 
 return M

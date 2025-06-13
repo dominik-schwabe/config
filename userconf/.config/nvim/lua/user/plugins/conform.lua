@@ -27,14 +27,14 @@ conform.setup({
       args = { "--line-width", "70", "--multiple" },
       stdin = true,
     },
-    elsa = {
-      command = "elsa",
+    jon = {
+      command = "jon",
       args = { "--line-width", "70", "--rotate-delimiters" },
       stdin = true,
     },
-    celsa = {
-      command = "elsa",
-      args = { "--line-width", "70", "--multiple", "--rotate-delimiters" },
+    cjon = {
+      command = "jon",
+      args = { "--line-width", "70", "--spacing", "1", "--multiple", "--rotate-delimiters" },
       stdin = true,
     },
     xdata = {

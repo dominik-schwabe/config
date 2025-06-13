@@ -24,7 +24,7 @@ alias lr="find -type f -exec basename {} \;"
 alias l='ls -lAthr'
 alias ll='ls -lAh'
 
-alias lines="fd --type file | xargs wc -l | sort -h"
+alias lines='fd --type file | xargs -d "\n" wc -l | sort -h'
 
 alias d='mkdir -p ~/.diary && vim ~/.diary/$(date -I).md'
 if [[ "$EDITOR" == "nvim" ]]; then

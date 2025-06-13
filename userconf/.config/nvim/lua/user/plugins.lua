@@ -1,4 +1,5 @@
 local F = require("user.functional")
+local U = require("user.utils")
 
 local config = require("user.config")
 
@@ -23,6 +24,39 @@ local function bind_select_action(entries, opts)
     end)
   end, desc(map_opts, "select actions"))
 end
+
+local disabled_plugins = {
+  "2html_plugin",
+  "bugreport",
+  "compiler",
+  "ftplugin",
+  "getscript",
+  "getscriptPlugin",
+  "gzip",
+  "logipat",
+  "matchit",
+  "matchparen",
+  "netrw",
+  "netrwFileHandlers",
+  "netrwPlugin",
+  "netrwSettings",
+  "optwin",
+  "rplugin",
+  "rrhelper",
+  "shada",
+  "spellfile_plugin",
+  "synmenu",
+  "syntax",
+  "syntax_completion",
+  "tar",
+  "tarPlugin",
+  "tohtml",
+  "tutor",
+  "vimball",
+  "vimballPlugin",
+  "zip",
+  "zipPlugin",
+}
 
 local illuminate_denylist = {
   "",
@@ -78,8 +112,8 @@ local lspconfig = with_dependencies({
   "neovim/nvim-lspconfig",
   config = l("lspconfig"),
   dependencies = {
-    { "williamboman/mason.nvim", opts = { ui = { border = config.border } }, config = true },
-    { "williamboman/mason-lspconfig.nvim" },
+    { "mason-org/mason.nvim", opts = { ui = { border = config.border } }, config = true },
+    { "mason-org/mason-lspconfig.nvim" },
   },
 }, {
   {
@@ -186,7 +220,7 @@ local cmp = with_dependencies({
 }, {
   { "onsails/lspkind.nvim" },
   { "hrsh7th/cmp-buffer" },
-  { "FelipeLema/cmp-async-path" },
+  { "hrsh7th/cmp-path" },
   { "hrsh7th/cmp-nvim-lua" },
   { "andersevenrud/cmp-tmux" },
 })
@@ -254,18 +288,10 @@ local plugins = F.concat({
       },
     },
   },
-  {
-    "kylechui/nvim-surround",
-    event = "VeryLazy",
-    config = true,
-  },
+  { "kylechui/nvim-surround", config = true },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
-  {
-    "stevearc/conform.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    config = l("conform"),
-  },
+  { "stevearc/conform.nvim", config = l("conform") },
   {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
@@ -630,7 +656,7 @@ if not config.minimal then
               strategy = {
                 [""] = function()
                   local rb = require("rainbow-delimiters")
-                  return vim.fn.line("$") > 1000 and rb.strategy["noop"] or rb.strategy["global"]
+                  return U.is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
                 end,
               },
             }
@@ -782,36 +808,59 @@ if not config.minimal then
     { "nmac427/guess-indent.nvim", opts = {} },
     { "nvimtools/hydra.nvim", lazy = true },
     { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>cl", "dal" } },
-    -- {
-    --   "OXY2DEV/markview.nvim",
-    --   lazy = false,
-    --   opts = { preview = { enable = false, enable_hybrid_mode = false } },
-    --   keys = { { "<space>tm", "<CMD>Markview splitToggle<CR>", desc = "toggle markview markdown preview" } },
-    -- },
     {
-      "iamcco/markdown-preview.nvim",
-      cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+      "renerocksai/telekasten.nvim",
+      dependencies = { "nvim-telescope/telescope.nvim" },
+      config = function()
+        require("telekasten").setup({
+          home = vim.fn.expand("~/zettelkasten"),
+          image_subdir = "img",
+          dailies = "daily",
+          weeklies = "weekly",
+          image_link_style = "wiki",
+          subdirs_in_links = true,
+          clipboard_program = "xclip",
+          auto_set_filetype = false,
+        })
+        F.foreach({
+          { "<space>zz", "<cmd>Telekasten panel<CR>", "zettelkasten panel" },
+          { "<space>zp", "<cmd>Telekasten find_notes<CR>", "zettelkasten find notes" },
+          { "<space>z-", "<cmd>Telekasten find_friends<CR>", "zettelkasten find link" },
+          { "<space>z_", "<cmd>Telekasten search_notes<CR>", "zettelkasten search notes" },
+          { "<space>zr", "<cmd>Telekasten rename_note<CR>", "zettelkasten rename note" },
+          { "<space>zd", "<cmd>Telekasten goto_today<CR>", "zettelkasten goto today" },
+          { "<space>za", "<cmd>Telekasten new_note<CR>", "zettelkasten new note" },
+          { "<space>zb", "<cmd>Telekasten show_backlinks<CR>", "zettelkasten show backlinks" },
+          { "<space>zt", "<cmd>Telekasten show_tags<CR>", "zettelkasten show tags" },
+          { "<space>zii", "<cmd>Telekasten insert_img_link<CR>", "zettelkasten insert image link" },
+          { "<space>zip", "<cmd>Telekasten paste_img_and_link<CR>", "zettelkasten paste image" },
+        }, function(mapping)
+          local keymap, command, description = unpack(mapping)
+          vim.keymap.set("n", keymap, command, { desc = description })
+        end)
+      end,
+    },
+    {
+      "toppair/peek.nvim",
       ft = { "markdown" },
-      build = function()
-        vim.fn["mkdp#util#install"]()
-      end,
-      init = function()
-        vim.cmd([[
-          function OpenMarkdown(url)
-            echo a:url
-            if empty($SSH_TTY)
-              call system("xdg-open " .. a:url)
-            endif
-          endfunction
-        ]])
-        vim.g.mkdp_browserfunc = "OpenMarkdown"
-        if os.getenv("SSH_TTY") then
-          vim.g.mkdp_port = 8100
+      build = "deno task --quiet build:fast",
+      config = function()
+        local peek = require("peek")
+        peek.setup({
+          app = "browser",
+          filetype = { "markdown", "telekasten" },
+        })
+        vim.api.nvim_create_user_command("PeekOpen", peek.open, {})
+        vim.api.nvim_create_user_command("PeekClose", peek.close, {})
+        local function toggle_markdown()
+          if peek.is_open() then
+            peek.close()
+          else
+            peek.open()
+          end
         end
-        vim.g.mkdp_auto_start = 0
-        vim.g.mkdp_auto_close = 0
+        vim.keymap.set("n", "<space>tm", toggle_markdown, { desc = "toggle markdown preview" })
       end,
-      keys = { { "<space>tM", "<CMD>MarkdownPreviewToggle<CR>", desc = "toggle markdown preview" } },
     },
     {
       "FabijanZulj/blame.nvim",
@@ -824,54 +873,10 @@ if not config.minimal then
 end
 
 require("lazy").setup(plugins, {
-  defaults = {
-    lazy = false,
-  },
-  checker = {
-    enabled = false,
-  },
-  ui = {
-    border = config.border,
-  },
-  performance = {
-    cache = {
-      enabled = true,
-    },
-    rtp = {
-      disabled_plugins = {
-        "2html_plugin",
-        "bugreport",
-        "compiler",
-        "ftplugin",
-        "getscript",
-        "getscriptPlugin",
-        "gzip",
-        "logipat",
-        "matchit",
-        "matchparen",
-        "netrw",
-        "netrwFileHandlers",
-        "netrwPlugin",
-        "netrwSettings",
-        "optwin",
-        "rplugin",
-        "rrhelper",
-        "shada",
-        "spellfile_plugin",
-        "synmenu",
-        "syntax",
-        "syntax_completion",
-        "tar",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "vimball",
-        "vimballPlugin",
-        "zip",
-        "zipPlugin",
-      },
-    },
-  },
+  defaults = { lazy = false },
+  checker = { enabled = false },
+  ui = { border = config.border },
+  performance = { cache = { enabled = true }, rtp = { disabled_plugins = disabled_plugins } },
 })
 
 vim.keymap.set("n", "<space>ol", "<ESC>:Lazy<CR>", { desc = "install, clean, and update plugins" })

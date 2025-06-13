@@ -110,7 +110,7 @@ local cmp_options = {
     },
     { name = "nvim_lua" },
     { name = "yank_history", max_item_count = 3 },
-    { name = "async_path" },
+    { name = "path" },
     {
       name = "buffer",
       option = {

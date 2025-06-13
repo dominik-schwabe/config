@@ -52,7 +52,7 @@ local function rg(string, opt)
     "--with-filename",
     "--ignore-case",
     "--vimgrep",
-    "--max-filesize=1M",
+    -- "--max-filesize=1M",
     "--max-columns=1000",
   }
   if raw then

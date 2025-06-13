@@ -63,7 +63,7 @@ M.icons = {
   Struct = "󰙅",
   KnownColor = "󰝤", -- ■  
   Yank = "󰏢",
-  Path = "/",
+  Path = "󰉋",
   Tmux = "󰓫",
   Modified = "󰏫",
   Readonly = "",
@@ -127,7 +127,7 @@ M.lsp_configs = {
       renderColons = false,
     },
     lspconfig_ignore = true,
-    checkOnSave = { command = "clippy" },
+    checkOnSave = true,
     hover = {
       actions = {
         gotoTypeDef = { enable = false },
@@ -253,8 +253,8 @@ M.formatters = {
     xdata = { "xdata" },
     xdatal = { "xdatal" },
     cjson = { "cjson" },
-    elsa = { "elsa" },
-    celsa = { "celsa" },
+    jon = { "jon" },
+    cjon = { "cjon" },
   },
 }
 M.treesitter = {
@@ -274,6 +274,7 @@ M.treesitter = {
     "lua",
     "make",
     "markdown",
+    "markdown_inline",
     "python",
     "rust",
     "toml",

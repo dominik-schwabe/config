@@ -6,9 +6,21 @@ local F = require("user.functional")
 
 local ensure_installed = config.minimal and {} or treesitter_config.ensure_installed
 
-local function disable_func(filetype, bufnr)
-  return U.is_big_buffer_or_in_allowlist(bufnr) or F.contains(treesitter_config.highlight_disable, filetype)
-end
+F.load("nvim-treesitter.parsers", function(tp)
+  local configs = tp.get_parser_configs()
+  F.foreach({ "jon", "cjon", "cjson" }, function(ft)
+    local path = os.getenv("HOME") .. "/tree-sitter-" .. ft
+    if U.exists(path) then
+      configs[ft] = {
+        install_info = {
+          url = path,
+          files = { "src/parser.c" },
+        },
+        filetype = { ft },
+      }
+    end
+  end)
+end)
 
 F.load("nvim-treesitter.configs", function(tc)
   tc.setup({
@@ -31,7 +43,7 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     highlight = {
       enable = true,
-      disable = disable_func,
+      disable = U.is_disable_treesitter,
     },
     incremental_selection = {
       enable = true,
@@ -41,30 +53,13 @@ F.load("nvim-treesitter.configs", function(tc)
         node_decremental = "(",
       },
     },
-    markid = {
-      enable = false,
-      disable = disable_func,
-      colors = {
-        "#ffffff",
-        "#eeeeee",
-        "#dddddd",
-        "#cccccc",
-        "#bbbbbb",
-        "#aaaaaa",
-        "#999999",
-        "#888888",
-        "#777777",
-        "#666666",
-        "#555555",
-      },
-    },
     matchup = {
       enable = false,
-      disable = disable_func,
+      disable = U.is_disable_treesitter,
     },
     indent = {
       enable = false,
-      disable = disable_func,
+      disable = U.is_disable_treesitter,
     },
     textobjects = {
       select = {
@@ -127,9 +122,10 @@ F.load("nvim-treesitter.configs", function(tc)
     },
     autotag = {
       enable = true,
-      disable = disable_func,
+      disable = U.is_disable_treesitter,
       enable_close_on_slash = false,
     },
+    markid = { enable = true },
     ensure_installed = ensure_installed,
     ignore_install = treesitter_config.ignore_install,
     additional_vim_regex_highlighting = false,
@@ -141,7 +137,7 @@ F.load("treesitter-context", function(treesitter_context)
     multiline_threshold = 1,
     on_attach = function(bufnr)
       local filetype = vim.bo[bufnr].filetype
-      return not disable_func(filetype, bufnr)
+      return not U.is_disable_treesitter(filetype, bufnr)
     end,
   })
 end)
@@ -150,7 +146,7 @@ F.load("hlargs", function(hlargs)
   hlargs.setup({
     paint_arg_declarations = false,
     color = "#16e5a4",
-    disable = disable_func,
+    disable = U.is_disable_treesitter,
     excluded_argnames = {
       declarations = {},
       usages = {

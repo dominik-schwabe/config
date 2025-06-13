@@ -3,53 +3,18 @@ local U = require("user.utils")
 
 vim.api.nvim_create_augroup("user", {})
 
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.pest",
-  callback = function()
-    vim.bo.filetype = "pest"
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.xj",
-  callback = function()
-    vim.bo.filetype = "xj"
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.xjl",
-  callback = function()
-    vim.bo.filetype = "xjl"
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.xd",
-  callback = function()
-    vim.bo.filetype = "xdata"
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.celsa",
-  callback = function()
-    vim.bo.filetype = "celsa"
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.xdl",
-  callback = function()
-    vim.bo.filetype = "xdatal"
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.cjson",
-  callback = function()
-    vim.bo.filetype = "cjson"
-  end,
+vim.filetype.add({
+  extension = {
+    pest = "pest",
+    xj = "xj",
+    xjl = "xjl",
+    xdata = "xdata",
+    xdatal = "xdatal",
+    jon = "jon",
+    cjon = "cjon",
+    cjson = "cjson",
+    kif = "lisp",
+  },
 })
 
 local function set_window_options(opts)
