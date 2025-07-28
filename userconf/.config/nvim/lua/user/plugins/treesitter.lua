@@ -58,7 +58,7 @@ F.load("nvim-treesitter.configs", function(tc)
       disable = U.is_disable_treesitter,
     },
     indent = {
-      enable = false,
+      enable = true,
       disable = U.is_disable_treesitter,
     },
     textobjects = {

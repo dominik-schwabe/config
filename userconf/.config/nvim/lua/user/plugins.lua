@@ -347,7 +347,6 @@ local plugins = F.concat({
   },
   {
     "jake-stewart/multicursor.nvim",
-    branch = "1.0",
     config = function()
       local mc = require("multicursor-nvim")
 
@@ -572,7 +571,6 @@ if not config.minimal then
     {
       "altermo/ultimate-autopair.nvim",
       event = { "InsertEnter", "CmdlineEnter" },
-      branch = "v0.6",
       opts = {
         tabout = { enable = true },
         cmap = false,
@@ -587,7 +585,7 @@ if not config.minimal then
               return not fn.in_node({ "bounded_type", "type_parameters" })
             end,
           },
-          { "`", "`", nft = { "python", "xdata", "xdatal" } },
+          { "`", "`", nft = { "python", "jon", "cjon" } },
         },
       },
     },
@@ -687,11 +685,6 @@ if not config.minimal then
         { "theHamsta/nvim-dap-virtual-text" },
         { "mfussenegger/nvim-dap-python" },
       },
-    },
-    {
-      "simrat39/symbols-outline.nvim",
-      opts = { width = 40 },
-      keys = { { "<space>os", "<ESC>:SymbolsOutline<CR>", desc = "toggle symbols outline" } },
     },
     {
       "lervag/vimtex",
@@ -869,6 +862,7 @@ if not config.minimal then
     },
     { "echasnovski/mini.nvim", version = false },
     { "jbyuki/venn.nvim", config = l("venn") },
+    "lark-parser/vim-lark-syntax",
   })
 end
 

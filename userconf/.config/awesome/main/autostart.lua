@@ -8,7 +8,7 @@ local autostart_programs = {
   { 4, "flameshot" },
   { 7, "spotify-launcher &>/dev/null" },
   { 8, "is_productive_system && birdtray" },
-  { 10, "is_productive_system && telegram-desktop -startintray" },
+  { 10, "is_productive_system && Telegram -startintray" },
   -- { 12, "is_productive_system && is_work_time && discord --start-minimized" },
   -- { 15, "is_productive_system && is_work_time && skypeforlinux" },
 }

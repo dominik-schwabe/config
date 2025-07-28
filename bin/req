@@ -68,8 +68,8 @@ if args.fake:
     import fake_useragent
 
     headers["User-Agent"] = fake_useragent.UserAgent().chrome
-    if user_headers := args.headers:
-        headers.update(json.loads(user_headers))
+if user_headers := args.headers:
+    headers.update(json.loads(user_headers))
 
 
 kwargs = {

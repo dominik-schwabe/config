@@ -106,7 +106,7 @@ local virtual_lines = false
 
 local function set_diagnostic_config(virtual)
   if virtual then
-    vim.diagnostic.config({ virtual_lines = { current_line = true } })
+    vim.diagnostic.config({ virtual_lines = true })
   else
     vim.diagnostic.config({ virtual_lines = false })
   end
@@ -174,14 +174,3 @@ vim.keymap.set("n", "<space>th", function()
 end, { desc = "toggle inlay hints" })
 
 vim.keymap.set("n", "<space>om", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })
-
--- show settings of lspserver
-local function lsp_settings()
-  local clients = vim.lsp.buf_get_clients()
-  print(vim.inspect(F.map(clients, function(client)
-    return client.config.settings
-  end)))
-end
-
-vim.api.nvim_create_user_command("LspSettings", lsp_settings, {})
-vim.keymap.set("n", "<space>lds", lsp_settings, { desc = "show lsp settings" })

@@ -251,6 +251,8 @@ HL.treesitter = {
   ["@operator.cjon"] = { fg = C.pink },
   ["@string.special.symbol.jon"] = { fg = C.orange },
   ["@string.special.symbol.cjon"] = { fg = C.orange },
+  ["@string.regexp.jon"] = { fg = C.fn },
+  ["@string.regexp.cjon"] = { fg = C.fn },
 
   ["@keyword"] = { fg = S.keyword },
   ["@keyword.modifier"] = { fg = S.modifier, bold = true },

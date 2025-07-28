@@ -9,6 +9,20 @@ F.foreach_items(formatters.args or {}, function(formatter, args)
   conform.formatters[formatter] = { append_args = args }
 end)
 
+local JON_OPERATORS = { "~", "=~", ":-", "unit", "::" }
+local JON_ARGS = F.concat(
+  {
+    "--max-line-length",
+    "70",
+    "--spacing",
+    "1",
+    "--rotate-delimiters",
+  },
+  F.flat(F.map(JON_OPERATORS, function(op)
+    return { "-o", op }
+  end))
+)
+
 conform.setup({
   formatters_by_ft = formatters.filetype or {},
   formatters = {
@@ -29,12 +43,14 @@ conform.setup({
     },
     jon = {
       command = "jon",
-      args = { "--line-width", "70", "--rotate-delimiters" },
+      args = JON_ARGS,
       stdin = true,
     },
     cjon = {
       command = "jon",
-      args = { "--line-width", "70", "--spacing", "1", "--multiple", "--rotate-delimiters" },
+      args = F.concat({
+        "--multiple",
+      }, JON_ARGS),
       stdin = true,
     },
     xdata = {

@@ -39,7 +39,7 @@ opt.clipboard:append("unnamedplus")
 vim.scriptencoding = "utf-8"
 opt.encoding = "utf-8"
 opt.fileencoding = "utf-8"
-opt.iskeyword:append({"-", "#"})
+opt.iskeyword:append({ "-", "#" })
 opt.scrolloff = 8
 opt.hidden = true
 opt.updatetime = 300
@@ -62,13 +62,8 @@ g.loaded_perl_provider = 0
 g.python3_host_prog = "/usr/bin/python3"
 
 if vim.fn.executable("mise") ~= 0 then
-  local output = vim.fn.system("mise global python")
-  local exit_code = vim.v.shell_error
-  if exit_code == 0 then
-    local PYTHON_VERSION = output:gsub("[\n\t ]+", "")
-    local PYTHON_PATH = U.path({ vim.env.HOME, "/.local/share/mise/installs/python/", PYTHON_VERSION, "/bin/python" })
-    if vim.fn.executable(PYTHON_PATH) ~= 0 then
-      g.python3_host_prog = PYTHON_PATH
-    end
+  local PYTHON_PATH = vim.fn.trim(vim.fn.system("mise which -C / python"))
+  if vim.v.shell_error == 0 and vim.fn.executable(PYTHON_PATH) ~= 0 then
+    g.python3_host_prog = PYTHON_PATH
   end
 end
