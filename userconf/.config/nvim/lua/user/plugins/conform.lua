@@ -9,7 +9,7 @@ F.foreach_items(formatters.args or {}, function(formatter, args)
   conform.formatters[formatter] = { append_args = args }
 end)
 
-local JON_OPERATORS = { "~", "=~", ":-", "unit", "::" }
+local JON_OPERATORS = { "~", "=~", ":-", "unit", "::", "+", "-", "/", "*" }
 local JON_ARGS = F.concat(
   {
     "--max-line-length",

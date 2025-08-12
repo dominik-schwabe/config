@@ -1,8 +1,9 @@
 ipdb
 ipython
 ipython-autoimport
-pipenv
 pynvim
 telegram-send
 wheel
 yt-dlp
+uv
+uvx

@@ -19,6 +19,7 @@
   review = "!f() { git log -p --reverse \"$@\" origin/master...HEAD; }; f"
   pr = "!f() { git fetch --force origin pull/$1/head:pr-$1; }; f"
   mff = merge --ff-only
+  diffback = "!f() { commit=$(git rev-list -1 --before=\"${1:-1 month ago}\" HEAD); git diff $commit; }; f"
 
 [diff]
   tool = difftastic

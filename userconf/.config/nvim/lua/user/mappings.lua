@@ -1,6 +1,7 @@
 local F = require("user.functional")
 local C = require("user.constants")
 
+vim.keymap.set({ "n" }, "<leader>x", "<CMD>:.lua<CR>", { desc = "interpret the current lua line" })
 vim.keymap.set({ "n", "x" }, "Q", "<CMD>qa<CR>", { desc = "quit neovim" })
 vim.keymap.set({ "n", "x" }, "<C-e>", "<CMD>noh|diffupdate<CR>", { desc = "clear selection" })
 vim.keymap.set("x", "<", "<gv", { desc = "decrement indentation" })
