@@ -5,5 +5,3 @@ pynvim
 telegram-send
 wheel
 yt-dlp
-uv
-uvx

@@ -77,6 +77,7 @@ alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9
 alias pythonserver='python -m http.server 8000'
 alias ppjson='python -m json.tool'
 
+alias install_uv='curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh'
 alias install_zsh='curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh'
 alias install_treesitter='cargo install tree-sitter-cli'
 alias install_rye='curl -sSf https://Rye-up.com/get | bash'
@@ -115,6 +116,7 @@ alias work='track work'
 alias whatismyip='curl -4 ifconfig.me; echo ; curl -6 ifconfig.me; echo'
 alias whereami='curl https://ipinfo.io/loc'
 alias firmware='fwupdmgr'
+alias path='echo $PATH | tr ":" "\n"'
 
 alias sst='(sinfo -S "%n" -O nodehost:12,memory:8,freemem:10,allocmem:11,cpusstate:15,socketcorethread:10 \
 && echo && sinfo -S "%n" -O nodehost:12,statecompact:7,gres:30,gresused:50,reason:35 \
