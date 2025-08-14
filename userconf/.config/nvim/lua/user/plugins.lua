@@ -100,165 +100,6 @@ local function l(plugin_name)
   end
 end
 
-local function with_dependencies(plugin, optional_dependencies)
-  if not config.minimal then
-    plugin.dependencies = plugin.dependencies or {}
-    plugin.dependencies = F.concat(plugin.dependencies, optional_dependencies)
-  end
-  return plugin
-end
-
-local lspconfig = with_dependencies({
-  "neovim/nvim-lspconfig",
-  config = l("lspconfig"),
-  dependencies = {
-    { "mason-org/mason.nvim", opts = { ui = { border = config.border } }, config = true },
-    { "mason-org/mason-lspconfig.nvim" },
-  },
-}, {
-  {
-    "azabiong/vim-highlighter",
-    keys = {
-      { "<space>ha", "<CMD>call highlighter#Command('+')<CR>", mode = "n", silent = true },
-      { "<space>ha", ":<C-U>call highlighter#Command('+x')<CR>", mode = "x", silent = true },
-      { "dh", "<CMD>call highlighter#Command('-')<CR>", mode = "n", silent = true },
-      { "dah", "<CMD>call highlighter#Command('clear')<CR>", mode = "n", silent = true },
-      { "<space>hi", "<CMD>call highlighter#Command('+%')<CR>", mode = "n", silent = true },
-      { "<space>hi", ":<C-U>call highlighter#Command('+x%')<CR>", mode = "x", silent = true },
-    },
-    init = function()
-      vim.g.HiMapKeys = 0
-    end,
-  },
-  { "b0o/schemastore.nvim" },
-  {
-    "RRethy/vim-illuminate",
-    config = function()
-      require("illuminate").configure({
-        providers = { "lsp" },
-        filetypes_denylist = illuminate_denylist,
-        modes_allowlist = { "n" },
-      })
-    end,
-  },
-  {
-    "mrcjkb/rustaceanvim",
-    ft = { "rust" },
-    init = function()
-      vim.g.rustaceanvim = {
-        tools = {
-          float_win_config = {
-            border = config.border,
-          },
-        },
-        server = {
-          on_attach = function(client, bufnr)
-            local map_opts = { noremap = true, silent = true, buffer = bufnr }
-            local rcb = F.f(vim.cmd.RustLsp)
-            vim.keymap.set("n", "gh", rcb({ "hover", "actions" }), desc(map_opts, "rust hover actions"))
-            bind_select_action({
-              { "debuggables" },
-              { "debuggables", "last" },
-              { "runnables" },
-              { "runnables", "last" },
-              { "explainError" },
-              { "expandMacro" },
-              { "rebuildProcMacros" },
-              { "openCargo" },
-              { "view", "hir" },
-              { "view", "mir" },
-            }, {
-              buffer = bufnr,
-              on_select = function(choice)
-                vim.cmd.RustLsp(F.copy(choice))
-              end,
-              format_item = function(item)
-                return table.concat(item, " ")
-              end,
-            })
-          end,
-          settings = function(project_root)
-            local ra = require("rustaceanvim.config.server")
-            local default_settings = require("rustaceanvim.config.internal").server.default_settings
-            local settings = ra.load_rust_analyzer_settings(project_root, {
-              settings_file_pattern = "rust-analyzer.json",
-            })
-            if settings == default_settings then
-              settings = { ["rust-analyzer"] = config.lsp_configs.rust_analyzer or {} }
-            end
-            return settings
-          end,
-        },
-        dap = {},
-      }
-    end,
-  },
-})
-
-local luasnip = {
-  "L3MON4D3/LuaSnip",
-  config = l("luasnip"),
-  dependencies = {
-    { "rafamadriz/friendly-snippets" },
-    -- { "mireq/luasnip-snippets" },
-  },
-}
-
-if not config.minimal then
-  luasnip.build = "make install_jsregexp"
-end
-
-local cmp = with_dependencies({
-  "hrsh7th/nvim-cmp",
-  event = "InsertEnter",
-  config = l("cmp"),
-  dependencies = {
-    { "saadparwaiz1/cmp_luasnip" },
-    { "hrsh7th/cmp-nvim-lsp" },
-    luasnip,
-  },
-}, {
-  { "onsails/lspkind.nvim" },
-  { "hrsh7th/cmp-buffer" },
-  { "hrsh7th/cmp-path" },
-  { "hrsh7th/cmp-nvim-lua" },
-  { "andersevenrud/cmp-tmux" },
-})
-
-local nvim_tree = with_dependencies({
-  "nvim-tree/nvim-tree.lua",
-  config = l("tree"),
-  lazy = false,
-  keys = {
-    { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
-    { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
-  },
-}, { { "nvim-tree/nvim-web-devicons" } })
-
-local comment = with_dependencies({
-  "numToStr/Comment.nvim",
-  config = function()
-    local opts = {
-      padding = true,
-      sticky = true,
-      ignore = "^%s*$",
-      mappings = { basic = true, extra = true },
-    }
-    F.load("ts_context_commentstring.integrations.comment_nvim", function(ttscc)
-      opts.pre_hook = ttscc.create_pre_hook()
-    end)
-    require("Comment").setup(opts)
-  end,
-  keys = { { "gc", mode = { "n", "x" } } },
-}, {
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    init = function()
-      vim.g.skip_ts_context_commentstring_module = true
-    end,
-  },
-})
-
 vim.g.VM_maps = {
   ["Select Cursor Down"] = "L",
   ["Select Cursor Up"] = "K",
@@ -266,10 +107,38 @@ vim.g.VM_maps = {
 
 local plugins = F.concat({
   { "folke/lazy.nvim" },
-  lspconfig,
-  nvim_tree,
-  cmp,
-  comment,
+  { "neovim/nvim-lspconfig", config = l("lspconfig") },
+  { "mason-org/mason.nvim", opts = { ui = { border = config.border } } },
+  { "mason-org/mason-lspconfig.nvim" },
+  {
+    "nvim-tree/nvim-tree.lua",
+    config = l("tree"),
+    lazy = false,
+    keys = {
+      { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
+      { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
+    },
+  },
+  { "nvim-tree/nvim-web-devicons" },
+  { "saghen/blink.cmp", version = "1.*", config = l("blink") },
+  { "mgalliou/blink-cmp-tmux" },
+  { "rafamadriz/friendly-snippets" },
+  {
+    "echasnovski/mini.nvim",
+    config = function()
+      require("mini.comment").setup({
+        options = {
+          custom_commentstring = function()
+            return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+          end,
+          ignore_blank_line = true,
+        },
+      })
+      require("mini.icons").setup()
+    end,
+  },
+  { "JoosepAlviste/nvim-ts-context-commentstring" },
+  -- { "folke/snacks.nvim" },
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
@@ -292,6 +161,7 @@ local plugins = F.concat({
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
   { "stevearc/conform.nvim", config = l("conform") },
+  -- { "dmtrKovalenko/fff.nvim" },
   {
     "nvim-telescope/telescope.nvim",
     config = l("telescope"),
@@ -340,11 +210,7 @@ local plugins = F.concat({
     },
     ft = "qf",
   },
-  {
-    "stevearc/quicker.nvim",
-    ft = "qf",
-    opts = {},
-  },
+  { "stevearc/quicker.nvim", ft = "qf", opts = {} },
   {
     "jake-stewart/multicursor.nvim",
     config = function()
@@ -354,16 +220,9 @@ local plugins = F.concat({
 
       local set = vim.keymap.set
 
-      -- local line_add_cursor = F.f(mc.lineAddCursor)
-      -- local line_skip_cursor = F.f(mc.lineSkipCursor)
       local match_add_cursor = F.f(mc.matchAddCursor)
       local match_skip_cursor = F.f(mc.matchSkipCursor)
       local transpose_cursor = F.f(mc.transposeCursors)
-
-      -- set({ "n", "v" }, "<up>", line_add_cursor(-1))
-      -- set({ "n", "v" }, "<down>", line_add_cursor(1))
-      -- set({ "n", "v" }, "<leader><up>", line_skip_cursor(-1))
-      -- set({ "n", "v" }, "<leader><down>", line_skip_cursor(1))
 
       set({ "n", "v" }, "<C-N>", match_add_cursor(1))
       set({ "n", "v" }, "<space>n", match_skip_cursor(-1))
@@ -374,7 +233,6 @@ local plugins = F.concat({
       set({ "n", "v" }, "<space>j", mc.nextCursor)
       set({ "n", "v" }, "<space>k", mc.prevCursor)
 
-      -- Delete the main cursor.
       set({ "n", "v" }, "<leader>x", mc.deleteCursor)
 
       local TERM_CODES = require("multicursor-nvim.term-codes")
@@ -394,7 +252,6 @@ local plugins = F.concat({
         end)
       end)
 
-      -- Clone every cursor and disable the originals.
       set({ "n", "v" }, "<leader><c-q>", mc.duplicateCursors)
 
       set("n", "<esc>", function()
@@ -402,51 +259,28 @@ local plugins = F.concat({
           mc.enableCursors()
         elseif mc.hasCursors() then
           mc.clearCursors()
-        else
-          -- Default <esc> handler.
         end
       end)
 
-      -- bring back cursors if you accidentally clear them
       set("n", "<space>mm", mc.restoreCursors)
 
-      -- Align cursor columns.
       set("n", "<space>ma", mc.alignCursors)
 
-      -- Split visual selections by regex.
       set("v", "<space>mr", mc.splitCursors)
 
-      -- Append/insert for each line of visual selections.
       set("v", "I", mc.insertVisual)
       set("v", "A", mc.appendVisual)
 
-      -- match new cursors within visual selections by regex.
       set("v", "M", mc.matchCursors)
 
-      -- Rotate visual selection contents.
       set("v", "<space>mt", transpose_cursor(1))
       set("v", "<leader>T", transpose_cursor(-1))
 
-      -- Jumplist support
       set({ "v", "n" }, "<c-i>", mc.jumpForward)
       set({ "v", "n" }, "<c-o>", mc.jumpBackward)
     end,
   },
   { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
-  -- {
-  --   "jiaoshijie/undotree",
-  --   dependencies = "nvim-lua/plenary.nvim",
-  --   config = true,
-  --   keys = {
-  --     {
-  --       "<F3>",
-  --       function()
-  --         require("undotree").toggle()
-  --       end,
-  --       desc = "toggle undo tree",
-  --     },
-  --   },
-  -- },
   {
     dir = config.custom_plugin_path .. "/rooter",
     config = function()
@@ -483,7 +317,7 @@ local plugins = F.concat({
 
       local send = require("repl.send")
       local window = require("repl.window")
-      local repls = F.keys(require("repl.repls").repls)
+      local repls = vim.tbl_keys(require("repl.repls").repls)
 
       local function mark_jump()
         vim.cmd("mark '")
@@ -493,7 +327,7 @@ local plugins = F.concat({
         group = vim.api.nvim_create_augroup("UserRepl", {}),
         callback = function(args)
           local bufopt = vim.bo[args.buf]
-          if F.contains(repls, bufopt.filetype) then
+          if vim.tbl_contains(repls, bufopt.filetype) then
             local map_opt = { buffer = args.buf }
             vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph), desc(map_opt, "send paragraph"))
             vim.keymap.set("n", "<CR>", F.f(send.line_next)(), desc(map_opt, "send line and go next"))
@@ -522,45 +356,156 @@ local plugins = F.concat({
 
 if not config.minimal then
   plugins = F.concat(plugins, {
+    { "b0o/schemastore.nvim" },
     {
-      "johmsalas/text-case.nvim",
-      config = l("text-case"),
-      keys = { "<space>cc" },
+      "RRethy/vim-illuminate",
+      config = function()
+        require("illuminate").configure({
+          providers = { "lsp" },
+          filetypes_denylist = illuminate_denylist,
+          modes_allowlist = { "n" },
+        })
+      end,
     },
     {
-      "nvim-lualine/lualine.nvim",
-      config = l("lualine"),
-      dependencies = {
-        { "SmiteshP/nvim-navic" },
-        { "nvim-tree/nvim-web-devicons" },
-        {
-          "j-hui/fidget.nvim",
-          event = "LspAttach",
-          opts = {
-            progress = {
-              suppress_on_insert = false,
-              ignore_done_already = true,
-              display = {
-                done_style = "FidgetDone",
-                group_style = "FidgetGroup",
-                progress_style = "FidgetProgress",
+      "mrcjkb/rustaceanvim",
+      ft = { "rust" },
+      init = function()
+        vim.g.rustaceanvim = {
+          tools = {
+            float_win_config = {
+              border = config.border,
+            },
+          },
+          server = {
+            on_attach = function(client, bufnr)
+              local map_opts = { noremap = true, silent = true, buffer = bufnr }
+              local rcb = F.f(vim.cmd.RustLsp)
+              vim.keymap.set("n", "gh", rcb({ "hover", "actions" }), desc(map_opts, "rust hover actions"))
+              bind_select_action({
+                { "debuggables" },
+                { "debuggables", "last" },
+                { "runnables" },
+                { "runnables", "last" },
+                { "explainError" },
+                { "expandMacro" },
+                { "rebuildProcMacros" },
+                { "openCargo" },
+                { "view", "hir" },
+                { "view", "mir" },
+              }, {
+                buffer = bufnr,
+                on_select = function(choice)
+                  vim.cmd.RustLsp(F.copy(choice))
+                end,
+                format_item = function(item)
+                  return table.concat(item, " ")
+                end,
+              })
+            end,
+            settings = function(project_root)
+              local ra = require("rustaceanvim.config.server")
+              local default_settings = require("rustaceanvim.config.internal").server.default_settings
+              local settings = ra.load_rust_analyzer_settings(project_root, {
+                settings_file_pattern = "rust-analyzer.json",
+              })
+              if settings == default_settings then
+                settings = { ["rust-analyzer"] = config.lsp_configs.rust_analyzer or {} }
+              end
+              return settings
+            end,
+          },
+          dap = {},
+        }
+      end,
+    },
+    {
+      "johmsalas/text-case.nvim",
+      config = function()
+        local textcase = require("textcase")
+        require("hydra")({
+          hint = [[
+_<F9>_  : to-snake-case (LSP)
+_<F10>_ : TO-CONSTANT-CASE (LSP)
+_<F11>_ : toCamelCase (LSP)
+_<F12>_ : ToPascalCase (LSP)
+_<F5>_  : to-snake-case
+_<F6>_  : TO-CONSTANT-CASE
+_<F7>_  : toCamelCase
+_<F8>_  : ToPascalCase
+_<C-c>_ : exit
+]],
+          config = {
+            color = "pink",
+            invoke_on_body = true,
+            hint = {
+              position = "middle-right",
+              float_opts = {
+                border = config.border,
               },
             },
-            notification = {
-              window = {
-                normal_hl = "FidgetNormal",
-                winblend = 100,
-                x_padding = 0,
-                align = "top",
-              },
-            },
+          },
+          name = "textcase",
+          mode = { "n", "x" },
+          body = "<space>cc",
+          heads = {
+            { "<F5>", F.f(textcase.current_word)("to_snake_case"), { silent = true, nowait = true } },
+            { "<F6>", F.f(textcase.current_word)("to_constant_case"), { silent = true, nowait = true } },
+            { "<F7>", F.f(textcase.current_word)("to_camel_case"), { silent = true, nowait = true } },
+            { "<F8>", F.f(textcase.current_word)("to_pascal_case"), { silent = true, nowait = true } },
+            { "<F9>", F.f(textcase.lsp_rename)("to_snake_case"), { silent = true, nowait = true } },
+            { "<F10>", F.f(textcase.lsp_rename)("to_constant_case"), { silent = true, nowait = true } },
+            { "<F11>", F.f(textcase.lsp_rename)("to_camel_case"), { silent = true, nowait = true } },
+            { "<F12>", F.f(textcase.lsp_rename)("to_pascal_case"), { silent = true, nowait = true } },
+            { "<C-c>", nil, { exit = true, nowait = true } },
+          },
+        })
+      end,
+      keys = { "<space>cc" },
+    },
+    { "nvim-lualine/lualine.nvim", config = l("lualine") },
+    {
+      "j-hui/fidget.nvim",
+      event = "LspAttach",
+      opts = {
+        progress = {
+          suppress_on_insert = false,
+          ignore_done_already = true,
+          display = {
+            done_style = "FidgetDone",
+            group_style = "FidgetGroup",
+            progress_style = "FidgetProgress",
+          },
+        },
+        notification = {
+          window = {
+            normal_hl = "FidgetNormal",
+            winblend = 100,
+            x_padding = 0,
+            align = "top",
           },
         },
       },
     },
     {
       "monaqa/dial.nvim",
-      config = l("dial"),
+      config = function()
+        local augend = require("dial.augend")
+        require("dial.config").augends:register_group({
+          default = {
+            augend.constant.new({ elements = { "yes", "no" }, word = true, cyclic = true }),
+            augend.constant.new({ elements = { "true", "false" }, word = true, cyclic = true }),
+            augend.constant.new({ elements = { "True", "False" }, word = true, cyclic = true }),
+            augend.constant.new({ elements = { "TRUE", "FALSE" }, word = true, cyclic = true }),
+            augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
+            augend.integer.new({ radix = 10, natural = false }),
+            augend.integer.alias.hex,
+            augend.integer.alias.binary,
+            augend.date.alias["%Y/%m/%d"],
+            augend.date.alias["%H:%M:%S"],
+          },
+        })
+      end,
       keys = {
         { "<C-a>", "<Plug>(dial-increment)", mode = { "n", "x" }, desc = "increment next" },
         { "<C-x>", "<Plug>(dial-decrement)", mode = { "n", "x" }, desc = "decrement next" },
@@ -611,10 +556,11 @@ if not config.minimal then
           show_version_date = true,
           max_height = 25,
         },
-        completion = {
-          cmp = {
-            enabled = true,
-          },
+        lsp = {
+          enabled = true,
+          actions = true,
+          completion = true,
+          hover = true,
         },
         on_attach = function(bufnr)
           bind_select_action({
@@ -646,46 +592,38 @@ if not config.minimal then
       build = ":TSUpdate",
       event = { "BufReadPost", "BufNewFile" },
       config = l("treesitter"),
-      dependencies = {
-        {
-          "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
-          config = function()
-            vim.g.rainbow_delimiters = {
-              strategy = {
-                [""] = function()
-                  local rb = require("rainbow-delimiters")
-                  return U.is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
-                end,
-              },
-            }
-          end,
-        },
-        { "m-demare/hlargs.nvim" },
-        { "nvim-treesitter/nvim-treesitter-textobjects" },
-        { "nvim-treesitter/nvim-treesitter-context" },
-        { "windwp/nvim-ts-autotag" },
-        { "Wansmer/treesj", config = l("treesj") },
-        {
-          "Wansmer/sibling-swap.nvim",
-          config = function()
-            local sibling_swap = require("sibling-swap")
-            sibling_swap.setup({ use_default_keymaps = false })
-            vim.keymap.set("n", "R", sibling_swap.swap_with_left)
-            vim.keymap.set("n", "U", sibling_swap.swap_with_right)
-          end,
-        },
-      },
     },
     {
-      "mfussenegger/nvim-dap",
-      event = "VeryLazy",
-      config = l("dap"),
-      dependencies = {
-        { "rcarriga/nvim-dap-ui" },
-        { "theHamsta/nvim-dap-virtual-text" },
-        { "mfussenegger/nvim-dap-python" },
-      },
+      "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+      config = function()
+        vim.g.rainbow_delimiters = {
+          strategy = {
+            [""] = function()
+              local rb = require("rainbow-delimiters")
+              return U.is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
+            end,
+          },
+        }
+      end,
     },
+    { "m-demare/hlargs.nvim" },
+    { "nvim-treesitter/nvim-treesitter-textobjects" },
+    { "nvim-treesitter/nvim-treesitter-context" },
+    { "windwp/nvim-ts-autotag" },
+    { "Wansmer/treesj", config = l("treesj") },
+    {
+      "Wansmer/sibling-swap.nvim",
+      config = function()
+        local sibling_swap = require("sibling-swap")
+        sibling_swap.setup({ use_default_keymaps = false })
+        vim.keymap.set("n", "R", sibling_swap.swap_with_left)
+        vim.keymap.set("n", "U", sibling_swap.swap_with_right)
+      end,
+    },
+    { "mfussenegger/nvim-dap", event = "VeryLazy", config = l("dap") },
+    { "rcarriga/nvim-dap-ui" },
+    { "theHamsta/nvim-dap-virtual-text" },
+    { "mfussenegger/nvim-dap-python" },
     {
       "lervag/vimtex",
       init = function()
@@ -764,14 +702,6 @@ if not config.minimal then
           end,
           desc = "Flash Treesitter",
         },
-        -- {
-        --   "<C-s>",
-        --   mode = { "x" },
-        --   function()
-        --     require("flash").treesitter()
-        --   end,
-        --   desc = "Flash Treesitter",
-        -- },
         {
           "r",
           mode = "o",
@@ -788,22 +718,13 @@ if not config.minimal then
           end,
           desc = "Treesitter Search",
         },
-        -- {
-        --   "<c-s>",
-        --   mode = { "c" },
-        --   function()
-        --     require("flash").toggle()
-        --   end,
-        --   desc = "Toggle Flash Search",
-        -- },
       },
     },
     { "nmac427/guess-indent.nvim", opts = {} },
     { "nvimtools/hydra.nvim", lazy = true },
-    { "mfussenegger/nvim-lint", config = l("lint"), keys = { "<space>cl", "dal" } },
+    -- { "obsidian-nvim/obsidian.nvim" },
     {
       "renerocksai/telekasten.nvim",
-      dependencies = { "nvim-telescope/telescope.nvim" },
       config = function()
         require("telekasten").setup({
           home = vim.fn.expand("~/zettelkasten"),
@@ -815,22 +736,24 @@ if not config.minimal then
           clipboard_program = "xclip",
           auto_set_filetype = false,
         })
-        F.foreach({
-          { "<space>zz", "<cmd>Telekasten panel<CR>", "zettelkasten panel" },
-          { "<space>zp", "<cmd>Telekasten find_notes<CR>", "zettelkasten find notes" },
-          { "<space>z-", "<cmd>Telekasten find_friends<CR>", "zettelkasten find link" },
-          { "<space>z_", "<cmd>Telekasten search_notes<CR>", "zettelkasten search notes" },
-          { "<space>zr", "<cmd>Telekasten rename_note<CR>", "zettelkasten rename note" },
-          { "<space>zd", "<cmd>Telekasten goto_today<CR>", "zettelkasten goto today" },
-          { "<space>za", "<cmd>Telekasten new_note<CR>", "zettelkasten new note" },
-          { "<space>zb", "<cmd>Telekasten show_backlinks<CR>", "zettelkasten show backlinks" },
-          { "<space>zt", "<cmd>Telekasten show_tags<CR>", "zettelkasten show tags" },
-          { "<space>zii", "<cmd>Telekasten insert_img_link<CR>", "zettelkasten insert image link" },
-          { "<space>zip", "<cmd>Telekasten paste_img_and_link<CR>", "zettelkasten paste image" },
-        }, function(mapping)
-          local keymap, command, description = unpack(mapping)
-          vim.keymap.set("n", keymap, command, { desc = description })
-        end)
+        vim
+          .iter({
+            { "<space>zz", "<cmd>Telekasten panel<CR>", "zettelkasten panel" },
+            { "<space>zp", "<cmd>Telekasten find_notes<CR>", "zettelkasten find notes" },
+            { "<space>z-", "<cmd>Telekasten find_friends<CR>", "zettelkasten find link" },
+            { "<space>z_", "<cmd>Telekasten search_notes<CR>", "zettelkasten search notes" },
+            { "<space>zr", "<cmd>Telekasten rename_note<CR>", "zettelkasten rename note" },
+            { "<space>zd", "<cmd>Telekasten goto_today<CR>", "zettelkasten goto today" },
+            { "<space>za", "<cmd>Telekasten new_note<CR>", "zettelkasten new note" },
+            { "<space>zb", "<cmd>Telekasten show_backlinks<CR>", "zettelkasten show backlinks" },
+            { "<space>zt", "<cmd>Telekasten show_tags<CR>", "zettelkasten show tags" },
+            { "<space>zii", "<cmd>Telekasten insert_img_link<CR>", "zettelkasten insert image link" },
+            { "<space>zip", "<cmd>Telekasten paste_img_and_link<CR>", "zettelkasten paste image" },
+          })
+          :each(function(mapping)
+            local keymap, command, description = unpack(mapping)
+            vim.keymap.set("n", keymap, command, { desc = description })
+          end)
       end,
     },
     {
@@ -860,9 +783,8 @@ if not config.minimal then
       opts = {},
       keys = { { "<space>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
     },
-    { "echasnovski/mini.nvim", version = false },
-    { "jbyuki/venn.nvim", config = l("venn") },
-    "lark-parser/vim-lark-syntax",
+    { "jbyuki/venn.nvim", config = l("venn"), keys = { "<space>v" } },
+    { "lark-parser/vim-lark-syntax" },
   })
 end
 

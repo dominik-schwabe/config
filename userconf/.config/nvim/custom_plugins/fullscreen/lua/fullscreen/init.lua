@@ -1,4 +1,3 @@
-local F = require("fullscreen.functional")
 local U = require("fullscreen.utils")
 
 local M = {}
@@ -12,7 +11,7 @@ local function resize_fullscreen()
 end
 
 local function fullscreen_off()
-  F.foreach(FS.autocmd_ids, vim.api.nvim_del_autocmd)
+  vim.iter(FS.autocmd_ids):each(vim.api.nvim_del_autocmd)
   if vim.api.nvim_win_is_valid(FS.win) then
     if vim.api.nvim_win_is_valid(FS.origin_win) then
       if vim.api.nvim_win_get_buf(FS.origin_win) == FS.buf then
@@ -46,7 +45,7 @@ local function is_consistent()
   if #normal_windows ~= FS.state_len then
     return false
   end
-  return F.all(normal_windows, function(window)
+  return vim.iter(normal_windows):all(function(window)
     return FS.state[window] == vim.api.nvim_win_get_buf(window)
   end)
 end
@@ -83,7 +82,7 @@ function M.toggle_fullscreen()
       vim.api.nvim_win_set_cursor(win, { row, col })
       local state = {}
       local normal_windows = U.list_normal_windows()
-      F.foreach(normal_windows, function(window)
+      vim.iter(normal_windows):each(function(window)
         state[window] = vim.api.nvim_win_get_buf(window)
       end)
       FS = {

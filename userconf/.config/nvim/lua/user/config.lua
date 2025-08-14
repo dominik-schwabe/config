@@ -61,7 +61,6 @@ M.icons = {
   Reference = "",
   Folder = "󰉋",
   Struct = "󰙅",
-  KnownColor = "󰝤", -- ■  
   Yank = "󰏢",
   Path = "󰉋",
   Tmux = "󰓫",

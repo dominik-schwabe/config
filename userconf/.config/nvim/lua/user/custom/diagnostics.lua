@@ -12,13 +12,14 @@ local function show_diagnostics(only_buffer)
   else
     local cwd = U.cwd()
     local buffers = U.list_buffers({ mru = true, buftype = C.PATH_BUFTYPES, unloaded = true, unlisted = true })
-    buffers = F.filter(buffers, function(buf)
-      return vim.startswith(U.buffer_path(buf), cwd)
-    end)
-    diagnostics = F.map(buffers, function(buf)
-      return vim.diagnostic.get(buf)
-    end)
-    diagnostics = F.concat(unpack(diagnostics))
+    diagnostics = vim
+      .iter(buffers)
+      :filter(function(buf)
+        return vim.startswith(U.buffer_path(buf), cwd)
+      end)
+      :map(vim.diagnostic.get)
+      :flatten()
+      :totable()
     name = name .. "Workspace"
   end
   diagnostics = vim.diagnostic.toqflist(diagnostics)

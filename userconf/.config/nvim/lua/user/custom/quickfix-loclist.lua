@@ -1,24 +1,12 @@
-local F = require("user.functional")
 local U = require("user.utils")
 
 local function window_exists(cb)
   return function()
-    return F.any(vim.api.nvim_tabpage_list_wins(0), cb)
+    return vim.iter(vim.api.nvim_tabpage_list_wins(0)):any(cb)
   end
 end
 
 local quickfix_exists = window_exists(U.is_quickfix)
-local loclist_exists = window_exists(U.is_loclist)
-
-local function loclist_toggle()
-  if loclist_exists() then
-    vim.cmd("lclose")
-  else
-    if not pcall(vim.cmd, "lopen") then
-      vim.notify("Loclist ist empty")
-    end
-  end
-end
 
 local function quickfix_toggle()
   if quickfix_exists() then
@@ -28,7 +16,6 @@ local function quickfix_toggle()
   end
 end
 
--- vim.keymap.set({ "n", "x" }, "Ä", loclist_toggle)
 vim.keymap.set({ "n", "x" }, "Ö", quickfix_toggle, { desc = "toggle quickfix" })
 
 function _G.qftf(info)
@@ -52,7 +39,8 @@ function _G.qftf(info)
         if fname == "" then
           fname = "[No Name]"
         else
-          fname = fname:gsub("^" .. vim.env.HOME, "~")
+          local result, _ = fname:gsub("^" .. vim.env.HOME, "~")
+          fname = result
         end
         if #fname <= limit then
           fname = fnameFmt1:format(fname)
@@ -71,5 +59,3 @@ function _G.qftf(info)
   end
   return ret
 end
-
--- vim.o.qftf = "{info -> v:lua._G.qftf(info)}"

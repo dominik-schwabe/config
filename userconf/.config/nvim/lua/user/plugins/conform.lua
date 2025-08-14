@@ -18,9 +18,13 @@ local JON_ARGS = F.concat(
     "1",
     "--rotate-delimiters",
   },
-  F.flat(F.map(JON_OPERATORS, function(op)
-    return { "-o", op }
-  end))
+  vim
+    .iter(JON_OPERATORS)
+    :map(function(op)
+      return { "-o", op }
+    end)
+    :flatten()
+    :totable()
 )
 
 conform.setup({
@@ -75,7 +79,7 @@ local function format()
     async = true,
     lsp_fallback = true,
     filter = function(client)
-      return F.contains(formatters.clients, client.name)
+      return vim.tbl_contains(formatters.clients, client.name)
     end,
   })
 end
@@ -92,9 +96,13 @@ local function trim_whitespace()
   local original_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local new_lines = F.copy(original_lines)
   if bo.filetype ~= "markdown" then
-    new_lines = F.map(new_lines, function(line)
-      return line:gsub("%s+$", "")
-    end)
+    new_lines = vim
+      .iter(new_lines)
+      :map(function(line)
+        local result, _ = line:gsub("%s+$", "")
+        return result
+      end)
+      :totable()
   else
     vim.notify("skip trimming for markdown")
   end

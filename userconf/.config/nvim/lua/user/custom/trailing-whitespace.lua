@@ -11,15 +11,15 @@ local filetype_denylist = { "markdown" }
 local trailing_highlight = F.defer(function(opts)
   local mode = opts.mode or vim.fn.mode()
   local current_window = vim.api.nvim_get_current_win()
-  F.foreach(vim.api.nvim_list_wins(), function(window)
+  vim.iter(vim.api.nvim_list_wins()):each(function(window)
     local new_win_mode = nil
     local buf = vim.api.nvim_win_get_buf(window)
     local bo = vim.bo[buf]
     if window == current_window then
       local disable_trailing = vim.b[buf].is_big_buffer
-        or not F.contains(C.FILE_BUFTYPE, bo.buftype)
+        or not vim.tbl_contains(C.FILE_BUFTYPE, bo.buftype)
         or not bo.modifiable
-        or F.contains(filetype_denylist, bo.filetype)
+        or vim.tbl_contains(filetype_denylist, bo.filetype)
       if not disable_trailing then
         new_win_mode = mode
       end

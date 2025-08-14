@@ -20,7 +20,8 @@ function M.num_leading_spaces(str)
 end
 
 function M.replace_tab(str)
-  return str:gsub("\t", string.rep(" ", vim.bo.tabstop))
+  local result, _ = str:gsub("\t", string.rep(" ", vim.bo.tabstop))
+  return result
 end
 
 function M.replace_tabs(lines)

@@ -17,8 +17,8 @@ end
 function Entry:text(compact)
   local text = table.concat(self.contents, "\n")
   if compact then
-    text = text:gsub("[\n\t ]+", " ")
-    text = U.remove_leading_space(text)
+    local result, _ = text:gsub("[\n\t ]+", " ")
+    text = U.remove_leading_space(result)
   end
   return text
 end
@@ -282,18 +282,21 @@ function History:make_completion_source()
   end
 
   function Source:complete(_, callback)
-    local items = F.map(history:topn(10), function(entry)
-      local text = entry:text()
-      return {
-        label = entry:first_line(),
-        filterText = text,
-        insertText = text,
-        documentation = {
-          kind = "markdown",
-          value = entry:markdown_string(true),
-        },
-      }
-    end)
+    local items = vim
+      .iter(history:topn(10))
+      :map(function(entry)
+        local text = entry:text()
+        return {
+          label = entry:first_line(),
+          filterText = text,
+          insertText = text,
+          documentation = {
+            kind = "markdown",
+            value = entry:markdown_string(true),
+          },
+        }
+      end)
+      :totable()
     callback(items)
   end
 

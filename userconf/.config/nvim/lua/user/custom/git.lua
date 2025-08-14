@@ -12,7 +12,7 @@ local function track_buf(buf)
   autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufWrite" }, {
     buffer = buf,
     callback = function()
-      F.foreach(autocmd_ids, vim.api.nvim_del_autocmd)
+      vim.iter(autocmd_ids):each(vim.api.nvim_del_autocmd)
       vim.bo[buf].buflisted = true
       vim.bo[buf].bufhidden = ""
     end,
@@ -20,7 +20,7 @@ local function track_buf(buf)
   autocmd_ids[#autocmd_ids + 1] = vim.api.nvim_create_autocmd({ "BufDelete" }, {
     buffer = buf,
     callback = function()
-      F.foreach(autocmd_ids, vim.api.nvim_del_autocmd)
+      vim.iter(autocmd_ids):each(vim.api.nvim_del_autocmd)
     end,
   })
 end
@@ -82,7 +82,7 @@ function Diffstate:_register_autocmds()
 end
 
 function Diffstate:_clear_autocmds()
-  F.foreach(self.autocmd_ids, vim.api.nvim_del_autocmd)
+  vim.iter(self.autocmd_ids):each(vim.api.nvim_del_autocmd)
 end
 
 function Diffstate:is_consistent()
@@ -97,7 +97,7 @@ function Diffstate:main_unchanged()
 end
 
 function Diffstate:_close_untracked_wins()
-  F.foreach(vim.api.nvim_list_wins(), function(win)
+  vim.iter(vim.api.nvim_list_wins()):each(function(win)
     if win ~= self.main_win and win ~= self.dependent_win then
       local win_buf = vim.api.nvim_win_get_buf(win)
       if
@@ -218,14 +218,17 @@ end
 local function commits(paths)
   local entries =
     git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h (%ar %an) %s", paths.file_path })
-  return F.map(entries, function(text)
-    local commit, message = text:gmatch("(%w+) (.*)")()
-    return {
-      commit = commit,
-      message = message,
-      text = text,
-    }
-  end)
+  return vim
+    .iter(entries)
+    :map(function(text)
+      local commit, message = text:gmatch("(%w+) (.*)")()
+      return {
+        commit = commit,
+        message = message,
+        text = text,
+      }
+    end)
+    :totable()
 end
 
 local function find_stats(opts)
@@ -447,16 +450,22 @@ function M.make_telescope_extension()
       notify("could not get refs")
       return
     end
-    local filtered_commits = F.filter({ "HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD" }, function(commit)
-      return U.exists(U.path({ paths.git_dir, commit }))
-    end)
-    local named = F.map(F.concat(filtered_commits, refs), function(commit)
-      return {
-        commit = commit,
-        message = commit,
-        text = commit,
-      }
-    end)
+    local filtered_commits = vim
+      .iter({ "HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD" })
+      :filter(function(commit)
+        return U.exists(U.path({ paths.git_dir, commit }))
+      end)
+      :totable()
+    local named = vim
+      .iter(F.concat(filtered_commits, refs))
+      :map(function(commit)
+        return {
+          commit = commit,
+          message = commit,
+          text = commit,
+        }
+      end)
+      :totable()
     local results = F.concat(commits(paths), named)
     for index, entry in ipairs(results) do
       entry.index = index

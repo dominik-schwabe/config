@@ -31,7 +31,7 @@ vim.keymap.set({ "n", "x" }, "<space>tw", "<CMD>set wrap!<CR>", { desc = "toggle
 vim.keymap.set({ "n", "x" }, "<space>tl", "<CMD>set relativenumber!<CR>", { desc = "toggle relativenumber" })
 vim.keymap.set({ "n" }, "<space>i", "<CMD>Inspect<CR>", { desc = "inspect current element" })
 vim.keymap.set("n", "<space>cw", function()
-  if F.contains(C.PATH_BUFTYPES, vim.bo.buftype) then
+  if vim.tbl_contains(C.PATH_BUFTYPES, vim.bo.buftype) then
     vim.cmd("cd %:p:h")
     vim.notify("new cwd: " .. vim.fn.getcwd())
   else
@@ -57,3 +57,13 @@ vim.keymap.set({ "n", "x" }, "k", movement("k"), { silent = true, expr = true })
 vim.keymap.set({ "n", "x" }, "j", movement("j"), { silent = true, expr = true })
 vim.keymap.set("n", "<", "<<")
 vim.keymap.set("n", ">", ">>")
+vim.keymap.set({ "v", "i" }, "<C-w>", function()
+  if vim.snippet.active({ direction = -1 }) then
+    vim.snippet.jump(-1)
+  end
+end, { desc = "jump to next position in snippet" })
+vim.keymap.set({ "v", "i" }, "<C-e>", function()
+  if vim.snippet.active({ direction = 1 }) then
+    vim.snippet.jump(1)
+  end
+end, { desc = "jump to previous position in snippet" })

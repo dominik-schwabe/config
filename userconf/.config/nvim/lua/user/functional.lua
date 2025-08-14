@@ -1,19 +1,5 @@
 local M = {}
 
-M.map = function(tbl, func)
-  return vim.tbl_map(func, tbl)
-end
-M.filter = function(tbl, func)
-  return vim.tbl_filter(func, tbl)
-end
-M.keys = vim.tbl_keys
-M.values = vim.tbl_values
-M.contains = vim.tbl_contains
-
-function M.empty(tbl)
-  return next(tbl) == nil
-end
-
 function M.iter(tbl)
   local i, v = next(tbl, nil)
   return function()
@@ -34,12 +20,6 @@ function M.filter_map(list, cb)
   return mapped
 end
 
-function M.foreach(list, cb)
-  for _, value in ipairs(list) do
-    cb(value)
-  end
-end
-
 function M.resolve(list, ...)
   local value = list
   local keys = { ... }
@@ -50,16 +30,6 @@ function M.resolve(list, ...)
     value = value[key]
   end
   return value
-end
-
-function M.flat(list_of_lists)
-  local result = {}
-  for _, list in ipairs(list_of_lists) do
-    for _, e in ipairs(list) do
-      result[#result + 1] = e
-    end
-  end
-  return result
 end
 
 function M.map_values(obj, cb)
@@ -76,24 +46,6 @@ function M.foreach_items(obj, cb)
   end
 end
 
-function M.reduce(list, cb, default)
-  local acc = default
-  if acc == nil then
-    acc = list[1]
-    table.remove(list, 1)
-  end
-  for _, el in ipairs(list) do
-    acc = cb(acc, el)
-  end
-  return acc
-end
-
-function M.sum(list)
-  return M.reduce(list, function(a, b)
-    return a + b
-  end, 0)
-end
-
 function M.find(list, cb)
   for _, value in ipairs(list) do
     if cb(value) then
@@ -108,24 +60,6 @@ function M.find_index(list, cb)
       return index
     end
   end
-end
-
-function M.any(list, cb)
-  for _, value in ipairs(list) do
-    if cb(value) then
-      return true
-    end
-  end
-  return false
-end
-
-function M.all(list, cb)
-  for _, value in ipairs(list) do
-    if not cb(value) then
-      return false
-    end
-  end
-  return true
 end
 
 function M.entries(obj)
@@ -146,10 +80,13 @@ function M.from_entries(list)
 end
 
 function M.map_obj(obj, cb)
-  return M.from_entries(M.map(M.entries(obj), function(item)
-    local key, value = unpack(item)
-    return cb(key, value)
-  end))
+  return M.from_entries(vim
+    .iter(M.entries(obj))
+    :map(function(item)
+      local key, value = unpack(item)
+      return cb(key, value)
+    end)
+    :totable())
 end
 
 function M.max(list)
@@ -168,7 +105,7 @@ end
 
 function M.subset(obj, values)
   local new_obj = {}
-  M.foreach(values, function(value)
+  vim.iter(values):each(function(value)
     new_obj[value] = obj[value]
   end)
   return new_obj
@@ -193,9 +130,12 @@ function M.chain(...)
 end
 
 function M.remove(list, e)
-  return M.filter(list, function(value)
-    return value ~= e
-  end)
+  return vim
+    .iter(list)
+    :filter(function(value)
+      return value ~= e
+    end)
+    :totable()
 end
 
 function M.concat(...)
@@ -318,10 +258,10 @@ end
 
 function M.unique(list)
   local unique_keys = {}
-  M.foreach(list, function(e)
+  vim.iter(list):each(function(e)
     unique_keys[e] = e
   end)
-  return M.keys(unique_keys)
+  return vim.tbl_keys(unique_keys)
 end
 
 function M.merge_sorted(tbl1, tbl2, opts)

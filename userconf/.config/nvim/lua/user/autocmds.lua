@@ -20,7 +20,7 @@ vim.filetype.add({
 local function set_window_options(opts)
   local bufnr = opts.buf
   local buftype = vim.bo[bufnr].buftype
-  F.foreach(U.list_normal_windows(), function(win)
+  vim.iter(U.list_normal_windows()):each(function(win)
     if vim.api.nvim_win_get_buf(win) == bufnr then
       local wo = vim.wo[win]
       if buftype == "terminal" then
@@ -54,7 +54,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     local bo = vim.bo[opts.buf]
     if
       bo.buftype == "help"
-      or F.contains({
+      or vim.tbl_contains({
         "qf",
         "help",
         "man",

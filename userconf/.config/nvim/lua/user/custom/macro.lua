@@ -1,5 +1,3 @@
-local F = require("user.functional")
-local U = require("user.utils")
 local preview = require("user.preview")
 
 local macro_regs = { "a" }
@@ -11,15 +9,13 @@ local function is_recording()
 end
 
 local function special_replace(str)
-  str = str:gsub("\27", "<ESC>")
-  str = str:gsub("\13", "<CR>")
-  return str
+  local result, _ = str:gsub("\27", "<ESC>"):gsub("\13", "<CR>")
+  return result
 end
 
 local function reverse_special_replace(str)
-  str = str:gsub("<ESC>", "\27")
-  str = str:gsub("<CR>", "\13")
-  return str
+  local result, _ = str:gsub("<ESC>", "\27"):gsub("<CR>", "\13")
+  return result
 end
 
 local function get_macro(s)
@@ -138,7 +134,7 @@ vim.keymap.set("n", "Ü", function()
   history:cycle(-1)
 end, { desc = "select previous macro from history" })
 
-F.foreach(macro_regs, function(reg)
+vim.iter(macro_regs):each(function(reg)
   vim.fn.setreg(reg, "")
 end)
 

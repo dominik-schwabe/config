@@ -15,16 +15,19 @@ F.load("mini.splitjoin", function(splitjoin)
   local get_fallback_patterns = F.cache(function()
     local error_messages = require("treesj.notify").msg
     local fallback_message_types = { "no_configured_lang", "no_ts_parser" }
-    local patterns = F.values(F.subset(error_messages, fallback_message_types))
-    patterns = F.map(patterns, function(value)
-      return value:gsub("%%s", ".*")
-    end)
-    return patterns
+    local patterns = vim.tbl_values(F.subset(error_messages, fallback_message_types))
+    return vim
+      .iter(patterns)
+      :map(function(value)
+        local result, _ = value:gsub("%%s", ".*")
+        return result
+      end)
+      :totable()
   end)
   opts.notify = false
   opts.on_error = function(msg, code, ...)
     local patterns = get_fallback_patterns()
-    if F.any(patterns, function(pattern)
+    if vim.iter(patterns):any(function(pattern)
       return msg:find(pattern)
     end) then
       splitjoin.toggle()

@@ -58,7 +58,7 @@ local function toggle_term(opts)
   local bottom = vim.F.if_nil(opts.bottom, true)
   if term_win ~= nil and vim.api.nvim_win_is_valid(term_win) and vim.api.nvim_win_get_buf(term_win) == term_buf then
     if not opts.only_open then
-      local is_bottom = F.all({ "left", "bottom", "right" }, function(direction)
+      local is_bottom = vim.iter({ "left", "bottom", "right" }):all(function(direction)
         return not has_neighbour(term_win, direction)
       end)
       vim.api.nvim_win_close(term_win, true)
@@ -95,7 +95,22 @@ vim.api.nvim_create_user_command("ToggleTermBottom", toggle_term_bottom, {})
 vim.api.nvim_create_user_command("ToggleTermRight", toggle_term_right, {})
 vim.api.nvim_create_user_command("TermCD", open_term_cd, {})
 
-vim.keymap.set({ "i", "n", "x" }, "<F22>", "<ESC>:ToggleTermBottom<CR>", { desc = "toggle terminal at bottom", silent=true })
-vim.keymap.set({ "t" }, "<F22>", "<CMD>ToggleTermBottom<CR>", { desc = "toggle terminal at bottom", silent=true })
-vim.keymap.set({ "i", "n", "x" }, "<F23>", "<ESC>:TermCD<CR>", { desc = "open current directory file in terminal", silent=true })
-vim.keymap.set({ "t" }, "<F23>", "<CMD>TermCD<CR>", { desc = "change directory to current file in terminal", silent=true })
+vim.keymap.set(
+  { "i", "n", "x" },
+  "<F22>",
+  "<ESC>:ToggleTermBottom<CR>",
+  { desc = "toggle terminal at bottom", silent = true }
+)
+vim.keymap.set({ "t" }, "<F22>", "<CMD>ToggleTermBottom<CR>", { desc = "toggle terminal at bottom", silent = true })
+vim.keymap.set(
+  { "i", "n", "x" },
+  "<F23>",
+  "<ESC>:TermCD<CR>",
+  { desc = "open current directory file in terminal", silent = true }
+)
+vim.keymap.set(
+  { "t" },
+  "<F23>",
+  "<CMD>TermCD<CR>",
+  { desc = "change directory to current file in terminal", silent = true }
+)

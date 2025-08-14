@@ -17,7 +17,7 @@ local function parse_line(line)
 end
 
 local function sort_rg_matches(lines)
-  lines = F.map(lines, parse_line)
+  lines = vim.iter(lines):map(parse_line):totable()
   table.sort(lines, function(a, b)
     if a.filename == b.filename then
       if a.lnum == b.lnum then
@@ -27,9 +27,12 @@ local function sort_rg_matches(lines)
     end
     return a.filename < b.filename
   end)
-  lines = F.map(lines, function(entry)
-    return entry.line
-  end)
+  lines = vim
+    .iter(lines)
+    :map(function(entry)
+      return entry.line
+    end)
+    :totable()
   return lines
 end
 

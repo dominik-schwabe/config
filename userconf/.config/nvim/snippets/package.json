@@ -1,0 +1,14 @@
+{
+  "name": "personal-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "jon",
+          "cjon"
+        ],
+        "path": "./jon.json"
+      }
+    ]
+  }
+}

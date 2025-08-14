@@ -119,8 +119,8 @@ vim.keymap.set("n", "td", function()
   set_diagnostic_config(virtual_lines)
 end, { desc = "toggle diagnostics" })
 
-F.load("cmp_nvim_lsp", function(cmp_nvim_lsp)
-  vim.lsp.config("*", { capabilities = cmp_nvim_lsp.default_capabilities() })
+F.load("blink.cmp", function(blink)
+  vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
 end)
 
 for server_name, opts in pairs(config.lsp_configs) do

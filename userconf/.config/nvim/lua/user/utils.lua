@@ -115,20 +115,21 @@ function M.list_buffers(opts)
   if opts.buftype and type(opts.buftype) == "string" then
     opts.buftype = { opts.buftype }
   end
-  local buffers = vim.api.nvim_list_bufs()
+  local buffers = vim.iter(vim.api.nvim_list_bufs())
   if not opts.unloaded then
-    buffers = F.filter(buffers, vim.api.nvim_buf_is_loaded)
+    buffers = buffers:filter(vim.api.nvim_buf_is_loaded)
   end
   if not opts.unlisted then
-    buffers = F.filter(buffers, function(buf)
+    buffers = buffers:filter(function(buf)
       return vim.fn.buflisted(buf) == 1
     end)
   end
   if opts.buftype then
-    buffers = F.filter(buffers, function(buf)
-      return F.contains(opts.buftype, vim.bo[buf].buftype)
+    buffers = buffers:filter(function(buf)
+      return vim.tbl_contains(opts.buftype, vim.bo[buf].buftype)
     end)
   end
+  buffers = buffers:totable()
   if opts.mru then
     table.sort(buffers, function(a, b)
       return vim.fn.getbufinfo(a)[1].lastused > vim.fn.getbufinfo(b)[1].lastused
@@ -154,11 +155,12 @@ local function num_leading_spaces(str)
 end
 
 function M.replace_tab(str)
-  return str:gsub("\t", string.rep(" ", vim.bo.tabstop))
+  local result, _ = str:gsub("\t", string.rep(" ", vim.bo.tabstop))
+  return result
 end
 
 function M.replace_tabs(lines)
-  return F.map(lines, M.replace_tab)
+  return vim.iter(lines):map(M.replace_tab):totable()
 end
 
 local function is_whitespace(str)
@@ -166,17 +168,23 @@ local function is_whitespace(str)
 end
 
 function M.remove_empty_lines(lines)
-  return F.filter(lines, function(str)
-    return not is_whitespace(str)
-  end)
+  return vim
+    .iter(lines)
+    :filter(function(str)
+      return not is_whitespace(str)
+    end)
+    :totable()
 end
 
 function M.fix_indent(lines)
-  local spaces = F.map(M.remove_empty_lines(lines), num_leading_spaces)
+  local spaces = vim.iter(M.remove_empty_lines(lines)):map(num_leading_spaces):totable()
   local min_indent = #spaces > 0 and F.min(spaces) or 0
-  return F.map(lines, function(line)
-    return line:sub(min_indent)
-  end)
+  return vim
+    .iter(lines)
+    :map(function(line)
+      return line:sub(min_indent)
+    end)
+    :totable()
 end
 
 function M.lines_are_same(lines1, lines2)
@@ -192,7 +200,8 @@ function M.lines_are_same(lines1, lines2)
 end
 
 function M.remove_leading_space(str)
-  return str:gsub("^[\t\n ]+", "")
+  local result, _ = str:gsub("^[\t\n ]+", "")
+  return result
 end
 
 function M.close_win(win)
@@ -220,13 +229,13 @@ end
 
 function M.is_big_buffer_or_in_allowlist(buf, max_size, allowlist)
   allowlist = allowlist or config.big_files_allowlist
-  return M.is_big_buffer(buf, max_size) and not F.contains(allowlist, vim.bo[buf].filetype)
+  return M.is_big_buffer(buf, max_size) and not vim.tbl_contains(allowlist, vim.bo[buf].filetype)
 end
 
 function M.is_disable_treesitter(filetype, bufnr)
   filetype = filetype or vim.bo.filetype
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-  return M.is_big_buffer_or_in_allowlist(bufnr) or F.contains(config.treesitter.highlight_disable, filetype)
+  return M.is_big_buffer_or_in_allowlist(bufnr) or vim.tbl_contains(config.treesitter.highlight_disable, filetype)
 end
 
 function M.convert(b)
@@ -298,9 +307,8 @@ function M.is_floating(win)
 end
 
 function M.simplify_path(path)
-  path = vim.fn.simplify(path)
-  path = path:gsub("/+", "/")
-  return path
+  local result, _ = vim.fn.simplify(path):gsub("/+", "/")
+  return result
 end
 
 function M.path(components, opts)
@@ -383,7 +391,7 @@ function M.is_dummy_buffer(buf)
 end
 
 function M.get_dummy_buffer()
-  local buf = F.filter(vim.api.nvim_list_bufs(), M.is_dummy_buffer)[1]
+  local buf = vim.iter(vim.api.nvim_list_bufs()):filter(M.is_dummy_buffer):next()
   if not buf then
     buf = vim.api.nvim_create_buf(false, true)
     vim.bo[buf].bufhidden = "wipe"
@@ -395,9 +403,12 @@ function M.get_dummy_buffer()
 end
 
 function M.list_normal_windows()
-  return F.filter(vim.api.nvim_list_wins(), function(win)
-    return not M.is_floating(win)
-  end)
+  return vim
+    .iter(vim.api.nvim_list_wins())
+    :filter(function(win)
+      return not M.is_floating(win)
+    end)
+    :totable()
 end
 
 return M

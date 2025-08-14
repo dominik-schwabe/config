@@ -18,7 +18,7 @@ local function stopinsert()
 end
 
 local function is_regular_buffer(buf)
-  return F.contains(C.PATH_BUFTYPES, vim.bo[buf].buftype) or U.is_dummy_buffer(buf)
+  return vim.tbl_contains(C.PATH_BUFTYPES, vim.bo[buf].buftype) or U.is_dummy_buffer(buf)
 end
 
 local function delete_buffer(prompt_bufnr)
@@ -30,16 +30,25 @@ local function delete_buffer(prompt_bufnr)
       return false
     end
     local windows = U.list_normal_windows()
-    local regular_windows = F.filter(windows, function(win)
-      local win_buf = vim.api.nvim_win_get_buf(win)
-      return is_regular_buffer(win_buf)
-    end)
-    local close_wins = F.filter(windows, function(win)
-      return vim.api.nvim_win_get_buf(win) == selection.bufnr
-    end)
-    local left_buffers = F.filter(U.list_buffers({ mru = true }), function(buf)
-      return buf ~= selection.bufnr
-    end)
+    local regular_windows = vim
+      .iter(windows)
+      :filter(function(win)
+        local win_buf = vim.api.nvim_win_get_buf(win)
+        return is_regular_buffer(win_buf)
+      end)
+      :totable()
+    local close_wins = vim
+      .iter(windows)
+      :filter(function(win)
+        return vim.api.nvim_win_get_buf(win) == selection.bufnr
+      end)
+      :totable()
+    local left_buffers = vim
+      .iter(U.list_buffers({ mru = true }))
+      :filter(function(buf)
+        return buf ~= selection.bufnr
+      end)
+      :totable()
     if (is_regular_buffer(selection.bufnr) and #close_wins >= #regular_windows) or #close_wins >= #windows then
       local keep_win = close_wins[1]
       close_wins = F.slice(close_wins, 2)
@@ -53,7 +62,7 @@ local function delete_buffer(prompt_bufnr)
     if #left_buffers == 0 then
       actions.close(prompt_bufnr)
     end
-    F.foreach(close_wins, function(win)
+    vim.iter(close_wins):each(function(win)
       vim.api.nvim_win_close(win, false)
     end)
     local buftype = vim.bo[selection.bufnr].buftype
@@ -137,20 +146,26 @@ local entry_point = function(opts)
   local terminal_bufnrs = F.reverse(U.list_buffers({ mru = true, unlisted = true, buftype = "terminal" }))
   local all_bufnrs = F.concat(terminal_bufnrs, path_bufnrs)
 
-  local buffers = F.map(all_bufnrs, function(bufnr)
-    local info = vim.fn.getbufinfo(bufnr)[1]
-    local tail = utils.path_tail(info.name)
-    return {
-      bufnr = bufnr,
-      is_path = vim.bo[bufnr].buftype ~= "terminal",
-      tail = tail,
-      info = info,
-    }
-  end)
+  local buffers = vim
+    .iter(all_bufnrs)
+    :map(function(bufnr)
+      local info = vim.fn.getbufinfo(bufnr)[1]
+      local tail = utils.path_tail(info.name)
+      return {
+        bufnr = bufnr,
+        is_path = vim.bo[bufnr].buftype ~= "terminal",
+        tail = tail,
+        info = info,
+      }
+    end)
+    :totable()
 
-  opts.longest_tail = F.max(F.map(buffers, function(entry)
-    return #entry.tail
-  end) or 0)
+  opts.longest_tail = vim
+    .iter(buffers)
+    :map(function(entry)
+      return #entry.tail
+    end)
+    :fold(0, math.max)
   opts.bufnr_width = #tostring(F.max(all_bufnrs) or 0)
   local current_buffer = vim.api.nvim_get_current_buf()
   local active_index = F.find_index(all_bufnrs, function(buf)

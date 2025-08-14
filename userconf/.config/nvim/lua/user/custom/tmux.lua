@@ -27,9 +27,7 @@ local function get_version()
   version = version:match("%d+.%d+")
   version = version:gmatch("%d+")
   version = F.consume(version)
-  version = F.map(version, function(e)
-    return tonumber(e)
-  end)
+  version = vim.iter(version):map(tonumber):totable()
   return version
 end
 

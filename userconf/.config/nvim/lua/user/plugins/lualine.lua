@@ -1,69 +1,12 @@
-local F = require("user.functional")
 local U = require("user.utils")
 
 local lualine = require("lualine")
 
 local config = require("user.config")
 
-local navic_icons = {}
-for _, type in ipairs({
-  "File",
-  "Module",
-  "Namespace",
-  "Package",
-  "Class",
-  "Method",
-  "Property",
-  "Field",
-  "Constructor",
-  "Enum",
-  "Interface",
-  "Function",
-  "Variable",
-  "Constant",
-  "String",
-  "Number",
-  "Boolean",
-  "Array",
-  "Object",
-  "Key",
-  "Null",
-  "EnumMember",
-  "Struct",
-  "Event",
-  "Operator",
-  "TypeParameter",
-}) do
-  navic_icons[type] = config.icons[type] .. " "
-end
-
-local separator = "󰐊"
-
 local lualine_c = {}
 
-F.load("nvim-navic", function(navic)
-  navic.setup({
-    icons = navic_icons,
-    highlight = true,
-    depth_limit = 0,
-    depth_limit_indicator = "",
-    separator = " " .. separator .. " ",
-    safe_output = true,
-    lsp = { auto_attach = true },
-  })
-  lualine_c[#lualine_c + 1] = "navic"
-end)
-
 local lualine_x = { "filetype" }
-F.load("lsp-progress", function(lsp_progress)
-  vim.api.nvim_create_augroup("lualine_refresh_augroup", {})
-  vim.api.nvim_create_autocmd("User", {
-    group = "lualine_refresh_augroup",
-    pattern = "LspProgressStatusUpdated",
-    callback = lualine.refresh,
-  })
-  table.insert(lualine_x, 1, lsp_progress.progress)
-end)
 
 vim.g.qf_disable_statusline = true
 
@@ -82,8 +25,8 @@ local quickfix = {
     },
     lualine_b = {
       function()
-        local title = U.quickfix_title(0)
-        return title:gsub("%%", "%%%%")
+        local result, _ = U.quickfix_title(0):gsub("%%", "%%%%")
+        return result
       end,
     },
     lualine_z = { "location" },

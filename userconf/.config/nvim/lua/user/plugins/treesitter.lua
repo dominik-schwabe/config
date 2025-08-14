@@ -8,7 +8,7 @@ local ensure_installed = config.minimal and {} or treesitter_config.ensure_insta
 
 F.load("nvim-treesitter.parsers", function(tp)
   local configs = tp.get_parser_configs()
-  F.foreach({ "jon", "cjon", "cjson" }, function(ft)
+  vim.iter({ "jon", "cjon", "cjson" }):each(function(ft)
     local path = os.getenv("HOME") .. "/tree-sitter-" .. ft
     if U.exists(path) then
       configs[ft] = {

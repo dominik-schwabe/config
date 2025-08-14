@@ -1,0 +1,146 @@
+{
+  "creator": {
+    "prefix": "creator",
+    "body": "creator ~ ( ${1} ) ,"
+  },
+  "example": {
+    "prefix": "example",
+    "body": "example ~ ( ${1} ) ,"
+  },
+  "condition": {
+    "prefix": "condition",
+    "body": "condition ~ ( ${1} ) ,"
+  },
+  "size": {
+    "prefix": "size",
+    "body": "size ~ ( ${1} ) ,"
+  },
+  "amount": {
+    "prefix": "amount",
+    "body": "amount =~ ( ${1} ) ,"
+  },
+  "attribute": {
+    "prefix": "attribute",
+    "body": "attribute :- ( ${1} ) ,"
+  },
+  "heater": {
+    "prefix": "heater",
+    "body": "heater :- ( ${1} ) ,"
+  },
+  "timing": {
+    "prefix": "timing",
+    "body": "timing :- ( ${1} ) ,"
+  },
+  "frequency": {
+    "prefix": "frequency",
+    "body": "frequency :- ( ${1} ) ,"
+  },
+  "form": {
+    "prefix": "form",
+    "body": "form :- ( ${1} ) ,"
+  },
+  "container": {
+    "prefix": "container",
+    "body": "container :- ( ${1} ) ,"
+  },
+  "theme": {
+    "prefix": "theme",
+    "body": "theme :- ( ${1} ) ,"
+  },
+  "target": {
+    "prefix": "target",
+    "body": "target :- ( ${1} ) ,"
+  },
+  "heat": {
+    "prefix": "heat",
+    "body": "heat :- ( ${1} ) ,"
+  },
+  "method": {
+    "prefix": "method",
+    "body": "method :- ( ${1} ) ,"
+  },
+  "setting": {
+    "prefix": "setting",
+    "body": "setting :- ( ${1} ) ,"
+  },
+  "along": {
+    "prefix": "along",
+    "body": "along :- ( ${1} ) ,"
+  },
+  "duration": {
+    "prefix": "duration",
+    "body": "duration :- ( ${1} ) ,"
+  },
+  "until": {
+    "prefix": "until",
+    "body": "until :- ( ${1} ) ,"
+  },
+  "speed": {
+    "prefix": "speed",
+    "body": "speed :- ( ${1} ) ,"
+  },
+  "ensure": {
+    "prefix": "ensure",
+    "body": "ensure :- ( ${1} ) ,"
+  },
+  "manner": {
+    "prefix": "manner",
+    "body": "manner :- ( ${1} ) ,"
+  },
+  "that:source": {
+    "prefix": "that:source",
+    "body": "source ~ ( ${1} ) ,"
+  },
+  "mode:source": {
+    "prefix": "mode:source",
+    "body": "source :- ( ${1} ) ,"
+  },
+  "transform": {
+    "prefix": "transform",
+    "body": "transform =~ ( undergo ( ${1} ) ) ,"
+  },
+  "parallel": {
+    "prefix": "parallel",
+    "body": "parallel :- ( do ( ${1} ) ) ,"
+  },
+  "do": {
+    "prefix": "do",
+    "body": "do ( ${1} ) mode ( ${2} )"
+  },
+  "class": {
+    "prefix": "class",
+    "body": "class ( ${1} ) tag ( ${2} )"
+  },
+  "food": {
+    "prefix": "food",
+    "body": "class ( food, ${1} ) that ( ${2} ) tag ( ${3} )"
+  },
+  "filter": {
+    "prefix": "filter",
+    "body": "${1} ~ ( ${2} ) ,"
+  },
+  "mod": {
+    "prefix": "mod",
+    "body": "${1} =~ ( ${2} ) ,"
+  },
+  "arg": {
+    "prefix": "arg",
+    "body": "${1} :- ( ${2} ) ,"
+  },
+  "yield": {
+    "prefix": "yield",
+    "body": "yield ( key ( result ) tag ( ${1} ) )"
+  },
+  "tag": {
+    "prefix": "tag",
+    "body": "tag ( ${1} )"
+  },
+  "mode": {
+    "prefix": "mode",
+    "body": "mode ( ${1} )"
+  },
+  "oven": {
+    "prefix": "oven",
+    "body": "class ( oven ) tag ( oven )"
+  }
+}

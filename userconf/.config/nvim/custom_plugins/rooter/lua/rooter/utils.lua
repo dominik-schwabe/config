@@ -34,9 +34,8 @@ function M.isdirectory(path)
 end
 
 function M.simplify_path(path)
-  path = vim.fn.simplify(path)
-  path = path:gsub("/+", "/")
-  return path
+  local result, _ = vim.fn.simplify(path):gsub("/+", "/")
+  return result
 end
 
 function M.path(components, opts)

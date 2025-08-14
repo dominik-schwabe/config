@@ -16,7 +16,7 @@ local function file_stats()
   }
   local path = vim.fn.expand("%:p")
   local buftype = vim.bo[buf].buftype
-  if F.contains(C.NOPATH_BUFTYPES, buftype) or path:sub(0, 1) ~= "/" then
+  if vim.tbl_contains(C.NOPATH_BUFTYPES, buftype) or path:sub(0, 1) ~= "/" then
     local name
     if buftype == "quickfix" then
       name = U.quickfix_title(win)

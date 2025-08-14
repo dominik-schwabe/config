@@ -4,9 +4,14 @@ local F = require("user.functional")
 local U = require("user.utils")
 
 local function entry_length(entry)
-  return F.sum(F.map(entry.contents, function(content)
-    return #content
-  end))
+  return vim
+    .iter(entry.contents)
+    :map(function(content)
+      return #content
+    end)
+    :fold(0, function(a, b)
+      return a + b
+    end)
 end
 
 local MIN_SIZE = 4
@@ -17,9 +22,9 @@ local conf = {
   name = "Yank",
   register = function()
     local clipboard_flags = vim.opt.clipboard:get()
-    if F.contains(clipboard_flags, "unnamedplus") then
+    if vim.tbl_contains(clipboard_flags, "unnamedplus") then
       return "+"
-    elseif F.contains(clipboard_flags, "unnamed") then
+    elseif vim.tbl_contains(clipboard_flags, "unnamed") then
       return "*"
     end
     return '"'

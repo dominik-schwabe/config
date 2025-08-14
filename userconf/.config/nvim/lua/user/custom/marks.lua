@@ -12,7 +12,7 @@ local timer
 
 local function is_markable_buffer(buf)
   local bufopt = vim.bo[buf]
-  return bufopt.buflisted and not F.contains(NO_FILES, vim.bo[buf].buftype)
+  return bufopt.buflisted and not vim.tbl_contains(NO_FILES, vim.bo[buf].buftype)
 end
 
 local function is_lower(byte)
@@ -61,14 +61,16 @@ end
 local function get_buf_marklist(bufnr)
   return vim.api.nvim_buf_call(bufnr, function()
     local marks = vim.fn.getmarklist("%")
-    F.foreach(marks, function(mark_info)
+    vim.iter(marks):each(function(mark_info)
       mark_info.mark = mark_info.mark:sub(2, 2)
       mark_info.bufnr = bufnr
     end)
-    marks = F.filter(marks, function(mark_info)
-      return is_lower(mark_info.mark:byte())
-    end)
-    return marks
+    return vim
+      .iter(marks)
+      :filter(function(mark_info)
+        return is_lower(mark_info.mark:byte())
+      end)
+      :totable()
   end)
 end
 
@@ -84,8 +86,7 @@ local function refresh()
   local buf = vim.api.nvim_get_current_buf()
   if is_markable_buffer(buf) then
     delete_all_signs(buf)
-    local marklist = get_buf_marklist(buf)
-    F.foreach(marklist, function(mark_info)
+    vim.iter(get_buf_marklist(buf)):each(function(mark_info)
       add_sign(buf, mark_info.mark, mark_info.pos[2])
     end)
   end
@@ -104,9 +105,13 @@ local function register_mark(bufnr, mark, line)
 end
 
 local function get_global_marklist()
-  return F.concat(unpack(F.map(vim.api.nvim_list_bufs(), function(bufnr)
-    return get_buf_marklist(bufnr)
-  end)))
+  return vim
+    .iter(vim.api.nvim_list_bufs())
+    :map(function(bufnr)
+      return get_buf_marklist(bufnr)
+    end)
+    :flatten()
+    :totable()
 end
 
 local function open_mark_quickfix()
@@ -124,10 +129,12 @@ local function open_mark_quickfix()
 end
 
 local function get_next_mark(bufnr)
-  local marks = get_buf_marklist(bufnr)
-  marks = F.map(marks, function(mark_info)
-    return mark_info.mark:byte()
-  end)
+  local marks = vim
+    .iter(get_buf_marklist(bufnr))
+    :map(function(mark_info)
+      return mark_info.mark:byte()
+    end)
+    :totable()
   table.sort(marks)
   local lowest = 97
   for _, byte in ipairs(marks) do
@@ -164,7 +171,7 @@ local function toggle_mark()
 
   local line_marks = get_line_marks(bufnr, line)
   if #line_marks ~= 0 then
-    F.foreach(line_marks, function(mark)
+    vim.iter(line_marks):each(function(mark)
       delete_mark(bufnr, mark)
     end)
   elseif is_markable_buffer(bufnr) then
@@ -173,7 +180,7 @@ local function toggle_mark()
 end
 
 local function clear_all_marks()
-  F.foreach(vim.api.nvim_list_bufs(), delete_all_marks)
+  vim.iter(vim.api.nvim_list_bufs()):each(delete_all_marks)
 end
 
 vim.keymap.set({ "n" }, "dm", function()
