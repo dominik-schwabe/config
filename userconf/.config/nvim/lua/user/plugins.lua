@@ -167,8 +167,26 @@ local plugins = F.concat({
     config = l("telescope"),
     cmd = "Telescope",
     keys = {
-      { "<C-p>", "<CMD>Telescope find_files<CR>", mode = { "n", "x", "i" }, desc = "find files" },
-      { "_", "<CMD>Telescope live_grep<CR>", mode = { "n", "x" }, desc = "live grep" },
+      {
+        "<C-p>",
+        function()
+          require("telescope.builtin").find_files({ no_ignore = U.is_git_ignored(vim.fn.getcwd()) })
+        end,
+        mode = { "n", "x", "i" },
+        desc = "find files",
+      },
+      {
+        "_",
+        function()
+          local args = {}
+          if U.is_git_ignored(vim.fn.getcwd()) then
+            args[#args + 1] = "--no-ignore"
+          end
+          require("telescope.builtin").live_grep({ additional_args = args })
+        end,
+        mode = { "n", "x" },
+        desc = "live grep",
+      },
       { "z=", "<CMD>Telescope spell_suggest<CR><ESC>", desc = "spell suggest" },
       {
         "<space>/",

@@ -411,4 +411,19 @@ function M.list_normal_windows()
     :totable()
 end
 
+function M.is_git_ignored(path)
+  if vim.fn.executable("git") then
+    local job = require("plenary.job"):new({
+      command = "git",
+      args = { "check-ignore", path },
+      cwd = path,
+    })
+    job:sync()
+    D({ path, job.code })
+    return job.code == 0
+  else
+    return false
+  end
+end
+
 return M

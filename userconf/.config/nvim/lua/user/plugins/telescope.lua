@@ -41,7 +41,6 @@ require("telescope").setup({
       "--line-number",
       "--column",
       "--ignore-case",
-      -- "--max-filesize=1M",
     },
     preview = {
       filesize_limit = config.max_buffer_size / (1024 * 1024),

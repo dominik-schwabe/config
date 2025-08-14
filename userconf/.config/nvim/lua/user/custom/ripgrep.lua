@@ -1,6 +1,5 @@
 local config = require("user.config")
 
-local F = require("user.functional")
 local U = require("user.utils")
 
 local curr_rg_job = nil
@@ -55,11 +54,15 @@ local function rg(string, opt)
     "--with-filename",
     "--ignore-case",
     "--vimgrep",
-    -- "--max-filesize=1M",
     "--max-columns=1000",
   }
+  local cwd = vim.fn.getcwd()
+  if U.is_git_ignored(cwd) then
+    args[#args + 1] = "--no-ignore"
+  end
   if raw then
-    string = vim.fn.escape(string, "^$.*+?()[]{}|\\-") -- don't use "--fixed-strings" because else boundary does not work
+    -- don't use "--fixed-strings" because else boundary does not work
+    string = vim.fn.escape(string, "^$.*+?()[]{}|\\-")
   end
   if maximum then
     maximum = maximum - 1
@@ -72,7 +75,7 @@ local function rg(string, opt)
     command = "rg",
     args = args,
     interactive = false,
-    cwd = vim.fn.getcwd(),
+    cwd = cwd,
     maximum_results = maximum,
     on_exit = function(j, return_val)
       if return_val == 0 or return_val == nil then
