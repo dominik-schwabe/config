@@ -4,10 +4,15 @@ local config = require("user.config")
 
 local M = {}
 
+---@param str string
+---@return string
 function M.replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+---@param key string
+---@param mode string
+---@param need_escape boolean
 function M.feedkeys(key, mode, need_escape)
   if mode == nil then
     mode = ""
@@ -22,6 +27,8 @@ end
 local esc = M.replace_termcodes("<Esc>")
 local ctrl_v = M.replace_termcodes("<c-v>")
 
+---@param buffer integer
+---@return string[]
 function M.get_visual_selection(buffer)
   local to_end = vim.fn.winsaveview().curswant == 2147483647
   M.feedkeys(esc, "nx", false)
@@ -51,6 +58,8 @@ function M.get_visual_selection(buffer)
   return lines
 end
 
+---@param motion_type `line`
+---@return string[]
 function M.get_motion(motion_type)
   local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(0, "["))
   local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(0, "]"))
@@ -65,6 +74,8 @@ function M.get_motion(motion_type)
   return lines
 end
 
+---@param num integer
+---@return string
 function M.get_indents(num)
   local text
   if vim.bo.expandtab then
@@ -76,6 +87,9 @@ function M.get_indents(num)
   return text
 end
 
+---@param t1 table<any, any>
+---@param t2 table<any, any>
+---@return table<any, any>
 function M.tbl_merge(t1, t2)
   for k, v in pairs(t2) do
     if (type(v) == "table") and (type(t1[k]) == "table") then
@@ -91,6 +105,8 @@ function M.tbl_merge(t1, t2)
   return t1
 end
 
+---@param this_file string
+---@param module_path string
 function M.load_neighbor_modules(this_file, module_path)
   local this_folder = vim.fn.fnamemodify(this_file, ":h")
   local this_file_end = vim.fn.fnamemodify(this_file, ":t")
@@ -102,10 +118,14 @@ function M.load_neighbor_modules(this_file, module_path)
   end
 end
 
+---@param path string
+---@return boolean
 function M.exists(path)
   return path and vim.fn.empty(vim.fn.glob(path)) == 0
 end
 
+---@param path string
+---@return boolean
 function M.isdirectory(path)
   return path and vim.fn.isdirectory(path) == 1
 end
@@ -419,7 +439,6 @@ function M.is_git_ignored(path)
       cwd = path,
     })
     job:sync()
-    D({ path, job.code })
     return job.code == 0
   else
     return false

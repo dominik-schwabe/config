@@ -1,5 +1,4 @@
 local F = require("user.functional")
-local U = require("user.utils")
 
 local config = require("user.config")
 
@@ -170,7 +169,7 @@ local plugins = F.concat({
       {
         "<C-p>",
         function()
-          require("telescope.builtin").find_files({ no_ignore = U.is_git_ignored(vim.fn.getcwd()) })
+          require("telescope.builtin").find_files({ no_ignore = require("user.utils").is_git_ignored(vim.fn.getcwd()) })
         end,
         mode = { "n", "x", "i" },
         desc = "find files",
@@ -179,7 +178,7 @@ local plugins = F.concat({
         "_",
         function()
           local args = {}
-          if U.is_git_ignored(vim.fn.getcwd()) then
+          if require("user.utils").is_git_ignored(vim.fn.getcwd()) then
             args[#args + 1] = "--no-ignore"
           end
           require("telescope.builtin").live_grep({ additional_args = args })
@@ -217,9 +216,34 @@ local plugins = F.concat({
     opts = {
       auto_resize_height = false,
       func_map = {
-        open = "o",
         openc = "<CR>",
+        vsplit = "s",
+        prevhist = "<",
+        nexthist = ">",
+        open = "",
+        tab = "",
+        tabb = "",
+        tabc = "",
+        drop = "",
+        split = "",
         nextfile = "",
+        tabdrop = "",
+        ptogglemode = "",
+        ptoggleitem = "",
+        ptoggleauto = "",
+        pscrollup = "",
+        pscrolldown = "",
+        pscrollorig = "",
+        prevfile = "",
+        lastleave = "",
+        stoggleup = "",
+        stoggledown = "",
+        stogglevm = "",
+        stogglebuf = "",
+        sclear = "",
+        filter = "",
+        filterr = "",
+        fzffilter = "",
       },
       preview = {
         border = config.border,
@@ -385,6 +409,7 @@ if not config.minimal then
         })
       end,
     },
+    { "pmizio/typescript-tools.nvim", opts = {} },
     {
       "mrcjkb/rustaceanvim",
       ft = { "rust" },
@@ -532,27 +557,6 @@ _<C-c>_ : exit
       },
     },
     {
-      "altermo/ultimate-autopair.nvim",
-      event = { "InsertEnter", "CmdlineEnter" },
-      opts = {
-        tabout = { enable = true },
-        cmap = false,
-        config_internal_pairs = {
-          {
-            "'",
-            "'",
-            multiline = false,
-            surround = true,
-            nft = { "xdata", "xdatal" },
-            cond = function(fn)
-              return not fn.in_node({ "bounded_type", "type_parameters" })
-            end,
-          },
-          { "`", "`", nft = { "python", "jon", "cjon" } },
-        },
-      },
-    },
-    {
       "catgoose/nvim-colorizer.lua",
       opts = {
         filetypes = { "*", "!cmp_menu" },
@@ -618,7 +622,7 @@ _<C-c>_ : exit
           strategy = {
             [""] = function()
               local rb = require("rainbow-delimiters")
-              return U.is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
+              return require("user.utils").is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
             end,
           },
         }

@@ -103,11 +103,9 @@ local function gen_from_buffer(opts)
   })
 
   local cwd = vim.fn.expand(opts.cwd or vim.loop.cwd())
-
   local make_display = function(entry)
     opts.__prefix = opts.bufnr_width + 4 + icon_width + 3 + 1
     local icon, hl_group = utils.get_devicons(entry.is_path and entry.filename or "terminal")
-
     return displayer({
       { entry.bufnr, "TelescopeResultsNumber" },
       { entry.indicator, "Orange" },
@@ -121,12 +119,10 @@ local function gen_from_buffer(opts)
   return function(entry)
     local bufname = entry.info.name ~= "" and entry.info.name or "[No Name]"
     bufname = Path:new(bufname):normalize(cwd)
-
     local progress = entry.is_path and F.threshold(thresholds, entry.info.changedtick) or nil
     local readonly = vim.bo[entry.bufnr].readonly and config.icons.Readonly or " "
     local changed = entry.info.changed == 1 and config.icons.Modified or " "
     local indicator = string.format("%s %s ", readonly, changed)
-
     return make_entry.set_default_entry_mt({
       value = bufname,
       ordinal = entry.bufnr .. " : " .. entry.tail .. bufname,
@@ -145,7 +141,6 @@ local entry_point = function(opts)
   local path_bufnrs = U.list_buffers({ mru = true, buftype = C.FILE_BUFTYPE })
   local terminal_bufnrs = F.reverse(U.list_buffers({ mru = true, unlisted = true, buftype = "terminal" }))
   local all_bufnrs = F.concat(terminal_bufnrs, path_bufnrs)
-
   local buffers = vim
     .iter(all_bufnrs)
     :map(function(bufnr)
@@ -159,7 +154,6 @@ local entry_point = function(opts)
       }
     end)
     :totable()
-
   opts.longest_tail = vim
     .iter(buffers)
     :map(function(entry)
@@ -171,9 +165,7 @@ local entry_point = function(opts)
   local active_index = F.find_index(all_bufnrs, function(buf)
     return buf == current_buffer
   end)
-
   local default_selection_index = active_index or #terminal_bufnrs + 1
-
   pickers
     .new(opts, {
       prompt_title = "Buffers",

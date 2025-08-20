@@ -1,4 +1,5 @@
 local U = require("user.utils")
+local C = require("monokai-rainbow").colors
 
 local lualine = require("lualine")
 
@@ -37,6 +38,22 @@ local quickfix = {
 local lualine_config = {
   extensions = { quickfix, "nvim-tree", "lazy" },
   options = {
+    theme = {
+      normal = {
+        a = { fg = C.base0, bg = C.orange, gui = "bold" },
+        b = { fg = C.orange, bg = C.base0 },
+        c = { fg = C.base10, bg = C.base4 },
+      },
+      insert = {
+        a = { fg = C.base0, bg = C.yellow, gui = "bold" },
+      },
+      visual = {
+        a = { fg = C.base0, bg = C.purple, gui = "bold" },
+      },
+      command = {
+        a = { bg = C.fn, fg = C.base0, gui = "bold" },
+      },
+    },
     section_separators = "",
     component_separators = { left = "|", right = "|" },
   },

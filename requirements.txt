@@ -1,7 +1,4 @@
 ipdb
 ipython
 ipython-autoimport
-pynvim
 telegram-send
-wheel
-yt-dlp

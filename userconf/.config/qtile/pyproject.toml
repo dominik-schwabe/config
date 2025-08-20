@@ -15,19 +15,21 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = ["qtile", "dbus-fast", "psutil", "pulsectl-asyncio"]
 
 [tool.pyright]
 pythonVersion = "3.12"
 typeCheckingMode = "strict"
 
 [tool.ruff]
-target-version = "py38"
 line-length = 120
 
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+  "TC001",
+  "TC002",
+  "TC003",
   "TRY003",
   "COM812",
   "ISC001",

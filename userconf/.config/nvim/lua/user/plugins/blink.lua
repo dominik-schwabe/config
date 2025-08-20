@@ -25,8 +25,8 @@ blink.setup({
   completion = {
     list = { selection = { preselect = true, auto_insert = false } },
     trigger = {
-      show_on_backspace = true,
-      show_on_insert = true,
+      show_on_backspace = false,
+      show_on_insert = false,
     },
     documentation = {
       auto_show = true,
@@ -67,12 +67,19 @@ blink.setup({
         name = "[lsp]",
         max_items = 50,
         transform_items = function(ctx, items)
-          -- don't show underscore properties in python unless there is ".__" in the line
-          if not ctx.line:find("[.]__") then
+          if not (ctx.line:find("[.%s]_[a-zA-Z0-9_]*$") or ctx.line:find("^_[a-zA-Z0-9_]*$")) then
             items = vim
               .iter(items)
               :filter(function(item)
-                return not item.label:find("^__")
+                return not item.label:find("^_[a-zA-Z0-9]")
+              end)
+              :totable()
+          end
+          if not (ctx.line:find("[.%s]__[a-zA-Z0-9_]*$") or ctx.line:find("^__[a-zA-Z0-9_]*$")) then
+            items = vim
+              .iter(items)
+              :filter(function(item)
+                return not item.label:find("^__[a-zA-Z0-9]")
               end)
               :totable()
           end
@@ -99,6 +106,7 @@ blink.setup({
               :totable()
           end,
         },
+        score_offset = -20,
       },
       path = {
         name = "[path]",
@@ -110,6 +118,7 @@ blink.setup({
         opts = {
           all_panes = true,
         },
+        score_offset = -20,
       },
     },
   },

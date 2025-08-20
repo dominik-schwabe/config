@@ -4,7 +4,7 @@ local M = {}
 
 M.minimal = os.getenv("MINIMAL_CONFIG")
 M.log_load = vim.log.levels.OFF
-M.rg_maximum_lines = 100
+M.rg_maximum_lines = nil
 M.log_level = vim.log.levels.INFO
 M.max_buffer_size = 300 * 1024
 M.big_files_allowlist = { "help" }
@@ -61,6 +61,7 @@ M.icons = {
   Reference = "",
   Folder = "󰉋",
   Struct = "󰙅",
+  KnownColor = "󰝤", -- ■  
   Yank = "󰏢",
   Path = "󰉋",
   Tmux = "󰓫",
@@ -100,7 +101,7 @@ M.rooter = {
     patterns = { "/lib/python3.[0-9]*$" },
   },
 }
-M.lsp_ensure_installed = { "basedpyright", "ruff", "ts_ls", "jsonls", "bashls" }
+M.lsp_ensure_installed = { "basedpyright", "ruff", "jsonls", "bashls" }
 M.mason_ensure_installed = { "prettierd" }
 M.lsp_configs = {
   -- latex = {
@@ -290,6 +291,7 @@ M.repls = {
   python = { "ipython", "python", "python3", "qtconsole" },
   r = { "radian", "R" },
   lua = { "lua5.4", "luajit" },
+  typescript = { "deno" },
 }
 
 return M

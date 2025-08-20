@@ -38,6 +38,8 @@ function M.get_visual_selection(buffer)
   return lines
 end
 
+---@param motion_type `line`
+---@return string[]
 function M.get_motion(motion_type)
   local line_start, column_start = unpack(vim.api.nvim_buf_get_mark(0, "["))
   local line_end, column_end = unpack(vim.api.nvim_buf_get_mark(0, "]"))
@@ -52,6 +54,8 @@ function M.get_motion(motion_type)
   return lines
 end
 
+---@param path string
+---@return boolean
 function M.path_exists(path)
   return vim.fn.empty(vim.fn.glob(path)) == 1
 end

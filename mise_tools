@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-for TOOL in "usage fzf jq ripgrep fd"; do
+for TOOL in "usage fzf jq ripgrep fd zoxide just btop"; do
   mise use -yg $TOOL
 done

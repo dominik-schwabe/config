@@ -78,9 +78,6 @@ alias pythonserver='python -m http.server 8000'
 alias ppjson='python -m json.tool'
 
 alias install_uv='curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh'
-alias install_zsh='curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh'
-alias install_treesitter='cargo install tree-sitter-cli'
-alias install_rye='curl -sSf https://Rye-up.com/get | bash'
 alias install_mise='curl https://mise.run | sh'
 alias install_trans='curl --create-dirs -sfLo ~/.toolbin/trans https://git.io/trans && chmod 755 ~/.toolbin/trans'
 alias install_chtsh='curl --create-dirs -sfLo ~/.toolbin/cht.sh https://cht.sh/:cht.sh && chmod 755 ~/.toolbin/cht.sh'
@@ -106,6 +103,7 @@ alias top='btop'
 alias otop='/usr/bin/env top'
 
 alias a='vim ~/.config/awesome/rc.lua'
+alias q='vim ~/.config/qtile/config.py'
 alias v='vim ~/.config/nvim/init.lua'
 
 alias grhs='git reset --soft HEAD^'

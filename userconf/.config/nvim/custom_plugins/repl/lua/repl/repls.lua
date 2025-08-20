@@ -129,7 +129,10 @@ M.repls = {
   sh = { zsh = { command = { "zsh" } }, bash = { command = { "bash" } }, sh = { command = { "sh" } } },
   stata = { stata = { command = { "stata", "-q" } } },
   tcl = { tclsh = { command = { "tclsh" } } },
-  typescript = { ts = { command = { "ts-node" }, format = M.editor_n_format } },
+  typescript = {
+    ts = { command = { "ts-node" }, format = M.editor_n_format },
+    deno = { command = { "deno" }, format = M.normal_format },
+  },
   zsh = { zsh = { command = { "zsh" } } },
 }
 

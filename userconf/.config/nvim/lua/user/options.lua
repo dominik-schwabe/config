@@ -1,8 +1,6 @@
 local opt = vim.opt
 local g = vim.g
 
-local U = require("user.utils")
-
 opt.foldenable = false
 opt.tabstop = 2
 opt.shiftround = true

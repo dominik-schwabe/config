@@ -1,4 +1,3 @@
-local F = require("user.functional")
 local C = require("user.constants")
 
 vim.keymap.set({ "n" }, "<leader>x", "<CMD>:.lua<CR>", { desc = "interpret the current lua line" })

@@ -38,8 +38,8 @@ vim.keymap.set("n", "gD", vim.lsp.buf.declaration, desc(map_opt, "go to declarat
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, desc(map_opt, "go to definition"))
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, desc(map_opt, "go to type definition"))
 vim.keymap.set(
-  { "n", "i" },
-  "<C-s>",
+  { "n" },
+  "gs",
   F.f(vim.lsp.buf.signature_help)({ border = config.border }),
   desc(map_opt, "show signature help")
 )
@@ -134,20 +134,10 @@ end
 
 F.load("mason-lspconfig", function(mason_lspconfig)
   mason_lspconfig.setup({
-    ensure_installed = config.minimal and {} or config.lsp_ensure_installed,
     log_level = vim.log.levels.ERROR,
     automatic_enable = {
-      exclude = { "rust_analyzer" },
+      exclude = { "rust_analyzer", "ts_ls" },
     },
-  })
-end)
-
-F.load("mason-tool-installer", function(mti)
-  mti.setup({
-    ensure_installed = config.minimal and {} or config.mason_ensure_installed,
-    auto_update = false,
-    run_on_start = true,
-    start_delay = 3000,
   })
 end)
 
