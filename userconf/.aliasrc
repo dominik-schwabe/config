@@ -3,6 +3,8 @@ alias rl='readlink'
 
 alias cloc='tokei -s code -C'
 
+alias binstall='cargo binstall --no-confirm --disable-telemetry'
+
 alias grep='grep -i --color=auto'
 alias fgrep='fgrep -i --color=auto'
 alias egrep='egrep -i --color=auto'
@@ -64,12 +66,11 @@ alias ssh='ssh -CA'
 alias xssh='ssh -XCA'
 alias lssh='ssh -Aq -L 3000:localhost:3000 -L 5000:localhost:5000'
 
-alias yay='paru'
 alias uk='sudo pacman --noconfirm --needed -S linux-zen linux-zen-headers'
-alias pu='paru -Syu'
-alias pi='paru -S'
-alias pr='paru -Rs'
-alias prf='paru -Rsc'
+alias pu='yay -Syu'
+alias pi='yay -S'
+alias pr='yay -Rs'
+alias prf='yay -Rsc'
 
 alias broken_packages='sudo LC_ALL=C pacman -Qk 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
 alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9][0-9]* missing files" | cut -d':' -f1'
@@ -77,12 +78,6 @@ alias broken_packages_explicit='sudo LC_ALL=C pacman -Qek 2>&1 | grep -E ", [1-9
 alias pythonserver='python -m http.server 8000'
 alias ppjson='python -m json.tool'
 
-alias install_uv='curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh'
-alias install_mise='curl https://mise.run | sh'
-alias install_trans='curl --create-dirs -sfLo ~/.toolbin/trans https://git.io/trans && chmod 755 ~/.toolbin/trans'
-alias install_chtsh='curl --create-dirs -sfLo ~/.toolbin/cht.sh https://cht.sh/:cht.sh && chmod 755 ~/.toolbin/cht.sh'
-alias install_tldr='npm install -g tldr'
-alias install_rust="curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain stable"
 alias te='translate de:en'
 alias td='translate en:de'
 alias e='extract'

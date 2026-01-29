@@ -6,10 +6,11 @@ error() {
 }
 
 QUALITY="medium"
-while getopts "eq:l:" o &>/dev/null; do
+while getopts "deq:l:" o &>/dev/null; do
   [[ $o == "?" ]] && error "unknown argument"
   case $o in
     "e") ECHO=true ;;
+    "d") DEBUG=true ;;
     "q") QUALITY=$OPTARG ;;
     "l") LANGUAGE=$OPTARG ;;
   esac
@@ -19,6 +20,25 @@ shift "$(($OPTIND - 1))"
 ARGUMENT="$1"
 
 [[ -z "$ARGUMENT" ]] && error "missing argument"
+
+launch() {
+  if [[ $DEBUG == true ]]; then
+    echo -n "["
+    IS_FIRST=true
+    for e in "$@"; do
+      if [[ $IS_FIRST == true ]]; then
+        IS_FIRST=false
+      else
+        echo -n ", "
+      fi
+      echo -n "\"$e\""
+    done
+    echo "]"
+    "$@"
+  else
+    nohup "$@" &>/dev/null &
+  fi
+}
 
 custom_application() {
   TEXT_ONLY=$1
@@ -41,7 +61,7 @@ custom_application() {
         exit 0
       elif [[ "$mimetype" == "video/"* ]]; then
         [[ "$ECHO" == true ]] && echo mpv "$mimetype"
-        nohup mpv "$ARGUMENT" &>/dev/null &
+        launch mpv "$ARGUMENT"
         exit 0
       fi
     fi
@@ -76,7 +96,7 @@ stream_application() {
   if [[ "$ARGUMENT" == "https://www.youtube.com/"* || "$ARGUMENT" == "https://youtu.be/"* ]]; then
     if command -v yt-dlp &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "youtube"
-      nohup mpv --title="mpv_media_stream $ARGUMENT $QUALITY" --ytdl-format=$YTDL_FORMAT $ARGUMENT &>/dev/null &
+      launch mpv --title="mpv_media_stream $ARGUMENT $QUALITY" --ytdl-format="$YTDL_FORMAT" $ARGUMENT
       exit 0
     else
       error "yt-dlp not installed"
@@ -84,7 +104,7 @@ stream_application() {
   elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
     if command -v streamlink &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "streamlink twitch"
-      nohup streamlink --twitch-disable-ads --player-no-close --player mpv --player-args "--title='mpv_media_stream $ARGUMENT $QUALITY' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT &>/dev/null &
+      launch streamlink --twitch-disable-ads --player-no-close --player mpv --player-args "--title='mpv_media_stream $ARGUMENT $QUALITY' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT
       exit 0
     else
       error "streamlink not installed"
@@ -102,9 +122,9 @@ default_application() {
       if [[ "$default_app" == "$EDITOR" ]] || [[ -z "$default_app" ]]; then
         $EDITOR "$ARGUMENT"
       elif [[ "$mimetype" == "image/svg+xml" ]] && command -v inkview &>/dev/null; then
-        nohup inkview "$ARGUMENT" &>/dev/null &
+        launch inkview "$ARGUMENT"
       else
-        nohup xdg-open "$ARGUMENT" &>/dev/null &
+        launch xdg-open "$ARGUMENT"
       fi
       exit 0
       ;;

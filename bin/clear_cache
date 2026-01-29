@@ -2,7 +2,7 @@
 
 if [[ "$EUID" = 0 ]]; then
   pacman -Rs $(pacman -Qtdq) --noconfirm
-  paru -Scc --noconfirm
+  yay -Scc --noconfirm
   journalctl --vacuum-size=100M
 fi
 pip cache remove '*'

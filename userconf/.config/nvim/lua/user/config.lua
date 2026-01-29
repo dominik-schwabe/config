@@ -6,7 +6,7 @@ M.minimal = os.getenv("MINIMAL_CONFIG")
 M.log_load = vim.log.levels.OFF
 M.rg_maximum_lines = nil
 M.log_level = vim.log.levels.INFO
-M.max_buffer_size = 300 * 1024
+M.max_buffer_size = 1024 * 1024
 M.big_files_allowlist = { "help" }
 M.border = "rounded"
 M.icons = {
@@ -144,9 +144,8 @@ M.lsp_configs = {
           callSnippet = "Replace",
           showWord = "Disable",
         },
-        hint = {
-          enable = true,
-        },
+        hint = { enable = true },
+        telemetry = { enable = false },
       },
     },
   },
@@ -218,16 +217,21 @@ M.linters = {
   python = { "cspell" },
   lua = { "luacheck" },
 }
+local JON_OPERATORS = { "?", "~", ":", "=", ":=", "=>", "->", "<-", "unit", "+", "-", "/", "*", "." }
+local JON_ARGS = F.concat(
+  { "--max-line-length", "70", "--spacing", "1", "--rotate-delimiters" },
+  vim
+    .iter(JON_OPERATORS)
+    :map(function(op)
+      return { "-o", op }
+    end)
+    :flatten()
+    :totable()
+)
 M.formatters = {
   clients = {
     "jsonls",
     "rust-analyzer",
-  },
-  args = {
-    ruff_fix = { "--unfixable", "F401,F811,F841" },
-    latexindent = { "-y", 'defaultIndent:"  ",verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1' },
-    shfmt = { "-i", "2", "-ci" },
-    stylua = { "--config-path", vim.fn.expand("~/.config/stylua.toml") },
   },
   filetype = {
     python = { "ruff_fix", "ruff_format" },
@@ -255,6 +259,53 @@ M.formatters = {
     cjson = { "cjson" },
     jon = { "jon" },
     cjon = { "cjon" },
+  },
+  formatters = {
+    stylua = { append_args = { "--indent-type", "spaces" } },
+    ruff_fix = { append_args = { "--unfixable", "F401,F811,F841" } },
+    latexindent = {
+      append_args = { "-y", 'defaultIndent:"  ",verbatimEnvironments:Verbatim:1;pre:1;textpre:1;rawpre:1' },
+    },
+    shfmt = { append_args = { "-i", "2", "-ci" } },
+    pestfmt = {
+      command = "pestfmt",
+      args = { "--stdin" },
+      stdin = true,
+    },
+    xj = {
+      command = "xj",
+      args = { "--line-width", "70" },
+      stdin = true,
+    },
+    xjl = {
+      command = "xj",
+      args = { "--line-width", "70", "--multiple" },
+      stdin = true,
+    },
+    jon = {
+      command = "jon",
+      args = JON_ARGS,
+      stdin = true,
+    },
+    cjon = {
+      command = "jon",
+      args = F.concat({ "--multiple" }, JON_ARGS),
+      stdin = true,
+    },
+    xdata = {
+      command = "xdata",
+      args = { "--line-width", "70" },
+      stdin = true,
+    },
+    xdatal = {
+      command = "xdata",
+      args = { "--line-width", "70", "--multiple" },
+      stdin = true,
+    },
+    cjson = {
+      command = "cjson_format",
+      stdin = true,
+    },
   },
 }
 M.treesitter = {
@@ -285,6 +336,13 @@ M.treesitter = {
   },
   highlight_disable = {},
 }
+M.brackets = {
+  { "(", ")" },
+  { "[", "]" },
+  { "{", "}" },
+  { "<", ">" },
+}
+M.quotes = { '"', "'", "`" }
 M.closable_terminals = { "term://repl*", "term://toggleterm" }
 M.custom_plugin_path = vim.fn.stdpath("config") .. "/custom_plugins"
 M.repls = {

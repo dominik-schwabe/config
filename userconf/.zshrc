@@ -383,15 +383,15 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-_paru_update() {
-    LBUFFER="paru -Syu --noconfirm"
+_aur_helper_update() {
+    LBUFFER="yay -Syu --noconfirm"
     RBUFFER=""
     zle accept-line
 }
 
-zle -N _paru_update
-bindkey -M vicmd '^[[15~' _paru_update
-bindkey -M viins '^[[15~' _paru_update
+zle -N _aur_helper_update
+bindkey -M vicmd '^[[15~' _aur_helper_update
+bindkey -M viins '^[[15~' _aur_helper_update
 
 fpath+=$HOME/.zfunc
 fpath+=$HOME/.zsh-completions

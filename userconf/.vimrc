@@ -1,13 +1,9 @@
 set t_Co=256
 let &t_SI="\e[6 q"
 let &t_EI="\e[2 q"
+let &t_ti="\e[2 q"
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-augroup myCmds
-au!
-autocmd VimEnter * silent! !echo -ne "\e[2 q" | redraw!
-augroup END
 
 if has("termguicolors") | set termguicolors | endif
 syntax on

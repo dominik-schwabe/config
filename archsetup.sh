@@ -5,7 +5,10 @@ GREEN="\e[1;32m"
 ORANGE="\e[1;33m"
 BLUE="\e[1;34m"
 VIOLET="\e[1;35m"
+CYAN="\e[1;36m"
 RESET="\e[0m"
+
+AUR_HELPER_PROGRAM="yay"
 
 grep -q vmx /proc/cpuinfo && UCODE="intel-ucode"
 grep -q svm /proc/cpuinfo && UCODE="amd-ucode"
@@ -182,14 +185,14 @@ lua53-inspect
 unclutter-xfixes-git
 "
 
-installparu() {
-  PARU_PATH=$(mktemp -d)
-  git clone https://aur.archlinux.org/paru-bin.git $PARU_PATH
-  cd $PARU_PATH
+install_aur_helper() {
+  AUR_HELPER_PATH=$(mktemp -d)
+  git clone https://aur.archlinux.org/${AUR_HELPER_PROGRAM}-bin.git $AUR_HELPER_PATH
+  cd $AUR_HELPER_PATH
   makepkg -si
 }
 
-while getopts "abglu" o &>/dev/null; do
+while getopts "abglup" o &>/dev/null; do
   case $o in
     "a")
       INSTALLBASE=1
@@ -201,35 +204,43 @@ while getopts "abglu" o &>/dev/null; do
     "g") INSTALLGRAPHICAL=1 ;;
     "l") INSTALLLATEX=1 ;;
     "u") INSTALLAUR=1 ;;
+    "p") INSTALL_AUR_HELPER=1 ;;
   esac
 done
 
 INSTALLSTRING=""
-if [ -n "$INSTALLBASE" ]; then
+if [[ "$INSTALLBASE" ]]; then
   echo -e "install ${RED}base${RESET}"
   INSTALLSTRING="${INSTALLSTRING} ${BASE}"
 fi
 
-if [ -n "$INSTALLGRAPHICAL" ]; then
+if [[ "$INSTALLGRAPHICAL" ]]; then
   echo -e "install ${GREEN}graphical${RESET}"
   INSTALLSTRING="${INSTALLSTRING} ${GRAPHIC}"
 fi
 
-if [ -n "$INSTALLLATEX" ]; then
+if [[ "$INSTALLLATEX" ]]; then
   echo -e "install ${ORANGE}latex${RESET}"
   INSTALLSTRING="${INSTALLSTRING} ${LATEX}"
 fi
 
-[ -n "$INSTALLAUR" ] && echo -e "install ${BLUE}aur${RESET}"
+if [[ "$INSTALLL_AUR_HELPER" ]]; then
+  echo -e "install ${CYAN}aur helper${RESET}"
+fi
+
+if [[ "$INSTALLAUR" ]]; then
+  echo -e "install ${BLUE}aur${RESET}"
+fi
 
 INSTALLSTRING=$(echo -n $INSTALLSTRING | tr "\n" " " | sed -e "s/\s\+/ /g" -e "s/^\s\+|\s\+$//g")
 AURPKG=$(echo -n $AURPKG | tr "\n" " " | sed -e "s/\s\+/ /g" -e "s/^\s\+|\s\+$//g")
 
-if [ -z "$INSTALLSTRING" -a -z "$INSTALLAUR" ]; then
-  echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -l (${ORANGE}latex${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET})"
+if [[ ! "$INSTALL_AUR_HELPER" && ! "$INSTALLSTRING" && ! "$INSTALLAUR" ]]; then
+  echo -e "specify packages with -b (${RED}base${RESET}), -g (${GREEN}graphical${RESET}), -l (${ORANGE}latex${RESET}), -u (${BLUE}aur${RESET}), -a (${VIOLET}all${RESET}) -p (${CYAN}aur helper${RESET})"
   exit 1
 fi
-if [ -n "$INSTALLSTRING" ]; then
+
+if [[ "$INSTALLSTRING" ]]; then
   echo "$INSTALLSTRING"
   if command -v sudo &>/dev/null; then
     sudo pacman -S --needed $INSTALLSTRING || exit 1
@@ -237,11 +248,13 @@ if [ -n "$INSTALLSTRING" ]; then
     su -c "pacman -S --needed $INSTALLSTRING" || exit 1
   fi
 fi
-if ! command -v paru &>/dev/null; then
-  echo -e "installing ${BLUE}paru${RESET}"
-  installparu || exit 1
+
+if [[ $INSTALL_AUR_HELPER ]] || ($INSTALLAUR && ! command -v $AUR_HELPER_PROGRAM &>/dev/null); then
+  echo -e "installing ${CYAN}aur helper${RESET}"
+  install_aur_helper || exit 1
 fi
-if [ -n "$INSTALLAUR" ]; then
+
+if [[ "$INSTALLAUR" ]]; then
   echo "$AURPKG"
-  paru -S --needed $AURPKG || exit 1
+  $AUR_HELPER_PROGRAM -S --needed $AURPKG || exit 1
 fi

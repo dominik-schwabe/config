@@ -3,9 +3,9 @@ local F = require("util.functional")
 
 local autostart_programs = {
   { 0, "brave &>/dev/null" },
-  { 2, "easyeffects --gapplication-service" },
+  -- { 2, "easyeffects --gapplication-service" },
   { 3, "unclutter --timeout 0.7" },
-  { 4, "flameshot" },
+  -- { 4, "flameshot" },
   { 7, "spotify-launcher &>/dev/null" },
   { 8, "is_productive_system && birdtray" },
   { 10, "is_productive_system && Telegram -startintray" },

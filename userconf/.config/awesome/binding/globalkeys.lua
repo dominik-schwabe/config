@@ -56,7 +56,7 @@ local cmus_toggle = dropdown.build_toggle_dropdown({
 
 local thunderbird_toggle = dropdown.build_toggle_dropdown({
   instance = "Mail",
-  class = "thunderbird",
+  class = ".*Thunderbird",
   name = ".*Mozilla Thunderbird",
   role = "3pane",
   border_width = 3,

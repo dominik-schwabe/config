@@ -211,6 +211,22 @@ awful.rules.rules = {
       end,
     },
   },
+  {
+    rule = { name = "Picture in picture" },
+    properties = {
+      focus = false,
+      callback = function(c)
+        c.fullscreen = false
+        c.floating = true
+        c.sticky = true
+        c.width = dpi(500)
+        c.height = dpi(300)
+        F.schedule(function()
+          awful.placement.top_right(c, { honor_workarea = true })
+        end)
+      end,
+    },
+  },
   { -- very small widgets should not be in the way
     rule = {},
     callback = function(c)

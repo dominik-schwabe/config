@@ -141,10 +141,16 @@ F.load("mason-lspconfig", function(mason_lspconfig)
   })
 end)
 
-for type, icon in pairs(F.subset(config.icons, { "Error", "Warn", "Hint", "Info" })) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = config.icons["Error"],
+      [vim.diagnostic.severity.WARN] = config.icons["Warn"],
+      [vim.diagnostic.severity.HINT] = config.icons["Hint"],
+      [vim.diagnostic.severity.INFO] = config.icons["Info"],
+    },
+  },
+})
 
 vim.api.nvim_create_augroup("UserLsp", {})
 

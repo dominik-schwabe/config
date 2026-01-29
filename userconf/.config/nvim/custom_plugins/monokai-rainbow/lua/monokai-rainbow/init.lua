@@ -578,6 +578,7 @@ HL.blink = {
 }
 
 HL.other = {
+  SnippetTabstop = { bg = "#004400" },
   CursorWord0 = { bg = C.white, fg = C.black },
   CursorWord1 = { bg = C.white, fg = C.black },
   TrailingWhitespace = { bg = C.trailing },

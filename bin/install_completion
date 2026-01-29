@@ -64,6 +64,7 @@ command_completion ruff             ruff generate-shell-completion zsh
 command_completion uv               uv generate-shell-completion zsh
 command_completion espflash         espflash completions zsh
 command_completion mise             mise completions zsh
+command_completion paru             paru completions zsh
 
 
 TMP=$(mktemp -d)

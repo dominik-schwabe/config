@@ -123,12 +123,13 @@ local plugins = F.concat({
   { "mgalliou/blink-cmp-tmux" },
   { "rafamadriz/friendly-snippets" },
   {
-    "echasnovski/mini.nvim",
+    "nvim-mini/mini.nvim",
     config = function()
       require("mini.comment").setup({
         options = {
-          custom_commentstring = function()
-            return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+          custom_commentstring = function(pos)
+            return require("ts_context_commentstring").calculate_commentstring({ location = pos })
+              or vim.bo.commentstring
           end,
           ignore_blank_line = true,
         },
@@ -136,7 +137,14 @@ local plugins = F.concat({
       require("mini.icons").setup()
     end,
   },
-  { "JoosepAlviste/nvim-ts-context-commentstring" },
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    opts = {
+      languages = {
+        sparql = "# %s",
+      },
+    },
+  },
   -- { "folke/snacks.nvim" },
   {
     "stevearc/dressing.nvim",
@@ -159,7 +167,41 @@ local plugins = F.concat({
   { "kylechui/nvim-surround", config = true },
   { "nvim-lua/plenary.nvim", lazy = true },
   { "MunifTanjim/nui.nvim", lazy = true },
-  { "stevearc/conform.nvim", config = l("conform") },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = config.formatters.filetype,
+      formatters = config.formatters.formatters,
+    },
+    keys = {
+      {
+        "<space>f",
+        function()
+          require("conform").format({
+            async = true,
+            lsp_fallback = true,
+            filter = function(client)
+              return vim.tbl_contains(config.formatters.clients, client.name)
+            end,
+          })
+        end,
+        mode = { "n", "x" },
+        silent = true,
+        desc = "format buffer",
+      },
+      {
+        "<space>.",
+        function()
+          require("conform").format({
+            formatters = { "trim_whitespace", "trim_newlines" },
+            async = true,
+          })
+        end,
+        mode = { "n", "x" },
+        desc = "trim whitespace and last empty lines",
+      },
+    },
+  },
   -- { "dmtrKovalenko/fff.nvim" },
   {
     "nvim-telescope/telescope.nvim",
@@ -217,7 +259,7 @@ local plugins = F.concat({
       auto_resize_height = false,
       func_map = {
         openc = "<CR>",
-        vsplit = "s",
+        vsplit = "<C-s>",
         prevhist = "<",
         nexthist = ">",
         open = "",
@@ -252,7 +294,16 @@ local plugins = F.concat({
     },
     ft = "qf",
   },
-  { "stevearc/quicker.nvim", ft = "qf", opts = {} },
+  {
+    "stevearc/quicker.nvim",
+    ft = "qf",
+    opts = {
+      highlight = {
+        treesitter = false,
+        lsp = false,
+      },
+    },
+  },
   {
     "jake-stewart/multicursor.nvim",
     config = function()
@@ -550,10 +601,91 @@ _<C-c>_ : exit
         })
       end,
       keys = {
-        { "<C-a>", "<Plug>(dial-increment)", mode = { "n", "x" }, desc = "increment next" },
-        { "<C-x>", "<Plug>(dial-decrement)", mode = { "n", "x" }, desc = "decrement next" },
-        { "g<C-a>", "<Plug>(dial-increment-additional)", mode = "x", desc = "increment additional" },
-        { "g<C-x>", "<Plug>(dial-decrement-additional)", mode = "x", desc = "decrement additional" },
+        {
+          "<C-a>",
+          function()
+            require("dial.map").manipulate("increment", "normal")
+          end,
+          mode = "n",
+          desc = "increment normal",
+        },
+        {
+          "<C-x>",
+          function()
+            require("dial.map").manipulate("decrement", "normal")
+          end,
+          mode = "n",
+          desc = "decrement normal",
+        },
+        {
+          "g<C-a>",
+          function()
+            require("dial.map").manipulate("increment", "gnormal")
+          end,
+          mode = "n",
+          desc = "increment gnormal",
+        },
+        {
+          "g<C-x>",
+          function()
+            require("dial.map").manipulate("decrement", "gnormal")
+          end,
+          mode = "n",
+          desc = "decrement gnormal",
+        },
+        {
+          "<C-a>",
+          function()
+            require("dial.map").manipulate("increment", "visual")
+          end,
+          mode = "x",
+          desc = "increment visual",
+        },
+        {
+          "<C-x>",
+          function()
+            require("dial.map").manipulate("decrement", "visual")
+          end,
+          mode = "x",
+          desc = "decrement visual",
+        },
+        {
+          "g<C-a>",
+          function()
+            require("dial.map").manipulate("increment", "gvisual")
+          end,
+          mode = "x",
+          desc = "increment gvisual",
+        },
+        {
+          "g<C-x>",
+          function()
+            require("dial.map").manipulate("decrement", "gvisual")
+          end,
+          mode = "x",
+          desc = "decrement gvisual",
+        },
+      },
+    },
+    {
+      "altermo/ultimate-autopair.nvim",
+      event = { "InsertEnter", "CmdlineEnter" },
+      opts = {
+        tabout = { enable = true },
+        cmap = false,
+        config_internal_pairs = {
+          {
+            "'",
+            "'",
+            multiline = false,
+            surround = true,
+            nft = { "xdata", "xdatal" },
+            cond = function(fn)
+              return not fn.in_node({ "bounded_type", "type_parameters" })
+            end,
+          },
+          { "`", "`", nft = { "python", "jon", "cjon" } },
+        },
       },
     },
     {
