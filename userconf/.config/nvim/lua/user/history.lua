@@ -181,95 +181,16 @@ function History:topn(num)
   return F.slice(self.entries, #self.entries - num)
 end
 
-function History:to_telescope()
+function History:prepare_entries_for_picker()
   local results = {}
   for index, entry in ipairs(self.entries) do
     index = #self.entries - index + 1
     entry = F.copy(entry)
     entry.index = index
+    entry.text = table.concat(entry.contents, "\n")
     results[index] = entry
   end
   return results
-end
-
-local function previewer()
-  return require("telescope.previewers").new_buffer_previewer({
-    define_preview = function(self, entry)
-      vim.bo[self.state.bufnr].filetype = "nofile"
-      vim.lsp.util.stylize_markdown(self.state.bufnr, entry.value:markdown())
-    end,
-  })
-end
-
-function History:make_telescope_extension()
-  local pickers = require("telescope.pickers")
-  local finders = require("telescope.finders")
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
-  local entry_display = require("telescope.pickers.entry_display")
-  local conf = require("telescope.config").values
-
-  local history = self
-
-  local function attach_mappings(_, map)
-    local function accept(bufnr)
-      actions.close(bufnr)
-      history:select(action_state.get_selected_entry().index)
-    end
-    map("i", "<CR>", accept)
-    map("n", "<CR>", accept)
-    return true
-  end
-
-  local function gen_from_history(opts)
-    local displayer = entry_display.create({
-      separator = " ",
-      items = {
-        { width = #tostring(opts.history_length) },
-        { remaining = true },
-      },
-    })
-
-    local make_display = function(entry)
-      return displayer({
-        { entry.value.index, "TelescopeResultsNumber" },
-        entry.content,
-      })
-    end
-
-    return function(entry)
-      local text = U.remove_leading_space(entry:text())
-      return {
-        value = entry,
-        ordinal = text,
-        content = text,
-        display = make_display,
-      }
-    end
-  end
-
-  local function entry_point(opts)
-    opts = opts or {}
-    local results = history:to_telescope()
-    opts.history_length = #results
-    pickers
-      .new(opts, {
-        prompt_title = self.name .. " history",
-        finder = finders.new_table({
-          results = results,
-          entry_maker = gen_from_history(opts),
-        }),
-        attach_mappings = attach_mappings,
-        previewer = previewer(),
-        sorter = conf.generic_sorter(opts),
-      })
-      :find()
-  end
-  return require("telescope").register_extension({
-    exports = {
-      [self.name:lower() .. "_history"] = entry_point,
-    },
-  })
 end
 
 function History:make_completion_source()
@@ -301,6 +222,37 @@ function History:make_completion_source()
   end
 
   return Source
+end
+
+function History:pick()
+  local items = self:prepare_entries_for_picker()
+  local snacks = F.load("snacks")
+  if snacks ~= nil then
+    snacks.picker.pick({
+      items = items,
+      format = function(item, picker)
+        return { { tostring(item.index), "SnacksPickerIdx" }, { " " }, { item.text } }
+      end,
+      preview = function(opts)
+        opts.picker.preview:set_lines(opts.item.contents)
+        opts.picker.preview:highlight({ ft = opts.item.filetype })
+      end,
+      confirm = function(picker, item)
+        picker:close()
+        self:select(item.index)
+      end,
+    })
+  else
+    vim.ui.select(items, {
+      format_item = function(item)
+        return item.text
+      end,
+    }, function(item)
+      if item ~= nil then
+        self:select(item.index)
+      end
+    end)
+  end
 end
 
 return History

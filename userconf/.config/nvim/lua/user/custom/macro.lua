@@ -134,14 +134,18 @@ vim.keymap.set("n", "Ü", function()
   history:cycle(-1)
 end, { desc = "select previous macro from history" })
 
+vim.keymap.set({ "n", "x" }, "<leader>,gm", function()
+  history:pick()
+end, { desc = "search macro history" })
+
 vim.iter(macro_regs):each(function(reg)
   vim.fn.setreg(reg, "")
 end)
 
 vim.keymap.set({ "n", "x" }, toggle_key, toggle_recording, { desc = "toggle macro recording" })
 vim.keymap.set({ "n", "x" }, "<C-q>", play_recording, { desc = "replay last macro" })
-vim.keymap.set({ "n", "x" }, "<space>rf", next_macro, { desc = "select next macro" })
-vim.keymap.set({ "n", "x" }, "<space>rb", prev_macro, { desc = "select previous macro" })
-vim.keymap.set("n", "<space>re", edit_macro, { desc = "edit last macro" })
+vim.keymap.set({ "n", "x" }, "<leader>rf", next_macro, { desc = "select next macro" })
+vim.keymap.set({ "n", "x" }, "<leader>rb", prev_macro, { desc = "select previous macro" })
+vim.keymap.set("n", "<leader>re", edit_macro, { desc = "edit last macro" })
 
 return { history = history }

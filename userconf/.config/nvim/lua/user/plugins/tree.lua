@@ -1,5 +1,6 @@
 local nvim_tree = require("nvim-tree")
 
+local F = require("user.functional")
 local U = require("user.utils")
 local config = require("user.config")
 
@@ -89,10 +90,25 @@ nvim_tree.setup({
   },
 })
 
-vim.keymap.set("n", "<space>of", function()
+vim.keymap.set("n", "<leader>of", function()
   local last_buffer = U.list_buffers({ mru = true })[1]
   api.tree.open()
   if last_buffer then
     api.tree.find_file({ buf = last_buffer, update_root = true })
   end
 end, { desc = "find file" })
+
+F.load("snacks", function(snacks)
+  local prev = { new_name = "", old_name = "" }
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "NvimTreeSetup",
+    callback = function()
+      api.events.subscribe(api.events.Event.NodeRenamed, function(data)
+        if prev.new_name ~= data.new_name or prev.old_name ~= data.old_name then
+          data = data
+          snacks.rename.on_rename_file(data.old_name, data.new_name)
+        end
+      end)
+    end,
+  })
+end)

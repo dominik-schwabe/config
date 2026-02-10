@@ -51,11 +51,17 @@ local function start_terminal(ft, meta)
   CB.create_window()
   local bufnr = api.nvim_create_buf(S.listed, false)
   api.nvim_win_set_buf(0, bufnr)
-  local jobnr = fn.jobstart(meta.command, { detach = 0, term = true })
+  local repl = { ft = ft, bufnr = bufnr, meta = meta }
+  local on_stdout = nil
+  if S.on_stdout ~= nil then
+    on_stdout = function()
+      S.on_stdout(repl)
+    end
+  end
+  repl.jobnr = fn.jobstart(meta.command, { detach = 0, term = true, on_stdout = on_stdout })
   vim.schedule(function()
     pcall(vim.api.nvim_set_current_win, previous_window)
   end)
-  local repl = { ft = ft, jobnr = jobnr, bufnr = bufnr, meta = meta }
   api.nvim_buf_set_name(bufnr, S.term_name .. "_" .. ft)
   api.nvim_buf_set_var(bufnr, "repl", repl)
   return repl
@@ -81,6 +87,9 @@ local function create_repl(ft)
     repl = start_terminal(ft, meta)
   end
   M.running_repls[ft] = repl
+  if S.after_open ~= nil then
+    S.after_open(repl)
+  end
   return repl
 end
 

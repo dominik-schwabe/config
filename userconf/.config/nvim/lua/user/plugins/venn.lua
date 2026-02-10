@@ -36,7 +36,7 @@ F.load("hydra", function(Hydra)
       end,
     },
     mode = { "n", "x" },
-    body = "<space>v",
+    body = "<leader>v",
     heads = {
       { "H", "<C-v>h:VBox<CR>" },
       { "J", "<C-v>j:VBox<CR>" },

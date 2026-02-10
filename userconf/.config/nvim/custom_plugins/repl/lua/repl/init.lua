@@ -9,6 +9,8 @@ function M.setup(config)
   S.listed = vim.F.if_nil(config.listed, false)
   S.debug = vim.F.if_nil(config.debug, false)
   S.ensure_win = vim.F.if_nil(config.ensure_win, true)
+  S.after_open = config.after_open
+  S.on_stdout = config.on_stdout
 
   require("repl.store").set_callbacks(config.callbacks)
 end

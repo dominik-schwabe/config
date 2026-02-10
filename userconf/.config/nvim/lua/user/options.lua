@@ -59,6 +59,8 @@ g.loaded_perl_provider = 0
 
 g.python3_host_prog = "/usr/bin/python3"
 
+g.mapleader = " "
+
 if vim.fn.executable("mise") ~= 0 then
   local PYTHON_PATH = vim.fn.trim(vim.fn.system("mise which -C / python"))
   if vim.v.shell_error == 0 and vim.fn.executable(PYTHON_PATH) ~= 0 then

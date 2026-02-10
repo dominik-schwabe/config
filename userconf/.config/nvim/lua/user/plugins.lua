@@ -6,13 +6,15 @@ local function desc(opts, description)
   return F.extend(opts, { desc = description })
 end
 
+local noop = function() end
+
 local function bind_select_action(entries, opts)
   opts = opts or {}
   local buffer = opts.buffer
   local on_select = opts.on_select
   local format_item = opts.format_item
   local map_opts = { noremap = true, silent = true, buffer = buffer }
-  vim.keymap.set({ "n", "x" }, "<space>ch", function()
+  vim.keymap.set({ "n", "x" }, "<leader>ch", function()
     vim.ui.select(entries, {
       prompt = "actions:",
       format_item = format_item,
@@ -57,22 +59,6 @@ local disabled_plugins = {
   "zipPlugin",
 }
 
-local illuminate_denylist = {
-  "",
-  "NvimTree",
-  "Trouble",
-  "fugitiveblame",
-  "help",
-  "json",
-  "lsputil_codeaction_list",
-  "markdown",
-  "packer",
-  "qf",
-  "vista",
-  "yaml",
-  "TelescopePrompt",
-}
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -99,29 +85,17 @@ local function l(plugin_name)
   end
 end
 
-vim.g.VM_maps = {
-  ["Select Cursor Down"] = "L",
-  ["Select Cursor Up"] = "K",
-}
+local function pick(name, opts)
+  return function()
+    require("snacks").picker.pick(name, opts)
+  end
+end
 
 local plugins = F.concat({
   { "folke/lazy.nvim" },
   { "neovim/nvim-lspconfig", config = l("lspconfig") },
   { "mason-org/mason.nvim", opts = { ui = { border = config.border } } },
   { "mason-org/mason-lspconfig.nvim" },
-  {
-    "nvim-tree/nvim-tree.lua",
-    config = l("tree"),
-    lazy = false,
-    keys = {
-      { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
-      { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
-    },
-  },
-  { "nvim-tree/nvim-web-devicons" },
-  { "saghen/blink.cmp", version = "1.*", config = l("blink") },
-  { "mgalliou/blink-cmp-tmux" },
-  { "rafamadriz/friendly-snippets" },
   {
     "nvim-mini/mini.nvim",
     config = function()
@@ -135,8 +109,23 @@ local plugins = F.concat({
         },
       })
       require("mini.icons").setup()
+      require("mini.icons").mock_nvim_web_devicons()
     end,
   },
+  {
+    "nvim-tree/nvim-tree.lua",
+    config = l("tree"),
+    lazy = false,
+    dependencies = { "nvim-mini/mini.nvim" },
+    keys = {
+      { "<F1>", "<ESC>:NvimTreeToggle<CR>", mode = { "n", "x", "i" } },
+      { "<F1>", "<CMD>NvimTreeToggle<CR>", mode = { "t" } },
+    },
+  },
+  -- { "nvim-tree/nvim-web-devicons" },
+  { "saghen/blink.cmp", version = "1.*", config = l("blink") },
+  { "mgalliou/blink-cmp-tmux" },
+  { "rafamadriz/friendly-snippets" },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
     opts = {
@@ -145,28 +134,120 @@ local plugins = F.concat({
       },
     },
   },
-  -- { "folke/snacks.nvim" },
   {
-    "stevearc/dressing.nvim",
-    event = "VeryLazy",
+    "folke/snacks.nvim",
     opts = {
-      input = {
-        insert_only = false,
-        win_options = {
-          winblend = 0,
-          winhighlight = "",
+      words = { debounce = 100 },
+      notifier = {},
+      picker = {
+        limit_live = 500,
+        previewers = {
+          file = { max_size = 256 * 1024 },
         },
-        override = function(conf)
-          conf.col = -1
-          conf.row = 0
-          return conf
-        end,
+        win = {
+          input = {
+            keys = {
+              ["<F1>"] = { noop, mode = { "n", "i" } },
+              ["<F3>"] = { noop, mode = { "n", "i" } },
+              ["<F24>"] = { "toggle_maximize", mode = { "i", "n" } },
+              ["<Esc>"] = { "close", mode = { "n", "i" } },
+              ["<c-c>"] = { "stopinsert" },
+              ["<c-o>"] = { "focus_input", mode = { "n", "i" } },
+              ["<c-p>"] = { "focus_preview", mode = { "n", "i" } },
+              ["<c-l>"] = { "focus_list", mode = { "n", "i" } },
+              ["<F7>"] = { "toggle_preview", mode = { "i", "n" } },
+              ["<F8>"] = { "toggle_follow", mode = { "i", "n" } },
+              ["<F9>"] = { "toggle_ignored", mode = { "i", "n" } },
+              ["<F10>"] = { "toggle_hidden", mode = { "i", "n" } },
+              ["<F11>"] = { "toggle_live", mode = { "i", "n" } },
+              ["<F12>"] = { "toggle_regex", mode = { "i", "n" } },
+            },
+          },
+          list = {
+            keys = {
+              ["<c-o>"] = "focus_input",
+              ["<c-p>"] = "focus_preview",
+              ["<c-l>"] = "focus_list",
+              ["<Esc>"] = "close",
+            },
+          },
+          preview = {
+            keys = {
+              ["<Esc>"] = "close",
+              ["<c-o>"] = "focus_input",
+              ["<c-p>"] = "focus_preview",
+              ["<c-l>"] = "focus_list",
+              ["<c-j>"] = "list_down",
+              ["<c-k>"] = "list_up",
+              ["<CR>"] = "confirm",
+            },
+          },
+        },
       },
+      input = {
+        icon = "",
+        win = {
+          relative = "cursor",
+          row = -3,
+          col = -1,
+          width = 28,
+        },
+      },
+    },
+    keys = {
+      {
+        "<leader>,,",
+        function()
+          require("snacks").picker.resume()
+        end,
+        desc = "Resume",
+      },
+      { "<C-p>", pick("files"), desc = "Find Files" },
+      { "z=", pick("spelling"), desc = "Spell Suggest" },
+      { "_", pick("grep"), desc = "Grep" },
+      { "<leader>-", pick("grep_word"), desc = "Visual selection or word", mode = { "n", "x" } },
+      { "<leader>/", pick("lines"), desc = "Buffer Lines" },
+      -- find
+      { "<leader>,fb", pick("buffers"), desc = "Buffers" },
+      { "<leader>,fc", pick("files", { cwd = vim.fn.stdpath("config") }), desc = "Find Config File" },
+      { "<leader>,fg", pick("git_files"), desc = "Find Git Files" },
+      { "<leader>,fp", pick("projects"), desc = "Projects" },
+      { "<leader>,fr", pick("recent"), desc = "Recent" },
+      -- git
+      { "<leader>,gb", pick("git_branches"), desc = "Git Branches" },
+      { "<leader>,gl", pick("git_log"), desc = "Git Log" },
+      { "<leader>,gL", pick("git_log_line"), desc = "Git Log Line" },
+      { "<leader>,gs", pick("git_status"), desc = "Git Status" },
+      { "<leader>,gS", pick("git_stash"), desc = "Git Stash" },
+      { "<leader>,gD", pick("git_diff"), desc = "Git Diff (Hunks)" },
+      { "<leader>,gf", pick("git_log_file"), desc = "Git Log File" },
+      -- gh
+      { "<leader>,gi", pick("gh_issue"), desc = "GitHub Issues (open)" },
+      { "<leader>,gI", pick("gh_issue", { state = "all" }), desc = "GitHub Issues (all)" },
+      { "<leader>,gp", pick("gh_pr"), desc = "GitHub Pull Requests (open)" },
+      { "<leader>,gP", pick("gh_pr", { state = "all" }), desc = "GitHub Pull Requests (all)" },
+      -- search
+      { '<leader>,"', pick("registers"), desc = "Registers" },
+      { "<leader>,/", pick("search_history"), desc = "Search History" },
+      { "<leader>,a", pick("autocmds"), desc = "Autocmds" },
+      { "<leader>,c", pick("command_history"), desc = "Command History" },
+      { "<leader>,C", pick("commands"), desc = "Commands" },
+      { "<leader>oD", pick("diagnostics_buffer"), desc = "Buffer Diagnostics" },
+      { "<leader>oW", pick("diagnostics"), desc = "Diagnostics" },
+      { "<leader>,i", pick("icons"), desc = "Icons" },
+      { "<leader>,j", pick("jumps"), desc = "Jumps" },
+      { "<leader>,q", pick("qflist"), desc = "Quickfix List" },
+      { "<leader>,l", pick("loclist"), desc = "Location List" },
+      { "<leader>,m", pick("marks"), desc = "Marks" },
+      { "<leader>,M", pick("man"), desc = "Man Pages" },
+      { "<leader>,h", pick("help"), desc = "Help Pages" },
+      { "<leader>,H", pick("highlights"), desc = "Highlights" },
+      { "<leader>,k", pick("keymaps"), desc = "Keymaps" },
+      { "<leader>,:", pick("command_history"), desc = "Command History" },
+      { "<leader>,n", pick("notifications"), desc = "Notification History" },
     },
   },
   { "kylechui/nvim-surround", config = true },
-  { "nvim-lua/plenary.nvim", lazy = true },
-  { "MunifTanjim/nui.nvim", lazy = true },
   {
     "stevearc/conform.nvim",
     opts = {
@@ -175,7 +256,7 @@ local plugins = F.concat({
     },
     keys = {
       {
-        "<space>f",
+        "<leader>f",
         function()
           require("conform").format({
             async = true,
@@ -190,7 +271,7 @@ local plugins = F.concat({
         desc = "format buffer",
       },
       {
-        "<space>.",
+        "<leader>.",
         function()
           require("conform").format({
             formatters = { "trim_whitespace", "trim_newlines" },
@@ -200,57 +281,6 @@ local plugins = F.concat({
         mode = { "n", "x" },
         desc = "trim whitespace and last empty lines",
       },
-    },
-  },
-  -- { "dmtrKovalenko/fff.nvim" },
-  {
-    "nvim-telescope/telescope.nvim",
-    config = l("telescope"),
-    cmd = "Telescope",
-    keys = {
-      {
-        "<C-p>",
-        function()
-          require("telescope.builtin").find_files({ no_ignore = require("user.utils").is_git_ignored(vim.fn.getcwd()) })
-        end,
-        mode = { "n", "x", "i" },
-        desc = "find files",
-      },
-      {
-        "_",
-        function()
-          local args = {}
-          if require("user.utils").is_git_ignored(vim.fn.getcwd()) then
-            args[#args + 1] = "--no-ignore"
-          end
-          require("telescope.builtin").live_grep({ additional_args = args })
-        end,
-        mode = { "n", "x" },
-        desc = "live grep",
-      },
-      { "z=", "<CMD>Telescope spell_suggest<CR><ESC>", desc = "spell suggest" },
-      {
-        "<space>/",
-        "<CMD>Telescope current_buffer_fuzzy_find<CR>",
-        mode = { "n", "x" },
-        desc = "fuzzy find in current buffer",
-      },
-      {
-        "<space>/",
-        "<CMD>Telescope current_buffer_fuzzy_find<CR>",
-        mode = { "n", "x" },
-        desc = "fuzzy find in current buffer",
-      },
-      { "<F2>", "<CMD>Telescope custom_buffers<CR>", mode = { "n", "x", "t", "i" }, desc = "toggle buffer explorer" },
-      { "<space>,,", "<CMD>Telescope resume<CR>", mode = { "n", "x" }, desc = "resume last search" },
-      { "<space>,h", "<CMD>Telescope help_tags<CR>", mode = { "n", "x" }, desc = "search help tags" },
-      { "<space>,c", "<CMD>Telescope highlights<CR>", mode = { "n", "x" }, desc = "search highlights" },
-      { "<space>,k", "<CMD>Telescope keymaps<CR>", mode = { "n", "x" }, desc = "search keymaps" },
-      { "<space>,j", "<CMD>Telescope jumplist<CR>", mode = { "n", "x" }, desc = "search jumplist" },
-      { "<space>,y", "<CMD>Telescope yank_history<CR>", mode = { "n", "x" }, desc = "search yank history" },
-      { "<space>,m", "<CMD>Telescope macro_history<CR>", mode = { "n", "x" }, desc = "search macro history" },
-      { "<space>,d", "<CMD>Telescope diffsplit<CR>", mode = { "n", "x" }, desc = "search diffsplit commits" },
-      { "<space>,s", "<CMD>Telescope git_status<CR>", mode = { "n", "x" }, desc = "search changed files" },
     },
   },
   {
@@ -318,13 +348,13 @@ local plugins = F.concat({
       local transpose_cursor = F.f(mc.transposeCursors)
 
       set({ "n", "v" }, "<C-N>", match_add_cursor(1))
-      set({ "n", "v" }, "<space>n", match_skip_cursor(-1))
-      set({ "n", "v" }, "<space>N", match_skip_cursor(1))
+      set({ "n", "v" }, "<leader>n", match_skip_cursor(-1))
+      set({ "n", "v" }, "<leader>N", match_skip_cursor(1))
 
-      set({ "n", "v" }, "<space>ma", mc.matchAllAddCursors)
+      set({ "n", "v" }, "<leader>ma", mc.matchAllAddCursors)
 
-      set({ "n", "v" }, "<space>j", mc.nextCursor)
-      set({ "n", "v" }, "<space>k", mc.prevCursor)
+      set({ "n", "v" }, "<leader>j", mc.nextCursor)
+      set({ "n", "v" }, "<leader>k", mc.prevCursor)
 
       set({ "n", "v" }, "<leader>x", mc.deleteCursor)
 
@@ -355,18 +385,18 @@ local plugins = F.concat({
         end
       end)
 
-      set("n", "<space>mm", mc.restoreCursors)
+      set("n", "<leader>mm", mc.restoreCursors)
 
-      set("n", "<space>ma", mc.alignCursors)
+      set("n", "<leader>ma", mc.alignCursors)
 
-      set("v", "<space>mr", mc.splitCursors)
+      set("v", "<leader>mr", mc.splitCursors)
 
       set("v", "I", mc.insertVisual)
       set("v", "A", mc.appendVisual)
 
       set("v", "M", mc.matchCursors)
 
-      set("v", "<space>mt", transpose_cursor(1))
+      set("v", "<leader>mt", transpose_cursor(1))
       set("v", "<leader>T", transpose_cursor(-1))
 
       set({ "v", "n" }, "<c-i>", mc.jumpForward)
@@ -387,7 +417,7 @@ local plugins = F.concat({
           }
         end,
       })
-      vim.keymap.set("n", "<space>,w", function()
+      vim.keymap.set("n", "<leader>,r", function()
         rooter.pick_root({
           callback = function(root)
             F.load("nvim-tree.api", function(tree_api)
@@ -406,6 +436,30 @@ local plugins = F.concat({
         listed = false,
         debug = false,
         ensure_win = true,
+        after_open = function(repl)
+          F.load("colorizer", function(colorizer)
+            colorizer.attach_to_buffer(repl.bufnr)
+          end)
+        end,
+        on_stdout = function(repl)
+          F.load("colorizer", function(colorizer)
+            if colorizer.is_buffer_attached(repl.bufnr) then
+              local debounce_timer = repl.colorizer_debounce
+              if debounce_timer == nil then
+                debounce_timer = vim.loop.new_timer()
+                repl.colorizer_debounce = debounce_timer
+              end
+              debounce_timer:stop()
+              debounce_timer:start(
+                50,
+                0,
+                vim.schedule_wrap(function()
+                  colorizer.rehighlight(repl.bufnr, require("colorizer.config").options.user_default_options)
+                end)
+              )
+            end
+          end)
+        end,
       })
 
       local send = require("repl.send")
@@ -426,7 +480,7 @@ local plugins = F.concat({
             vim.keymap.set("n", "<CR>", F.f(send.line_next)(), desc(map_opt, "send line and go next"))
             vim.keymap.set("x", "<CR>", F.f(send.visual)(), desc(map_opt, "send visual"))
             vim.keymap.set("n", "=", F.f(send.line)(), desc(map_opt, "send line and stay"))
-            vim.keymap.set("n", "<leader><space>", F.f(send.buffer)(), desc(map_opt, "send buffer"))
+            vim.keymap.set("n", "<leader><leader>", F.f(send.buffer)(), desc(map_opt, "send buffer"))
             vim.keymap.set("n", "<leader>m", F.f(send.motion)(), desc(map_opt, "send motion"))
             vim.keymap.set("n", "<leader>M", F.f(send.newline)(), desc(map_opt, "send newline"))
             vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl)(), desc(map_opt, "toggle repl"))
@@ -450,17 +504,7 @@ local plugins = F.concat({
 if not config.minimal then
   plugins = F.concat(plugins, {
     { "b0o/schemastore.nvim" },
-    {
-      "RRethy/vim-illuminate",
-      config = function()
-        require("illuminate").configure({
-          providers = { "lsp" },
-          filetypes_denylist = illuminate_denylist,
-          modes_allowlist = { "n" },
-        })
-      end,
-    },
-    { "pmizio/typescript-tools.nvim", opts = {} },
+    { "pmizio/typescript-tools.nvim", opts = {}, dependencies = { "nvim-lua/plenary.nvim" } },
     {
       "mrcjkb/rustaceanvim",
       ft = { "rust" },
@@ -541,7 +585,7 @@ _<C-c>_ : exit
           },
           name = "textcase",
           mode = { "n", "x" },
-          body = "<space>cc",
+          body = "<leader>cc",
           heads = {
             { "<F5>", F.f(textcase.current_word)("to_snake_case"), { silent = true, nowait = true } },
             { "<F6>", F.f(textcase.current_word)("to_constant_case"), { silent = true, nowait = true } },
@@ -555,7 +599,7 @@ _<C-c>_ : exit
           },
         })
       end,
-      keys = { "<space>cc" },
+      keys = { "<leader>cc" },
     },
     { "nvim-lualine/lualine.nvim", config = l("lualine") },
     {
@@ -691,13 +735,16 @@ _<C-c>_ : exit
     {
       "catgoose/nvim-colorizer.lua",
       opts = {
-        filetypes = { "*", "!cmp_menu" },
         user_default_options = {
           names = false,
           rgb_fn = true,
           hsl_fn = true,
           tailwind = true,
         },
+      },
+      lazy = false,
+      keys = {
+        { "<leader>tc", "<CMD>ColorizerToggle<CR>", desc = "toggle colorizer" },
       },
     },
     {
@@ -820,12 +867,7 @@ _<C-c>_ : exit
           },
         },
       },
-      keys = { { "<space>ot", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
-    },
-    {
-      "ziontee113/icon-picker.nvim",
-      config = true,
-      keys = { { "<space>,i", "<CMD>IconPickerYank emoji nerd_font_v3<CR>", desc = "open icon picker" } },
+      keys = { { "<leader>ot", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
     },
     {
       "folke/flash.nvim",
@@ -876,39 +918,18 @@ _<C-c>_ : exit
     },
     { "nmac427/guess-indent.nvim", opts = {} },
     { "nvimtools/hydra.nvim", lazy = true },
-    -- { "obsidian-nvim/obsidian.nvim" },
     {
-      "renerocksai/telekasten.nvim",
-      config = function()
-        require("telekasten").setup({
-          home = vim.fn.expand("~/zettelkasten"),
-          image_subdir = "img",
-          dailies = "daily",
-          weeklies = "weekly",
-          image_link_style = "wiki",
-          subdirs_in_links = true,
-          clipboard_program = "xclip",
-          auto_set_filetype = false,
-        })
-        vim
-          .iter({
-            { "<space>zz", "<cmd>Telekasten panel<CR>", "zettelkasten panel" },
-            { "<space>zp", "<cmd>Telekasten find_notes<CR>", "zettelkasten find notes" },
-            { "<space>z-", "<cmd>Telekasten find_friends<CR>", "zettelkasten find link" },
-            { "<space>z_", "<cmd>Telekasten search_notes<CR>", "zettelkasten search notes" },
-            { "<space>zr", "<cmd>Telekasten rename_note<CR>", "zettelkasten rename note" },
-            { "<space>zd", "<cmd>Telekasten goto_today<CR>", "zettelkasten goto today" },
-            { "<space>za", "<cmd>Telekasten new_note<CR>", "zettelkasten new note" },
-            { "<space>zb", "<cmd>Telekasten show_backlinks<CR>", "zettelkasten show backlinks" },
-            { "<space>zt", "<cmd>Telekasten show_tags<CR>", "zettelkasten show tags" },
-            { "<space>zii", "<cmd>Telekasten insert_img_link<CR>", "zettelkasten insert image link" },
-            { "<space>zip", "<cmd>Telekasten paste_img_and_link<CR>", "zettelkasten paste image" },
-          })
-          :each(function(mapping)
-            local keymap, command, description = unpack(mapping)
-            vim.keymap.set("n", keymap, command, { desc = description })
-          end)
-      end,
+      "obsidian-nvim/obsidian.nvim",
+      opts = {
+        legacy_commands = false,
+        ui = { enable = false },
+        workspaces = {
+          {
+            name = "personal",
+            path = "~/zettelkasten",
+          },
+        },
+      },
     },
     {
       "toppair/peek.nvim",
@@ -929,16 +950,15 @@ _<C-c>_ : exit
             peek.open()
           end
         end
-        vim.keymap.set("n", "<space>tm", toggle_markdown, { desc = "toggle markdown preview" })
+        vim.keymap.set("n", "<leader>tm", toggle_markdown, { desc = "toggle markdown preview" })
       end,
     },
     {
       "FabijanZulj/blame.nvim",
       opts = {},
-      keys = { { "<space>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
+      keys = { { "<leader>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
     },
-    { "jbyuki/venn.nvim", config = l("venn"), keys = { "<space>v" } },
-    { "lark-parser/vim-lark-syntax" },
+    { "jbyuki/venn.nvim", config = l("venn"), keys = { "<leader>v" } },
   })
 end
 
@@ -949,4 +969,4 @@ require("lazy").setup(plugins, {
   performance = { cache = { enabled = true }, rtp = { disabled_plugins = disabled_plugins } },
 })
 
-vim.keymap.set("n", "<space>ol", "<ESC>:Lazy<CR>", { desc = "install, clean, and update plugins" })
+vim.keymap.set("n", "<leader>ol", "<ESC>:Lazy<CR>", { desc = "install, clean, and update plugins" })

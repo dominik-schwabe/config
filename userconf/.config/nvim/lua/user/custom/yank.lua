@@ -74,6 +74,10 @@ vim.keymap.set("n", "Ä", function()
   history:cycle(-1)
 end, { desc = "select previous yank from history" })
 
+vim.keymap.set({ "n", "x" }, "<leader>,gy", function()
+  history:pick()
+end, { desc = "search yank history" })
+
 local function bind_paste_func(key)
   vim.keymap.set("n", key, function()
     history:add_register()

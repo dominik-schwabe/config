@@ -17,7 +17,7 @@ local function set_jumplist()
   U.quickfix(filtered_jumplist, "Jumplist")
 end
 
-vim.keymap.set({ "n", "x" }, "<space>oj", set_jumplist, { desc = "open the quickfix with the jumplist" })
+vim.keymap.set({ "n", "x" }, "<leader>oj", set_jumplist, { desc = "open the quickfix with the jumplist" })
 
 local function jump(direction, opt)
   opt = opt or {}

@@ -22,6 +22,7 @@ local C = {
   grey = "#8F908A",
   pink = "#f92672",
   teal = "#00d1d1",
+  auzre = "#007fff",
   amaranth = "#ff0077",
   alt_green = "#aadb00",
   green = "#83e516",
@@ -509,12 +510,12 @@ HL.nvim_tree = {
   NvimTreeImageFile = { fg = C.purple },
 }
 
-HL.telescope = {
-  TelescopeNormal = { fg = C.base11, bg = C.base1 },
-  TelescopeSelection = { bg = C.base5 },
-  TelescopeSelectionCaret = { fg = C.green },
-  TelescopeMultiSelection = { fg = C.pink },
-  TelescopeMatching = { fg = C.pink, bold = true },
+HL.snacks = {
+  SnacksPickerDir = { fg = C.base9 },
+  SnacksPickerMatch = { fg = C.pink, bold = true },
+  SnacksPickerListCursorLine = { link = "CursorLine" },
+  SnacksPickerPreviewCursorLine = { link = "CursorLine" },
+  SnacksPickerFile = { fg = C.white },
 }
 
 HL.lsp = {
@@ -577,6 +578,18 @@ HL.blink = {
   BlinkCmpKindFeature = { fg = S.field },
 }
 
+HL.mini = {
+  MiniIconsGrey = { fg = C.grey },
+  MiniIconsGreen = { fg = C.green },
+  MiniIconsBlue = { fg = C.fn },
+  MiniIconsCyan = { fg = C.aqua },
+  MiniIconsRed = { fg = C.loop },
+  MiniIconsOrange = { fg = C.orange },
+  MiniIconsYellow = { fg = C.gold },
+  MiniIconsAzure = { fg = C.auzre },
+  MiniIconsPurple = { fg = C.purple },
+}
+
 HL.other = {
   SnippetTabstop = { bg = "#004400" },
   CursorWord0 = { bg = C.white, fg = C.black },
@@ -595,9 +608,6 @@ HL.other = {
   TermBackground = { bg = C.base0 },
   EyelinerPrimary = { bg = C.base6, fg = "none" },
   EyelinerSecondary = { bg = "none", fg = "none" },
-  IlluminatedWordText = { link = "CursorLine" },
-  IlluminatedWordRead = { link = "CursorLine" },
-  IlluminatedWordWrite = { link = "CursorLine" },
   MarkSignHL = { fg = C.purple, bold = true },
   HydraRed = { fg = C.red },
   HydraBlue = { fg = C.cool_blue1 },

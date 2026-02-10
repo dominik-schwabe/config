@@ -16,9 +16,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
       F.load("illuminate.engine", function(illuminate)
         illuminate.stop_buf(opts.buf)
       end)
-      F.load("colorizer", function(colorizer)
-        colorizer.detach_from_buffer(opts.buf)
-      end)
     end
   end,
 })

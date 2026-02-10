@@ -1,7 +1,5 @@
 local F = require("user.functional")
 
-local Job = require("plenary.job")
-
 local M = {}
 
 local function get_tmux()
@@ -10,20 +8,17 @@ end
 
 local function execute(arg, opts)
   local socket = vim.split(get_tmux(), ",")[1]
-  local job = Job:new({
-    command = "tmux",
-    args = { "-S", socket, unpack(arg) },
-    enable_recordings = true,
-    writer = opts.input,
-  })
-  if opts.sync then
-    return job:sync(500)
+  local job = vim.system({ "tmux", "-S", socket, unpack(arg) }, { stdin = true, text = true, timeout = 500 })
+  if opts.input ~= nil then
+    job:write(opts.input)
   end
-  job:start(500)
+  if opts.sync then
+    return vim.trim(job:wait().stdout)
+  end
 end
 
 local function get_version()
-  local version = execute({ "-V" }, { sync = true })[1]
+  local version = execute({ "-V" }, { sync = true })
   version = version:match("%d+.%d+")
   version = version:gmatch("%d+")
   version = F.consume(version)

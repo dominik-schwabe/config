@@ -77,9 +77,8 @@ zsh
 "
 
 GRAPHIC="
+nwg-look
 ly
-dunst
-qtile
 python-dbus-fast
 python-psutil
 python-keyring
@@ -115,7 +114,6 @@ accountsservice
 wezterm
 android-file-transfer
 arandr
-arc-gtk-theme
 autorandr
 awesome
 discord
@@ -177,6 +175,7 @@ texlive
 "
 
 AURPKG="
+whitesur-gtk-theme
 birdtray
 brave-bin
 jmtpfs

@@ -1,8 +1,6 @@
 local F = require("user.functional")
 local U = require("user.utils")
 
-local Job = require("plenary.job")
-
 local M = {}
 
 local function track_buf(buf)
@@ -182,13 +180,8 @@ local function are_paths_invalid(paths, silent)
 end
 
 local function git(args)
-  local job = Job:new({
-    command = "git",
-    args = args,
-    enable_recordings = true,
-  })
-  local results = job:sync()
-  return job.code == 0 and results or nil
+  local job = vim.system({ "git", unpack(args) }, { text = true }):wait()
+  return job.code == 0 and vim.split(vim.trim(job.stdout), "\n") or nil
 end
 
 local function _get_diff_files(git_dir, commit)
@@ -217,15 +210,17 @@ end
 
 local function commits(paths)
   local entries =
-    git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h (%ar %an) %s", paths.file_path })
+    git({ "-C", paths.project_path, "--literal-pathspecs", "log", "--pretty=%h:1:%ar:2:%an:3:%s", paths.file_path })
   return vim
     .iter(entries)
     :map(function(text)
-      local commit, message = text:gmatch("(%w+) (.*)")()
+      local commit, date, author, message = text:gmatch("(.*):1:(.*):2:(.*):3:(.*)")()
       return {
         commit = commit,
+        date = date,
+        author = author,
         message = message,
-        text = text,
+        text = commit .. " " .. date .. " " .. message .. " " .. author,
       }
     end)
     :totable()
@@ -383,15 +378,44 @@ local function cycle(direction)
   vim.api.nvim_echo({ { string.format("%d/%d %s", next_index, #changed_files, next_file) } }, false, {})
 end
 
-vim.keymap.set("n", "<space>dn", function()
+local function list_diff_logs(original_win)
+  local original_buf = vim.api.nvim_win_get_buf(original_win)
+  local paths = get_paths(original_buf)
+  if are_paths_invalid(paths) then
+    return
+  end
+  local refs = git({ "-C", paths.project_path, "--literal-pathspecs", "for-each-ref", "--format=%(refname:short)" })
+  if not refs then
+    notify("could not get refs")
+    return
+  end
+  local filtered_commits = vim
+    .iter({ "HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD" })
+    :filter(function(commit)
+      return U.exists(U.path({ paths.git_dir, commit }))
+    end)
+    :totable()
+  local named = vim
+    .iter(F.concat(filtered_commits, refs))
+    :map(function(commit)
+      return {
+        commit = commit,
+        text = commit,
+      }
+    end)
+    :totable()
+  return F.concat(commits(paths), named)
+end
+
+vim.keymap.set("n", "<leader>dn", function()
   cycle(1)
 end, { desc = "diff cycle next" })
 
-vim.keymap.set("n", "<space>dp", function()
+vim.keymap.set("n", "<leader>dp", function()
   cycle(-1)
 end, { desc = "diff cycle previous" })
 
-vim.keymap.set("n", "<space>gg", function()
+vim.keymap.set("n", "<leader>gg", function()
   vim.ui.input({ default = "HEAD" }, function(commit)
     if commit ~= nil then
       diffsplit({ commit = commit })
@@ -399,108 +423,53 @@ vim.keymap.set("n", "<space>gg", function()
   end)
 end, { desc = "select commit for diffsplit" })
 
-vim.keymap.set("n", "<space>gd", function()
+vim.keymap.set("n", "<leader>gd", function()
   diffsplit({ commit = "index" })
 end, { desc = "open diffsplit on HEAD commit" })
 
-function M.make_telescope_extension()
-  local pickers = require("telescope.pickers")
-  local finders = require("telescope.finders")
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
-  local entry_display = require("telescope.pickers.entry_display")
-  local conf = require("telescope.config").values
-
-  local function gen_from_history(opts)
-    local displayer = entry_display.create({
-      separator = " ",
-      items = {
-        { width = #tostring(opts.history_length) },
-        { remaining = true },
-      },
+vim.keymap.set("n", "<leader>,gd", function()
+  local original_win = vim.api.nvim_get_current_win()
+  local items = list_diff_logs(original_win)
+  local snacks = F.load("snacks")
+  if snacks ~= nil then
+    snacks.picker.pick({
+      items = items,
+      format = function(item, picker)
+        if item.date ~= nil then
+          return {
+            { picker.opts.icons.git.commit, "SnacksPickerGitCommit" },
+            { snacks.picker.util.align(item.commit, 7, { truncate = true }), "SnacksPickerGitCommit" },
+            { " " },
+            { item.date, "SnacksPickerGitDate" },
+            { " " },
+            { item.message, "SnacksPickerGitMsg" },
+            { " " },
+            { item.author, "SnacksPickerGitAuthor" },
+          }
+        else
+          return {
+            { picker.opts.icons.git.commit, "SnacksPickerGitCommit" },
+            { item.commit, "SnacksPickerGitCommit" },
+          }
+        end
+      end,
+      layout = { preview = false },
+      confirm = function(picker, item)
+        picker:close()
+        _diffsplit(original_win, { commit = item.commit })
+      end,
     })
-
-    local make_display = function(entry)
-      return displayer({
-        { entry.value.index, "TelescopeResultsNumber" },
-        entry.value.text,
-      })
-    end
-
-    return function(entry)
-      return {
-        value = entry,
-        ordinal = entry.text,
-        content = entry.text,
-        display = make_display,
-      }
-    end
-  end
-
-  local function entry_point(opts)
-    opts = opts or {}
-    local original_win = vim.api.nvim_get_current_win()
-    local original_buf = vim.api.nvim_win_get_buf(original_win)
-    local paths = get_paths(original_buf)
-    if are_paths_invalid(paths) then
-      return
-    end
-    local refs = git({ "-C", paths.project_path, "--literal-pathspecs", "for-each-ref", "--format=%(refname:short)" })
-    if not refs then
-      notify("could not get refs")
-      return
-    end
-    local filtered_commits = vim
-      .iter({ "HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD" })
-      :filter(function(commit)
-        return U.exists(U.path({ paths.git_dir, commit }))
-      end)
-      :totable()
-    local named = vim
-      .iter(F.concat(filtered_commits, refs))
-      :map(function(commit)
-        return {
-          commit = commit,
-          message = commit,
-          text = commit,
-        }
-      end)
-      :totable()
-    local results = F.concat(commits(paths), named)
-    for index, entry in ipairs(results) do
-      entry.index = index
-    end
-    opts.history_length = #results
-
-    local function attach_mappings(_, map)
-      local function accept(bufnr)
-        actions.close(bufnr)
-        vim.schedule(function()
-          _diffsplit(original_win, { commit = action_state.get_selected_entry().value.commit })
-        end)
+  else
+    vim.ui.select(items, {
+      format_item = function(item)
+        return item.text
+      end,
+    }, function(item)
+      if item ~= nil then
+        _diffsplit(original_win, { commit = item.commit })
       end
-      map("i", "<CR>", accept)
-      map("n", "<CR>", accept)
-      return true
-    end
-
-    pickers
-      .new(opts, {
-        prompt_title = "Commits",
-        finder = finders.new_table({
-          results = results,
-          entry_maker = gen_from_history(opts),
-        }),
-        attach_mappings = attach_mappings,
-        sorter = conf.generic_sorter(opts),
-      })
-      :find()
+    end)
   end
-  return require("telescope").register_extension({
-    exports = {
-      diffsplit = entry_point,
-    },
-  })
-end
+end, { desc = "Search Diffsplit Commits" })
 
 return M

@@ -20,6 +20,6 @@ end, { nargs = "*" })
 
 local set_spell_cb = F.f(set_spell)
 
-vim.keymap.set({ "n", "x" }, "<space>ss", set_spell_cb(nil), { desc = "disable spell" })
-vim.keymap.set({ "n", "x" }, "<space>sd", set_spell_cb("de_de"), { desc = "toggle spell German" })
-vim.keymap.set({ "n", "x" }, "<space>se", set_spell_cb("en_us"), { desc = "toggle spell English" })
+vim.keymap.set({ "n", "x" }, "<leader>ss", set_spell_cb(nil), { desc = "disable spell" })
+vim.keymap.set({ "n", "x" }, "<leader>sd", set_spell_cb("de_de"), { desc = "toggle spell German" })
+vim.keymap.set({ "n", "x" }, "<leader>se", set_spell_cb("en_us"), { desc = "toggle spell English" })
