@@ -1,3 +1,5 @@
+local U = require("user.utils")
+
 local config = require("user.config")
 
 local function leave_term()
@@ -23,7 +25,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
       group = "UserTerm",
       buffer = args.buf,
       callback = function()
-        if not vim.b.term_was_normal then
+        if not vim.b.term_was_normal and not U.is_floating(vim.api.nvim_get_current_win()) then
           vim.cmd("startinsert")
         end
       end,

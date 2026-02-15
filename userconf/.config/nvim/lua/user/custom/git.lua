@@ -181,7 +181,7 @@ end
 
 local function git(args)
   local job = vim.system({ "git", unpack(args) }, { text = true }):wait()
-  return job.code == 0 and vim.split(vim.trim(job.stdout), "\n") or nil
+  return job.code == 0 and vim.split(job.stdout, "\n", { trimempty = true }) or nil
 end
 
 local function _get_diff_files(git_dir, commit)

@@ -7,7 +7,7 @@ local function get_tmux()
 end
 
 local function execute(arg, opts)
-  local socket = vim.split(get_tmux(), ",")[1]
+  local socket = vim.split(get_tmux(), ",", { trimempty = true })[1]
   local job = vim.system({ "tmux", "-S", socket, unpack(arg) }, { stdin = true, text = true, timeout = 500 })
   if opts.input ~= nil then
     job:write(opts.input)

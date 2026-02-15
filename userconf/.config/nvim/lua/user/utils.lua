@@ -152,7 +152,7 @@ function M.list_buffers(opts)
   buffers = buffers:totable()
   if opts.mru then
     table.sort(buffers, function(a, b)
-      return vim.fn.getbufinfo(a)[1].lastused > vim.fn.getbufinfo(b)[1].lastused
+      return (vim.b[a].user_last_entry or 0) > (vim.b[b].user_last_entry or 0)
     end)
   end
   return buffers
@@ -243,7 +243,7 @@ function M.buffer_size(buf)
 end
 
 function M.is_big_buffer(buf, max_size)
-  max_size = max_size or config.max_buffer_size
+  max_size = max_size or config.max_buffer_size or 4294967296
   return M.buffer_size(buf) > max_size
 end
 
@@ -429,6 +429,20 @@ function M.list_normal_windows()
       return not M.is_floating(win)
     end)
     :totable()
+end
+
+function M.is_git_ignored(path)
+  if vim.fn.executable("git") then
+    local job = require("plenary.job"):new({
+      command = "git",
+      args = { "check-ignore", path },
+      cwd = path,
+    })
+    job:sync()
+    return job.code == 0
+  else
+    return false
+  end
 end
 
 return M

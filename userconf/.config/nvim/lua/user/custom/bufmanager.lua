@@ -56,7 +56,7 @@ end
 
 local function make_items()
   local path_bufnrs = U.list_buffers({ mru = true, buftype = C.FILE_BUFTYPE })
-  local terminal_bufnrs = F.reverse(U.list_buffers({ mru = true, unlisted = true, buftype = "terminal" }))
+  local terminal_bufnrs = F.reverse(U.list_buffers({ mru = true, unlisted = true, buftype = C.TERMINAL }))
   local all_bufnrs = F.concat(terminal_bufnrs, path_bufnrs)
   local meta = {}
   local items = vim
@@ -101,14 +101,16 @@ vim.keymap.set({ "n", "x", "t", "i" }, "<F2>", function()
     snacks.picker.pick({
       source = "bufmanager",
       layout = { cycle = false },
-      items = items,
+      finder = function(picker, ctx)
+        return ctx.filter:filter(items)
+      end,
       on_show = function(picker)
         picker.list:set_target(meta.default_index)
         vim.cmd("stopinsert")
       end,
       format = function(item, picker)
         local results = {}
-        results[#results + 1] = { align(tostring(item.buf), meta.bufnr_width), "TelescopeResultsNumber" }
+        results[#results + 1] = { align(tostring(item.buf), meta.bufnr_width), "SnacksPickerBufNr" }
         results[#results + 1] = { " " }
         results[#results + 1] = { " " }
         if item.is_path then
@@ -128,17 +130,16 @@ vim.keymap.set({ "n", "x", "t", "i" }, "<F2>", function()
           local selected = picker.list:current()
           picker.preview:reset()
           if delete_buffer(selected) then
-            picker.list.items = vim
-              .iter(picker.list.items)
+            items = vim
+              .iter(items)
               :filter(function(item)
                 return item.buf ~= selected.buf
               end)
               :totable()
-            if #picker.list.items == 0 then
+            if #items == 0 then
               picker:close()
             else
-              picker.list:set_target(math.min(selected.idx, #picker.list.items))
-              picker.list:update({ force = true })
+              picker:refresh()
             end
           end
         end,
@@ -151,6 +152,8 @@ vim.keymap.set({ "n", "x", "t", "i" }, "<F2>", function()
             ["x"] = { "delete_buffer", mode = { "n" } },
             ["<F2>"] = { "close", mode = { "n", "i" } },
             ["<Esc>"] = { "close", mode = { "n", "i" } },
+            ["s"] = { "edit_split", mode = { "n" } },
+            ["v"] = { "edit_vsplit", mode = { "n" } },
           },
         },
         list = {
@@ -158,6 +161,8 @@ vim.keymap.set({ "n", "x", "t", "i" }, "<F2>", function()
             ["<c-x>"] = "delete_buffer",
             ["d"] = "delete_buffer",
             ["x"] = "delete_buffer",
+            ["s"] = "edit_split",
+            ["v"] = "edit_vsplit",
             ["<F2>"] = "close",
             ["<Esc>"] = "close",
           },

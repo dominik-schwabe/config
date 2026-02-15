@@ -98,6 +98,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = "user",
+  callback = function(obj)
+    if not U.is_floating(vim.api.nvim_get_current_win()) then
+      vim.b[obj.buf].user_last_entry = vim.uv.hrtime()
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("VimEnter", {
   group = "user",
   command = "clearjumps",
