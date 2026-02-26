@@ -1,4 +1,5 @@
 local F = require("user.functional")
+local U = require("user.utils")
 
 local config = require("user.config")
 
@@ -891,7 +892,7 @@ _<C-c>_ : exit
   { "nvimtools/hydra.nvim", cond = NOT_MINIMAL, lazy = true },
   {
     "obsidian-nvim/obsidian.nvim",
-    cond = NOT_MINIMAL and vim.fn.isdirectory(vim.fs.normalize("~/zettelkasten")),
+    cond = NOT_MINIMAL and U.isdirectory(vim.fs.normalize("~/zettelkasten")),
     opts = {
       legacy_commands = false,
       ui = { enable = false },
