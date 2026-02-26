@@ -91,7 +91,15 @@ local function pick(name, opts)
   end
 end
 
-local plugins = F.concat({
+local function dial(command, mode)
+  return function()
+    require("dial.map").manipulate(command, mode)
+  end
+end
+
+local NOT_MINIMAL = not config.minimal
+
+local plugins = {
   { "folke/lazy.nvim" },
   { "neovim/nvim-lspconfig", config = l("lspconfig") },
   { "mason-org/mason.nvim", opts = { ui = { border = config.border } } },
@@ -509,70 +517,68 @@ local plugins = F.concat({
       { "<F24>", "<ESC>:ToggleFullscreen<CR>", mode = { "i" }, desc = "toggle fullscreen" },
     },
   },
-})
-
-if not config.minimal then
-  plugins = F.concat(plugins, {
-    { "b0o/schemastore.nvim" },
-    { "pmizio/typescript-tools.nvim", opts = {}, dependencies = { "nvim-lua/plenary.nvim" } },
-    {
-      "mrcjkb/rustaceanvim",
-      ft = { "rust" },
-      init = function()
-        vim.g.rustaceanvim = {
-          tools = {
-            float_win_config = {
-              border = config.border,
-            },
+  { "b0o/schemastore.nvim", cond = NOT_MINIMAL },
+  { "pmizio/typescript-tools.nvim", cond = NOT_MINIMAL, opts = {}, dependencies = { "nvim-lua/plenary.nvim" } },
+  {
+    "mrcjkb/rustaceanvim",
+    cond = NOT_MINIMAL,
+    ft = { "rust" },
+    init = function()
+      vim.g.rustaceanvim = {
+        tools = {
+          float_win_config = {
+            border = config.border,
           },
-          server = {
-            on_attach = function(client, bufnr)
-              local map_opts = { noremap = true, silent = true, buffer = bufnr }
-              local rcb = F.f(vim.cmd.RustLsp)
-              vim.keymap.set("n", "gh", rcb({ "hover", "actions" }), desc(map_opts, "rust hover actions"))
-              bind_select_action({
-                { "debuggables" },
-                { "debuggables", "last" },
-                { "runnables" },
-                { "runnables", "last" },
-                { "explainError" },
-                { "expandMacro" },
-                { "rebuildProcMacros" },
-                { "openCargo" },
-                { "view", "hir" },
-                { "view", "mir" },
-              }, {
-                buffer = bufnr,
-                on_select = function(choice)
-                  vim.cmd.RustLsp(F.copy(choice))
-                end,
-                format_item = function(item)
-                  return table.concat(item, " ")
-                end,
-              })
-            end,
-            settings = function(project_root)
-              local ra = require("rustaceanvim.config.server")
-              local default_settings = require("rustaceanvim.config.internal").server.default_settings
-              local settings = ra.load_rust_analyzer_settings(project_root, {
-                settings_file_pattern = "rust-analyzer.json",
-              })
-              if settings == default_settings then
-                settings = { ["rust-analyzer"] = config.lsp_configs.rust_analyzer or {} }
-              end
-              return settings
-            end,
-          },
-          dap = {},
-        }
-      end,
-    },
-    {
-      "johmsalas/text-case.nvim",
-      config = function()
-        local textcase = require("textcase")
-        require("hydra")({
-          hint = [[
+        },
+        server = {
+          on_attach = function(client, bufnr)
+            local map_opts = { noremap = true, silent = true, buffer = bufnr }
+            local rcb = F.f(vim.cmd.RustLsp)
+            vim.keymap.set("n", "gh", rcb({ "hover", "actions" }), desc(map_opts, "rust hover actions"))
+            bind_select_action({
+              { "debuggables" },
+              { "debuggables", "last" },
+              { "runnables" },
+              { "runnables", "last" },
+              { "explainError" },
+              { "expandMacro" },
+              { "rebuildProcMacros" },
+              { "openCargo" },
+              { "view", "hir" },
+              { "view", "mir" },
+            }, {
+              buffer = bufnr,
+              on_select = function(choice)
+                vim.cmd.RustLsp(F.copy(choice))
+              end,
+              format_item = function(item)
+                return table.concat(item, " ")
+              end,
+            })
+          end,
+          settings = function(project_root)
+            local ra = require("rustaceanvim.config.server")
+            local default_settings = require("rustaceanvim.config.internal").server.default_settings
+            local settings = ra.load_rust_analyzer_settings(project_root, {
+              settings_file_pattern = "rust-analyzer.json",
+            })
+            if settings == default_settings then
+              settings = { ["rust-analyzer"] = config.lsp_configs.rust_analyzer or {} }
+            end
+            return settings
+          end,
+        },
+        dap = {},
+      }
+    end,
+  },
+  {
+    "johmsalas/text-case.nvim",
+    cond = NOT_MINIMAL,
+    config = function()
+      local textcase = require("textcase")
+      require("hydra")({
+        hint = [[
 _<F9>_  : to-snake-case (LSP)
 _<F10>_ : TO-CONSTANT-CASE (LSP)
 _<F11>_ : toCamelCase (LSP)
@@ -583,394 +589,351 @@ _<F7>_  : toCamelCase
 _<F8>_  : ToPascalCase
 _<C-c>_ : exit
 ]],
-          config = {
-            color = "pink",
-            invoke_on_body = true,
-            hint = {
-              position = "middle-right",
-              float_opts = {
-                border = config.border,
-              },
+        config = {
+          color = "pink",
+          invoke_on_body = true,
+          hint = {
+            position = "middle-right",
+            float_opts = {
+              border = config.border,
             },
           },
-          name = "textcase",
-          mode = { "n", "x" },
-          body = "<leader>cc",
-          heads = {
-            { "<F5>", F.f(textcase.current_word)("to_snake_case"), { silent = true, nowait = true } },
-            { "<F6>", F.f(textcase.current_word)("to_constant_case"), { silent = true, nowait = true } },
-            { "<F7>", F.f(textcase.current_word)("to_camel_case"), { silent = true, nowait = true } },
-            { "<F8>", F.f(textcase.current_word)("to_pascal_case"), { silent = true, nowait = true } },
-            { "<F9>", F.f(textcase.lsp_rename)("to_snake_case"), { silent = true, nowait = true } },
-            { "<F10>", F.f(textcase.lsp_rename)("to_constant_case"), { silent = true, nowait = true } },
-            { "<F11>", F.f(textcase.lsp_rename)("to_camel_case"), { silent = true, nowait = true } },
-            { "<F12>", F.f(textcase.lsp_rename)("to_pascal_case"), { silent = true, nowait = true } },
-            { "<C-c>", nil, { exit = true, nowait = true } },
-          },
+        },
+        name = "textcase",
+        mode = { "n", "x" },
+        body = "<leader>cc",
+        heads = {
+          { "<F5>", F.f(textcase.current_word)("to_snake_case"), { silent = true, nowait = true } },
+          { "<F6>", F.f(textcase.current_word)("to_constant_case"), { silent = true, nowait = true } },
+          { "<F7>", F.f(textcase.current_word)("to_camel_case"), { silent = true, nowait = true } },
+          { "<F8>", F.f(textcase.current_word)("to_pascal_case"), { silent = true, nowait = true } },
+          { "<F9>", F.f(textcase.lsp_rename)("to_snake_case"), { silent = true, nowait = true } },
+          { "<F10>", F.f(textcase.lsp_rename)("to_constant_case"), { silent = true, nowait = true } },
+          { "<F11>", F.f(textcase.lsp_rename)("to_camel_case"), { silent = true, nowait = true } },
+          { "<F12>", F.f(textcase.lsp_rename)("to_pascal_case"), { silent = true, nowait = true } },
+          { "<C-c>", nil, { exit = true, nowait = true } },
+        },
+      })
+    end,
+    keys = { "<leader>cc" },
+  },
+  { "nvim-lualine/lualine.nvim", cond = NOT_MINIMAL, config = l("lualine") },
+  {
+    "j-hui/fidget.nvim",
+    cond = NOT_MINIMAL,
+    event = "LspAttach",
+    opts = {
+      progress = {
+        suppress_on_insert = false,
+        ignore_done_already = true,
+        display = {
+          done_style = "FidgetDone",
+          group_style = "FidgetGroup",
+          progress_style = "FidgetProgress",
+        },
+      },
+      notification = {
+        window = {
+          normal_hl = "FidgetNormal",
+          winblend = 100,
+          x_padding = 0,
+          align = "top",
+        },
+      },
+    },
+  },
+  {
+    "monaqa/dial.nvim",
+    cond = NOT_MINIMAL,
+    config = function()
+      local augend = require("dial.augend")
+      require("dial.config").augends:register_group({
+        default = {
+          augend.constant.new({ elements = { "yes", "no" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "true", "false" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "True", "False" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "TRUE", "FALSE" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
+          augend.integer.new({ radix = 10, natural = false }),
+          augend.integer.alias.hex,
+          augend.integer.alias.binary,
+          augend.date.alias["%Y/%m/%d"],
+          augend.date.alias["%H:%M:%S"],
+        },
+      })
+    end,
+    keys = {
+      { "<C-a>", dial("increment", "normal"), mode = "n", desc = "increment normal" },
+      { "<C-x>", dial("decrement", "normal"), mode = "n", desc = "decrement normal" },
+      { "g<C-a>", dial("increment", "gnormal"), mode = "n", desc = "increment gnormal" },
+      { "g<C-x>", dial("decrement", "gnormal"), mode = "n", desc = "decrement gnormal" },
+      { "<C-a>", dial("increment", "visual"), mode = "x", desc = "increment visual" },
+      { "<C-x>", dial("decrement", "visual"), mode = "x", desc = "decrement visual" },
+      { "g<C-a>", dial("increment", "gvisual"), mode = "x", desc = "increment gvisual" },
+      { "g<C-x>", dial("decrement", "gvisual"), mode = "x", desc = "decrement gvisual" },
+    },
+  },
+  {
+    "altermo/ultimate-autopair.nvim",
+    cond = NOT_MINIMAL,
+    event = { "InsertEnter", "CmdlineEnter" },
+    opts = {
+      tabout = { enable = true },
+      cmap = false,
+      config_internal_pairs = {
+        {
+          "'",
+          "'",
+          multiline = false,
+          surround = true,
+          nft = { "xdata", "xdatal" },
+          cond = function(fn)
+            return not fn.in_node({ "bounded_type", "type_parameters" })
+          end,
+        },
+        { "`", "`", nft = { "python", "jon", "cjon" } },
+      },
+    },
+  },
+  {
+    "catgoose/nvim-colorizer.lua",
+    cond = NOT_MINIMAL,
+    opts = {
+      user_default_options = {
+        names = false,
+        rgb_fn = true,
+        hsl_fn = true,
+        tailwind = true,
+      },
+    },
+    lazy = false,
+    keys = {
+      { "<leader>tc", "<CMD>ColorizerToggle<CR>", desc = "toggle colorizer" },
+    },
+  },
+  {
+    "saecki/crates.nvim",
+    cond = NOT_MINIMAL,
+    config = true,
+    opts = {
+      popup = {
+        border = config.border,
+        hide_on_select = true,
+        show_version_date = true,
+        max_height = 25,
+      },
+      lsp = {
+        enabled = true,
+        actions = true,
+        completion = true,
+        hover = true,
+      },
+      on_attach = function(bufnr)
+        bind_select_action({
+          { "Dependencies", "show_dependencies_popup", true },
+          { "Update Crate", "update_crate", false },
+          { "Update All", "update_all_crates", false },
+          { "Upgrade Crate", "upgrade_crate", false },
+          { "Upgrade All", "upgrade_all_crates", false },
+          { "Features", "show_features_popup", true },
+        }, {
+          buffer = bufnr,
+          on_select = function(choice)
+            local crates = require("crates")
+            crates[choice[2]]()
+            if choice[3] then
+              crates.focus_popup()
+            end
+          end,
+          format_item = function(item)
+            return item[1]
+          end,
         })
       end,
-      keys = { "<leader>cc" },
     },
-    { "nvim-lualine/lualine.nvim", config = l("lualine") },
-    {
-      "j-hui/fidget.nvim",
-      event = "LspAttach",
-      opts = {
-        progress = {
-          suppress_on_insert = false,
-          ignore_done_already = true,
-          display = {
-            done_style = "FidgetDone",
-            group_style = "FidgetGroup",
-            progress_style = "FidgetProgress",
-          },
+    event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" },
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    cond = NOT_MINIMAL,
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    config = l("treesitter"),
+  },
+  {
+    "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+    cond = NOT_MINIMAL,
+    config = function()
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [""] = function()
+            local rb = require("rainbow-delimiters")
+            return require("user.utils").is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
+          end,
         },
-        notification = {
-          window = {
-            normal_hl = "FidgetNormal",
-            winblend = 100,
-            x_padding = 0,
-            align = "top",
-          },
+      }
+    end,
+  },
+  { "m-demare/hlargs.nvim", cond = NOT_MINIMAL },
+  { "nvim-treesitter/nvim-treesitter-textobjects", cond = NOT_MINIMAL },
+  { "nvim-treesitter/nvim-treesitter-context", cond = NOT_MINIMAL },
+  { "windwp/nvim-ts-autotag", cond = NOT_MINIMAL },
+  { "Wansmer/treesj", cond = NOT_MINIMAL, config = l("treesj") },
+  {
+    "Wansmer/sibling-swap.nvim",
+    cond = NOT_MINIMAL,
+    config = function()
+      local sibling_swap = require("sibling-swap")
+      sibling_swap.setup({ use_default_keymaps = false })
+      vim.keymap.set("n", "R", sibling_swap.swap_with_left)
+      vim.keymap.set("n", "U", sibling_swap.swap_with_right)
+    end,
+  },
+  { "mfussenegger/nvim-dap", cond = NOT_MINIMAL, event = "VeryLazy", config = l("dap") },
+  { "rcarriga/nvim-dap-ui", cond = NOT_MINIMAL },
+  { "theHamsta/nvim-dap-virtual-text", cond = NOT_MINIMAL },
+  { "mfussenegger/nvim-dap-python", cond = NOT_MINIMAL },
+  {
+    "lervag/vimtex",
+    cond = NOT_MINIMAL,
+    init = function()
+      vim.g.vimtex_imaps_enabled = 0
+      vim.g.vimtex_complete_enabled = 0
+      vim.g.vimtex_matchparen_enabled = 0
+      vim.g.vimtex_syntax_enabled = 0
+      vim.g.vimtex_syntax_conceal_disable = 1
+      vim.g.vimtex_view_method = "zathura"
+      vim.g.vimtex_view_skim_reading_bar = 1
+      vim.g.vimtex_quickfix_mode = 2
+      vim.g.vimtex_quickfix_open_on_warning = 0
+      vim.g.tex_flavor = "latex"
+      vim.g.tex_conceal = "abdmg"
+    end,
+    ft = "tex",
+  },
+  {
+    "folke/todo-comments.nvim",
+    cond = NOT_MINIMAL,
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      keywords = {
+        FIX = { icon = config.icons.Fix, color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+        TODO = { icon = config.icons.Todo, color = "info" },
+        HACK = { icon = config.icons.Hack, color = "warning" },
+        WARN = { icon = config.icons.Warn, color = "warning", alt = { "WARNING", "XXX" } },
+        PERF = { icon = config.icons.Perf, color = "warning", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+        NOTE = { icon = config.icons.Note, color = "hint", alt = { "INFO" } },
+        TEST = { icon = config.icons.Test, color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+      },
+      search = {
+        command = "rg",
+        args = {
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--max-filesize=1M",
         },
       },
     },
-    {
-      "monaqa/dial.nvim",
-      config = function()
-        local augend = require("dial.augend")
-        require("dial.config").augends:register_group({
-          default = {
-            augend.constant.new({ elements = { "yes", "no" }, word = true, cyclic = true }),
-            augend.constant.new({ elements = { "true", "false" }, word = true, cyclic = true }),
-            augend.constant.new({ elements = { "True", "False" }, word = true, cyclic = true }),
-            augend.constant.new({ elements = { "TRUE", "FALSE" }, word = true, cyclic = true }),
-            augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
-            augend.integer.new({ radix = 10, natural = false }),
-            augend.integer.alias.hex,
-            augend.integer.alias.binary,
-            augend.date.alias["%Y/%m/%d"],
-            augend.date.alias["%H:%M:%S"],
-          },
-        })
-      end,
-      keys = {
-        {
-          "<C-a>",
-          function()
-            require("dial.map").manipulate("increment", "normal")
-          end,
-          mode = "n",
-          desc = "increment normal",
-        },
-        {
-          "<C-x>",
-          function()
-            require("dial.map").manipulate("decrement", "normal")
-          end,
-          mode = "n",
-          desc = "decrement normal",
-        },
-        {
-          "g<C-a>",
-          function()
-            require("dial.map").manipulate("increment", "gnormal")
-          end,
-          mode = "n",
-          desc = "increment gnormal",
-        },
-        {
-          "g<C-x>",
-          function()
-            require("dial.map").manipulate("decrement", "gnormal")
-          end,
-          mode = "n",
-          desc = "decrement gnormal",
-        },
-        {
-          "<C-a>",
-          function()
-            require("dial.map").manipulate("increment", "visual")
-          end,
-          mode = "x",
-          desc = "increment visual",
-        },
-        {
-          "<C-x>",
-          function()
-            require("dial.map").manipulate("decrement", "visual")
-          end,
-          mode = "x",
-          desc = "decrement visual",
-        },
-        {
-          "g<C-a>",
-          function()
-            require("dial.map").manipulate("increment", "gvisual")
-          end,
-          mode = "x",
-          desc = "increment gvisual",
-        },
-        {
-          "g<C-x>",
-          function()
-            require("dial.map").manipulate("decrement", "gvisual")
-          end,
-          mode = "x",
-          desc = "decrement gvisual",
-        },
+    keys = { { "<leader>ot", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
+  },
+  {
+    "folke/flash.nvim",
+    cond = NOT_MINIMAL,
+    event = "VeryLazy",
+    opts = {
+      highlight = {
+        priority = 9999,
+      },
+      modes = {
+        char = { enabled = false },
+        search = { enabled = false },
       },
     },
-    {
-      "altermo/ultimate-autopair.nvim",
-      event = { "InsertEnter", "CmdlineEnter" },
-      opts = {
-        tabout = { enable = true },
-        cmap = false,
-        config_internal_pairs = {
-          {
-            "'",
-            "'",
-            multiline = false,
-            surround = true,
-            nft = { "xdata", "xdatal" },
-            cond = function(fn)
-              return not fn.in_node({ "bounded_type", "type_parameters" })
-            end,
-          },
-          { "`", "`", nft = { "python", "jon", "cjon" } },
-        },
-      },
-    },
-    {
-      "catgoose/nvim-colorizer.lua",
-      opts = {
-        user_default_options = {
-          names = false,
-          rgb_fn = true,
-          hsl_fn = true,
-          tailwind = true,
-        },
-      },
-      lazy = false,
-      keys = {
-        { "<leader>tc", "<CMD>ColorizerToggle<CR>", desc = "toggle colorizer" },
-      },
-    },
-    {
-      "saecki/crates.nvim",
-      config = true,
-      opts = {
-        popup = {
-          border = config.border,
-          hide_on_select = true,
-          show_version_date = true,
-          max_height = 25,
-        },
-        lsp = {
-          enabled = true,
-          actions = true,
-          completion = true,
-          hover = true,
-        },
-        on_attach = function(bufnr)
-          bind_select_action({
-            { "Dependencies", "show_dependencies_popup", true },
-            { "Update Crate", "update_crate", false },
-            { "Update All", "update_all_crates", false },
-            { "Upgrade Crate", "upgrade_crate", false },
-            { "Upgrade All", "upgrade_all_crates", false },
-            { "Features", "show_features_popup", true },
-          }, {
-            buffer = bufnr,
-            on_select = function(choice)
-              local crates = require("crates")
-              crates[choice[2]]()
-              if choice[3] then
-                crates.focus_popup()
-              end
-            end,
-            format_item = function(item)
-              return item[1]
-            end,
-          })
+    keys = {
+      {
+        "s",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").jump()
         end,
+        desc = "Flash",
       },
-      event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" },
-    },
-    {
-      "nvim-treesitter/nvim-treesitter",
-      build = ":TSUpdate",
-      event = { "BufReadPost", "BufNewFile" },
-      config = l("treesitter"),
-    },
-    {
-      "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
-      config = function()
-        vim.g.rainbow_delimiters = {
-          strategy = {
-            [""] = function()
-              local rb = require("rainbow-delimiters")
-              return require("user.utils").is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
-            end,
-          },
-        }
-      end,
-    },
-    { "m-demare/hlargs.nvim" },
-    { "nvim-treesitter/nvim-treesitter-textobjects" },
-    { "nvim-treesitter/nvim-treesitter-context" },
-    { "windwp/nvim-ts-autotag" },
-    { "Wansmer/treesj", config = l("treesj") },
-    {
-      "Wansmer/sibling-swap.nvim",
-      config = function()
-        local sibling_swap = require("sibling-swap")
-        sibling_swap.setup({ use_default_keymaps = false })
-        vim.keymap.set("n", "R", sibling_swap.swap_with_left)
-        vim.keymap.set("n", "U", sibling_swap.swap_with_right)
-      end,
-    },
-    { "mfussenegger/nvim-dap", event = "VeryLazy", config = l("dap") },
-    { "rcarriga/nvim-dap-ui" },
-    { "theHamsta/nvim-dap-virtual-text" },
-    { "mfussenegger/nvim-dap-python" },
-    {
-      "lervag/vimtex",
-      init = function()
-        vim.g.vimtex_imaps_enabled = 0
-        vim.g.vimtex_complete_enabled = 0
-        vim.g.vimtex_matchparen_enabled = 0
-        vim.g.vimtex_syntax_enabled = 0
-        vim.g.vimtex_syntax_conceal_disable = 1
-        vim.g.vimtex_view_method = "zathura"
-        vim.g.vimtex_view_skim_reading_bar = 1
-        vim.g.vimtex_quickfix_mode = 2
-        vim.g.vimtex_quickfix_open_on_warning = 0
-        vim.g.tex_flavor = "latex"
-        vim.g.tex_conceal = "abdmg"
-      end,
-      ft = "tex",
-    },
-    {
-      "folke/todo-comments.nvim",
-      event = { "BufReadPost", "BufNewFile" },
-      opts = {
-        keywords = {
-          FIX = { icon = config.icons.Fix, color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
-          TODO = { icon = config.icons.Todo, color = "info" },
-          HACK = { icon = config.icons.Hack, color = "warning" },
-          WARN = { icon = config.icons.Warn, color = "warning", alt = { "WARNING", "XXX" } },
-          PERF = { icon = config.icons.Perf, color = "warning", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-          NOTE = { icon = config.icons.Note, color = "hint", alt = { "INFO" } },
-          TEST = { icon = config.icons.Test, color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
-        },
-        search = {
-          command = "rg",
-          args = {
-            "--color=never",
-            "--no-heading",
-            "--with-filename",
-            "--line-number",
-            "--column",
-            "--max-filesize=1M",
-          },
-        },
+      {
+        "S",
+        mode = { "n", "o" },
+        function()
+          require("flash").treesitter()
+        end,
+        desc = "Flash Treesitter",
       },
-      keys = { { "<leader>ot", "<CMD>TodoQuickFix<CR>", desc = "show todos in quickfix" } },
-    },
-    {
-      "folke/flash.nvim",
-      event = "VeryLazy",
-      opts = {
-        highlight = {
-          priority = 9999,
-        },
-        modes = {
-          char = { enabled = false },
-          search = { enabled = false },
-        },
+      {
+        "r",
+        mode = "o",
+        function()
+          require("flash").remote()
+        end,
+        desc = "Remote Flash",
       },
-      keys = {
+      {
+        "R",
+        mode = { "o", "x" },
+        function()
+          require("flash").treesitter_search()
+        end,
+        desc = "Treesitter Search",
+      },
+    },
+  },
+  { "nmac427/guess-indent.nvim", cond = NOT_MINIMAL, opts = {} },
+  { "nvimtools/hydra.nvim", cond = NOT_MINIMAL, lazy = true },
+  {
+    "obsidian-nvim/obsidian.nvim",
+    cond = NOT_MINIMAL and vim.fn.isdirectory(vim.fs.normalize("~/zettelkasten")),
+    opts = {
+      legacy_commands = false,
+      ui = { enable = false },
+      workspaces = {
         {
-          "s",
-          mode = { "n", "x", "o" },
-          function()
-            require("flash").jump()
-          end,
-          desc = "Flash",
-        },
-        {
-          "S",
-          mode = { "n", "o" },
-          function()
-            require("flash").treesitter()
-          end,
-          desc = "Flash Treesitter",
-        },
-        {
-          "r",
-          mode = "o",
-          function()
-            require("flash").remote()
-          end,
-          desc = "Remote Flash",
-        },
-        {
-          "R",
-          mode = { "o", "x" },
-          function()
-            require("flash").treesitter_search()
-          end,
-          desc = "Treesitter Search",
+          name = "personal",
+          path = "~/zettelkasten",
         },
       },
     },
-    { "nmac427/guess-indent.nvim", opts = {} },
-    { "nvimtools/hydra.nvim", lazy = true },
-    {
-      "obsidian-nvim/obsidian.nvim",
-      opts = {
-        legacy_commands = false,
-        ui = { enable = false },
-        workspaces = {
-          {
-            name = "personal",
-            path = "~/zettelkasten",
-          },
-        },
-      },
-    },
-    {
-      "toppair/peek.nvim",
-      ft = { "markdown" },
-      build = "deno task --quiet build:fast",
-      config = function()
-        local peek = require("peek")
-        peek.setup({
-          app = "browser",
-          filetype = { "markdown", "telekasten" },
-        })
-        vim.api.nvim_create_user_command("PeekOpen", peek.open, {})
-        vim.api.nvim_create_user_command("PeekClose", peek.close, {})
-        local function toggle_markdown()
-          if peek.is_open() then
-            peek.close()
-          else
-            peek.open()
-          end
+  },
+  {
+    "toppair/peek.nvim",
+    cond = NOT_MINIMAL,
+    ft = { "markdown" },
+    build = "deno task --quiet build:fast",
+    config = function()
+      local peek = require("peek")
+      peek.setup({
+        app = "browser",
+        filetype = { "markdown", "telekasten" },
+      })
+      vim.api.nvim_create_user_command("PeekOpen", peek.open, {})
+      vim.api.nvim_create_user_command("PeekClose", peek.close, {})
+      local function toggle_markdown()
+        if peek.is_open() then
+          peek.close()
+        else
+          peek.open()
         end
-        vim.keymap.set("n", "<leader>tm", toggle_markdown, { desc = "toggle markdown preview" })
-      end,
-    },
-    {
-      "FabijanZulj/blame.nvim",
-      opts = {},
-      keys = { { "<leader>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
-    },
-    { "jbyuki/venn.nvim", config = l("venn"), keys = { "<leader>v" } },
-  })
-end
+      end
+      vim.keymap.set("n", "<leader>tm", toggle_markdown, { desc = "toggle markdown preview" })
+    end,
+  },
+  {
+    "FabijanZulj/blame.nvim",
+    cond = NOT_MINIMAL,
+    opts = {},
+    keys = { { "<leader>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
+  },
+  { "jbyuki/venn.nvim", cond = NOT_MINIMAL, config = l("venn"), keys = { "<leader>v" } },
+}
 
 require("lazy").setup(plugins, {
   defaults = { lazy = false },

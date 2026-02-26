@@ -21,8 +21,8 @@ fi
 # if grep -E -i "(wireless|ethernet)" <<< "$TYPE" &>/dev/null; then
 if [[ -z $DELETE ]]; then
   nmcli connection modify "$CONNECTION" \
-    ipv4.dns "8.8.8.8 8.8.4.4" \
-    ipv6.dns "2001:4860:4860::8888 2001:4860:4860::8844"
+    ipv4.dns "9.9.9.9 149.112.112.112" \
+    ipv6.dns "2620:fe::fe 2620:fe::9"
 else
   nmcli connection modify "$CONNECTION" ipv4.dns "" ipv6.dns ""
 fi
