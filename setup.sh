@@ -33,32 +33,28 @@ done
 ./create_symlink.sh $FORCE $JUPYTER_PATH $HOME/.jupyter
 ./create_symlink.sh -h $FORCE $MIME_PATH $HOME/.config/mimeapps.list
 echo
-echo -n "redshift config "
+echo -n "gammastep config "
 
-if command -v redshift &>/dev/null; then
+if command -v gammastep &>/dev/null; then
+  [ -e $HOME/.config/gammastep ] || mkdir --parents $HOME/.config/gammastep
   if LOCATION=$(curl -sL https://ipinfo.io/loc); then
     LAT=$(echo $LOCATION | cut -f1 -d,)
     LON=$(echo $LOCATION | cut -f2 -d,)
-    echo "[redshift]
+    echo "[general]
 temp-day=6500
-temp-night=2700
+temp-night=3500
+fade=1
 location-provider=manual
-adjustment-method=vidmode
 
 [manual]
 lat=$LAT
-lon=$LON" >"$HOME/.config/redshift.conf"
+lon=$LON" >"$HOME/.config/gammastep/config.ini"
     echo -e "${GREEN}success${RESET}"
   else
     echo -e "${RED}failure${RESET}"
   fi
 else
   echo -e "${BLUE}skipping${RESET}"
-fi
-echo
-if [[ -z "$CONTAINERIZED" ]]; then
-  echo "tool setup"
-  $CURRPATH/install_tools.py
 fi
 echo
 echo -n "generated config "

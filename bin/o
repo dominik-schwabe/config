@@ -104,7 +104,7 @@ stream_application() {
   elif [[ "$ARGUMENT" == "https://www.twitch.tv/"* ]]; then
     if command -v streamlink &>/dev/null; then
       [[ "$ECHO" == true ]] && echo "streamlink twitch"
-      launch streamlink --twitch-disable-ads --player-no-close --player mpv --player-args "--title='mpv_media_stream $ARGUMENT $QUALITY' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT
+      launch streamlink --twitch-proxy-playlist=https://eu.luminous.dev,https://lb-eu.cdn-perfprod.com --twitch-disable-ads --player-no-close --player mpv --player-args "--title='mpv_media_stream $ARGUMENT $QUALITY' --geometry=50%" $ARGUMENT $STREAM_LINK_FORMAT
       exit 0
     else
       error "streamlink not installed"

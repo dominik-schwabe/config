@@ -1,4 +1,0 @@
-qtile
-dbus-fast
-psutil
-pulsectl-asyncio

@@ -1,0 +1,82 @@
+window#waybar {
+    background-color: #111111;
+}
+
+#clock, #battery, #memory, #network, #pulseaudio, #backlight, #temperature, #idle_inhibitor {
+    font-size: 12px;
+    margin: 0px;
+    padding: 0px 8px;
+    border-radius: 8px;
+    background-color: #313244;
+}
+
+#clock.time {
+    color: #DEED12;
+}
+
+#clock.date {
+    color: #F92782;
+}
+
+#battery {
+    color: #00FF00;
+}
+
+#battery.discharging {
+    color: #DEED12;
+}
+
+#battery.warning {
+    color: #FF0000;
+}
+
+#battery.critical:not(.charging) {
+    background-color: #111111;
+    color: #ff0000;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: #ff0000; /* The "Alert" color */
+        color: #111111;            /* Text color during blink */
+    }
+}
+
+#temperature {
+    color: #ED9D12;
+}
+
+#temperature.warning {
+    color: #ff0000;
+}
+
+#temperature.critical {
+    background-color: #111111;
+    color: #ff0000;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#memory {
+    color: #00FFFF;
+}
+
+#network {
+    color: #00FFFF;
+}
+
+#pulseaudio {
+    color: #00FFFF;
+}
+
+#pulseaudio.muted {
+    color: #ff0000;
+}

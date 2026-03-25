@@ -1,3 +1,16 @@
+[colors]
+selection = { background = "#cd853f", text = "#000000" }
+
+[colors.normal]
+black = "#444444"
+blue = "#5f87af"
+cyan = "#66d9ef"
+green = "#3fff3f"
+magenta = "#f92672"
+red = "#ff1111"
+white = "#dddddd"
+yellow = "#ed9d12"
+
 [colors.bright]
 black = "#5f87af"
 blue = "#5f87af"
@@ -12,16 +25,6 @@ yellow = "#deed12"
 cursor = "#dddddd"
 text = "#000000"
 
-[colors.normal]
-black = "#555555"
-blue = "#5f87af"
-cyan = "#66d9ef"
-green = "#3fff3f"
-magenta = "#f92672"
-red = "#ff1111"
-white = "#dddddd"
-yellow = "#ed9d12"
-
 [colors.primary]
 background = "#111111"
 foreground = "#dddddd"
@@ -29,13 +32,26 @@ foreground = "#dddddd"
 [font]
 size = 10.5
 
+[font.normal]
+family = "Fira Code Nerd Font"
+style = "Regular"
+
 [font.bold]
 family = "Fira Code Nerd Font"
 style = "Bold"
 
-[font.normal]
-family = "Fira Code Nerd Font"
-style = "Regular"
+[selection]
+save_to_clipboard = true
+
+[cursor]
+unfocused_hollow = false
+
+[cursor.style]
+shape = "Block"
+blinking = "Never"
+
+[terminal]
+osc52 = "CopyPaste"
 
 [mouse]
 hide_when_typing = true
@@ -45,4 +61,7 @@ decorations = "none"
 
 [window.padding]
 x = 4
-y = 2
+y = 4
+
+[scrolling]
+history = 10000

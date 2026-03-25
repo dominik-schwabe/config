@@ -2,6 +2,7 @@ local awful = require("awful")
 local F = require("util.functional")
 
 local autostart_programs = {
+  { 0, "gammastep" },
   { 0, "brave &>/dev/null" },
   -- { 2, "easyeffects --gapplication-service" },
   { 3, "unclutter --timeout 0.7" },

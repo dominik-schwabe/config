@@ -108,17 +108,14 @@ pulsemixer
 easyeffects
 helvum
 wireplumber
-i3lock
 brightnessctl
 accountsservice
-wezterm
+alacritty
 android-file-transfer
 arandr
 autorandr
-awesome
 discord
 evince
-feh
 firefox
 flameshot
 libreoffice-still
@@ -126,9 +123,8 @@ mpv
 nm-connection-editor
 pavucontrol
 perl-file-mimeinfo
-picom
 playerctl
-redshift
+gammastep
 rofi
 scrot
 spotify-launcher
@@ -149,18 +145,14 @@ ttf-sazanami
 tumbler
 udiskie
 wireless_tools
-xbindkeys
-xclip
-xsel
-xcolor
-xdotool
-xorg
-xorg-apps
-xorg-drivers
-xorg-fonts
-xorg-xinit
+swaylock
 zathura
 zathura-pdf-poppler
+niri
+waybar
+hyprpicker
+wev
+wl-clipboard
 "
 
 LATEX="
@@ -176,12 +168,8 @@ texlive
 
 AURPKG="
 whitesur-gtk-theme
-birdtray
 brave-bin
 jmtpfs
-lain-git
-lua53-inspect
-unclutter-xfixes-git
 "
 
 install_aur_helper() {

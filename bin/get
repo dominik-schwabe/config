@@ -8,6 +8,8 @@ declare -A PROGRAMS=(
   ["tldr"]='npm install -g tldr'
   ["rust"]='curl --proto "=https" --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain stable'
   ["binstall"]='curl -L --proto "=https" --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash'
+  ["lean"]='curl https://elan.lean-lang.org/elan-init.sh -sSf | sh'
+  ["niri-tools"]='cargo install --path ~/config/niri-tools'
 )
 
 if [[ "$@" != "" ]]; then

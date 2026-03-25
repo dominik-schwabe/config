@@ -1,4 +1,5 @@
 local U = require("user.utils")
+local config = require("user.config")
 
 local curr_rg_job = nil
 
@@ -75,11 +76,14 @@ local function rg(string, opt)
       vim.schedule(function()
         args[#args] = '"' .. vim.fn.escape(args[#args], '"') .. '"'
         local command = "rg " .. table.concat(args, " ")
-        local lines = vim.split(obj.stdout, "\n", { trimempty = true })
         if obj.code == 124 then
           vim.schedule(function()
             vim.notify(string.format("timeout reached (%d ms)", timeout), vim.log.levels.WARN)
           end)
+        end
+        local lines = vim.split(obj.stdout, "\n", { trimempty = true })
+        if #lines > config.max_quickfix_lines then
+          lines = table.move(lines, 1, config.max_quickfix_lines, 1, {})
         end
         if #lines == 0 then
           vim.notify("nothing found")

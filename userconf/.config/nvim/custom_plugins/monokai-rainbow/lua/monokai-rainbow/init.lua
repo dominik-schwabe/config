@@ -263,7 +263,7 @@ HL.treesitter = {
   ["@keyword.import"] = { fg = S.import, bold = true },
   ["@keyword.repeat"] = { fg = S.keyword_repeat, bold = true },
   ["@keyword.return"] = { fg = S.keyword_return, bold = true },
-  ["@keyword.debug"] = UNKNOWN,
+  ["@keyword.debug"] = { fg = C.teal },
   ["@keyword.exception"] = { fg = S.exception },
 
   ["@keyword.conditional"] = { fg = S.conditional, bold = true },

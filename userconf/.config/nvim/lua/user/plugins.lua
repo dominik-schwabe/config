@@ -547,6 +547,7 @@ local plugins = {
               { "openCargo" },
               { "view", "hir" },
               { "view", "mir" },
+              { "logFile" },
             }, {
               buffer = bufnr,
               on_select = function(choice)
@@ -700,11 +701,22 @@ _<C-c>_ : exit
     "catgoose/nvim-colorizer.lua",
     cond = NOT_MINIMAL,
     opts = {
-      user_default_options = {
-        names = false,
-        rgb_fn = true,
-        hsl_fn = true,
-        tailwind = true,
+      options = {
+        parsers = {
+          rgb_fn = true,
+          hsl_fn = true,
+          hsl = { enable = true },
+          hex = {
+            aarrggbb = true,
+            default = true,
+            rgb = true,
+            rgba = true,
+            rrggbb = true,
+            rrggbbaa = true,
+          },
+          names = { enable = true },
+          tailwind = { enable = true },
+        },
       },
     },
     lazy = false,
@@ -934,6 +946,13 @@ _<C-c>_ : exit
     keys = { { "<leader>tb", "<CMD>BlameToggle virtual<CR>", desc = "toggle blamer" } },
   },
   { "jbyuki/venn.nvim", cond = NOT_MINIMAL, config = l("venn"), keys = { "<leader>v" } },
+  {
+    "Julian/lean.nvim",
+    cond = NOT_MINIMAL,
+    event = { "BufReadPre *.lean", "BufNewFile *.lean" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = { mappings = true },
+  },
 }
 
 require("lazy").setup(plugins, {

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if ! pkill -u $UID hyprpicker; then
+  COLOR=$(hyprpicker)
+  echo -n "$COLOR" | wl-copy
+  notify-send -t 3000 $COLOR
+fi
