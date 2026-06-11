@@ -1,3 +1,5 @@
+local config = require("user.config")
+
 local opt = vim.opt
 local g = vim.g
 
@@ -16,6 +18,8 @@ opt.splitkeep = "screen"
 opt.listchars = "extends:>,precedes:<,nbsp:␣,tab:>-,trail:_,nbsp:+"
 opt.list = true
 opt.jumpoptions = "stack"
+
+opt.winborder = config.border
 
 opt.number = true
 opt.relativenumber = true
@@ -42,7 +46,6 @@ opt.scrolloff = 8
 opt.hidden = true
 opt.updatetime = 300
 opt.diffopt:append("vertical")
-opt.shortmess:remove({ "c", "F" })
 opt.backspace = "indent,eol,start"
 opt.backup = false
 opt.writebackup = false

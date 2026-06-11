@@ -68,7 +68,8 @@ nvim_tree.setup({
     dotfiles = true,
   },
   view = {
-    width = 32,
+    signcolumn = "no",
+    width = 35,
   },
   diagnostics = {
     enable = false,

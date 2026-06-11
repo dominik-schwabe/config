@@ -268,8 +268,8 @@ HL.treesitter = {
 
   ["@keyword.conditional"] = { fg = S.conditional, bold = true },
 
-  ["@keyword.directive"] = { fg = C.pink, bold = true },
-  ["@keyword.directive.define"] = UNKNOWN,
+  ["@keyword.directive"] = { fg = C.teal },
+  ["@keyword.directive.define"] = { fg = C.teal },
 
   ["@punctuation.delimiter"] = { fg = S.punctuation_delimiter },
   ["@punctuation.bracket"] = { fg = S.punctuation_bracket },

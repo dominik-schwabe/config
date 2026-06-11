@@ -407,14 +407,6 @@ local function list_diff_logs(original_win)
   return F.concat(commits(paths), named)
 end
 
-vim.keymap.set("n", "<leader>dn", function()
-  cycle(1)
-end, { desc = "diff cycle next" })
-
-vim.keymap.set("n", "<leader>dp", function()
-  cycle(-1)
-end, { desc = "diff cycle previous" })
-
 vim.keymap.set("n", "<leader>gg", function()
   vim.ui.input({ default = "HEAD" }, function(commit)
     if commit ~= nil then

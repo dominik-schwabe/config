@@ -6,9 +6,9 @@
 spawn-at-startup "gammastep"
 spawn-at-startup "waybar"
 spawn-at-startup "brave"
-spawn-at-startup "spotify-launcher"
 spawn-at-startup "Telegram"
 spawn-at-startup "thunderbird"
+spawn-at-startup "spotify-launcher"
 
 workspace "browser" {
     open-on-output "eDP-1"
@@ -41,7 +41,7 @@ window-rule {
 window-rule {
     match app-id="^brave-browser$"
     open-on-workspace "browser"
-    open-focused false
+    open-focused true
 }
 
 window-rule {
@@ -51,9 +51,19 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^spotify$"
+    match app-id="^Spotify$"
     open-on-workspace "scratch"
     open-focused false
+    open-floating true
+    default-column-width { proportion 0.9; }
+    default-window-height { proportion 0.9; }
+}
+
+window-rule {
+    match app-id="^org.mozilla.Thunderbird$"
+    open-on-workspace "scratch"
+    open-focused false
+    open-floating true
     default-column-width { proportion 0.9; }
     default-window-height { proportion 0.9; }
 }
@@ -62,6 +72,7 @@ window-rule {
     match app-id="^org.telegram.desktop$"
     open-on-workspace "scratch"
     open-focused false
+    open-floating true
     default-column-width { proportion 0.9; }
     default-window-height { proportion 0.9; }
 }
@@ -82,14 +93,6 @@ window-rule {
     default-window-height { proportion 0.9; }
 }
 
-window-rule {
-    match app-id="^org.mozilla.Thunderbird$"
-    open-focused true
-    open-floating true
-    default-column-width { proportion 0.9; }
-    default-window-height { proportion 0.9; }
-}
-
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
@@ -101,7 +104,8 @@ input {
 
             layout "de"
             variant "nodeadkeys"
-            options "ctrl:nocaps"
+            options "ctrl:nocaps,compose:rctrl"
+            // options "ctrl:nocaps"
 
             // If this section is empty, niri will fetch xkb settings
             // from org.freedesktop.locale1. You can control these using
@@ -125,9 +129,9 @@ input {
         // drag false
         // drag-lock
         natural-scroll
-        scroll-factor 0.3
-        // accel-speed 0.2
-        // accel-profile "flat"
+        scroll-factor 0.2
+        // accel-speed 0.1
+        accel-profile "adaptive"
         // scroll-method "two-finger"
         // disabled-on-external-mouse
     }
@@ -160,7 +164,7 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    focus-follows-mouse
+    focus-follows-mouse max-scroll-amount="50%"
     disable-power-key-handling
 }
 
@@ -488,14 +492,14 @@ binds {
 
     // Example media keys mapping using playerctl.
     // This will work with any MPRIS-enabled media player.
-    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium play-pause"; }
-    XF86AudioStop allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium stop"; }
-    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium previous"; }
-    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium next"; }
+    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox play-pause"; }
+    XF86AudioStop allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox stop"; }
+    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox previous"; }
+    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox next"; }
 
-    Mod+y    allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium play-pause"; }
-    Mod+less allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium previous"; }
-    Mod+x    allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox,chromium next"; }
+    Mod+y    allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox play-pause"; }
+    Mod+less allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox previous"; }
+    Mod+x    allow-when-locked=true { spawn-sh "playerctl --player spotify,cmus,rhythmbox next"; }
 
     // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
@@ -635,21 +639,21 @@ binds {
     Mod+3 { focus-workspace "1"; }
     Mod+4 { focus-workspace "2"; }
     Mod+5 { focus-workspace "3"; }
-    Mod+udiaeresis { focus-workspace "leisure"; }
+    Mod+W { focus-workspace "leisure"; }
     Mod+P { focus-workspace "misc"; }
     Mod+Shift+1 { move-column-to-workspace "browser"; }
     Mod+Shift+2 { move-column-to-workspace "work"; }
     Mod+Shift+3 { move-column-to-workspace "1"; }
     Mod+Shift+4 { move-column-to-workspace "2"; }
     Mod+Shift+5 { move-column-to-workspace "3"; }
-    Mod+Shift+udiaeresis { move-column-to-workspace "leisure"; }
+    Mod+Shift+W { move-column-to-workspace "leisure"; }
     Mod+Shift+P { move-column-to-workspace "misc"; }
 
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
 
     // Switches focus between the current and the previous workspace.
-    // Mod+Tab { focus-workspace-previous; }
+    Mod+Tab repeat=false { focus-workspace-previous; }
 
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
@@ -739,5 +743,29 @@ binds {
     Mod+Shift+y repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id ___musicplayer___ --scratch-workspace scratch --height frac:90 --width frac:90 --center --spawn-command 'alacritty --option "font.size=11.5" --class ___musicplayer___ -e "cmus"'"#; }
     Mod+adiaeresis repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id org.mozilla.Thunderbird --scratch-workspace scratch --height frac:90 --width frac:90 --center --spawn-command 'thunderbird'"#; }
     Mod+8 repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id org.telegram.desktop --scratch-workspace scratch --height frac:90 --width frac:90 --center"#; }
-    Mod+9 repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id spotify --scratch-workspace scratch --height frac:90 --width frac:90 --center"#; }
+    Mod+9 repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id Spotify --scratch-workspace scratch --height frac:90 --width frac:90 --center"#; }
+}
+
+recent-windows {
+    // off
+    debounce-ms 750
+
+    open-delay-ms 150
+
+    highlight {
+        active-color "#999999ff"
+        urgent-color "#ff9999ff"
+        padding 30
+        corner-radius 0
+    }
+
+    previews {
+        max-height 480
+        max-scale 0.5
+    }
+
+    binds {
+        Alt+Tab         { next-window; }
+        Alt+Shift+Tab   { previous-window; }
+    }
 }

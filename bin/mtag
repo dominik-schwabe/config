@@ -21,7 +21,7 @@ emoji_pattern = re.compile(
     flags=re.UNICODE,
 )
 
-filename_re = re.compile(r"^.*\.(mp3|m4a|wav)$")
+filename_re = re.compile(r"^.*\.(mp3|m4a|wav|opus|flac)$")
 namesplit_re = re.compile(r" X | & |,| vs\.? ")
 space_re = re.compile(r"\s+")
 
@@ -247,4 +247,4 @@ for file in files:
     if file != new_file:
         print(f"renaming '{file.stem}' -> '{new_file.stem}'")
         file.rename(new_file)
-    tag(new_file, artist=normalized["artist"], title=normalized["title"], **extra_tags)
+    tag(str(new_file), artist=normalized["artist"], title=normalized["title"], **extra_tags)

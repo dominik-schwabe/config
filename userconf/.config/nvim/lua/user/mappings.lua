@@ -66,3 +66,29 @@ vim.keymap.set({ "v", "i" }, "<C-e>", function()
     vim.snippet.jump(1)
   end
 end, { desc = "jump to previous position in snippet" })
+vim.keymap.set({ "i", "n", "x" }, "<F3>", function()
+  require("undotree").open({
+    command = [[
+      topleft 35vnew
+      set winfixwidth
+      set nonumber
+      set norelativenumber
+      set signcolumn=no
+    ]],
+  })
+end, { desc = "toggle undo tree" })
+vim.keymap.set({ "n", "x", "o" }, ")", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_parent(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(vim.v.count1)
+  end
+end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
+
+vim.keymap.set({ "n", "x", "o" }, "(", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_child(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(-vim.v.count1)
+  end
+end, { desc = "Select child treesitter node or inner incremental lsp selections" })

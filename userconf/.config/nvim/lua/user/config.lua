@@ -217,7 +217,7 @@ M.linters = {
   python = { "cspell" },
   lua = { "luacheck" },
 }
-local JON_OPERATORS = { "?", "~", ":", "=", ":=", "=>", "->", "<-", "unit", "+", "-", "/", "*", "." }
+local JON_OPERATORS = { "?", "~", ":", "=", ":=", "=>", "->", "<-", "unit", "+", "-", "/", "*", ".", "&&", "||" }
 local JON_ARGS = F.concat(
   { "--max-line-length", "70", "--spacing", "1", "--rotate-delimiters" },
   vim
@@ -259,6 +259,7 @@ M.formatters = {
     cjson = { "cjson" },
     jon = { "jon" },
     cjon = { "cjon" },
+    scala = { "scalafmt" },
   },
   formatters = {
     stylua = { append_args = { "--indent-type", "spaces" } },
@@ -321,7 +322,7 @@ M.treesitter = {
     "html",
     "javascript",
     "json",
-    "latex",
+    -- "latex",
     "lua",
     "make",
     "markdown",

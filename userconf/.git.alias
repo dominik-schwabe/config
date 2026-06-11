@@ -62,8 +62,8 @@ alias gcs='git commit -S'
 alias gcss='git commit -S -s'
 alias gcssm='git commit -S -s -m'
 
-alias gd='git diff'
-alias gdd='git difftool'
+alias gd='git difftool'
+alias gdd='git diff'
 alias gds='git diff --staged'
 alias gdca='git diff --cached'
 alias gdcw='git diff --cached --word-diff'
@@ -104,7 +104,8 @@ alias glgg='git log --graph'
 alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
 alias glo='git log --oneline --decorate'
-alias glol="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
+alias glol="git log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
+alias glolg="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
 alias glols="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --stat"
 alias glod="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'"
 alias glods="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short"

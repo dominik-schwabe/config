@@ -1,0 +1,12 @@
+font-family = Fira Code Nerd Font
+background = #111111
+foreground = #dddddd
+selection-foreground = #000000
+selection-background = #cd853f
+cursor-text = #000000
+cursor-color = #dddddd
+mouse-scroll-multiplier = 3
+scrollback-limit = 10000
+window-decoration = false
+gtk-single-instance = true
+quit-after-last-window-closed = false

@@ -422,7 +422,6 @@ local plugins = {
       set({ "v", "n" }, "<c-o>", mc.jumpBackward)
     end,
   },
-  { "mbbill/undotree", keys = { { "<F3>", "<CMD>UndotreeToggle<CR>", desc = "toggle undo tree" } } },
   {
     dir = config.custom_plugin_path .. "/rooter",
     config = function()
@@ -570,7 +569,20 @@ local plugins = {
             return settings
           end,
         },
-        dap = {},
+        dap = {
+          configurations = {
+            {
+              -- This array tells CodeLLDB which source files to skip during stepping
+              skipFiles = {
+                "<rustc style>", -- Skips compiler internal files
+                "**/library/std/**/*", -- Skips Rust standard library
+                "**/.cargo/registry/**/*", -- Skips external crates downloaded via Cargo
+                "**/.rustup/**/*", -- Skips toolchain-specific files
+              },
+              -- ──────────────────────────────────────────────────────────────────
+            },
+          },
+        },
       }
     end,
   },
@@ -683,17 +695,8 @@ _<C-c>_ : exit
       tabout = { enable = true },
       cmap = false,
       config_internal_pairs = {
-        {
-          "'",
-          "'",
-          multiline = false,
-          surround = true,
-          nft = { "xdata", "xdatal" },
-          cond = function(fn)
-            return not fn.in_node({ "bounded_type", "type_parameters" })
-          end,
-        },
         { "`", "`", nft = { "python", "jon", "cjon" } },
+        { "'", "'", nft = { "rust" } },
       },
     },
   },
@@ -767,11 +770,74 @@ _<C-c>_ : exit
     event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" },
   },
   {
-    "nvim-treesitter/nvim-treesitter",
+    "romus204/tree-sitter-manager.nvim",
     cond = NOT_MINIMAL,
-    build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    config = l("treesitter"),
+    config = function()
+      -- local languages = vim.iter({ "jon", "cjon", "cjson" }):fold({}, function(acc, ft)
+      --   local path = os.getenv("HOME") .. "/tree-sitter-" .. ft
+      --   if U.exists(path) then
+      --     acc[ft] = {
+      --       url = path,
+      --     }
+      --   end
+      --   return acc
+      -- end)
+      local languages = {}
+      require("tree-sitter-manager").setup({
+        -- Default Options
+        ensure_installed = config.minimal and {} or config.treesitter.ensure_installed,
+        languages = languages, -- override or add new parser sources
+      })
+    end,
+  },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter-textobjects",
+  --   cond = NOT_MINIMAL,
+  --   opts = { move = { set_jumps = true } },
+  -- },
+  -- !!! translate from nvim-treesitter:
+  -- textobjects = {
+  --   select = {
+  --     enable = true,
+  --     lookahead = true,
+  --     keymaps = {
+  --       ["af"] = "@function.outer",
+  --       ["if"] = "@function.inner",
+  --       ["ia"] = "@parameter.inner",
+  --       ["aa"] = "@parameter.outer",
+  --       ["ii"] = "@conditional.inner",
+  --       ["ai"] = "@conditional.outer",
+  --       ["al"] = "@loop.outer",
+  --       ["il"] = "@loop.inner",
+  --       ["a,"] = "@attribute.outer",
+  --       ["i,"] = "@attribute.inner",
+  --       [","] = "@assignment.lhs",
+  --       ["."] = "@assignment.rhs",
+  --       ["au"] = "@block.outer",
+  --       ["iu"] = "@block.inner",
+  --       ["ac"] = "@call.outer",
+  --       ["ic"] = "@call.inner",
+  --       ["ar"] = "@return.outer",
+  --       ["ir"] = "@return.inner",
+  --       ["a="] = "@assignment.outer",
+  --       ["i="] = "@assignment.inner",
+  --       ["ak"] = "@class.outer",
+  --       ["ik"] = "@class.inner",
+  --     },
+  --   },
+  -- },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    cond = NOT_MINIMAL,
+    config = function()
+      require("treesitter-context").setup({
+        multiline_threshold = 1,
+        on_attach = function(bufnr)
+          local filetype = vim.bo[bufnr].filetype
+          return not U.is_disable_treesitter(filetype, bufnr)
+        end,
+      })
+    end,
   },
   {
     "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
@@ -787,11 +853,68 @@ _<C-c>_ : exit
       }
     end,
   },
-  { "m-demare/hlargs.nvim", cond = NOT_MINIMAL },
-  { "nvim-treesitter/nvim-treesitter-textobjects", cond = NOT_MINIMAL },
-  { "nvim-treesitter/nvim-treesitter-context", cond = NOT_MINIMAL },
-  { "windwp/nvim-ts-autotag", cond = NOT_MINIMAL },
-  { "Wansmer/treesj", cond = NOT_MINIMAL, config = l("treesj") },
+  {
+    "windwp/nvim-ts-autotag",
+    cond = NOT_MINIMAL,
+    opts = {
+      opts = {
+        enable_close = true,
+        enable_rename = true,
+        enable_close_on_slash = false,
+      },
+    },
+  },
+  {
+    "Wansmer/treesj",
+    cond = NOT_MINIMAL,
+    keys = {
+      {
+        "Y",
+        function()
+          require("treesj").toggle()
+        end,
+        mode = { "n", "x" },
+        desc = "toggle split join",
+      },
+    },
+    config = function()
+      local treesj = require("treesj")
+      local opts = {
+        use_default_keymaps = false,
+        check_syntax_error = true,
+        cursor_behavior = "hold",
+        notify = true,
+        max_join_length = 100000,
+      }
+      F.load("mini.splitjoin", function(splitjoin)
+        splitjoin.setup()
+        local get_fallback_patterns = F.cache(function()
+          local error_messages = require("treesj.notify").msg
+          local fallback_message_types = { "no_configured_lang", "no_ts_parser" }
+          local patterns = vim.tbl_values(F.subset(error_messages, fallback_message_types))
+          return vim
+            .iter(patterns)
+            :map(function(value)
+              local result, _ = value:gsub("%%s", ".*")
+              return result
+            end)
+            :totable()
+        end)
+        opts.notify = false
+        opts.on_error = function(msg, code, ...)
+          local patterns = get_fallback_patterns()
+          if vim.iter(patterns):any(function(pattern)
+            return msg:find(pattern)
+          end) then
+            splitjoin.toggle()
+          else
+            vim.notify(string.format(msg, ...), code)
+          end
+        end
+      end)
+      treesj.setup(opts)
+    end,
+  },
   {
     "Wansmer/sibling-swap.nvim",
     cond = NOT_MINIMAL,
@@ -803,9 +926,47 @@ _<C-c>_ : exit
     end,
   },
   { "mfussenegger/nvim-dap", cond = NOT_MINIMAL, event = "VeryLazy", config = l("dap") },
-  { "rcarriga/nvim-dap-ui", cond = NOT_MINIMAL },
-  { "theHamsta/nvim-dap-virtual-text", cond = NOT_MINIMAL },
-  { "mfussenegger/nvim-dap-python", cond = NOT_MINIMAL },
+  {
+    "igorlfs/nvim-dap-view",
+    dependencies = { "mfussenegger/nvim-dap" },
+    opts = {
+      winbar = {
+        sections = {
+          "watches",
+          "repl",
+          "threads",
+          "exceptions",
+          "breakpoints",
+          "scopes",
+          "sessions",
+          "console"
+        },
+        base_sections = {
+          watches = { label = "👀", keymap = "1" },
+          repl = { label = ">_", keymap = "2" },
+          threads = { label = "🪜", keymap = "3" },
+          exceptions = { label = "💥", keymap = "4" },
+          breakpoints = { label = "🛑", keymap = "5" },
+          scopes = { label = "α", keymap = "6" },
+          sessions = { label = "🔑", keymap = "7" },
+          console = { label = "⌨", keymap = "8" },
+        },
+      },
+      windows = {
+        size = 0.5,
+        position = "right",
+        terminal = {
+          hide = true,
+        },
+      },
+      help = { border = config.border },
+      hover = { border = config.border },
+      virtual_text = {
+        enabled = true,
+      },
+    },
+    cond = NOT_MINIMAL,
+  },
   {
     "lervag/vimtex",
     cond = NOT_MINIMAL,
@@ -950,7 +1111,6 @@ _<C-c>_ : exit
     "Julian/lean.nvim",
     cond = NOT_MINIMAL,
     event = { "BufReadPre *.lean", "BufNewFile *.lean" },
-    dependencies = { "nvim-lua/plenary.nvim" },
     opts = { mappings = true },
   },
 }

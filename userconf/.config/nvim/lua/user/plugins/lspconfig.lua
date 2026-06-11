@@ -57,22 +57,14 @@ vim.keymap.set(
   F.f(vim.diagnostic.jump)({ count = -1, float = true }),
   desc(map_opt, "go to previous diagnostic")
 )
-vim.keymap.set("n", "gll", vim.lsp.codelens.refresh, desc(map_opt, "refresh codelens"))
 vim.keymap.set("n", "glr", vim.lsp.codelens.run, desc(map_opt, "run codelens"))
 vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, desc(map_opt, "show incoming calls"))
 vim.keymap.set("n", "glo", vim.lsp.buf.outgoing_calls, desc(map_opt, "show outgoing calls"))
-vim.keymap.set("n", "<leader>th", function()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-end, desc(map_opt, "show outgoing calls"))
 vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, desc(map_opt, "add workspace folder"))
 vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc(map_opt, "remove workspace folder"))
 vim.keymap.set("n", "<leader>wl", function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, desc(map_opt, "list loaded workspaces"))
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  update_in_insert = false,
-})
 
 vim.api.nvim_create_autocmd({ "LspAttach" }, {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -102,6 +94,17 @@ vim.api.nvim_create_autocmd({ "LspDetach" }, {
   desc = "Stop lsp client when no buffer is attached",
 })
 
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = config.icons["Error"],
+      [vim.diagnostic.severity.WARN] = config.icons["Warn"],
+      [vim.diagnostic.severity.HINT] = config.icons["Hint"],
+      [vim.diagnostic.severity.INFO] = config.icons["Info"],
+    },
+  },
+})
+
 local virtual_lines = false
 
 local function set_diagnostic_config(virtual)
@@ -114,7 +117,7 @@ end
 
 set_diagnostic_config(false)
 
-vim.keymap.set("n", "td", function()
+vim.keymap.set("n", "<leader>td", function()
   virtual_lines = not virtual_lines
   set_diagnostic_config(virtual_lines)
 end, { desc = "toggle diagnostics" })
@@ -141,32 +144,20 @@ F.load("mason-lspconfig", function(mason_lspconfig)
   })
 end)
 
-vim.diagnostic.config({
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = config.icons["Error"],
-      [vim.diagnostic.severity.WARN] = config.icons["Warn"],
-      [vim.diagnostic.severity.HINT] = config.icons["Hint"],
-      [vim.diagnostic.severity.INFO] = config.icons["Info"],
-    },
-  },
-})
+local function make_toggle(name, enable, is_enabled)
+  return function()
+    local new_setting = not is_enabled()
+    enable(new_setting)
+    print(name .. ": " .. (new_setting and "on" or "off"))
+  end
+end
 
-vim.api.nvim_create_augroup("UserLsp", {})
+vim.keymap.set("n", "<leader>lr", "<CMD>lsp restart<CR>", { desc = "restart lsp server" })
 
-F.load("nvim-lightbulb", function(lightbulb)
-  vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-    group = "UserLsp",
-    callback = lightbulb.update_lightbulb,
-  })
-end)
+local inlay_toggler = make_toggle("inlay hints", vim.lsp.inlay_hint.enable, vim.lsp.inlay_hint.is_enabled)
+vim.keymap.set("n", "<leader>th", inlay_toggler, { desc = "toggle inlay hints" })
 
-vim.keymap.set("n", "<leader>ll", "<CMD>LspInfo<CR>", { desc = "show loaded lsp servers" })
-vim.keymap.set("n", "<leader>lr", "<CMD>LspRestart<CR>", { desc = "restart lsp server" })
-vim.keymap.set("n", "<leader>th", function()
-  local new_setting = not vim.lsp.inlay_hint.is_enabled()
-  vim.lsp.inlay_hint.enable(new_setting)
-  print("inlay hints: " .. (new_setting and "on" or "off"))
-end, { desc = "toggle inlay hints" })
+local codelens_toggler = make_toggle("codelens", vim.lsp.codelens.enable, vim.lsp.codelens.is_enabled)
+vim.keymap.set("n", "<leader>tc", codelens_toggler, { desc = "toggle codelens" })
 
 vim.keymap.set("n", "<leader>om", "<CMD>Mason<CR>", { desc = "show mason (install lsp, formatter ...)" })

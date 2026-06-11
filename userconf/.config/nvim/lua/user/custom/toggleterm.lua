@@ -1,4 +1,3 @@
-local F = require("user.functional")
 local U = require("user.utils")
 
 local term_buf

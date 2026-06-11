@@ -6,4 +6,4 @@ if [[ "$ARG" != "http"* ]]; then
   ARG="ytsearch:$ARG"
 fi
 
-yt-dlp --extract-audio --audio-format m4a "$ARG"
+yt-dlp --extract-audio --audio-format opus "$ARG"

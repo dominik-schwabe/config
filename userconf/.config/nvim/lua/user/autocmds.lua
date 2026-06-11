@@ -1,15 +1,11 @@
 local F = require("user.functional")
 local U = require("user.utils")
 
-vim.api.nvim_create_augroup("user", {})
+local user_group = vim.api.nvim_create_augroup("user", { clear = true })
 
 vim.filetype.add({
   extension = {
     pest = "pest",
-    xj = "xj",
-    xjl = "xjl",
-    xdata = "xdata",
-    xdatal = "xdatal",
     jon = "jon",
     cjon = "cjon",
     cjson = "cjson",
@@ -23,7 +19,7 @@ local function set_window_options(opts)
   vim.iter(U.list_normal_windows()):each(function(win)
     if vim.api.nvim_win_get_buf(win) == bufnr then
       local wo = vim.wo[win]
-      if buftype == "terminal" then
+      if vim.tbl_contains({ "terminal", "nofile", "prompt" }, buftype) then
         wo.spell = false
         wo.number = false
         wo.relativenumber = false
@@ -43,13 +39,14 @@ local function set_window_options(opts)
   end)
 end
 
-vim.api.nvim_create_autocmd("TermOpen", {
-  group = "UserTerm",
+vim.api.nvim_create_autocmd({ "OptionSet" }, {
+  group = user_group,
+  pattern = { "buftype" },
   callback = set_window_options,
 })
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
-  group = "user",
+  group = user_group,
   callback = function(opts)
     local bo = vim.bo[opts.buf]
     if
@@ -74,7 +71,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 })
 
 -- vim.api.nvim_create_autocmd("CmdWinEnter", {
---   group = "user",
+--   group = user_group,
 --   callback = function(args)
 --     vim.wo.number = false
 --     vim.wo.relativenumber = false
@@ -92,14 +89,14 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 -- })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-  group = "user",
+  group = user_group,
   callback = function()
     vim.hl.on_yank({ higroup = "YankHighlight", timeout = 400 })
   end,
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-  group = "user",
+  group = user_group,
   callback = function(obj)
     if not U.is_floating(vim.api.nvim_get_current_win()) then
       vim.b[obj.buf].user_last_entry = vim.uv.hrtime()
@@ -108,6 +105,12 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 vim.api.nvim_create_autocmd("VimEnter", {
-  group = "user",
+  group = user_group,
   command = "clearjumps",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
 })
