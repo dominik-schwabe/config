@@ -37,26 +37,13 @@ local map_opt = { noremap = true, silent = true }
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, desc(map_opt, "go to declaration"))
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, desc(map_opt, "go to definition"))
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, desc(map_opt, "go to type definition"))
-vim.keymap.set(
-  { "n" },
-  "gs",
-  F.f(vim.lsp.buf.signature_help)({ border = config.border }),
-  desc(map_opt, "show signature help")
-)
+local opt = { border = config.border }
+vim.keymap.set({ "n" }, "gs", F.cb(vim.lsp.buf.signature_help, opt), desc(map_opt, "show signature help"))
+vim.keymap.set("n", "gm", F.cb(vim.diagnostic.open_float, opt), desc(map_opt, "show diagnostics under cursor"))
+local jump = F.f(vim.diagnostic.jump)
+vim.keymap.set("n", "gn", jump({ count = 1, float = true }), desc(map_opt, "go to next diagnostic"))
+vim.keymap.set("n", "gp", jump({ count = -1, float = true }), desc(map_opt, "go to previous diagnostic"))
 vim.keymap.set("n", "gh", hover, desc(map_opt, "show hover info"))
-vim.keymap.set(
-  "n",
-  "gm",
-  F.f(vim.diagnostic.open_float)({ border = config.border }),
-  desc(map_opt, "show diagnostics under cursor")
-)
-vim.keymap.set("n", "gn", F.f(vim.diagnostic.jump)({ count = 1, float = true }), desc(map_opt, "go to next diagnostic"))
-vim.keymap.set(
-  "n",
-  "gp",
-  F.f(vim.diagnostic.jump)({ count = -1, float = true }),
-  desc(map_opt, "go to previous diagnostic")
-)
 vim.keymap.set("n", "glr", vim.lsp.codelens.run, desc(map_opt, "run codelens"))
 vim.keymap.set("n", "gli", vim.lsp.buf.incoming_calls, desc(map_opt, "show incoming calls"))
 vim.keymap.set("n", "glo", vim.lsp.buf.outgoing_calls, desc(map_opt, "show outgoing calls"))

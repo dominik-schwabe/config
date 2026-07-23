@@ -744,6 +744,8 @@ binds {
     Mod+adiaeresis repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id org.mozilla.Thunderbird --scratch-workspace scratch --height frac:90 --width frac:90 --center --spawn-command 'thunderbird'"#; }
     Mod+8 repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id org.telegram.desktop --scratch-workspace scratch --height frac:90 --width frac:90 --center"#; }
     Mod+9 repeat=false { spawn-sh r#"~/.cargo/bin/niri-tools toggle-scratch --app-id Spotify --scratch-workspace scratch --height frac:90 --width frac:90 --center"#; }
+
+    Ctrl+Alt+A repeat=false { spawn-sh "~/bin/auto_clicker"; }
 }
 
 recent-windows {

@@ -260,6 +260,7 @@ M.formatters = {
     jon = { "jon" },
     cjon = { "cjon" },
     scala = { "scalafmt" },
+    typst = { "typstyle" }
   },
   formatters = {
     stylua = { append_args = { "--indent-type", "spaces" } },
@@ -308,34 +309,6 @@ M.formatters = {
       stdin = true,
     },
   },
-}
-M.treesitter = {
-  ensure_installed = {
-    "bash",
-    "bibtex",
-    "c",
-    "comment",
-    "cpp",
-    "css",
-    "dockerfile",
-    "vimdoc",
-    "html",
-    "javascript",
-    "json",
-    -- "latex",
-    "lua",
-    "make",
-    "markdown",
-    "markdown_inline",
-    "python",
-    "rust",
-    "toml",
-    "tsx",
-    "typescript",
-    "vim",
-    "yaml",
-  },
-  highlight_disable = {},
 }
 M.brackets = {
   { "(", ")" },

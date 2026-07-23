@@ -1,3 +1,4 @@
+local F = require("user.functional")
 local U = require("user.utils")
 local C = require("monokai-rainbow").colors
 
@@ -35,6 +36,47 @@ local quickfix = {
   filetypes = { "qf" },
 }
 
+local lualine_b = {
+  { "branch", icon = config.icons.Branch },
+  "diff",
+  {
+    "diagnostics",
+    symbols = {
+      error = config.icons.ErrorAlt .. " ",
+      warn = config.icons.WarnAlt .. " ",
+      info = config.icons.InfoAlt .. " ",
+      hint = config.icons.HintAlt .. " ",
+    },
+  },
+  {
+    "filename",
+    symbols = {
+      modified = config.icons.Modified,
+      readonly = config.icons.Readonly,
+      unnamed = "[No Name]",
+      newfile = "[New]",
+    },
+  },
+}
+
+F.load("dap", function(dap)
+  lualine_b[#lualine_b + 1] = {
+    function()
+      local status = dap.status()
+      if status == "" then
+        return "🪲"
+      else
+        return "🪲 " .. status
+      end
+    end,
+    color = { fg = C.yellow },
+  }
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "DapProgressUpdate",
+    command = "redrawstatus",
+  })
+end)
+
 local lualine_config = {
   extensions = { quickfix, "nvim-tree", "lazy" },
   options = {
@@ -59,28 +101,7 @@ local lualine_config = {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = {
-      { "branch", icon = config.icons.Branch },
-      "diff",
-      {
-        "diagnostics",
-        symbols = {
-          error = config.icons.ErrorAlt .. " ",
-          warn = config.icons.WarnAlt .. " ",
-          info = config.icons.InfoAlt .. " ",
-          hint = config.icons.HintAlt .. " ",
-        },
-      },
-      {
-        "filename",
-        symbols = {
-          modified = config.icons.Modified,
-          readonly = config.icons.Readonly,
-          unnamed = "[No Name]",
-          newfile = "[New]",
-        },
-      },
-    },
+    lualine_b = lualine_b,
     lualine_c = lualine_c,
     lualine_x = lualine_x,
     lualine_y = { "%3p%%" },

@@ -252,12 +252,6 @@ function M.is_big_buffer_or_in_allowlist(buf, max_size, allowlist)
   return M.is_big_buffer(buf, max_size) and not vim.tbl_contains(allowlist, vim.bo[buf].filetype)
 end
 
-function M.is_disable_treesitter(filetype, bufnr)
-  filetype = filetype or vim.bo.filetype
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  return M.is_big_buffer_or_in_allowlist(bufnr) or vim.tbl_contains(config.treesitter.highlight_disable, filetype)
-end
-
 function M.convert(b)
   local num_digits = math.max(math.floor(math.log10(b)), 0)
   local lower_power = num_digits - num_digits % 3

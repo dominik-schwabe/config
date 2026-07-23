@@ -28,7 +28,6 @@ alias ll='ls -lAh'
 
 alias lines='fd --type file | xargs -d "\n" wc -l | sort -h'
 
-alias d='mkdir -p ~/.diary && vim ~/.diary/$(date -I).md'
 if [[ "$EDITOR" == "nvim" ]]; then
   alias vim='nvim'
 fi
@@ -36,7 +35,6 @@ alias novim='vim -u NONE --noplugin --cmd "set nomodeline | au VimEnter * windo 
 alias prvim='vim -u NONE --cmd "au VimEnter * windo set mouse= termguicolors cursorline nowrap scrollbind cursorbind number norelativenumber signcolumn=no nomodifiable | noremap Q :qa<cr>| noremap <C-e> :noh<cr>| noremap <C-h> <ESC>:wincmd h<CR>| noremap <C-j> <ESC>:wincmd j<CR>| noremap <C-k> <ESC>:wincmd k<CR>| noremap <C-l> <ESC>:wincmd l<CR>| noremap <space>tw <CMD>windo set wrap!<CR>| hi CursorLine guibg=#303030" -O'
 alias label='vim --cmd "au VimEnter * windo set scrollbind cursorbind" -O'
 alias ovim='/bin/vim'
-alias benchmark-nvim='rm -f /tmp/nvim-startuptime && nvim --startuptime /tmp/nvim-startuptime -c ":e /tmp/nvim-startuptime"'
 
 alias i='vim --cmd "au BufEnter * setlocal nomodifiable buftype=nofile bufhidden=hide noswapfile"'
 alias im='vim --cmd "au BufEnter * setlocal buftype=nofile bufhidden=hide noswapfile"'
@@ -103,24 +101,9 @@ alias v='vim ~/.config/nvim/init.lua'
 
 alias grhs='git reset --soft HEAD^'
 
-alias thesis='track --start-date 01.04.2022 --end-date 01.10.2022 --hours 900 thesis'
-alias work='track work'
-
 alias whatismyip='curl -4 ifconfig.me; echo ; curl -6 ifconfig.me; echo'
 alias whereami='curl https://ipinfo.io/loc'
-alias firmware='fwupdmgr'
 alias path='echo $PATH | tr ":" "\n"'
-
-alias sst='(sinfo -S "%n" -O nodehost:12,memory:8,freemem:10,allocmem:11,cpusstate:15,socketcorethread:10 \
-&& echo && sinfo -S "%n" -O nodehost:12,statecompact:7,gres:30,gresused:50,reason:35 \
-&& echo && squeue -S i -o "%5i %12u %20j %5C %10m %8T %5D %11l %11L %R")'
-alias sqc='squeue -S i -o "%5i %10u %5C %10m %o"'
-alias sk='scancel --user dschwabe'
-alias sdel='srun --pty --mem=8G enroot remove'
-
-alias pw-reload='systemctl restart --user wireplumber.service pipewire.service pipewire-pulse.service'
-
-#command -v rlwrap && alias node='NODE_NO_READLINE=1 rlwrap node'
 
 [[ -f ~/.kubectl.alias ]] && source ~/.kubectl.alias
 [[ -f ~/.docker.alias ]] && source ~/.docker.alias

@@ -495,13 +495,13 @@ local plugins = {
           if vim.tbl_contains(repls, bufopt.filetype) then
             local map_opt = { buffer = args.buf }
             vim.keymap.set("n", "<C-space>", F.chain(mark_jump, send.paragraph), desc(map_opt, "send paragraph"))
-            vim.keymap.set("n", "<CR>", F.f(send.line_next)(), desc(map_opt, "send line and go next"))
-            vim.keymap.set("x", "<CR>", F.f(send.visual)(), desc(map_opt, "send visual"))
-            vim.keymap.set("n", "=", F.f(send.line)(), desc(map_opt, "send line and stay"))
-            vim.keymap.set("n", "<leader><leader>", F.f(send.buffer)(), desc(map_opt, "send buffer"))
-            vim.keymap.set("n", "<leader>m", F.f(send.motion)(), desc(map_opt, "send motion"))
-            vim.keymap.set("n", "<leader>M", F.f(send.newline)(), desc(map_opt, "send newline"))
-            vim.keymap.set({ "n", "i", "t" }, "<F4>", F.f(window.toggle_repl)(), desc(map_opt, "toggle repl"))
+            vim.keymap.set("n", "<CR>", F.cb(send.line_next), desc(map_opt, "send line and go next"))
+            vim.keymap.set("x", "<CR>", F.cb(send.visual), desc(map_opt, "send visual"))
+            vim.keymap.set("n", "=", F.cb(send.line), desc(map_opt, "send line and stay"))
+            vim.keymap.set("n", "<leader><leader>", F.cb(send.buffer), desc(map_opt, "send buffer"))
+            vim.keymap.set("n", "<leader>m", F.cb(send.motion), desc(map_opt, "send motion"))
+            vim.keymap.set("n", "<leader>M", F.cb(send.newline), desc(map_opt, "send newline"))
+            vim.keymap.set({ "n", "i", "t" }, "<F4>", F.cb(window.toggle_repl), desc(map_opt, "toggle repl"))
           end
         end,
       })
@@ -533,8 +533,8 @@ local plugins = {
         server = {
           on_attach = function(client, bufnr)
             local map_opts = { noremap = true, silent = true, buffer = bufnr }
-            local rcb = F.f(vim.cmd.RustLsp)
-            vim.keymap.set("n", "gh", rcb({ "hover", "actions" }), desc(map_opts, "rust hover actions"))
+            local rcb = F.cb(vim.cmd.RustLsp, { "hover", "actions" })
+            vim.keymap.set("n", "gh", rcb, desc(map_opts, "rust hover actions"))
             bind_select_action({
               { "debuggables" },
               { "debuggables", "last" },
@@ -570,16 +570,13 @@ local plugins = {
           end,
         },
         dap = {
-          configurations = {
-            {
-              -- This array tells CodeLLDB which source files to skip during stepping
-              skipFiles = {
-                "<rustc style>", -- Skips compiler internal files
-                "**/library/std/**/*", -- Skips Rust standard library
-                "**/.cargo/registry/**/*", -- Skips external crates downloaded via Cargo
-                "**/.rustup/**/*", -- Skips toolchain-specific files
-              },
-              -- ──────────────────────────────────────────────────────────────────
+          configuration = {
+            type = "codelldb",
+            request = "launch",
+            name = "Debug",
+            stopOnEntry = false,
+            postRunCommands = {
+              "breakpoint set -n rust_panic",
             },
           },
         },
@@ -617,14 +614,14 @@ _<C-c>_ : exit
         mode = { "n", "x" },
         body = "<leader>cc",
         heads = {
-          { "<F5>", F.f(textcase.current_word)("to_snake_case"), { silent = true, nowait = true } },
-          { "<F6>", F.f(textcase.current_word)("to_constant_case"), { silent = true, nowait = true } },
-          { "<F7>", F.f(textcase.current_word)("to_camel_case"), { silent = true, nowait = true } },
-          { "<F8>", F.f(textcase.current_word)("to_pascal_case"), { silent = true, nowait = true } },
-          { "<F9>", F.f(textcase.lsp_rename)("to_snake_case"), { silent = true, nowait = true } },
-          { "<F10>", F.f(textcase.lsp_rename)("to_constant_case"), { silent = true, nowait = true } },
-          { "<F11>", F.f(textcase.lsp_rename)("to_camel_case"), { silent = true, nowait = true } },
-          { "<F12>", F.f(textcase.lsp_rename)("to_pascal_case"), { silent = true, nowait = true } },
+          { "<F5>", F.cb(textcase.current_word, "to_snake_case"), { silent = true, nowait = true } },
+          { "<F6>", F.cb(textcase.current_word, "to_constant_case"), { silent = true, nowait = true } },
+          { "<F7>", F.cb(textcase.current_word, "to_camel_case"), { silent = true, nowait = true } },
+          { "<F8>", F.cb(textcase.current_word, "to_pascal_case"), { silent = true, nowait = true } },
+          { "<F9>", F.cb(textcase.lsp_rename, "to_snake_case"), { silent = true, nowait = true } },
+          { "<F10>", F.cb(textcase.lsp_rename, "to_constant_case"), { silent = true, nowait = true } },
+          { "<F11>", F.cb(textcase.lsp_rename, "to_camel_case"), { silent = true, nowait = true } },
+          { "<F12>", F.cb(textcase.lsp_rename, "to_pascal_case"), { silent = true, nowait = true } },
           { "<C-c>", nil, { exit = true, nowait = true } },
         },
       })
@@ -770,74 +767,70 @@ _<C-c>_ : exit
     event = { "BufNewFile Cargo.toml", "BufRead Cargo.toml" },
   },
   {
-    "romus204/tree-sitter-manager.nvim",
+    "nvim-treesitter/nvim-treesitter",
     cond = NOT_MINIMAL,
+    lazy = false,
+    build = ":TSUpdate",
     config = function()
-      -- local languages = vim.iter({ "jon", "cjon", "cjson" }):fold({}, function(acc, ft)
-      --   local path = os.getenv("HOME") .. "/tree-sitter-" .. ft
-      --   if U.exists(path) then
-      --     acc[ft] = {
-      --       url = path,
-      --     }
-      --   end
-      --   return acc
-      -- end)
-      local languages = {}
-      require("tree-sitter-manager").setup({
-        -- Default Options
-        ensure_installed = config.minimal and {} or config.treesitter.ensure_installed,
-        languages = languages, -- override or add new parser sources
-      })
-    end,
-  },
-  -- {
-  --   "nvim-treesitter/nvim-treesitter-textobjects",
-  --   cond = NOT_MINIMAL,
-  --   opts = { move = { set_jumps = true } },
-  -- },
-  -- !!! translate from nvim-treesitter:
-  -- textobjects = {
-  --   select = {
-  --     enable = true,
-  --     lookahead = true,
-  --     keymaps = {
-  --       ["af"] = "@function.outer",
-  --       ["if"] = "@function.inner",
-  --       ["ia"] = "@parameter.inner",
-  --       ["aa"] = "@parameter.outer",
-  --       ["ii"] = "@conditional.inner",
-  --       ["ai"] = "@conditional.outer",
-  --       ["al"] = "@loop.outer",
-  --       ["il"] = "@loop.inner",
-  --       ["a,"] = "@attribute.outer",
-  --       ["i,"] = "@attribute.inner",
-  --       [","] = "@assignment.lhs",
-  --       ["."] = "@assignment.rhs",
-  --       ["au"] = "@block.outer",
-  --       ["iu"] = "@block.inner",
-  --       ["ac"] = "@call.outer",
-  --       ["ic"] = "@call.inner",
-  --       ["ar"] = "@return.outer",
-  --       ["ir"] = "@return.inner",
-  --       ["a="] = "@assignment.outer",
-  --       ["i="] = "@assignment.inner",
-  --       ["ak"] = "@class.outer",
-  --       ["ik"] = "@class.inner",
-  --     },
-  --   },
-  -- },
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    cond = NOT_MINIMAL,
-    config = function()
-      require("treesitter-context").setup({
-        multiline_threshold = 1,
-        on_attach = function(bufnr)
-          local filetype = vim.bo[bufnr].filetype
-          return not U.is_disable_treesitter(filetype, bufnr)
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "TSUpdate",
+        callback = function()
+          local parsers = require("nvim-treesitter.parsers")
+          vim.iter({ "jon", "cjon", "cjson" }):each(function(ft)
+            local path = "~/tree-sitter-" .. ft
+            if U.exists(path) then
+              parsers[ft] = {
+                install_info = { path = path },
+              }
+            end
+          end)
         end,
       })
     end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    cond = NOT_MINIMAL,
+    opts = {
+      move = { set_jumps = true },
+      select = { lookahead = true },
+    },
+    config = function()
+      local select = require("nvim-treesitter-textobjects.select")
+      local function bind(keys, object)
+        vim.keymap.set({ "x", "o" }, keys, function()
+          select.select_textobject(object, "textobjects")
+        end)
+      end
+      bind("af", "@function.outer")
+      bind("if", "@function.inner")
+      bind("af", "@function.outer")
+      bind("if", "@function.inner")
+      bind("ia", "@parameter.inner")
+      bind("aa", "@parameter.outer")
+      bind("ii", "@conditional.inner")
+      bind("ai", "@conditional.outer")
+      bind("al", "@loop.outer")
+      bind("il", "@loop.inner")
+      bind("a,", "@attribute.outer")
+      bind("i,", "@attribute.inner")
+      bind(",", "@assignment.lhs")
+      bind(".", "@assignment.rhs")
+      bind("au", "@block.outer")
+      bind("iu", "@block.inner")
+      bind("ac", "@call.outer")
+      bind("ic", "@call.inner")
+      bind("ar", "@return.outer")
+      bind("ir", "@return.inner")
+      bind("a=", "@assignment.outer")
+      bind("i=", "@assignment.inner")
+      bind("ak", "@class.outer")
+      bind("ik", "@class.inner")
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    cond = NOT_MINIMAL,
   },
   {
     "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
@@ -846,8 +839,7 @@ _<C-c>_ : exit
       vim.g.rainbow_delimiters = {
         strategy = {
           [""] = function()
-            local rb = require("rainbow-delimiters")
-            return require("user.utils").is_disable_treesitter() and rb.strategy["noop"] or rb.strategy["global"]
+            return require("rainbow-delimiters").strategy["global"]
           end,
         },
       }
@@ -931,25 +923,26 @@ _<C-c>_ : exit
     dependencies = { "mfussenegger/nvim-dap" },
     opts = {
       winbar = {
+        default_section = "console",
         sections = {
-          "watches",
+          "console",
           "repl",
+          "watches",
           "threads",
-          "exceptions",
           "breakpoints",
           "scopes",
           "sessions",
-          "console"
+          "exceptions",
         },
         base_sections = {
-          watches = { label = "👀", keymap = "1" },
+          console = { label = "⌨", keymap = "1" },
           repl = { label = ">_", keymap = "2" },
-          threads = { label = "🪜", keymap = "3" },
-          exceptions = { label = "💥", keymap = "4" },
+          watches = { label = "👀", keymap = "3" },
+          threads = { label = "🪜", keymap = "4" },
           breakpoints = { label = "🛑", keymap = "5" },
           scopes = { label = "α", keymap = "6" },
           sessions = { label = "🔑", keymap = "7" },
-          console = { label = "⌨", keymap = "8" },
+          exceptions = { label = "💥", keymap = "8" },
         },
       },
       windows = {

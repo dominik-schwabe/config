@@ -34,6 +34,7 @@ blink.setup({
     },
     menu = {
       border = config.border,
+      max_height = 11,
       scrolloff = 9999,
       draw = {
         padding = { 0, 1 },

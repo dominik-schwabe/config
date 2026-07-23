@@ -25,17 +25,17 @@ end
 
 for _, brackets in ipairs(config.brackets) do
   local open, close = unpack(brackets)
-  vim.keymap.set("i", "<C-S>" .. open, F.f(insert_brackets)(open, close, true), {})
-  vim.keymap.set("i", "<C-S><C-" .. open .. ">", F.f(insert_brackets)(open, close, true), {})
-  vim.keymap.set("i", "<C-S>" .. close, F.f(insert_brackets)(open, close, false), {})
+  vim.keymap.set("i", "<C-S>" .. open, F.cb(insert_brackets, open, close, true), {})
+  vim.keymap.set("i", "<C-S><C-" .. open .. ">", F.cb(insert_brackets, open, close, true), {})
+  vim.keymap.set("i", "<C-S>" .. close, F.cb(insert_brackets, open, close, false), {})
   if close == "}" then
-    vim.keymap.set("i", "<C-S><C-]>", F.f(insert_brackets)(open, close, false), {})
+    vim.keymap.set("i", "<C-S><C-]>", F.cb(insert_brackets, open, close, false), {})
   elseif close ~= "]" then
-    vim.keymap.set("i", "<C-S><C-" .. close .. ">", F.f(insert_brackets)(open, close, false), {})
+    vim.keymap.set("i", "<C-S><C-" .. close .. ">", F.cb(insert_brackets, open, close, false), {})
   end
 end
 
 for _, quote in ipairs(config.quotes) do
-  vim.keymap.set("i", "<C-S>" .. quote, F.f(insert_brackets)(quote, quote, true), {})
-  vim.keymap.set("i", "<C-S><C-" .. quote .. ">", F.f(insert_brackets)(quote, quote, true), {})
+  vim.keymap.set("i", "<C-S>" .. quote, F.cb(insert_brackets, quote, quote, true), {})
+  vim.keymap.set("i", "<C-S><C-" .. quote .. ">", F.cb(insert_brackets, quote, quote, true), {})
 end

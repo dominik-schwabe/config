@@ -120,6 +120,20 @@ function M.f(func)
   end
 end
 
+function M.cb(func, ...)
+  local tbl = { ... }
+  return function()
+    return func(unpack(tbl))
+  end
+end
+
+function M.p(func, ...)
+  local tbl = { ... }
+  return function(...)
+    return func(unpack(tbl), ...)
+  end
+end
+
 function M.chain(...)
   local funcs = { ... }
   return function()
